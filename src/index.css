@@ -1,0 +1,152 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #f4f4f4;
+  font-family: "Open Sans", sans-serif;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Product name clamp */
+.product-description {
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -moz-line-clamp: 2;
+}
+
+.swiper {
+  width: 100%;
+  height: 400px;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #22358e !important;
+}
+
+.Toastify__toast-container {
+  width: 500px;
+}
+
+.Toastify__toast {
+  width: 100%;
+  min-height: auto;
+}
+
+.Toastify__toast a {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+@media (max-width: 959px) {
+  .Toastify__toast-container {
+    width: 400px;
+  }
+
+  .Toastify__toast {
+    width: 100%;
+  }
+}
+
+@media (max-width: 599px) {
+  .Toastify__toast-container {
+    width: 100%;
+  }
+  .Toastify__toast {
+    width: 90%;
+    margin: auto;
+  }
+}
+
+/* MUI PAGINATION SELECT MENU */
+.MuiTablePagination-menuItem {
+  font-size: 1.2rem !important;
+}
+
+/* REMOVING THE BLUE BACKGROUND ON HYPERLINK ON TOP ON MOBILE */
+.product-content-wrapper {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.credit-card-container-grid > form > div:not(:first-of-type) {
+  display: block !important;
+  width: 100%;
+}
+
+.credit-card-container-grid > div > #field-wrapper {
+  justify-content: space-between;
+  padding-right: 0.5rem;
+  border: 1px solid #ccc;
+}
+
+.credit-card-container-grid > div > #field-wrapper > img {
+  height: 2.5rem;
+}
+
+.credit-card-container-grid > div > #field-wrapper ~ p {
+  font-size: 1.25rem;
+  margin: 0.5rem 0;
+}
+
+.credit-card-container-grid input {
+  font-size: 1.6rem !important;
+}
+
+.credit-card-container-grid > div > #field-wrapper label:first-of-type {
+  flex: 2;
+}
+
+.credit-card-container-grid > div > #field-wrapper label:nth-of-type(2) {
+  flex: 1;
+}
+
+.credit-card-container-grid > div > #field-wrapper label:nth-of-type(3) {
+  flex: 0.3;
+}
