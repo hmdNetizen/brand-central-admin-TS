@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import CustomOutlinedInput from "src/utils/CustomOutlinedInput";
 import { useNavigate, Navigate, useLocation } from "react-router-dom";
-// import { useActions } from "src/hooks/useActions";
+import { useActions } from "src/hooks/useActions";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
@@ -25,7 +23,7 @@ import {
   SuccessMsgWrapper,
 } from "src/components/auth/styles/LoginStyles";
 
-type CredentialProps = {
+export type CredentialProps = {
   email: "";
   password: "";
 };
@@ -34,6 +32,8 @@ const Login = () => {
   useTitle("Admin : Login");
 
   const theme = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   //   MEDIA QUERIES
   const matchesSM = useMediaQuery(theme.breakpoints.only("sm"));
@@ -51,9 +51,11 @@ const Login = () => {
 
   const { email, password } = credentials;
 
-  const { loading, adminLoginSuccess, error } = useTypedSelector(
+  const { loading, loginSuccess, error, accessToken } = useTypedSelector(
     (state) => state.auth
   );
+
+  const { login } = useActions();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -63,9 +65,42 @@ const Login = () => {
     setShowPassword((prev: React.SetStateAction<boolean>) => !prev);
   };
 
-  const handleLogin = () => {
-    console.log("Submit");
+  const handleLogin = (
+    event: React.FormEvent<HTMLFormElement | HTMLDivElement>
+  ) => {
+    event.preventDefault();
+
+    if (!email && !password) {
+      setEmailError("Email is required");
+      setPasswordError("Password is required");
+      return;
+    }
+
+    if (!email) {
+      setEmailError("Email is required");
+      return;
+    } else if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      setEmailError("Enter a valid email");
+      return;
+    }
+
+    if (!password) {
+      setPasswordError("Please enter a password");
+      return;
+    }
+
+    const path = location.state?.from?.pathname || "/dashboard";
+
+    login({
+      navigate,
+      path,
+      setCredentials,
+      Email: email,
+      password,
+    });
   };
+
+  if (accessToken && !loginSuccess) return <Navigate to="/dashboard" />;
 
   return (
     <Container
@@ -95,10 +130,10 @@ const Login = () => {
               </ErrorMsg>
             </ErrorsList>
           )}
-          {!loading && adminLoginSuccess && (
+          {!loading && loginSuccess && (
             <SuccessMsgWrapper item>
               <SuccessMsg variant="body2" align="center">
-                {adminLoginSuccess}
+                {loginSuccess}
               </SuccessMsg>
             </SuccessMsgWrapper>
           )}
@@ -109,7 +144,7 @@ const Login = () => {
               type="email"
               formControlWidth={matchesXS ? "100%" : matchesSM ? 400 : 500}
               value={email}
-              onChange={(e) => e.target.value}
+              onChange={handleChange}
               label="Email Address"
               labelId="email"
               error={emailError}
