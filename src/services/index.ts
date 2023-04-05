@@ -11,15 +11,15 @@ import authReducer from "./auth";
 // import shippingReducer from "./shipping";
 // import preOrderReducer from "./pre-orders";
 
-const reducers = combineReducers({
+const rootReducer = combineReducers({
   auth: authReducer,
 });
 
 const store = configureStore({
-  reducer: reducers,
+  reducer: rootReducer,
   devTools: process.env.NODE_ENV !== "production",
 });
 
-export type RootState = ReturnType<typeof reducers>;
+export type RootState = ReturnType<typeof rootReducer>;
 
 export default store;
