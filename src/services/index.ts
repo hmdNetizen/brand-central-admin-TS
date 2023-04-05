@@ -1,5 +1,5 @@
-import { configureStore } from "@reduxjs/toolkit";
-// import authReducer from "./auth";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import authReducer from "./auth";
 // import userReducer from "./user";
 // import productReducer from "./product";
 // import utilsReducer from "./utils";
@@ -11,22 +11,15 @@ import { configureStore } from "@reduxjs/toolkit";
 // import shippingReducer from "./shipping";
 // import preOrderReducer from "./pre-orders";
 
-const store = configureStore({
-  reducer: {
-    // auth: authReducer,
-    // user: userReducer,
-    // orders: orderReducer,
-    // customers: customersReducer,
-    // utils: utilsReducer,
-    // products: productReducer,
-    // common: commonReducer,
-    // coupon: couponReducer,
-    // settings: settingsReducer,
-    // shipping: shippingReducer,
-    // preOrders: preOrderReducer,
-  },
+const reducers = combineReducers({
+  auth: authReducer,
+});
 
+const store = configureStore({
+  reducer: reducers,
   devTools: process.env.NODE_ENV !== "production",
 });
+
+export type RootState = ReturnType<typeof reducers>;
 
 export default store;
