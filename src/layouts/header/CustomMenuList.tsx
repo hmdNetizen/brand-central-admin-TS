@@ -21,7 +21,6 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import Moment from "react-moment";
 import EmptyNotification from "./EmptyNotification";
 import { StyledMenuItem } from "./styles/CustomMenuListStyles";
-import { LowStockNotificationReturnedPayload } from "src/services/notifications/NotificationTypes";
 
 const accountMenus = [
   {
@@ -40,7 +39,7 @@ const accountMenus = [
 
 type MenuListProps = {
   open: boolean;
-  anchorEl: boolean | null;
+  anchorEl: HTMLElement | null;
   setAnchorEl: React.Dispatch<React.SetStateAction<boolean | null>>;
   notificationId: string;
 };
@@ -51,13 +50,12 @@ const CustomMenuList = (props: MenuListProps) => {
 
   const navigate = useNavigate();
 
-  const { messagesNotifications } = useSelector((state) => state.utils);
-
   const {
     orderNotifications,
     lowStockNotifications,
     preOrderNotifications,
     customerNotifications,
+    messagesNotifications,
   } = useTypedSelector((state) => state.notifications);
 
   const { admin } = useSelector((state) => state.user);

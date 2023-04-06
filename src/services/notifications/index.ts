@@ -6,13 +6,16 @@ import {
   PreOrderNotificationPayloadType,
   LowStockNotificationPayloadType,
   CustomerNotificationPayloadType,
+  MessagesNotificationPayloadType,
+  OrderNotificationReturnedData,
+  CustomerNotificationReturnedData,
 } from "./NotificationTypes";
 
 const initialState: initStateTypes = {
   orderNotifications: [],
   customerNotifications: [],
   lowStockNotifications: [],
-  //   messagesNotifications: [],
+  messagesNotifications: [],
   preOrderNotifications: [],
   loadingPreOrderNotification: false,
   loadingOrdersNotifications: false,
@@ -34,6 +37,22 @@ export const getOrdersNotifications = createAsyncThunk(
       return result.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("Error while fetching notifications");
+    }
+  }
+);
+
+export const markOrdersNotificationsAsRead = createAsyncThunk(
+  "mark-order-as-read",
+  async (orderId: string, thunkAPI) => {
+    try {
+      const { data } = await axios.patch(
+        `/api/notifications/new-order/${orderId}`
+      );
+      const result = data as OrderNotificationReturnedData;
+
+      return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error while updating notification");
     }
   }
 );
@@ -74,6 +93,36 @@ export const getCustomersNotifications = createAsyncThunk(
       const response = data as CustomerNotificationPayloadType;
 
       return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error while fetching notifications");
+    }
+  }
+);
+
+export const markCustomerNotificationsAsRead = createAsyncThunk(
+  "mark-customer-as-read",
+  async (customerId: string, thunkAPI) => {
+    try {
+      const { data } = await axios.patch(
+        `/api/notifications/new-customer/${customerId}`
+      );
+      const result = data as CustomerNotificationReturnedData;
+
+      return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error while updating notification");
+    }
+  }
+);
+
+export const getMessagesNotifications = createAsyncThunk(
+  "messages-notification",
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await axios.get("/api/contact");
+      const result = data as MessagesNotificationPayloadType;
+
+      return result.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("Error while fetching notifications");
     }
@@ -141,6 +190,57 @@ const notificationSlice = createSlice({
       })
       .addCase(getCustomersNotifications.rejected, (state, action) => {
         state.loadingCustomerNotification = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(getMessagesNotifications.pending, (state) => {
+        state.loadingMessagesNotifications = true;
+      })
+      .addCase(getMessagesNotifications.fulfilled, (state, action) => {
+        state.loadingMessagesNotifications = false;
+        state.messagesNotifications = action.payload;
+        state.error = null;
+      })
+      .addCase(getMessagesNotifications.rejected, (state, action) => {
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(markOrdersNotificationsAsRead.pending, (state) => {
+        state.loadingNotificationAction = true;
+      })
+      .addCase(markOrdersNotificationsAsRead.fulfilled, (state, action) => {
+        state.loadingNotificationAction = false;
+        state.orderNotifications = state.orderNotifications.map((order) =>
+          order._id === action.payload._id ? { ...order, isRead: true } : order
+        );
+        state.error = null;
+      })
+      .addCase(markOrdersNotificationsAsRead.rejected, (state, action) => {
+        state.loadingNotificationAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(markCustomerNotificationsAsRead.pending, (state) => {
+        state.loadingNotificationAction = true;
+      })
+      .addCase(markCustomerNotificationsAsRead.fulfilled, (state, action) => {
+        state.loadingNotificationAction = false;
+        state.customerNotifications = state.customerNotifications.map(
+          (customer) =>
+            customer._id === action.payload._id
+              ? { ...customer, isRead: true }
+              : customer
+        );
+        state.error = null;
+      })
+      .addCase(markCustomerNotificationsAsRead.rejected, (state, action) => {
+        state.loadingNotificationAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

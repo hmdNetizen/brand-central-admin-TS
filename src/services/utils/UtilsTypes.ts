@@ -8,7 +8,7 @@ type SentEmailReturnedPayload = {
   updatedAt: string;
 };
 
-type ReceivedEmailReturnedPayload = {
+export type ReceivedEmailReturnedPayload = {
   _id: string;
   fullName: string;
   emailAddress: string;

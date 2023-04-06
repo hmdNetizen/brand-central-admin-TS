@@ -1,3 +1,5 @@
+import { ReceivedEmailReturnedPayload } from "../utils/UtilsTypes";
+
 interface NotificationDataTypes {
   _id: string;
   isRead: boolean;
@@ -10,10 +12,20 @@ export interface OrderNotificationReturnedPayload
   orderId: string;
 }
 
+// Object shape returned from API
+export type OrderNotificationReturnedData = {
+  data: OrderNotificationReturnedPayload;
+};
+
 export interface CustomerNotificationReturnedPayload
   extends NotificationDataTypes {
   customerId: string;
 }
+
+// Object shape returned from API
+export type CustomerNotificationReturnedData = {
+  data: CustomerNotificationReturnedPayload;
+};
 
 export interface LowStockNotificationReturnedPayload
   extends NotificationDataTypes {
@@ -31,6 +43,11 @@ export interface PreOrderNotificationReturnedPayload
   brandName: string;
 }
 
+export type MessagesNotificationReturnedPayload = Pick<
+  ReceivedEmailReturnedPayload,
+  "_id" | "isRead" | "createdAt"
+>;
+
 export type OrderNotificationPayloadType = {
   data: OrderNotificationReturnedPayload[];
 };
@@ -47,11 +64,18 @@ export type PreOrderNotificationPayloadType = {
   data: PreOrderNotificationReturnedPayload[];
 };
 
+export type MessagesNotificationPayloadType = {
+  data: {
+    data: MessagesNotificationReturnedPayload[];
+  };
+};
+
 export type initStateTypes = {
   orderNotifications: OrderNotificationReturnedPayload[];
   customerNotifications: CustomerNotificationReturnedPayload[];
   lowStockNotifications: LowStockNotificationReturnedPayload[];
   preOrderNotifications: PreOrderNotificationReturnedPayload[];
+  messagesNotifications: MessagesNotificationReturnedPayload[];
   loadingPreOrderNotification: boolean;
   loadingOrdersNotifications: boolean;
   loadingCustomerNotification: boolean;
