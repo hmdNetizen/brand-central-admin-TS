@@ -46,3 +46,17 @@ export type LowStockNotificationPayloadType = {
 export type PreOrderNotificationPayloadType = {
   data: PreOrderNotificationReturnedPayload[];
 };
+
+export type initStateTypes = {
+  orderNotifications: OrderNotificationReturnedPayload[];
+  customerNotifications: CustomerNotificationReturnedPayload[];
+  lowStockNotifications: LowStockNotificationReturnedPayload[];
+  preOrderNotifications: PreOrderNotificationReturnedPayload[];
+  loadingPreOrderNotification: boolean;
+  loadingOrdersNotifications: boolean;
+  loadingCustomerNotification: boolean;
+  loadingLowStockNotifications: boolean;
+  loadingMessagesNotifications: boolean;
+  loadingNotificationAction: boolean;
+  loadingPreorderNotification: boolean;
+};
