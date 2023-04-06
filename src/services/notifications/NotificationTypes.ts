@@ -59,4 +59,5 @@ export type initStateTypes = {
   loadingMessagesNotifications: boolean;
   loadingNotificationAction: boolean;
   loadingPreorderNotification: boolean;
+  error: null | string;
 };
