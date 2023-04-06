@@ -5,6 +5,7 @@ import {
   OrderNotificationPayloadType,
   PreOrderNotificationPayloadType,
   LowStockNotificationPayloadType,
+  CustomerNotificationPayloadType,
 } from "./NotificationTypes";
 
 const initialState: initStateTypes = {
@@ -65,6 +66,20 @@ export const getPreOrderNotifications = createAsyncThunk(
   }
 );
 
+export const getCustomersNotifications = createAsyncThunk(
+  "customers-notification",
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await axios.get("/api/notifications/new-customer");
+      const response = data as CustomerNotificationPayloadType;
+
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error while fetching notifications");
+    }
+  }
+);
+
 const notificationSlice = createSlice({
   name: "notification",
   initialState,
@@ -111,6 +126,21 @@ const notificationSlice = createSlice({
       })
       .addCase(getPreOrderNotifications.rejected, (state, action) => {
         state.loadingPreOrderNotification = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(getCustomersNotifications.pending, (state) => {
+        state.loadingCustomerNotification = true;
+      })
+      .addCase(getCustomersNotifications.fulfilled, (state, action) => {
+        state.loadingCustomerNotification = false;
+        state.customerNotifications = action.payload;
+        state.error = null;
+      })
+      .addCase(getCustomersNotifications.rejected, (state, action) => {
+        state.loadingCustomerNotification = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

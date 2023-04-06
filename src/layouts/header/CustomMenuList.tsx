@@ -51,15 +51,14 @@ const CustomMenuList = (props: MenuListProps) => {
 
   const navigate = useNavigate();
 
-  const {
-    customerNotifications,
-    messagesNotifications,
-    preOrderNotifications,
-  } = useSelector((state) => state.utils);
+  const { messagesNotifications } = useSelector((state) => state.utils);
 
-  const { orderNotifications, lowStockNotifications } = useTypedSelector(
-    (state) => state.notifications
-  );
+  const {
+    orderNotifications,
+    lowStockNotifications,
+    preOrderNotifications,
+    customerNotifications,
+  } = useTypedSelector((state) => state.notifications);
 
   const { admin } = useSelector((state) => state.user);
 
