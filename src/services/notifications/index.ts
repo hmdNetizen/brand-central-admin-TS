@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { AxiosError } from "axios";
 import axios from "../axios";
 import {
   initStateTypes,
   OrderNotificationPayloadType,
+  PreOrderNotificationPayloadType,
+  LowStockNotificationPayloadType,
 } from "./NotificationTypes";
 
 const initialState: initStateTypes = {
@@ -30,7 +31,21 @@ export const getOrdersNotifications = createAsyncThunk(
       const result = data as OrderNotificationPayloadType;
 
       return result.data;
-    } catch (error: AxiosError<string> | any) {
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error while fetching notifications");
+    }
+  }
+);
+
+export const getLowStockNotifications = createAsyncThunk(
+  "low-stock-notification",
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await axios.get("/api/notifications/low-stock");
+      const result = data as LowStockNotificationPayloadType;
+
+      return result.data;
+    } catch (error) {
       return thunkAPI.rejectWithValue("Error while fetching notifications");
     }
   }
@@ -52,6 +67,21 @@ const notificationSlice = createSlice({
       })
       .addCase(getOrdersNotifications.rejected, (state, action) => {
         state.loadingOrdersNotifications = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(getLowStockNotifications.pending, (state) => {
+        state.loadingLowStockNotifications = true;
+      })
+      .addCase(getLowStockNotifications.fulfilled, (state, action) => {
+        state.loadingLowStockNotifications = false;
+        state.lowStockNotifications = action.payload;
+        state.error = null;
+      })
+      .addCase(getLowStockNotifications.rejected, (state, action) => {
+        state.loadingLowStockNotifications = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

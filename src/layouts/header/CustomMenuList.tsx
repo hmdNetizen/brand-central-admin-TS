@@ -17,9 +17,11 @@ import { useTheme } from "@mui/material/styles";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useActions } from "src/hooks/useActions";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
 import Moment from "react-moment";
 import EmptyNotification from "./EmptyNotification";
 import { StyledMenuItem } from "./styles/CustomMenuListStyles";
+import { LowStockNotificationReturnedPayload } from "src/services/notifications/NotificationTypes";
 
 const accountMenus = [
   {
@@ -50,13 +52,17 @@ const CustomMenuList = (props: MenuListProps) => {
   const navigate = useNavigate();
 
   const {
-    orderNotifications,
     customerNotifications,
-    lowStockNotifications,
     messagesNotifications,
     preOrderNotifications,
   } = useSelector((state) => state.utils);
+
+  const { orderNotifications, lowStockNotifications } = useTypedSelector(
+    (state) => state.notifications
+  );
+
   const { admin } = useSelector((state) => state.user);
+
   const {
     markOrdersNotificationsAsRead,
     markCustomerNotificationsAsRead,

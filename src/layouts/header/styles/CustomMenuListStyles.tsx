@@ -8,7 +8,7 @@ interface CustomMenuItemProps extends MenuItemProps {
 }
 
 export const StyledMenuItem = styled(MenuItem)<
-  CustomMenuItemProps & { component: React.ElementType; to: LinkProps["to"] }
+  CustomMenuItemProps & { component?: React.ElementType; to?: LinkProps["to"] }
 >(({ theme, notificationId }) => ({
   "&.MuiDivider-root": {
     padding: ".5rem 1.5rem",
