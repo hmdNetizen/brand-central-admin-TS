@@ -51,6 +51,20 @@ export const getLowStockNotifications = createAsyncThunk(
   }
 );
 
+export const getPreOrderNotifications = createAsyncThunk(
+  "pre-order-notification",
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await axios.get("/api/notifications/pre-order");
+      const result = data as PreOrderNotificationPayloadType;
+
+      return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error while fetching notifications");
+    }
+  }
+);
+
 const notificationSlice = createSlice({
   name: "notification",
   initialState,
@@ -82,6 +96,21 @@ const notificationSlice = createSlice({
       })
       .addCase(getLowStockNotifications.rejected, (state, action) => {
         state.loadingLowStockNotifications = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(getPreOrderNotifications.pending, (state) => {
+        state.loadingPreOrderNotification = true;
+      })
+      .addCase(getPreOrderNotifications.fulfilled, (state, action) => {
+        state.loadingPreorderNotification = false;
+        state.preOrderNotifications = action.payload;
+        state.error = null;
+      })
+      .addCase(getPreOrderNotifications.rejected, (state, action) => {
+        state.loadingPreOrderNotification = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }
