@@ -3,6 +3,7 @@ import authReducer from "./auth";
 // import userReducer from "./user";
 // import productReducer from "./product";
 import utilsReducer from "./utils";
+import notificationReducer from "./notifications";
 // import commonReducer from "./common";
 // import orderReducer from "./orders";
 // import customersReducer from "./customers";
@@ -14,6 +15,7 @@ import utilsReducer from "./utils";
 const rootReducer = combineReducers({
   auth: authReducer,
   utils: utilsReducer,
+  notifications: notificationReducer,
 });
 
 const store = configureStore({
