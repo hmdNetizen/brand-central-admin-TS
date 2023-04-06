@@ -2,7 +2,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./auth";
 // import userReducer from "./user";
 // import productReducer from "./product";
-// import utilsReducer from "./utils";
+import utilsReducer from "./utils";
 // import commonReducer from "./common";
 // import orderReducer from "./orders";
 // import customersReducer from "./customers";
@@ -13,6 +13,7 @@ import authReducer from "./auth";
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  utils: utilsReducer,
 });
 
 const store = configureStore({
