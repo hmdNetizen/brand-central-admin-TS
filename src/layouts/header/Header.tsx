@@ -1,29 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import AppBar, { AppBarProps } from "@mui/material/AppBar";
 import { styled, Theme } from "@mui/material/styles";
 import { SxProps } from "@mui/system";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
+import Toolbar from "@mui/material/Toolbar";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import MailIcon from "@mui/icons-material/Mail";
+import LoyaltySharpIcon from "@mui/icons-material/LoyaltySharp";
+import CreditScoreIcon from "@mui/icons-material/CreditScore";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import logo from "src/assets/images/logo-black.png";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import { StyledAppBar, StyledLogo } from "./styles/HeaderStyles";
 
-type CustomAppBarProps = {
-  lastElement: string;
+import NotificationBadge from "./NotificationBadge";
+import CustomMenuList from "./CustomMenuList";
+
+type HeaderProps = {
+  menuSlideIn: boolean;
+  setMenuSlideIn: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const StyledAppBar = styled((props: AppBarProps & SxProps<Theme>) => (
-  <AppBar {...props} />
-))<CustomAppBarProps>(({ lastElement, theme, ...props }) => ({
-  background: "#fff",
-  padding: "1rem 2rem 1rem 0",
+const Header = (props: HeaderProps) => {
+  const { menuSlideIn, setMenuSlideIn } = props;
 
-  [theme.breakpoints.only("xs")]: {
-    padding: "1rem 1rem 1rem 0",
-  },
-}));
-
-const Header = () => {
   const { pathname } = useLocation();
   const splitPath = pathname.split("/");
   const lastElement = splitPath[splitPath.length - 1];
+
+  const matchesXXS = useMediaQuery("(max-width: 390px)");
+  const matchesXXXS = useMediaQuery("(max-width: 350px)");
+
+  const [notificationId, setNotificationId] = useState<string>("");
+  const [openNotificationBadge, setOpenNotificationBadge] =
+    useState<HTMLElement | null>(null);
+  const open = Boolean(openNotificationBadge);
+
+  const {
+    messagesNotifications,
+    lowStockNotifications,
+    customerNotifications,
+    orderNotifications,
+    preOrderNotifications,
+  } = useTypedSelector((state) => state.notifications);
+  const { admin } = useTypedSelector((state) => state.user);
+
+  const handleNotificationOpen = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    setOpenNotificationBadge(event.currentTarget);
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -35,8 +66,8 @@ const Header = () => {
           }}
         >
           <Box sx={{ mr: { xs: 0, sm: "auto" } }}>
-            <Link to="/admin">
-              <img src={logo} alt="Brand Logo" className={classes.logo} />
+            <Link to="/">
+              <StyledLogo src={logo} alt="Brand Logo" />
             </Link>
           </Box>
 
@@ -74,7 +105,7 @@ const Header = () => {
                 }}
                 title="Incoming Messages"
                 open={open}
-                setAnchorEl={setOpenNotificationBadge}
+                // setAnchorEl={setOpenNotificationBadge}
                 notificationId={notificationId}
                 onClick={(event) => {
                   handleNotificationOpen(event);
@@ -100,7 +131,7 @@ const Header = () => {
                 }}
                 title="Low stock quantity"
                 open={open}
-                setAnchorEl={setOpenNotificationBadge}
+                // setAnchorEl={setOpenNotificationBadge}
                 notificationId={notificationId}
                 onClick={(event) => {
                   handleNotificationOpen(event);
@@ -126,9 +157,9 @@ const Header = () => {
                 }}
                 title="New Customers"
                 open={open}
-                setAnchorEl={setOpenNotificationBadge}
+                // setAnchorEl={setOpenNotificationBadge}
                 notificationId={notificationId}
-                onClick={(event) => {
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                   handleNotificationOpen(event);
                   setNotificationId("customers");
                 }}
@@ -148,7 +179,7 @@ const Header = () => {
                 }}
                 title="New Orders"
                 open={open}
-                setAnchorEl={setOpenNotificationBadge}
+                // setAnchorEl={setOpenNotificationBadge}
                 notificationId={notificationId}
                 onClick={(event) => {
                   handleNotificationOpen(event);
@@ -174,7 +205,7 @@ const Header = () => {
                 }}
                 title="New Pre-orders"
                 open={open}
-                setAnchorEl={setOpenNotificationBadge}
+                // setAnchorEl={setOpenNotificationBadge}
                 notificationId={notificationId}
                 onClick={(event) => {
                   handleNotificationOpen(event);
@@ -195,7 +226,6 @@ const Header = () => {
                   handleNotificationOpen(event);
                 }}
                 color="inherit"
-                className={classes.profileIconButton}
               >
                 <img
                   src={admin?.profileImage}

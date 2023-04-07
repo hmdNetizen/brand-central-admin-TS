@@ -40,7 +40,7 @@ const accountMenus = [
 type MenuListProps = {
   open: boolean;
   anchorEl: HTMLElement | null;
-  setAnchorEl: React.Dispatch<React.SetStateAction<boolean | null>>;
+  setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
   notificationId: string;
 };
 
@@ -58,7 +58,7 @@ const CustomMenuList = (props: MenuListProps) => {
     messagesNotifications,
   } = useTypedSelector((state) => state.notifications);
 
-  const { admin } = useSelector((state) => state.user);
+  const { admin } = useTypedSelector((state) => state.user);
 
   const {
     markOrdersNotificationsAsRead,

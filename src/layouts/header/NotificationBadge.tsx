@@ -7,7 +7,7 @@ import Tooltip from "@mui/material/Tooltip";
 interface BadgeProps extends IconButtonProps {
   title: string;
   label: string;
-  onClick: () => void;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   notificationId: string;
   open: boolean;
   notificationCount: number;
@@ -23,7 +23,7 @@ const NotificationBadge = (props: BadgeProps): JSX.Element => {
     open,
     onClick,
     children,
-    ...rest
+    ...restProps
   } = props;
   return (
     <Tooltip
@@ -41,7 +41,7 @@ const NotificationBadge = (props: BadgeProps): JSX.Element => {
         aria-controls={open ? notificationId : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
-        {...rest}
+        {...restProps}
       >
         <Badge badgeContent={notificationCount} color="error">
           {children}
