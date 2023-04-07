@@ -65,12 +65,12 @@ const CustomMenuList = (props: MenuListProps) => {
     markCustomerNotificationsAsRead,
     markLowStockNotificationsAsRead,
     markPreOrderNotificationsAsRead,
-    markReceivedEmaillAsRead,
+    markMessageNotificationAsRead,
     clearAllOrdersNotifications,
     clearAllCustomersNotifications,
     clearAllLowStockNotifications,
     clearAllPreOrderNotifications,
-    logoutAdmin,
+    logout,
   } = useActions();
 
   const handleClose = () => {
@@ -90,8 +90,8 @@ const CustomMenuList = (props: MenuListProps) => {
   };
 
   const handleLogout = () => {
-    logoutAdmin();
-    navigate("/admin/login");
+    logout();
+    navigate("/login");
   };
 
   const menuListTitle =
@@ -132,7 +132,7 @@ const CustomMenuList = (props: MenuListProps) => {
         key={message._id}
         onClick={() => {
           handleClose();
-          markReceivedEmaillAsRead(message._id);
+          markMessageNotificationAsRead(message._id);
         }}
         sx={{ background: !message.isRead ? "#f6f6f6" : undefined }}
         component={Link}

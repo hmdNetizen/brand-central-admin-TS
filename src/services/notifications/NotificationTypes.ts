@@ -35,6 +35,11 @@ export interface LowStockNotificationReturnedPayload
   brandName: string;
 }
 
+// Object shape returned from API
+export type LowStockNotificationReturnedData = {
+  data: LowStockNotificationReturnedPayload;
+};
+
 export interface PreOrderNotificationReturnedPayload
   extends NotificationDataTypes {
   productId: string;
@@ -43,10 +48,22 @@ export interface PreOrderNotificationReturnedPayload
   brandName: string;
 }
 
+// Object shape returned from API
+export type PreOrderNotificationReturnedData = {
+  data: PreOrderNotificationReturnedPayload;
+};
+
 export type MessagesNotificationReturnedPayload = Pick<
   ReceivedEmailReturnedPayload,
   "_id" | "isRead" | "createdAt"
 >;
+
+// Object shape returned from API
+// export type MessageNotificationReturnedData = {
+//   data: {
+//     data: MessagesNotificationReturnedPayload;
+//   };
+// };
 
 export type OrderNotificationPayloadType = {
   data: OrderNotificationReturnedPayload[];
