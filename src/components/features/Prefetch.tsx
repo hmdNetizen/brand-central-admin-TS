@@ -12,9 +12,11 @@ import {
   MessagesNotificationReturnedPayload,
   PreOrderNotificationReturnedPayload,
 } from "src/services/notifications/NotificationTypes";
+import { useNavigate } from "react-router-dom";
 
 const Prefetch = () => {
   const socket = io(`${BASE_URL}`);
+  const navigate = useNavigate();
 
   const {
     addNewOrderNotification,
@@ -27,6 +29,7 @@ const Prefetch = () => {
     getLowStockNotifications,
     getPreOrderNotifications,
     getMessagesNotifications,
+    loadAdminProfile,
   } = useActions();
 
   const {
@@ -95,11 +98,15 @@ const Prefetch = () => {
   ]);
 
   useLayoutEffect(() => {
-    if (accessToken) {
-      setAuthorizationToken(accessToken);
+    if (localStorage.accessToken) {
+      setAuthorizationToken(localStorage.accessToken);
     }
 
     // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    if (accessToken) loadAdminProfile(navigate);
   }, [accessToken]);
 
   useEffect(() => {

@@ -37,6 +37,10 @@ export type AdminProfilePayload = Pick<
   "companyName" | "profileImage" | "companyEmail" | "merchantName" | "_id"
 >;
 
+export type UserProfilePayloadType = {
+  data: AdminProfilePayload;
+};
+
 export type initAdminStateTypes = {
   loadingProfile: boolean;
   admin: null | AdminProfilePayload;
