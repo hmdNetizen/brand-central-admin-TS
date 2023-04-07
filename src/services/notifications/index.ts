@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "../axios";
 import {
   initStateTypes,
@@ -11,6 +11,11 @@ import {
   CustomerNotificationReturnedData,
   LowStockNotificationReturnedData,
   PreOrderNotificationReturnedData,
+  OrderNotificationReturnedPayload,
+  CustomerNotificationReturnedPayload,
+  LowStockNotificationReturnedPayload,
+  PreOrderNotificationReturnedPayload,
+  MessagesNotificationReturnedPayload,
 } from "./NotificationTypes";
 
 const initialState: initStateTypes = {
@@ -224,7 +229,50 @@ export const markMessageNotificationAsRead = createAsyncThunk(
 const notificationSlice = createSlice({
   name: "notification",
   initialState,
-  reducers: {},
+  reducers: {
+    addNewOrderNotification: (
+      state,
+      action: PayloadAction<OrderNotificationReturnedPayload>
+    ) => {
+      state.orderNotifications = [action.payload, ...state.orderNotifications];
+    },
+    addNewUserNotification: (
+      state,
+      action: PayloadAction<CustomerNotificationReturnedPayload>
+    ) => {
+      state.customerNotifications = [
+        action.payload,
+        ...state.customerNotifications,
+      ];
+    },
+    addNewLowStockNotification: (
+      state,
+      action: PayloadAction<LowStockNotificationReturnedPayload>
+    ) => {
+      state.lowStockNotifications = [
+        action.payload,
+        ...state.lowStockNotifications,
+      ];
+    },
+    addNewMessageNotification: (
+      state,
+      action: PayloadAction<MessagesNotificationReturnedPayload>
+    ) => {
+      state.messagesNotifications = [
+        action.payload,
+        ...state.messagesNotifications,
+      ];
+    },
+    addNewPreOrderNotification: (
+      state,
+      action: PayloadAction<PreOrderNotificationReturnedPayload>
+    ) => {
+      state.preOrderNotifications = [
+        action.payload,
+        ...state.preOrderNotifications,
+      ];
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(getOrdersNotifications.pending, (state) => {
@@ -448,4 +496,11 @@ const notificationSlice = createSlice({
   },
 });
 
+export const {
+  addNewOrderNotification,
+  addNewLowStockNotification,
+  addNewMessageNotification,
+  addNewPreOrderNotification,
+  addNewUserNotification,
+} = notificationSlice.actions;
 export default notificationSlice.reducer;
