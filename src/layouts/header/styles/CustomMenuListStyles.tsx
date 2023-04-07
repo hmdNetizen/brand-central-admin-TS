@@ -8,11 +8,10 @@ interface CustomMenuItemProps extends MenuItemProps {
   notificationId: string;
 }
 
-// export const StyledMenu = styled(Menu)()
-
-export const StyledMenuItem = styled(MenuItem)<
-  CustomMenuItemProps &
-    SxProps<Theme> & { component?: React.ElementType; to?: LinkProps["to"] }
+export const StyledMenuItem = styled(MenuItem, {
+  shouldForwardProp: (prop) => prop !== "notificationId",
+})<
+  CustomMenuItemProps & { component?: React.ElementType; to?: LinkProps["to"] }
 >(({ theme, notificationId }) => ({
   "&.MuiMenuItem-root": {
     padding: ".75rem 1.5rem",

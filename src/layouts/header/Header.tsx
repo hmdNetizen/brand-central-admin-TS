@@ -13,7 +13,11 @@ import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import logo from "src/assets/images/logo-black.png";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-import { StyledAppBar, StyledLogo } from "./styles/HeaderStyles";
+import {
+  StyledAppBar,
+  StyledLogo,
+  ProfileIconButton,
+} from "./styles/HeaderStyles";
 
 import NotificationBadge from "./NotificationBadge";
 import CustomMenuList from "./CustomMenuList";
@@ -212,7 +216,7 @@ const Header = (props: HeaderProps) => {
                 <LoyaltySharpIcon color="secondary" />
               </NotificationBadge>
 
-              <IconButton
+              <ProfileIconButton
                 size="large"
                 edge="end"
                 aria-label="account of current user"
@@ -229,7 +233,7 @@ const Header = (props: HeaderProps) => {
                   alt="Account"
                   style={{ width: "100%", height: "100%", borderRadius: "50%" }}
                 />
-              </IconButton>
+              </ProfileIconButton>
             </Box>
           </Box>
         </Toolbar>

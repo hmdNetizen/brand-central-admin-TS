@@ -1,14 +1,15 @@
 import AppBar, { AppBarProps } from "@mui/material/AppBar";
 import { styled, Theme } from "@mui/material/styles";
-import { SxProps } from "@mui/system";
+import IconButton from "@mui/material/IconButton";
 
 type CustomAppBarProps = {
   lastElement: string;
 };
 
-export const StyledAppBar = styled((props: AppBarProps & SxProps<Theme>) => (
-  <AppBar {...props} />
-))<CustomAppBarProps>(({ lastElement, theme, ...props }) => ({
+export const StyledAppBar = styled(
+  (props: AppBarProps) => <AppBar {...props} />,
+  { shouldForwardProp: (prop) => prop !== "lastElement" }
+)<CustomAppBarProps>(({ lastElement, theme }) => ({
   background: "#fff",
   padding: "1rem 2rem 1rem 0",
   display: lastElement === "print" ? "none" : "flex",
@@ -27,3 +28,10 @@ export const StyledLogo = styled("img")(({ theme }) => ({
     marginBottom: "1rem",
   },
 }));
+
+export const ProfileIconButton = styled(IconButton)({
+  width: 30,
+  height: 30,
+  overflow: "hidden",
+  padding: 0,
+});
