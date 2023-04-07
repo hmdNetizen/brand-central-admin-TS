@@ -15,7 +15,6 @@ import ShoppingBasketSharpIcon from "@mui/icons-material/ShoppingBasketSharp";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useTheme } from "@mui/material/styles";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { useActions } from "src/hooks/useActions";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import Moment from "react-moment";
@@ -145,7 +144,7 @@ const CustomMenuList = (props: MenuListProps) => {
           <ListItemText>You have a new message</ListItemText>
         </div>
         <Typography color="primary" variant="subtitle1">
-          <Moment fromNow>{message.createdAt}</Moment>
+          <Moment fromNow>{message?.createdAt}</Moment>
         </Typography>
       </StyledMenuItem>
     ));
@@ -182,7 +181,7 @@ const CustomMenuList = (props: MenuListProps) => {
         variant="subtitle1"
         style={{ color: theme.palette.secondary.main }}
       >
-        <Moment fromNow>{notification.createdAt}</Moment>
+        {/* <Moment fromNow>{notification.createdAt}</Moment> */}
       </Typography>
     </StyledMenuItem>
   ));
@@ -235,9 +234,10 @@ const CustomMenuList = (props: MenuListProps) => {
       </div>
       <Typography
         variant="subtitle1"
-        style={{ color: theme.palette.secondary.main }}
+        sx={{ color: theme.palette.secondary.main }}
       >
-        <Moment fromNow>{order.createdAt}</Moment>
+        45 minutes ago
+        {/* <Moment fromNow>{order.createdAt}</Moment> */}
       </Typography>
     </StyledMenuItem>
   ));
@@ -409,7 +409,7 @@ const CustomMenuList = (props: MenuListProps) => {
 
       {notificationId === "account" && (
         <StyledMenuItem onClick={handleLogout} notificationId={notificationId}>
-          <div className="account-wrapper">
+          <div>
             <ListItemIcon>
               <LogoutIcon />
             </ListItemIcon>

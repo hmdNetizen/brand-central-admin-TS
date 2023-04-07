@@ -22,6 +22,11 @@ const Prefetch = () => {
     addNewLowStockNotification,
     addNewMessageNotification,
     addNewPreOrderNotification,
+    getOrdersNotifications,
+    getCustomersNotifications,
+    getLowStockNotifications,
+    getPreOrderNotifications,
+    getMessagesNotifications,
   } = useActions();
 
   const {
@@ -32,7 +37,7 @@ const Prefetch = () => {
     preOrderNotifications,
   } = useTypedSelector((state) => state.notifications);
 
-  const { adminEmail } = useTypedSelector((state) => state.auth);
+  const { adminEmail, accessToken } = useTypedSelector((state) => state.auth);
 
   useEffect(() => {
     socket.emit("adminJoin", { email: adminEmail });
@@ -90,12 +95,20 @@ const Prefetch = () => {
   ]);
 
   useLayoutEffect(() => {
-    if (localStorage.accessToken) {
-      setAuthorizationToken(localStorage.accessToken);
+    if (accessToken) {
+      setAuthorizationToken(accessToken);
     }
 
     // eslint-disable-next-line
-  }, [localStorage.accessToken]);
+  }, [accessToken]);
+
+  useEffect(() => {
+    getOrdersNotifications();
+    getCustomersNotifications();
+    getLowStockNotifications();
+    getPreOrderNotifications();
+    getMessagesNotifications();
+  }, []);
 
   return <Outlet />;
 };

@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import AppBar, { AppBarProps } from "@mui/material/AppBar";
-import { styled, Theme } from "@mui/material/styles";
-import { SxProps } from "@mui/system";
 import { useLocation, Link } from "react-router-dom";
 import Toolbar from "@mui/material/Toolbar";
 import useMediaQuery from "@mui/material/useMediaQuery";

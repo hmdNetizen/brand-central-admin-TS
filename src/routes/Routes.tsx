@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import Prefetch from "src/components/features/Prefetch";
 import DashboardLayout from "src/layouts/DashboardLayout";
 import Login from "src/pages/auth/Login";
 import Dashboard from "src/pages/Dashboard";
@@ -9,8 +10,10 @@ const PagesRoutes = () => {
       <Routes>
         <Route path="/">
           <Route path="login" element={<Login />} />
-          <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route index element={<Dashboard />} />
+          <Route element={<Prefetch />}>
+            <Route path="/dashboard" element={<DashboardLayout />}>
+              <Route index element={<Dashboard />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

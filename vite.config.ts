@@ -8,5 +8,7 @@ export default defineConfig({
     alias: {
       src: "/src",
     },
+    mainFields:
+      [] /* Added this field because react-moment wouldn't work without it. */,
   },
 });
