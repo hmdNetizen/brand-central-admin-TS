@@ -34,7 +34,6 @@ const ListItemButtonWithoutSubMenu = (props: CustomListItemButtonProps) => {
   return (
     <StyledListItemButton
       disableRipple
-      key={menu.id}
       style={{ justifyContent: "center" }}
       component={Link}
       to={menu.path}

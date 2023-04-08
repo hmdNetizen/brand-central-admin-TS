@@ -39,9 +39,9 @@ export const StyledAccordion = styled(Accordion, {
   },
 }));
 
-export const StyledAccordionSummary = styled(
-  AccordionSummary
-)<CustomAccordionSummaryProps>(({ theme, menuId, selectedMenu }) => ({
+export const StyledAccordionSummary = styled(AccordionSummary, {
+  shouldForwardProp: (prop) => prop !== "menuId" && prop !== "selectedMenu",
+})<CustomAccordionSummaryProps>(({ theme, menuId, selectedMenu }) => ({
   padding: 0,
   paddingRight: 5,
   background:

@@ -17,6 +17,7 @@ const AsideList = (props: AsideListProps) => {
       {menus.map((menu) =>
         menu.hasOwnProperty("subMenus") ? (
           <AsideListItem
+            key={menu.id}
             menu={menu}
             menuSlideIn={menuSlideIn}
             selectedMenu={selectedMenu}
@@ -24,6 +25,7 @@ const AsideList = (props: AsideListProps) => {
           />
         ) : (
           <ListItemButtonWithoutSubMenu
+            key={menu.id}
             menu={menu}
             menuSlideIn={menuSlideIn}
             selectedMenu={selectedMenu}
