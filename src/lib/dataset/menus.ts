@@ -1,0 +1,196 @@
+import {
+  MdOutlineSpaceDashboard as DashboardIcon,
+  MdOutlineCategory as CategoryIcon,
+  MdOutlineEmail as MessagesIcon,
+  MdOutlineSettingsSuggest as GeneralSettingsIcon,
+  MdOutlineLocalShipping as ShippingIcon,
+  MdOutlineShoppingBag as PreOrderIcon,
+} from "react-icons/md";
+import { BiPurchaseTagAlt as OrderIcon } from "react-icons/bi";
+import { BsCart4 as ProductIcon } from "react-icons/bs";
+import {
+  IoPersonOutline as CustomersIcon,
+  IoDiamondOutline as BrandsIcon,
+  IoCloudUploadOutline,
+} from "react-icons/io5";
+import { RiCoupon2Line as CouponIcon } from "react-icons/ri";
+
+export const menus = [
+  { id: 0, title: "Dashboard", icon: DashboardIcon, path: "/dashboard" },
+  {
+    id: 1,
+    title: "Orders",
+    icon: OrderIcon,
+    path: "/orders",
+    subMenus: [
+      { subId: 0, title: "All Orders", path: "/orders" },
+      { subId: 1, title: "Pending Orders", path: "/orders/pending" },
+      {
+        subId: 2,
+        title: "Processing Orders",
+        path: "/orders/processing",
+      },
+      { subId: 3, title: "Completed Orders", path: "/orders/completed" },
+      { subId: 4, title: "Declined Orders", path: "/orders/declined" },
+    ],
+  },
+  {
+    id: 2,
+    title: "Pre-orders",
+    icon: PreOrderIcon,
+    path: "/pre-orders",
+    subMenus: [
+      { subId: 0, title: "All Pre-orders", path: "/pre-orders" },
+      {
+        subId: 1,
+        title: "Available Pre-orders",
+        path: "/pre-orders/available",
+      },
+    ],
+  },
+  {
+    id: 3,
+    title: "Products",
+    icon: ProductIcon,
+    path: "/products",
+    subMenus: [
+      {
+        subId: 0,
+        title: "All Products",
+        path: "/products",
+      },
+      {
+        subId: 1,
+        title: "Add New Product",
+        path: "/products/create",
+      },
+      {
+        subId: 2,
+        title: "Featured Products",
+        path: "/products/featured",
+      },
+      {
+        subId: 3,
+        title: "Best Sellers Products",
+        path: "/products/best-sellers",
+      },
+      {
+        subId: 4,
+        title: "Deactivated Products",
+        path: "/products/deactivated",
+      },
+      {
+        subId: 5,
+        title: "Popular Products",
+        path: "/products/popular",
+      },
+      {
+        subId: 6,
+        title: "Weekly Offers",
+        path: "/products/weekly-offers",
+      },
+      {
+        subId: 7,
+        title: "Non-Image Products",
+        path: "/products/missing-images",
+      },
+    ],
+  },
+  {
+    id: 4,
+    title: "Customers",
+    icon: CustomersIcon,
+    path: "/customers",
+    subMenus: [
+      { subId: 0, title: "Customers List", path: "/customers" },
+      {
+        subId: 1,
+        title: "Blocked Customers",
+        path: "/customers/blocked",
+      },
+    ],
+  },
+  {
+    id: 5,
+    title: "Manage Categories",
+    icon: CategoryIcon,
+    path: "/categories",
+    subMenus: [
+      { subId: 0, title: "Main Category", path: "/category" },
+      { subId: 1, title: "Sub Category", path: "/subcategory" },
+      { subId: 2, title: "Brands Category", path: "/brands-category" },
+    ],
+  },
+  {
+    id: 6,
+    title: "Brands",
+    icon: BrandsIcon,
+    path: "/brands",
+    subMenus: [
+      { subId: 0, title: "All Brands", path: "/brands" },
+      {
+        subId: 1,
+        title: "Deactivated Brands",
+        path: "/brands/deactivated",
+      },
+    ],
+  },
+  {
+    id: 7,
+    title: "Set Coupons",
+    icon: CouponIcon,
+    path: "/coupons",
+  },
+  {
+    id: 8,
+    title: "Messages",
+    icon: MessagesIcon,
+    path: "/messages",
+    subMenus: [
+      { subId: 0, title: "Sent", path: "/sent-emails" },
+      { subId: 1, title: "Recieved", path: "/received-emails" },
+    ],
+  },
+  {
+    id: 9,
+    title: "Shipping",
+    icon: ShippingIcon,
+    path: "/shipping/zip-codes",
+    subMenus: [
+      {
+        subId: 0,
+        title: "Zip Codes",
+        path: "/shipping/zip-codes",
+      },
+    ],
+  },
+  {
+    id: 10,
+    title: "General Settings",
+    icon: GeneralSettingsIcon,
+    path: "/general-settings",
+    subMenus: [
+      {
+        subId: 0,
+        title: "Logo",
+        path: "/general-settings/logo",
+      },
+      {
+        subId: 1,
+        title: "Favicon",
+        path: "/general-settings/favicon",
+      },
+      {
+        subId: 2,
+        title: "Social Media",
+        path: "/general-settings/socials",
+      },
+    ],
+  },
+  {
+    id: 11,
+    title: "Update Inventory",
+    icon: IoCloudUploadOutline,
+    path: "/update-inventory",
+  },
+];
