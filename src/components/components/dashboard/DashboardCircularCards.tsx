@@ -1,7 +1,6 @@
 import React from "react";
 import CircularCardItem from "./CircularCardItem";
 import { styled } from "@mui/material/styles";
-import { lastThirtyDaysCustomers } from "src/lib/helpers";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 
 type CircularCardProps = {
@@ -29,11 +28,12 @@ const Container = styled("div")<CircularCardProps>(
   })
 );
 
-const completedOrders = [];
-
-const DashboardCircularCards = () => {
+const DashboardCircularCards = ({ menuSlideIn }: CircularCardProps) => {
   const { numberOfCustomersInThirtyDays, totalCustomers } = useTypedSelector(
     (state) => state.customers
+  );
+  const { lastThirtyDaysSale, totalSales } = useTypedSelector(
+    (state) => state.orders
   );
   return (
     <Container menuSlideIn={menuSlideIn}>
@@ -51,15 +51,13 @@ const DashboardCircularCards = () => {
       />
       <CircularCardItem
         heading="Recent Sales"
-        numberCount={
-          completedOrders?.length > 0 ? lastThirtyDaysSales(completedOrders) : 0
-        }
+        numberCount={lastThirtyDaysSale}
         description="Last 30 days"
         cardBorderColor="#cf0633"
       />
       <CircularCardItem
         heading="Total Sales"
-        numberCount={completedOrders?.length}
+        numberCount={totalSales}
         description="All Time"
         cardBorderColor="#5a49e9"
       />
