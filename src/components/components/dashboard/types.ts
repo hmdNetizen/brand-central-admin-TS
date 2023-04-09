@@ -10,3 +10,10 @@ export type RectangularCardItemProps = {
 export type CardPropTypes = {
   menuSlideIn: boolean;
 };
+
+export type CircularCardProps = {
+  numberCount: number;
+  heading: string;
+  description: string;
+  cardBorderColor: string;
+};
