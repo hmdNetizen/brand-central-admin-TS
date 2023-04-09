@@ -17,7 +17,7 @@ const rootReducer = combineReducers({
   utils: utilsReducer,
   notifications: notificationReducer,
   user: userReducer,
-  customer: customersReducer,
+  customers: customersReducer,
 });
 
 const store = configureStore({
