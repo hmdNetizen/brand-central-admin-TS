@@ -5,6 +5,7 @@ import {
   notificationActions,
   userActions,
   customerActions,
+  ordersActions,
 } from "src/services/actions";
 
 export const useActions = () => {
@@ -15,6 +16,7 @@ export const useActions = () => {
       ...notificationActions,
       ...userActions,
       ...customerActions,
+      ...ordersActions,
     },
     dispatch
   );
