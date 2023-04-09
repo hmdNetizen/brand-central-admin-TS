@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../axios";
-import { initStateType, RecentOrdersPayloadType } from "./OrderTypes";
+import {
+  initStateType,
+  RecentOrdersPayloadType,
+  RecentSalesPayloadType,
+} from "./OrderTypes";
 
 const initialState: initStateType = {
   loadingOrders: false,
@@ -16,7 +20,7 @@ export const getRecentSales = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const { data } = await axios.get("/api/orders/completed/recent");
-      const result = data as RecentOrdersPayloadType;
+      const result = data as RecentSalesPayloadType;
 
       return {
         totalSales: result.data.total,
@@ -24,6 +28,20 @@ export const getRecentSales = createAsyncThunk(
       };
     } catch (error) {
       return thunkAPI.rejectWithValue("Error occurred while fetching sales");
+    }
+  }
+);
+
+export const getRecentOrders = createAsyncThunk(
+  "recent-orders",
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await axios.get("/api/orders/recent");
+      const result = data as RecentOrdersPayloadType;
+
+      return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error occurred while fetching orders");
     }
   }
 );
@@ -44,6 +62,21 @@ const ordersSlice = createSlice({
         state.error = null;
       })
       .addCase(getRecentSales.rejected, (state, action) => {
+        state.loadingOrders = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(getRecentOrders.pending, (state) => {
+        state.loadingOrders = true;
+      })
+      .addCase(getRecentOrders.fulfilled, (state, action) => {
+        state.loadingOrders = false;
+        state.recentOrders = action.payload;
+        state.error = null;
+      })
+      .addCase(getRecentOrders.rejected, (state, action) => {
         state.loadingOrders = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;

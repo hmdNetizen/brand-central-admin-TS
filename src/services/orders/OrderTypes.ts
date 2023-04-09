@@ -59,17 +59,41 @@ export type OrderReturnedPayload = {
   ordersProducts: OrderProductsType[];
 };
 
-export type RecentOrdersPayloadType = {
+export type RecentSalesPayloadType = {
   data: {
     total: number;
     lastThirtyDays: number;
   };
 };
 
+export type RecentOrdersType = Pick<
+  OrderReturnedPayload,
+  "orderId" | "orderDate"
+>;
+
+export type OrderExcerptDataTypes = Pick<
+  OrderReturnedPayload,
+  | "id"
+  | "orderId"
+  | "orderDate"
+  | "orderPaymentAmount"
+  | "orderTotalQuantity"
+  | "ordersCustomer"
+  | "orderStatus"
+>;
+
+export interface RecentOrdersReturnedPayload extends RecentOrdersType {
+  _id: string;
+}
+
+export type RecentOrdersPayloadType = {
+  data: RecentOrdersReturnedPayload[];
+};
+
 export type initStateType = {
   loadingOrders: boolean;
   completedOrders: OrderReturnedPayload[];
-  recentOrders: OrderReturnedPayload[];
+  recentOrders: RecentOrdersReturnedPayload[];
   lastThirtyDaysSale: number;
   totalSales: number;
   error: string | null;

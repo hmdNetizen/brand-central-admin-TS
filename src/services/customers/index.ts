@@ -5,6 +5,7 @@ import { initStateTypes, CustomerPayloadType } from "./CustomerTypes";
 const initialState: initStateTypes = {
   loadingCustomers: false,
   customers: [],
+  recentCustomers: [],
   numberOfCustomersInThirtyDays: 0,
   totalCustomers: 0,
   error: null,
