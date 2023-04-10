@@ -10,13 +10,6 @@ import { Container } from "./styles/DashRectangularCardsStyles";
 import { CardPropTypes } from "./types";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 
-const completedOrders = [];
-const pendingOrders = [];
-const total = 10;
-const preOrders = [];
-const processingOrders = [];
-const customers = [];
-
 // const cardData: RectangularCardItemProps[] = [
 //   {
 //     heading: "Orders Pending",
@@ -83,6 +76,13 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
   const totalCustomers = useTypedSelector(
     (state) => state.customers.totalCustomers
   );
+
+  const totalProducts = useTypedSelector(
+    (state) => state.products.totalProducts
+  );
+
+  const preOrders = useTypedSelector((state) => state.preOrders.preOrders);
+
   return (
     <Container menuSlideIn={menuSlideIn}>
       <DashboardRectangularCardItem
@@ -95,7 +95,7 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
             style={{ transform: "rotate(-20deg)", fontSize: "5rem" }}
           />
         }
-        path="/admin/orders/pending"
+        path="/orders/pending"
       />
       <DashboardRectangularCardItem
         heading="Orders Processing"
@@ -107,7 +107,7 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
             style={{ transform: "rotate(-20deg)", fontSize: "5rem" }}
           />
         }
-        path="/admin/orders/processing"
+        path="/orders/processing"
       />
       <DashboardRectangularCardItem
         heading="Orders Completed"
@@ -119,11 +119,11 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
             style={{ transform: "rotate(-20deg)", fontSize: "5rem" }}
           />
         }
-        path="/admin/orders/completed"
+        path="/orders/completed"
       />
       <DashboardRectangularCardItem
         heading="Total Products"
-        numberCount={total}
+        numberCount={totalProducts}
         primaryColor="#5a49e9"
         secondaryColor="#7a6cf0"
         cardIcon={
@@ -131,7 +131,7 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
             style={{ transform: "rotate(-20deg)", fontSize: "5rem" }}
           />
         }
-        path="/admin/products"
+        path="/products"
       />
       <DashboardRectangularCardItem
         heading="Total Customers"
@@ -143,7 +143,7 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
             style={{ transform: "rotate(-20deg)", fontSize: "5rem" }}
           />
         }
-        path="/admin/customers"
+        path="/customers"
       />
       <DashboardRectangularCardItem
         heading="Total Preorders"
@@ -155,7 +155,7 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
             style={{ transform: "rotate(-20deg)", fontSize: "5rem" }}
           />
         }
-        path="/admin/pre-orders"
+        path="/pre-orders"
       />
     </Container>
   );

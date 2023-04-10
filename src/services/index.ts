@@ -1,7 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./auth";
 import userReducer from "./user";
-// import productReducer from "./product";
+import productReducer from "./products";
 import utilsReducer from "./utils";
 import notificationReducer from "./notifications";
 // import commonReducer from "./common";
@@ -10,7 +10,7 @@ import customersReducer from "./customers";
 // import couponReducer from "./coupon";
 // import settingsReducer from "./settings";
 // import shippingReducer from "./shipping";
-// import preOrderReducer from "./pre-orders";
+import preOrderReducer from "./pre-orders";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -19,6 +19,8 @@ const rootReducer = combineReducers({
   user: userReducer,
   customers: customersReducer,
   orders: orderReducer,
+  preOrders: preOrderReducer,
+  products: productReducer,
 });
 
 const store = configureStore({
