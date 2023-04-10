@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 import DashboardRectangularCards from "src/components/dashboard/DashboardRectangularCards";
@@ -10,8 +10,15 @@ import {
 } from "src/components/dashboard/styles/DashboardStyles";
 import DashboardOrdersTable from "src/components/dashboard/DashboardOrdersTable";
 import DashboardCustomersTable from "src/components/dashboard/DashboardCustomersTable";
+import { useActions } from "src/hooks/useActions";
 
 const Dashboard = ({ menuSlideIn }: DashboardProps) => {
+  const { getRecentSales, getRecentOrders } = useActions();
+
+  useEffect(() => {
+    getRecentSales();
+    getRecentOrders();
+  }, []);
   return (
     <Container container direction="column" menuSlideIn={menuSlideIn}>
       <DashboardRectangularCards menuSlideIn={menuSlideIn} />
