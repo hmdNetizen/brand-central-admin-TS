@@ -2,40 +2,17 @@ import React, { useState, Fragment, useEffect } from "react";
 import Header from "./header/Header";
 import { Outlet, Params, useParams, useLocation } from "react-router-dom";
 import AsideNavigation from "./aside/AsideNavigation";
-import { styled } from "@mui/material/styles";
+import { OutletContainer } from "src/layouts/DashLayoutStyles";
 import { menus } from "src/lib/dataset/menus";
 
-type OutletProps = {
+type DashLayoutProps = {
   menuSlideIn: boolean;
-  orderId: string;
-  pathname: string;
+  setMenuSlideIn: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const OutletContainer = styled("div", {
-  shouldForwardProp: (prop) =>
-    prop !== "menuSlideIn" && prop !== "orderId" && prop !== "pathname",
-})<OutletProps>(({ theme, menuSlideIn, orderId, pathname }) => ({
-  transition: "all .25s ease-in-out",
-  paddingLeft:
-    pathname === `/admin/orders/${orderId}/invoice/print`
-      ? 0
-      : menuSlideIn
-      ? "7rem"
-      : 300,
-  overflowX: "hidden",
+const DashboardLayout = (props: DashLayoutProps) => {
+  const { menuSlideIn, setMenuSlideIn } = props;
 
-  [theme.breakpoints.only("xs")]: {
-    paddingLeft:
-      pathname === `/admin/orders/${orderId}/invoice/print`
-        ? 0
-        : menuSlideIn
-        ? 0
-        : "80%",
-  },
-}));
-
-const DashboardLayout = () => {
-  const [menuSlideIn, setMenuSlideIn] = useState<boolean>(false);
   const [selectedMenu, setSelectedMenu] = useState<number>(0);
   const [selectedSubMenu, setSelectedSubMenu] = useState<number>(0);
 

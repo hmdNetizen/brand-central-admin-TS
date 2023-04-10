@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import spinner from "assets/gif/loading-screen.gif";
+import spinner from "src/assets/gifs/loading-screen.gif";
 
 const Spinner = ({ loaderHeight }: { loaderHeight: string | number }) => {
   return (

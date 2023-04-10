@@ -135,7 +135,11 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
         numberCount={preOrders.length}
         primaryColor="#cf0633"
         secondaryColor="#f96079"
-        cardIcon={<ShoppingBagOutlinedIcon />}
+        cardIcon={
+          <ShoppingBagOutlinedIcon
+            style={{ transform: "rotate(-20deg)", fontSize: "5rem" }}
+          />
+        }
         path="/admin/pre-orders"
       />
     </Container>

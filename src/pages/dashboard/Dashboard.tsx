@@ -8,6 +8,8 @@ import {
   Container,
   InforTableWrapper,
 } from "src/components/dashboard/styles/DashboardStyles";
+import DashboardOrdersTable from "src/components/dashboard/DashboardOrdersTable";
+import DashboardCustomersTable from "src/components/dashboard/DashboardCustomersTable";
 
 const Dashboard = ({ menuSlideIn }: DashboardProps) => {
   return (
@@ -16,18 +18,18 @@ const Dashboard = ({ menuSlideIn }: DashboardProps) => {
       <DashboardCircularCards menuSlideIn={menuSlideIn} />
       <InforTableWrapper item container menuSlideIn={menuSlideIn}>
         <Grid item md>
-          <DashboardOrderTable />
+          <DashboardOrdersTable />
         </Grid>
         <Grid item md>
-          <DashboardCustomerTable />
+          <DashboardCustomersTable />
         </Grid>
       </InforTableWrapper>
-      <Grid item container style={{ padding: "5rem 0" }}>
+      {/* <Grid item container style={{ padding: "5rem 0" }}>
         <DashboardRecentProducts />
       </Grid>
       <Grid item container style={{ padding: "0 0 5rem 0" }}>
         <DashboardPopularProducts />
-      </Grid>
+      </Grid> */}
     </Container>
   );
 };
