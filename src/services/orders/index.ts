@@ -4,12 +4,16 @@ import {
   initStateType,
   RecentOrdersPayloadType,
   RecentSalesPayloadType,
+  OrdersCountReturnedPayload,
 } from "./OrderTypes";
 
 const initialState: initStateType = {
   loadingOrders: false,
   completedOrders: [],
   recentOrders: [],
+  pendingOrdersCount: 0,
+  processingOrdersCount: 0,
+  completedOrdersCount: 0,
   lastThirtyDaysSale: 0,
   totalSales: 0,
   error: null,
@@ -42,6 +46,25 @@ export const getRecentOrders = createAsyncThunk(
       return result.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+    }
+  }
+);
+
+export const getOrdersCount = createAsyncThunk(
+  "orders-count",
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await axios.get("/api/orders/count");
+
+      const result = data as OrdersCountReturnedPayload;
+
+      return {
+        processingOrders: result.data.processing,
+        pendingOrders: result.data.pending,
+        completedOrders: result.data.completed,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error occured while fetching orders");
     }
   }
 );
@@ -82,6 +105,11 @@ const ordersSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder.addCase(getOrdersCount.fulfilled, (state, action) => {
+      state.completedOrdersCount = action.payload.completedOrders;
+      state.pendingOrdersCount = action.payload.pendingOrders;
+      state.processingOrdersCount = action.payload.processingOrders;
+    });
   },
 });
 

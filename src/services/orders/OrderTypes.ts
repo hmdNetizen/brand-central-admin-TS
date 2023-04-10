@@ -90,10 +90,21 @@ export type RecentOrdersPayloadType = {
   data: RecentOrdersReturnedPayload[];
 };
 
+export type OrdersCountReturnedPayload = {
+  data: {
+    pending: number;
+    processing: number;
+    completed: number;
+  };
+};
+
 export type initStateType = {
   loadingOrders: boolean;
   completedOrders: OrderReturnedPayload[];
   recentOrders: RecentOrdersReturnedPayload[];
+  pendingOrdersCount: number;
+  processingOrdersCount: number;
+  completedOrdersCount: number;
   lastThirtyDaysSale: number;
   totalSales: number;
   error: string | null;

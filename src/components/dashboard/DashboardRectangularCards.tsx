@@ -8,6 +8,7 @@ import GroupsSharpIcon from "@mui/icons-material/GroupsSharp";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import { Container } from "./styles/DashRectangularCardsStyles";
 import { CardPropTypes } from "./types";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
 
 const completedOrders = [];
 const pendingOrders = [];
@@ -68,11 +69,13 @@ const customers = [];
 // ];
 
 const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
+  const { completedOrdersCount, pendingOrdersCount, processingOrdersCount } =
+    useTypedSelector((state) => state.orders);
   return (
     <Container menuSlideIn={menuSlideIn}>
       <DashboardRectangularCardItem
         heading="Orders Pending"
-        numberCount={pendingOrders.length}
+        numberCount={pendingOrdersCount}
         primaryColor="#f85108"
         secondaryColor="#f4ad3c"
         cardIcon={
@@ -84,7 +87,7 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
       />
       <DashboardRectangularCardItem
         heading="Orders Processing"
-        numberCount={processingOrders.length}
+        numberCount={processingOrdersCount}
         primaryColor="#047edf"
         secondaryColor="#0bb9fa"
         cardIcon={
@@ -96,7 +99,7 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
       />
       <DashboardRectangularCardItem
         heading="Orders Completed"
-        numberCount={completedOrders.length}
+        numberCount={completedOrdersCount}
         primaryColor="#0fa49b"
         secondaryColor="#03dbce"
         cardIcon={
