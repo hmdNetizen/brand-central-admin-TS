@@ -13,12 +13,18 @@ import DashboardCustomersTable from "src/components/dashboard/DashboardCustomers
 import { useActions } from "src/hooks/useActions";
 
 const Dashboard = ({ menuSlideIn }: DashboardProps) => {
-  const { getRecentSales, getRecentOrders, getOrdersCount } = useActions();
+  const {
+    getRecentSales,
+    getRecentOrders,
+    getOrdersCount,
+    getRecentCustomers,
+  } = useActions();
 
   useEffect(() => {
     getRecentSales();
     getRecentOrders();
     getOrdersCount();
+    getRecentCustomers();
   }, []);
   return (
     <Container container direction="column" menuSlideIn={menuSlideIn}>

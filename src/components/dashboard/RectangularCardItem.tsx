@@ -1,9 +1,7 @@
 import React from "react";
 import Grid, { GridProps } from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Button, { ButtonProps } from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
-import { Link, LinkProps } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Container,
   StyledButton,

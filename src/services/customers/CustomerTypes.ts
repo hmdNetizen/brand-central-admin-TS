@@ -16,6 +16,14 @@ export type CustomerPayloadType = {
   };
 };
 
+export type CustomerExcerptPayloadType = {
+  data: {
+    data: CustomerExcerptDataTypes[];
+    lastThirtyDays: number;
+    totalCustomers: number;
+  };
+};
+
 export type initStateTypes = {
   loadingCustomers: boolean;
   customers: UserProfilePayloadType[];

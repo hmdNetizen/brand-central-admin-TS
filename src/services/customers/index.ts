@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../axios";
-import { initStateTypes, CustomerPayloadType } from "./CustomerTypes";
+import {
+  initStateTypes,
+  CustomerPayloadType,
+  CustomerExcerptPayloadType,
+} from "./CustomerTypes";
 
 const initialState: initStateTypes = {
   loadingCustomers: false,
@@ -11,17 +15,17 @@ const initialState: initStateTypes = {
   error: null,
 };
 
-export const getCustomers = createAsyncThunk(
+export const getRecentCustomers = createAsyncThunk(
   "get-customers",
   async (_, thunkAPI) => {
     try {
       const { data } = await axios.get("/api/customers/recent");
-      const result = data as CustomerPayloadType;
+      const result = data as CustomerExcerptPayloadType;
 
       return {
         data: result.data.data,
         lastThirtyDays: result.data.lastThirtyDays,
-        totalCustomers: result.data.total,
+        totalCustomers: result.data.totalCustomers,
       };
     } catch (error) {
       return thunkAPI.rejectWithValue(
@@ -37,16 +41,16 @@ const customerSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(getCustomers.pending, (state) => {
+      .addCase(getRecentCustomers.pending, (state) => {
         state.loadingCustomers = true;
       })
-      .addCase(getCustomers.fulfilled, (state, action) => {
+      .addCase(getRecentCustomers.fulfilled, (state, action) => {
         state.loadingCustomers = false;
-        state.customers = action.payload.data;
+        state.recentCustomers = action.payload.data;
         state.numberOfCustomersInThirtyDays = action.payload.lastThirtyDays;
         state.totalCustomers = action.payload.totalCustomers;
       })
-      .addCase(getCustomers.rejected, (state, action) => {
+      .addCase(getRecentCustomers.rejected, (state, action) => {
         state.loadingCustomers = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;

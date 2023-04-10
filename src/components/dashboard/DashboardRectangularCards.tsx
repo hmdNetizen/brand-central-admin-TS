@@ -69,8 +69,20 @@ const customers = [];
 // ];
 
 const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
-  const { completedOrdersCount, pendingOrdersCount, processingOrdersCount } =
-    useTypedSelector((state) => state.orders);
+  // Orders states
+  const completedOrdersCount = useTypedSelector(
+    (state) => state.orders.completedOrdersCount
+  );
+  const pendingOrdersCount = useTypedSelector(
+    (state) => state.orders.pendingOrdersCount
+  );
+  const processingOrdersCount = useTypedSelector(
+    (state) => state.orders.processingOrdersCount
+  );
+
+  const totalCustomers = useTypedSelector(
+    (state) => state.customers.totalCustomers
+  );
   return (
     <Container menuSlideIn={menuSlideIn}>
       <DashboardRectangularCardItem
@@ -123,7 +135,7 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
       />
       <DashboardRectangularCardItem
         heading="Total Customers"
-        numberCount={customers.length}
+        numberCount={totalCustomers}
         primaryColor="#129021"
         secondaryColor="#1ed41e"
         cardIcon={
