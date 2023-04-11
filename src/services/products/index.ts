@@ -1,6 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../axios";
-import { PaginatedReturnedPayloadType, initStateType } from "./ProductTypes";
+import {
+  PaginatedReturnedPayloadType,
+  ProductsReturnedPayloadType,
+  DashboardProductPayloadType,
+  initStateType,
+} from "./ProductTypes";
 
 type ProductQueryType = {
   page: number;
@@ -9,7 +14,11 @@ type ProductQueryType = {
 
 const initialState: initStateType = {
   loadingProducts: false,
+  loadingPopularProducts: false,
+  loadingRecentProducts: false,
   products: [],
+  recentProducts: [],
+  popularProducts: [],
   totalProducts: 0,
   error: null,
 };
@@ -34,6 +43,38 @@ export const getPaginatedProducts = createAsyncThunk(
   }
 );
 
+export const getRecentlyAddedProducts = createAsyncThunk(
+  "recently-added",
+  async (page: number, thunkAPI) => {
+    try {
+      const { data } = await axios.get(
+        `/api/products/v1/recently-added?page=${page}`
+      );
+      const result = data as DashboardProductPayloadType;
+
+      return result.data.products;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error occurred while fetching products");
+    }
+  }
+);
+
+export const getDashboardPopularProducts = createAsyncThunk(
+  "get-popular-products",
+  async (page: number, thunkAPI) => {
+    try {
+      const { data } = await axios.get(
+        `/api/products/v1/popular?limit=${5}&page=${page}`
+      );
+      const result = data as DashboardProductPayloadType;
+
+      return result.data.products;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error occurred while fetching products");
+    }
+  }
+);
+
 const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -51,6 +92,36 @@ const productsSlice = createSlice({
       })
       .addCase(getPaginatedProducts.rejected, (state, action) => {
         state.loadingProducts = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(getRecentlyAddedProducts.pending, (state) => {
+        state.loadingRecentProducts = true;
+      })
+      .addCase(getRecentlyAddedProducts.fulfilled, (state, action) => {
+        state.loadingRecentProducts = false;
+        state.recentProducts = action.payload;
+        state.error = null;
+      })
+      .addCase(getRecentlyAddedProducts.rejected, (state, action) => {
+        state.loadingRecentProducts = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(getDashboardPopularProducts.pending, (state) => {
+        state.loadingPopularProducts = true;
+      })
+      .addCase(getDashboardPopularProducts.fulfilled, (state, action) => {
+        state.loadingPopularProducts = false;
+        state.popularProducts = action.payload;
+        state.error = null;
+      })
+      .addCase(getDashboardPopularProducts.rejected, (state, action) => {
+        state.loadingPopularProducts = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

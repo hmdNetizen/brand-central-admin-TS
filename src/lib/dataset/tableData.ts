@@ -67,7 +67,7 @@ export const customerColumns: TableHeaderColumnTypes[] = [
   },
 ];
 
-export const dashboardProductColumns = [
+export const dashboardProductColumns: TableHeaderColumnTypes[] = [
   {
     id: 0,
     label: "Featured Image",

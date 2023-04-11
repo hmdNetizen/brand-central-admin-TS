@@ -31,6 +31,7 @@ export type ProductTypes = {
   _id: string;
   productName: string;
   productDescription: string;
+  productType: string;
   itemCode: string;
   productUPC: string;
   units: string;
@@ -77,9 +78,38 @@ export type PaginatedReturnedPayloadType = {
   };
 };
 
+export type ProductsReturnedPayloadType = {
+  data: {
+    products: ProductTypes[];
+    total?: number;
+  };
+};
+
+export type DashboardProductType = Pick<
+  ProductTypes,
+  | "_id"
+  | "productName"
+  | "hasImage"
+  | "featuredImage"
+  | "productType"
+  | "priceCode3"
+  | "category"
+  | "subCategory"
+>;
+
+export type DashboardProductPayloadType = {
+  data: {
+    products: DashboardProductType[];
+  };
+};
+
 export type initStateType = {
   loadingProducts: boolean;
+  loadingRecentProducts: boolean;
+  loadingPopularProducts: boolean;
   products: ProductTypes[];
+  recentProducts: DashboardProductType[];
+  popularProducts: DashboardProductType[] | ProductTypes[];
   totalProducts: number;
   error: null | string;
 };
