@@ -236,8 +236,7 @@ const CustomMenuList = (props: MenuListProps) => {
         variant="subtitle1"
         sx={{ color: theme.palette.secondary.main }}
       >
-        45 minutes ago
-        {/* <Moment fromNow>{order.createdAt}</Moment> */}
+        <Moment fromNow>{order.createdAt}</Moment>
       </Typography>
     </StyledMenuItem>
   ));

@@ -4,6 +4,7 @@ import Prefetch from "src/components/features/Prefetch";
 import DashboardLayout from "src/layouts/DashboardLayout";
 import Login from "src/pages/auth/Login";
 import Dashboard from "src/pages/dashboard/Dashboard";
+import AllOrders from "src/pages/orders/AllOrders";
 
 const PagesRoutes = () => {
   const [menuSlideIn, setMenuSlideIn] = useState<boolean>(false);
@@ -23,6 +24,9 @@ const PagesRoutes = () => {
               }
             >
               <Route index element={<Dashboard menuSlideIn={menuSlideIn} />} />
+              <Route path="orders">
+                <Route index element={<AllOrders />} />
+              </Route>
             </Route>
           </Route>
         </Route>

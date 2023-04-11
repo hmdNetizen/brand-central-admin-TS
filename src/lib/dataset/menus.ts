@@ -21,17 +21,25 @@ export const menus = [
     id: 1,
     title: "Orders",
     icon: OrderIcon,
-    path: "/orders",
+    path: "/dashboard/orders",
     subMenus: [
-      { subId: 0, title: "All Orders", path: "/orders" },
-      { subId: 1, title: "Pending Orders", path: "/orders/pending" },
+      { subId: 0, title: "All Orders", path: "/dashboard/orders" },
+      { subId: 1, title: "Pending Orders", path: "/dashboard/orders/pending" },
       {
         subId: 2,
         title: "Processing Orders",
-        path: "/orders/processing",
+        path: "/dashboard/orders/processing",
       },
-      { subId: 3, title: "Completed Orders", path: "/orders/completed" },
-      { subId: 4, title: "Declined Orders", path: "/orders/declined" },
+      {
+        subId: 3,
+        title: "Completed Orders",
+        path: "/dashboard/orders/completed",
+      },
+      {
+        subId: 4,
+        title: "Declined Orders",
+        path: "/dashboard/orders/declined",
+      },
     ],
   },
   {
