@@ -8,59 +8,15 @@ import ShowDialog from "src/utils/ShowDialog";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CustomSelect from "src/utils/CustomSelect";
 import CustomTextArea from "src/utils/CustomTextArea";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
-import { useSelector } from "react-redux";
 import { useActions } from "src/hooks/useActions";
-
-const useStyles = makeStyles((theme) => ({
-  formContainer: {
-    "&.MuiGrid-root": {
-      padding: "2rem 3rem",
-    },
-  },
-  submitButton: {
-    "&.MuiButton-root": {
-      minWidth: 180,
-      fontSize: "1.6rem",
-      fontWeight: 400,
-      textTransform: "none",
-      borderRadius: 0,
-
-      "&:hover": {
-        background: theme.palette.secondary.light,
-      },
-
-      "&:active": {
-        background: theme.palette.secondary.dark,
-      },
-
-      "&:disabled": {
-        cursor: "not-allowed",
-        pointerEvents: "all !important",
-        background: theme.palette.secondary.light,
-        color: "#fff",
-        // color: (props) => (props.loading ? "#fff" : "inherit"),
-      },
-    },
-  },
-  loader: {
-    marginRight: "1rem",
-    "&.MuiCircularProgress-root": {
-      color: "#f2f2f2",
-    },
-  },
-  cancelButton: {
-    "&.MuiButton-root": {
-      fontSize: "1.5rem",
-      textTransform: "none",
-      padding: ".5rem 2rem",
-      borderRadius: 0,
-      color: theme.palette.error.main,
-      background: theme.palette.common.lightRed,
-    },
-  },
-}));
+import { SelectChangeEvent } from "@mui/material";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import {
+  FormContainer,
+  SubmitButton,
+  StyledCircularProgress,
+  CancelButton,
+} from "./styles/DeliverStatusStyles";
 
 const initialState = {
   orderPaymentStatus: "",
@@ -68,27 +24,41 @@ const initialState = {
   orderNote: "",
 };
 
-const OrderDeliveryStatus = ({ openDeliveryStatus, setOpenDeliveryStatus }) => {
-  const classes = useStyles();
+type InitialStateType = {
+  orderPaymentStatus: string;
+  orderStatus: string;
+  orderNote: string;
+};
+
+type OrderDeliveryStatusType = {
+  openDeliveryStatus: boolean;
+  setOpenDeliveryStatus: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const OrderDeliveryStatus = (props: OrderDeliveryStatusType) => {
+  const { openDeliveryStatus, setOpenDeliveryStatus } = props;
   const theme = useTheme();
 
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
 
-  const [orderData, setOrderData] = useState(initialState);
+  const [orderData, setOrderData] = useState<InitialStateType>(initialState);
 
   const [orderPaymentStatusError, setOrderPaymentStatusError] = useState("");
   const [orderStatusError, setOrderStatusError] = useState("");
 
   const { orderPaymentStatus, orderStatus, orderNote } = orderData;
 
-  const { singleOrder, loadingOrderAction } = useSelector(
-    (state) => state.orders
+  const singleOrder = useTypedSelector((state) => state.orders.singleOrder);
+  const loadingOrderAction = useTypedSelector(
+    (state) => state.orders.loadingOrderAction
   );
 
   const { updateOrderStatus } = useActions();
 
-  const handleChange = (event) => {
+  const handleChange = (
+    event: SelectChangeEvent<unknown> | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     const { name, value } = event.target;
 
     setOrderData((prev) => ({ ...prev, [name]: value }));
@@ -114,7 +84,9 @@ const OrderDeliveryStatus = ({ openDeliveryStatus, setOpenDeliveryStatus }) => {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (
+    event: React.FormEvent<HTMLFormElement | HTMLDivElement>
+  ) => {
     event.preventDefault();
 
     if (!orderPaymentStatus && !orderStatus) {
@@ -136,7 +108,7 @@ const OrderDeliveryStatus = ({ openDeliveryStatus, setOpenDeliveryStatus }) => {
     if (orderPaymentStatusError || orderStatusError) return;
 
     updateOrderStatus({
-      orderId: singleOrder.id,
+      orderId: singleOrder?.id!,
       setOpenDeliveryStatus,
       orderStatus,
       orderPaymentStatus,
@@ -148,7 +120,8 @@ const OrderDeliveryStatus = ({ openDeliveryStatus, setOpenDeliveryStatus }) => {
       const newOrderData = { ...initialState };
       for (const key in singleOrder) {
         if (key in newOrderData) {
-          newOrderData[key] = singleOrder[key];
+          newOrderData[key as keyof InitialStateType] =
+            singleOrder[key as keyof InitialStateType];
         }
 
         setOrderData(newOrderData);
@@ -162,7 +135,7 @@ const OrderDeliveryStatus = ({ openDeliveryStatus, setOpenDeliveryStatus }) => {
       width={matchesXS ? "95%" : matchesSM ? 500 : 600}
       handleClose={() => setOpenDeliveryStatus(false)}
     >
-      <Grid container direction="column" className={classes.container}>
+      <Grid container direction="column">
         <Grid
           item
           container
@@ -183,12 +156,11 @@ const OrderDeliveryStatus = ({ openDeliveryStatus, setOpenDeliveryStatus }) => {
             </IconButton>
           </Grid>
         </Grid>
-        <Grid
+        <FormContainer
           item
           container
           direction="column"
           component="form"
-          className={classes.formContainer}
           onSubmit={handleSubmit}
         >
           <Grid item container pb={2}>
@@ -233,33 +205,26 @@ const OrderDeliveryStatus = ({ openDeliveryStatus, setOpenDeliveryStatus }) => {
             style={{ marginTop: "5rem" }}
           >
             <Grid item>
-              <Button
-                className={classes.cancelButton}
-                onClick={() => setOpenDeliveryStatus(false)}
-              >
+              <CancelButton onClick={() => setOpenDeliveryStatus(false)}>
                 Cancel
-              </Button>
+              </CancelButton>
             </Grid>
             <Grid item>
-              <Button
+              <SubmitButton
                 type="submit"
                 variant="contained"
                 disableRipple
                 color="secondary"
-                className={classes.submitButton}
                 disabled={loadingOrderAction}
               >
                 {loadingOrderAction && (
-                  <CircularProgress
-                    style={{ height: 25, width: 25 }}
-                    className={classes.loader}
-                  />
+                  <StyledCircularProgress style={{ height: 25, width: 25 }} />
                 )}{" "}
                 Save
-              </Button>
+              </SubmitButton>
             </Grid>
           </Grid>
-        </Grid>
+        </FormContainer>
       </Grid>
     </ShowDialog>
   );

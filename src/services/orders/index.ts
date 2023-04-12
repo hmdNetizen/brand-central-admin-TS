@@ -1,17 +1,20 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "../axios";
+import { toast } from "react-toastify";
 import {
   initStateType,
   RecentOrdersPayloadType,
   RecentSalesPayloadType,
   OrdersCountReturnedPayload,
   OrderReturnedPayload,
-  SendEmailProps,
+  SendEmailType,
   SingleOrderPayloadType,
+  OrderUpdateType,
 } from "./OrderTypes";
 
 const initialState: initStateType = {
   loadingOrders: false,
+  loadingOrderAction: false,
   orders: [],
   completedOrders: [],
   recentOrders: [],
@@ -79,7 +82,7 @@ export const getOrdersCount = createAsyncThunk(
 
 export const sendOrderStatusEmail = createAsyncThunk(
   "send-email",
-  async (details: SendEmailProps, thunkAPI) => {
+  async (details: SendEmailType, thunkAPI) => {
     const { setOpen, ...fields } = details;
 
     try {
@@ -104,6 +107,28 @@ export const getSingleOrder = createAsyncThunk(
       return result.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("Order could not be retrieved");
+    }
+  }
+);
+
+export const updateOrderStatus = createAsyncThunk(
+  "update-order-status",
+  async (details: OrderUpdateType, thunkAPI) => {
+    const { orderId, setOpenDeliveryStatus, ...fields } = details;
+    try {
+      const { data, status } = await axios.patch(
+        `/api/orders/${orderId}/status`,
+        fields
+      );
+      const result = data as SingleOrderPayloadType;
+
+      if (status === 200) {
+        setOpenDeliveryStatus(false);
+      }
+
+      return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error occurred while updating order");
     }
   }
 );
@@ -180,6 +205,33 @@ const ordersSlice = createSlice({
       })
       .addCase(getSingleOrder.rejected, (state, action) => {
         state.loadingSingleOrder = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updateOrderStatus.pending, (state) => {
+        state.loadingOrderAction = true;
+      })
+      .addCase(updateOrderStatus.fulfilled, (state, action) => {
+        state.loadingOrderAction = false;
+        state.orders = state.orders.map((order) =>
+          order.id === action.payload._id
+            ? {
+                ...order,
+                orderStatus: action.payload.orderStatus,
+                orderPaymentStatus: action.payload.orderPaymentStatus,
+              }
+            : order
+        );
+
+        toast.success("Order successfully updated", {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(updateOrderStatus.rejected, (state, action) => {
+        state.loadingOrderAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }
