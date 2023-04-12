@@ -254,7 +254,7 @@ export const brandCategoryColumns = [
   },
 ];
 
-export const allOrdersCategoryColumns = [
+export const allOrdersCategoryColumns: TableHeaderColumnTypes[] = [
   {
     id: 0,
     label: "Order Date",

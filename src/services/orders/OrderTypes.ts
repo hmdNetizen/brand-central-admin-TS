@@ -13,7 +13,7 @@ type PaymentMethodType = {
   };
 };
 
-type OrderProductsType = {
+type OrdersProductsType = {
   products: {
     id: string;
     name: string;
@@ -56,7 +56,7 @@ export type OrderReturnedPayload = {
     id: string;
     email: string;
   };
-  ordersProducts: OrderProductsType[];
+  ordersProducts: OrdersProductsType[];
 };
 
 export type RecentSalesPayloadType = {
@@ -100,6 +100,7 @@ export type OrdersCountReturnedPayload = {
 
 export type initStateType = {
   loadingOrders: boolean;
+  orders: OrderReturnedPayload[];
   completedOrders: OrderReturnedPayload[];
   recentOrders: RecentOrdersReturnedPayload[];
   pendingOrdersCount: number;
@@ -107,5 +108,6 @@ export type initStateType = {
   completedOrdersCount: number;
   lastThirtyDaysSale: number;
   totalSales: number;
+  singleOrder: null | OrderReturnedPayload;
   error: string | null;
 };

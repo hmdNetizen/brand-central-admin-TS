@@ -1,14 +1,16 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "../axios";
 import {
   initStateType,
   RecentOrdersPayloadType,
   RecentSalesPayloadType,
   OrdersCountReturnedPayload,
+  OrderReturnedPayload,
 } from "./OrderTypes";
 
 const initialState: initStateType = {
   loadingOrders: false,
+  orders: [],
   completedOrders: [],
   recentOrders: [],
   pendingOrdersCount: 0,
@@ -16,6 +18,7 @@ const initialState: initStateType = {
   completedOrdersCount: 0,
   lastThirtyDaysSale: 0,
   totalSales: 0,
+  singleOrder: null,
   error: null,
 };
 
@@ -72,7 +75,11 @@ export const getOrdersCount = createAsyncThunk(
 const ordersSlice = createSlice({
   name: "orders",
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentOrder: (state, action: PayloadAction<OrderReturnedPayload>) => {
+      state.singleOrder = action.payload;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(getRecentSales.pending, (state) => {
@@ -113,4 +120,5 @@ const ordersSlice = createSlice({
   },
 });
 
+export const { setCurrentOrder } = ordersSlice.actions;
 export default ordersSlice.reducer;
