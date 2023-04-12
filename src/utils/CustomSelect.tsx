@@ -61,9 +61,9 @@ interface CustomSelectProps
   value: string;
   onChange: (event: SelectChangeEvent<unknown>, child: React.ReactNode) => void;
   options: (string | number)[];
-  label: string;
-  placeholder: string;
-  name: string;
+  label?: string;
+  placeholder?: string;
+  name?: string;
   errorMessage?: string;
   hasLabel: boolean;
   renderValue?: (value: unknown) => React.ReactNode;
