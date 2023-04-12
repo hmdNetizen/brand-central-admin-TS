@@ -37,6 +37,7 @@ type OrdersProductsType = {
 
 export type OrderReturnedPayload = {
   id: string;
+  _id?: string;
   orderId: string;
   orderStatus: string;
   orderDate: string;
@@ -104,15 +105,30 @@ export type SingleOrderPayloadType = {
   data: OrderReturnedPayload;
 };
 
-export type SendEmailProps = {
+export type SendEmailType = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   to: string | string[];
   subject: string;
   content: string;
 };
 
+export type OrderUpdateType = {
+  orderId: string;
+  setOpenDeliveryStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  orderStatus: string;
+  orderPaymentStatus: string;
+};
+
+export type OrdersPayloadType = {
+  data: {
+    orders: OrderReturnedPayload[];
+    total: number;
+  };
+};
+
 export type initStateType = {
   loadingOrders: boolean;
+  loadingOrderAction: boolean;
   orders: OrderReturnedPayload[];
   completedOrders: OrderReturnedPayload[];
   recentOrders: RecentOrdersReturnedPayload[];

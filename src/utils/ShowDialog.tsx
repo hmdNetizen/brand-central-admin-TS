@@ -3,8 +3,8 @@ import { styled } from "@mui/material/styles";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
 
 interface StyledDialogProps extends DialogProps {
-  height: number | string;
-  width: number | string;
+  height?: number | string;
+  width?: number | string;
 }
 
 const StyledDialog = styled(Dialog, {
@@ -25,8 +25,8 @@ const StyledDialog = styled(Dialog, {
 type ShowDialogProps = {
   openModal: boolean;
   handleClose: () => void;
-  height: number | string;
-  width: number | string;
+  height?: number | string;
+  width?: number | string;
   children: React.ReactNode;
 };
 

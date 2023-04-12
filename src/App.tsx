@@ -3,6 +3,8 @@ import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./theme";
 import PagesRoutes from "./routes/Routes";
 import { useActions } from "./hooks/useActions";
+import { ToastContainer } from "react-toastify";
+import ScrollToView from "./utils/ScrollToView";
 
 function App() {
   const { getPaginatedProducts } = useActions();
@@ -15,6 +17,9 @@ function App() {
   }, []);
   return (
     <ThemeProvider theme={theme}>
+      <ScrollToView>
+        <ToastContainer newestOnTop style={{ fontSize: "1.5rem" }} />
+      </ScrollToView>
       <PagesRoutes />
     </ThemeProvider>
   );

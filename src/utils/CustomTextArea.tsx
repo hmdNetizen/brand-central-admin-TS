@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { StyledTextArea, Label, Error } from "./styles/CustomTextAreaStyles";
 
 interface TextAreaProps extends React.InputHTMLAttributes<HTMLTextAreaElement> {
-  error: string;
+  error?: string;
   label: string;
   id?: string;
 }
