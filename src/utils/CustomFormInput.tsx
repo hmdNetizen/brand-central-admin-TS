@@ -1,14 +1,14 @@
 import React, { Fragment } from "react";
 import { FormInput, FormLabel, Error } from "./styles/CustomFormInputStyles";
 
-type FormInputProps = {
-  labelId: string;
+interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  labelId?: string;
   label: string;
   type: string;
   placeholder: string;
   error: string;
-  labelColor: string;
-};
+  labelColor?: string;
+}
 
 const CustomFormInput = (props: FormInputProps) => {
   const { labelId, label, type, placeholder, error, labelColor, ...rest } =

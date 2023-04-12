@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles";
 
 type FormLabelProps = {
-  labelColor: string;
+  labelColor?: string;
 };
 
 export const FormLabel = styled("label", {
