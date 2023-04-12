@@ -11,6 +11,7 @@ import {
   SingleOrderPayloadType,
   OrderUpdateType,
 } from "./OrderTypes";
+import React from "react";
 
 const initialState: initStateType = {
   loadingOrders: false,
@@ -133,6 +134,32 @@ export const updateOrderStatus = createAsyncThunk(
   }
 );
 
+export const deleteOrder = createAsyncThunk(
+  "delete-order",
+  async (
+    orderDetails: {
+      orderId: string;
+      setOpenDeleteOrder: React.Dispatch<React.SetStateAction<boolean>>;
+    },
+    thunkAPI
+  ) => {
+    const { orderId, setOpenDeleteOrder } = orderDetails;
+    try {
+      const { status } = await axios.delete(`/api/orders/${orderId}`);
+
+      if (status === 200) {
+        setOpenDeleteOrder(false);
+      }
+
+      return orderId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        "Error occurred while attempting to delete order"
+      );
+    }
+  }
+);
+
 const ordersSlice = createSlice({
   name: "orders",
   initialState,
@@ -231,6 +258,23 @@ const ordersSlice = createSlice({
         });
       })
       .addCase(updateOrderStatus.rejected, (state, action) => {
+        state.loadingOrderAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(deleteOrder.pending, (state) => {
+        state.loadingOrderAction = true;
+      })
+      .addCase(deleteOrder.fulfilled, (state, action) => {
+        state.loadingOrderAction = false;
+        state.orders = state.orders.filter(
+          (order) => order.id !== action.payload
+        );
+        state.error = null;
+      })
+      .addCase(deleteOrder.rejected, (state, action) => {
         state.loadingOrderAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;

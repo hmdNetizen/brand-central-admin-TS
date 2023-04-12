@@ -1,7 +1,323 @@
-import React from "react";
+import React, { useState } from "react";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import { styled, useTheme } from "@mui/material/styles";
+import CustomSelect from "src/utils/CustomSelect";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import IconButton from "@mui/material/IconButton";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Button from "@mui/material/Button";
+import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
+import Tables from "src/components/table/Tables";
+import { allOrdersCategoryColumns } from "src/lib/dataset/tableData";
+import EmailCustomerOrder from "./modals/EmailCustomerOrder";
+import Moment from "react-moment";
+import CustomOrderOptions from "src/components/orders/CustomOrderOptions";
+import DeliveryStatus from "./modals/DeliveryStatus";
+import Chip from "@mui/material/Chip";
+import { capitalizeFirstLetters } from "src/lib/helpers";
+import { useActions } from "src/hooks/useActions";
+import { useSelector } from "react-redux";
+import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
+import DeleteOrder from "./modals/DeleteOrder";
 
-const OrderPageDisplay = () => {
-  return <div>OrderPageDisplay</div>;
+const Container = styled(Grid)(({ theme }) => ({
+  padding: "1rem 2rem 5rem 2rem",
+
+  [theme.breakpoints.only("xs")]: {
+    padding: "5rem 1rem 5rem 1rem",
+  },
+}));
+
+const ContainerWrapper = styled(Grid)(({ theme }) => ({
+  background: "#fff",
+  padding: "2rem 3rem",
+  borderRadius: 5,
+
+  [theme.breakpoints.only("xs")]: {
+    padding: "2rem 1rem",
+  },
+}));
+
+const Input = styled("input")(({ theme }) => ({
+  fontSize: "1.6rem",
+  borderRadius: 5,
+  border: `1px solid ${theme.palette.common.lighterGrey}`,
+  padding: "1rem 1rem",
+  width: "100%",
+
+  "&:focus": {
+    outline: "none",
+  },
+}));
+
+const ActionButton = styled(Button)({
+  minWidth: 64,
+  padding: "1rem 1.5rem",
+  borderRadius: "2rem",
+});
+
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  background: theme.palette.error.main,
+  width: 35,
+  height: 35,
+
+  "&:hover": {
+    background: theme.palette.error.light,
+  },
+
+  "&:active": {
+    background: theme.palette.error.dark,
+  },
+
+  "& .MuiSvgIcon-root": {
+    color: "#fff",
+  },
+}));
+
+const OptionsTableData = styled("div")({
+  minWidth: 250,
+  display: "grid",
+  gridTemplateColumns: "repeat(3, 1fr)",
+  gridColumnGap: "1rem",
+});
+
+const OrderStatus = styled(Chip)({
+  padding: ".5rem .5rem",
+  textAlign: "center",
+  fontWeight: 700,
+  fontSize: "1.5rem",
+});
+
+const CompletedButton = styled(Button)(({ theme }) => ({
+  fontSize: "1.2rem",
+  minWidth: 120,
+  paddingLeft: ".25rem",
+  paddingRight: ".25rem",
+  textTransform: "none",
+  borderRadius: 20,
+  background: theme.palette.success.dark,
+
+  "&:hover": {
+    background: theme.palette.success.main,
+  },
+
+  "&:active": {
+    background: theme.palette.success.dark,
+  },
+}));
+
+const OrderPageDisplay = (props) => {
+  const {
+    title,
+    filterText,
+    page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage,
+    openDeliveryStatus,
+    setOpenDeliveryStatus,
+    openEmailCustomer,
+    setOpenEmailCustomer,
+    orderDataset,
+    onChange,
+    loading,
+  } = props;
+  const classes = useStyles();
+  const theme = useTheme();
+
+  const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
+  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
+
+  const [openDeleteOrder, setOpenDeleteOrder] = useState(false);
+
+  const { loadingOrderAction } = useSelector((state) => state.orders);
+
+  const { markOrderStatusAsCompleted, setCurrentOrder } = useActions();
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  const handleMarkAsCompleted = (order) => {
+    markOrderStatusAsCompleted({
+      orderId: order.id,
+    });
+  };
+
+  const handleLoadingOrders = () => {
+    return !loadingOrderAction;
+  };
+
+  const handleDeleteOrder = (order) => {
+    setCurrentOrder(order);
+    setOpenDeleteOrder(true);
+  };
+
+  return (
+    <Grid container direction="column" className={classes.container}>
+      <Grid item container pb={2}>
+        <Typography variant="h3" color={theme.palette.secondary.dark}>
+          {title}
+        </Typography>
+      </Grid>
+      <Grid item container className={classes.containerWrapper}>
+        <Grid
+          container
+          direction={matchesSM ? "column" : "row"}
+          rowSpacing={matchesSM ? 2 : matchesMD ? 3 : 0}
+          alignItems="center"
+          justifyContent={matchesMD ? "space-between" : undefined}
+        >
+          <Grid
+            item
+            style={{ marginRight: matchesSM ? 0 : matchesMD ? 0 : "20rem" }}
+          >
+            <Grid container alignItems="center">
+              <Grid item>
+                <Typography variant="body2">Show</Typography>
+              </Grid>
+              <Grid item style={{ marginRight: 5, marginLeft: 5 }}>
+                <CustomSelect
+                  style={{ width: "100%" }}
+                  options={[10, 25, 50, 100]}
+                  value={rowsPerPage}
+                  onChange={handleChangeRowsPerPage}
+                  hasLabel={false}
+                />
+              </Grid>
+              <Grid item>
+                <Typography variant="body2">entries</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid
+            item
+            justifySelf="center"
+            style={{ width: matchesSM ? "100%" : 350 }}
+          >
+            <input
+              className={classes.input}
+              placeholder="Search by order number or status..."
+              value={filterText}
+              onChange={onChange}
+            />
+          </Grid>
+        </Grid>
+        <Grid item container style={{ marginTop: "5rem" }}>
+          <Tables
+            headerColumns={allOrdersCategoryColumns}
+            page={page}
+            setPage={setPage}
+            rowsPerPage={rowsPerPage}
+            setRowsPerPage={setRowsPerPage}
+            total={orderDataset.length}
+            handleChangeRowsPerPage={handleChangeRowsPerPage}
+            loading={loading}
+            notFoundText="No Order found"
+          >
+            {!loading &&
+              orderDataset
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((order) => {
+                  const {
+                    id,
+                    orderId,
+                    orderDate,
+                    orderStatus,
+                    orderPaymentAmount,
+                    ordersCustomer: { email },
+                    ordersProducts,
+                  } = order;
+                  return (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={id}>
+                      <TableCell style={{ minWidth: 200 }}>
+                        <Moment format="YYYY-MM-DD hh:mm:ss">
+                          {orderDate}
+                        </Moment>
+                      </TableCell>
+                      <TableCell style={{ minWidth: 150 }}>{orderId}</TableCell>
+                      <TableCell style={{ minWidth: 250 }}>
+                        {order && email}
+                      </TableCell>
+                      <TableCell style={{ minWidth: 100 }} align="center">
+                        {ordersProducts.length}
+                      </TableCell>
+                      <TableCell style={{ minWidth: 120 }} align="center">
+                        {orderPaymentAmount.toFixed(2)}
+                      </TableCell>
+                      <TableCell align="center">
+                        <Chip
+                          label={capitalizeFirstLetters(orderStatus)}
+                          className={classes.orderStatus}
+                          style={{
+                            background:
+                              orderStatus === "pending"
+                                ? theme.palette.warning.light
+                                : orderStatus === "declined"
+                                ? theme.palette.error.light
+                                : orderStatus === "completed"
+                                ? theme.palette.success.light
+                                : theme.palette.common.lightGreen,
+                            color:
+                              orderStatus === "processing"
+                                ? theme.palette.success.dark
+                                : "#fff",
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <div className={classes.optionsTableData}>
+                          <CustomOrderOptions
+                            order={order}
+                            setOpenDeliveryStatus={setOpenDeliveryStatus}
+                            setOpenEmailCustomer={setOpenEmailCustomer}
+                          />
+                          <IconButton
+                            className={classes.iconButton}
+                            onClick={() => handleDeleteOrder(order)}
+                          >
+                            <DeleteSharpIcon />
+                          </IconButton>
+                          {orderStatus !== "completed" &&
+                            orderStatus !== "declined" && (
+                              <Button
+                                variant="contained"
+                                disableRipple
+                                className={classes.completedBtn}
+                                onClick={() => handleMarkAsCompleted(order)}
+                              >
+                                Mark Completed
+                              </Button>
+                            )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+          </Tables>
+        </Grid>
+      </Grid>
+      <DeliveryStatus
+        openDeliveryStatus={openDeliveryStatus}
+        setOpenDeliveryStatus={setOpenDeliveryStatus}
+      />
+      <EmailCustomerOrder
+        open={openEmailCustomer}
+        setOpen={setOpenEmailCustomer}
+      />
+      <CustomLoadingDialog
+        loading={loadingOrderAction}
+        handleLoading={handleLoadingOrders}
+      />
+      <DeleteOrder
+        openDeleteOrder={openDeleteOrder}
+        setOpenDeleteOrder={setOpenDeleteOrder}
+      />
+    </Grid>
+  );
 };
 
 export default OrderPageDisplay;
