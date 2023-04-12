@@ -1,76 +1,26 @@
 import React, { useState, useEffect } from "react";
-import Box, { BoxProps } from "@mui/material/Box";
-import Grid, { GridProps } from "@mui/material/Grid";
+import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
 import Modal from "@mui/material/Modal";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { styled, useTheme, Theme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import CustomFormInput from "src/utils/CustomFormInput";
 import CustomTextArea from "src/utils/CustomTextArea";
-import { useSelector } from "react-redux";
 import { useActions } from "src/hooks/useActions";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import {
+  FormContainer,
+  StyledBox,
+  StyledButton,
+  StyledCircularProgress,
+} from "./styles/EmailCustomerOrderStyles";
 
-const style = {
-  bgcolor: "background.paper",
+type initialStateProps = {
+  companyEmail: string;
+  subject: string;
+  message: string;
 };
-
-interface StyledBoxProps extends BoxProps {
-  theme: Theme;
-}
-
-const StyledBox = styled(Box)<StyledBoxProps>(({ theme }) => ({
-  position: "absolute",
-  bottom: 5,
-  right: 5,
-  boxShadow: 24,
-  padding: "1rem",
-
-  [theme.breakpoints.only("xs")]: {
-    width: "100%",
-    right: 0,
-    bottom: 0,
-  },
-}));
-
-const FormContainer = styled(Grid)<
-  GridProps & { component: React.ElementType }
->({
-  padding: "2rem",
-  background: "#fff",
-});
-
-const StyledButton = styled(Button)(({ theme }) => ({
-  fontSize: "1.5rem",
-  fontWeight: 400,
-  textTransform: "none",
-  width: "100%",
-  background: theme.palette.secondary.dark,
-
-  "&:hover": {
-    background: theme.palette.secondary.light,
-  },
-  "&:active": {
-    background: theme.palette.secondary.dark,
-  },
-
-  "&:disabled": {
-    cursor: "not-allowed",
-    pointerEvents: "all !important",
-    background: theme.palette.secondary.light,
-    color: "#fff",
-    // color: (props) => (props.loading ? "#fff" : "inherit"),
-  },
-}));
-
-const StyledCircularProgress = styled(CircularProgress)({
-  marginRight: "1rem",
-  "&.MuiCircularProgress-root": {
-    color: "#f2f2f2",
-  },
-});
 
 const initialState = {
   companyEmail: "",
@@ -78,25 +28,36 @@ const initialState = {
   message: "",
 };
 
-const EmailCustomer = ({ open, setOpen, isPreOrder }) => {
+type EmailCustomerProps = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isPreOrder: boolean;
+};
+
+const EmailCustomer = (props: EmailCustomerProps) => {
+  const { open, setOpen, isPreOrder } = props;
   const theme = useTheme();
 
-  const { singleCustomer } = useSelector((state) => state.customers);
+  const singleCustomer = useTypedSelector(
+    (state) => state.customers.singleCustomer
+  );
+  const singleOrder = useTypedSelector((state) => state.orders.singleOrder);
+  const sendingEmail = useTypedSelector((state) => state.orders.sendingEmail);
 
-  const { singleOrder, sendingEmail } = useSelector((state) => state.orders);
-
-  const [mailData, setMailData] = useState(initialState);
+  const [mailData, setMailData] = useState<initialStateProps>(initialState);
   const [subjectError, setSubjectError] = useState("");
   const [companyEmailError, setCompanyEmailError] = useState("");
   const [messageError, setMessageError] = useState("");
 
   const { companyEmail, message, subject } = mailData;
 
-  const { getSingleCustomer, sendEmail } = useActions();
+  const { sendOrderStatusEmail, getSingleCustomer } = useActions();
 
   const handleClose = () => setOpen(false);
 
-  const handleSendEmail = (event) => {
+  const handleSendEmail = (
+    event: React.FormEvent<HTMLFormElement | HTMLDivElement>
+  ) => {
     event.preventDefault();
 
     if (!companyEmail && !subject && !message) {
@@ -125,7 +86,7 @@ const EmailCustomer = ({ open, setOpen, isPreOrder }) => {
       return;
     }
 
-    sendEmail({
+    sendOrderStatusEmail({
       setOpen,
       to: companyEmail,
       subject,
@@ -133,7 +94,9 @@ const EmailCustomer = ({ open, setOpen, isPreOrder }) => {
     });
   };
 
-  const handleChange = (event) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = event.target;
     setMailData({ ...mailData, [name]: value });
 
@@ -220,7 +183,7 @@ const EmailCustomer = ({ open, setOpen, isPreOrder }) => {
       aria-labelledby="modal-Send-message"
       aria-describedby="modal-send-message-to-customer"
     >
-      <StyledBox style={style}>
+      <StyledBox>
         <Grid
           item
           container

@@ -1,11 +1,11 @@
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import { StyledTextArea, Label, Error } from "./styles/CustomTextAreaStyles";
 
-type TextAreaProps = {
+interface TextAreaProps extends React.InputHTMLAttributes<HTMLTextAreaElement> {
   error: string;
   label: string;
-  id: string;
-};
+  id?: string;
+}
 
 const CustomTextArea = (props: TextAreaProps) => {
   const { error, label, id, ...rest } = props;

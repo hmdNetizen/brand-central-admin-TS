@@ -2,8 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../axios";
 import {
   initStateTypes,
-  CustomerPayloadType,
+  CustomersPayloadType,
   CustomerExcerptPayloadType,
+  SingleCustomerPayloadType,
 } from "./CustomerTypes";
 
 const initialState: initStateTypes = {
@@ -12,6 +13,8 @@ const initialState: initStateTypes = {
   recentCustomers: [],
   numberOfCustomersInThirtyDays: 0,
   totalCustomers: 0,
+  loadingSingleCustomer: false,
+  singleCustomer: null,
   error: null,
 };
 
@@ -35,6 +38,22 @@ export const getRecentCustomers = createAsyncThunk(
   }
 );
 
+export const getSingleCustomer = createAsyncThunk(
+  "single-customer",
+  async (customerId: string, thunkAPI) => {
+    try {
+      const { data } = await axios.get(`/api/customers/${customerId}`);
+      const result = data as SingleCustomerPayloadType;
+
+      return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        "Error occurred while fetching customer data"
+      );
+    }
+  }
+);
+
 const customerSlice = createSlice({
   name: "customers",
   initialState,
@@ -52,6 +71,21 @@ const customerSlice = createSlice({
       })
       .addCase(getRecentCustomers.rejected, (state, action) => {
         state.loadingCustomers = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(getSingleCustomer.pending, (state) => {
+        state.loadingSingleCustomer = true;
+      })
+      .addCase(getSingleCustomer.fulfilled, (state, action) => {
+        state.loadingSingleCustomer = false;
+        state.singleCustomer = action.payload;
+        state.error = null;
+      })
+      .addCase(getSingleCustomer.rejected, (state, action) => {
+        state.loadingSingleCustomer = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

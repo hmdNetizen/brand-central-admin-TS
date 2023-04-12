@@ -8,12 +8,16 @@ export type CustomerExcerptDataTypes = Pick<
   "_id" | "companyEmail" | "createdAt"
 >;
 
-export type CustomerPayloadType = {
+export type CustomersPayloadType = {
   data: {
     data: UserProfilePayloadType[];
     lastThirtyDays: number;
     total: number;
   };
+};
+
+export type SingleCustomerPayloadType = {
+  data: UserProfileReturnedPayload;
 };
 
 export type CustomerExcerptPayloadType = {
@@ -31,4 +35,6 @@ export type initStateTypes = {
   error: string | null;
   numberOfCustomersInThirtyDays: number;
   totalCustomers: number;
+  loadingSingleCustomer: boolean;
+  singleCustomer: null | UserProfileReturnedPayload;
 };

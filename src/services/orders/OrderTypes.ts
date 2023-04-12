@@ -1,3 +1,5 @@
+import React from "react";
+
 type AddressType = {
   customerName: string;
   address: string;
@@ -98,6 +100,17 @@ export type OrdersCountReturnedPayload = {
   };
 };
 
+export type SingleOrderPayloadType = {
+  data: OrderReturnedPayload;
+};
+
+export type SendEmailProps = {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  to: string | string[];
+  subject: string;
+  content: string;
+};
+
 export type initStateType = {
   loadingOrders: boolean;
   orders: OrderReturnedPayload[];
@@ -108,6 +121,9 @@ export type initStateType = {
   completedOrdersCount: number;
   lastThirtyDaysSale: number;
   totalSales: number;
+  loadingSingleOrder: boolean;
   singleOrder: null | OrderReturnedPayload;
+  sendingEmail: boolean;
+  emailSuccess: string;
   error: string | null;
 };
