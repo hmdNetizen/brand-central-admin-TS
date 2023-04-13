@@ -1,7 +1,6 @@
-import React from "react";
 import Dialog from "@mui/material/Dialog";
 import { styled } from "@mui/material/styles";
-import loader from "src/assets/gif/spinner.gif";
+import loader from "src/assets/gifs/spinner.gif";
 
 const StyledDialog = styled(Dialog)({
   "& .MuiPaper-root": {
