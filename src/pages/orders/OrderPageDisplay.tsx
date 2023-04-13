@@ -18,9 +18,11 @@ import DeliveryStatus from "./modals/DeliveryStatus";
 import Chip from "@mui/material/Chip";
 import { capitalizeFirstLetters } from "src/lib/helpers";
 import { useActions } from "src/hooks/useActions";
-import { useSelector } from "react-redux";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
 import DeleteOrder from "./modals/DeleteOrder";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import { OrderReturnedPayload } from "src/services/orders/OrderTypes";
+import { SelectChangeEvent } from "@mui/material";
 
 const Container = styled(Grid)(({ theme }) => ({
   padding: "1rem 2rem 5rem 2rem",
@@ -83,7 +85,7 @@ const OptionsTableData = styled("div")({
   gridColumnGap: "1rem",
 });
 
-const OrderStatus = styled(Chip)({
+const StyledChip = styled(Chip)({
   padding: ".5rem .5rem",
   textAlign: "center",
   fontWeight: 700,
@@ -108,7 +110,23 @@ const CompletedButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const OrderPageDisplay = (props) => {
+type OrderPageDisplayProps = {
+  title: string;
+  filterText: string;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  rowsPerPage: string;
+  setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
+  openDeliveryStatus: boolean;
+  setOpenDeliveryStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  openEmailCustomer: boolean;
+  setOpenEmailCustomer: React.Dispatch<React.SetStateAction<boolean>>;
+  orderDataset: OrderReturnedPayload[];
+  onChange: () => void;
+  loading: boolean;
+};
+
+const OrderPageDisplay = (props: OrderPageDisplayProps) => {
   const {
     title,
     filterText,
@@ -124,46 +142,56 @@ const OrderPageDisplay = (props) => {
     onChange,
     loading,
   } = props;
-  const classes = useStyles();
   const theme = useTheme();
+
+  const loadingOrderAction = useTypedSelector(
+    (state) => state.orders.loadingOrderAction
+  );
 
   const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
 
   const [openDeleteOrder, setOpenDeleteOrder] = useState(false);
 
-  const { loadingOrderAction } = useSelector((state) => state.orders);
-
   const { markOrderStatusAsCompleted, setCurrentOrder } = useActions();
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
 
-  const handleMarkAsCompleted = (order) => {
-    markOrderStatusAsCompleted({
-      orderId: order.id,
-    });
+  const handleSelectRowsPerPage = (
+    event: SelectChangeEvent<unknown>,
+    child: React.ReactNode
+  ): void => {
+    const selectEvent = event as SelectChangeEvent<HTMLInputElement>;
+    setRowsPerPage(+selectEvent.target.value);
+    setPage(0);
+  };
+
+  const handleMarkAsCompleted = (order: OrderReturnedPayload) => {
+    markOrderStatusAsCompleted(order.id);
   };
 
   const handleLoadingOrders = () => {
     return !loadingOrderAction;
   };
 
-  const handleDeleteOrder = (order) => {
+  const handleDeleteOrder = (order: OrderReturnedPayload) => {
     setCurrentOrder(order);
     setOpenDeleteOrder(true);
   };
 
   return (
-    <Grid container direction="column" className={classes.container}>
+    <Container container direction="column">
       <Grid item container pb={2}>
         <Typography variant="h3" color={theme.palette.secondary.dark}>
           {title}
         </Typography>
       </Grid>
-      <Grid item container className={classes.containerWrapper}>
+      <ContainerWrapper item container>
         <Grid
           container
           direction={matchesSM ? "column" : "row"}
@@ -184,7 +212,7 @@ const OrderPageDisplay = (props) => {
                   style={{ width: "100%" }}
                   options={[10, 25, 50, 100]}
                   value={rowsPerPage}
-                  onChange={handleChangeRowsPerPage}
+                  onChange={handleSelectRowsPerPage}
                   hasLabel={false}
                 />
               </Grid>
@@ -198,8 +226,7 @@ const OrderPageDisplay = (props) => {
             justifySelf="center"
             style={{ width: matchesSM ? "100%" : 350 }}
           >
-            <input
-              className={classes.input}
+            <Input
               placeholder="Search by order number or status..."
               value={filterText}
               onChange={onChange}
@@ -211,7 +238,7 @@ const OrderPageDisplay = (props) => {
             headerColumns={allOrdersCategoryColumns}
             page={page}
             setPage={setPage}
-            rowsPerPage={rowsPerPage}
+            rowsPerPage={+rowsPerPage}
             setRowsPerPage={setRowsPerPage}
             total={orderDataset.length}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
@@ -220,7 +247,10 @@ const OrderPageDisplay = (props) => {
           >
             {!loading &&
               orderDataset
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .slice(
+                  page * +rowsPerPage,
+                  page * Number(rowsPerPage) + Number(rowsPerPage)
+                )
                 .map((order) => {
                   const {
                     id,
@@ -249,9 +279,8 @@ const OrderPageDisplay = (props) => {
                         {orderPaymentAmount.toFixed(2)}
                       </TableCell>
                       <TableCell align="center">
-                        <Chip
+                        <StyledChip
                           label={capitalizeFirstLetters(orderStatus)}
-                          className={classes.orderStatus}
                           style={{
                             background:
                               orderStatus === "pending"
@@ -269,37 +298,35 @@ const OrderPageDisplay = (props) => {
                         />
                       </TableCell>
                       <TableCell>
-                        <div className={classes.optionsTableData}>
+                        <OptionsTableData>
                           <CustomOrderOptions
                             order={order}
                             setOpenDeliveryStatus={setOpenDeliveryStatus}
                             setOpenEmailCustomer={setOpenEmailCustomer}
                           />
-                          <IconButton
-                            className={classes.iconButton}
+                          <StyledIconButton
                             onClick={() => handleDeleteOrder(order)}
                           >
                             <DeleteSharpIcon />
-                          </IconButton>
+                          </StyledIconButton>
                           {orderStatus !== "completed" &&
                             orderStatus !== "declined" && (
-                              <Button
+                              <CompletedButton
                                 variant="contained"
                                 disableRipple
-                                className={classes.completedBtn}
                                 onClick={() => handleMarkAsCompleted(order)}
                               >
                                 Mark Completed
-                              </Button>
+                              </CompletedButton>
                             )}
-                        </div>
+                        </OptionsTableData>
                       </TableCell>
                     </TableRow>
                   );
                 })}
           </Tables>
         </Grid>
-      </Grid>
+      </ContainerWrapper>
       <DeliveryStatus
         openDeliveryStatus={openDeliveryStatus}
         setOpenDeliveryStatus={setOpenDeliveryStatus}
@@ -316,7 +343,7 @@ const OrderPageDisplay = (props) => {
         openDeleteOrder={openDeleteOrder}
         setOpenDeleteOrder={setOpenDeleteOrder}
       />
-    </Grid>
+    </Container>
   );
 };
 

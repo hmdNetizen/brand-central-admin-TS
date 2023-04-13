@@ -160,6 +160,23 @@ export const deleteOrder = createAsyncThunk(
   }
 );
 
+export const markOrderStatusAsCompleted = createAsyncThunk(
+  "mark-order-as-completed",
+  async (orderId: string, thunkAPI) => {
+    try {
+      const { data } = await axios.patch(`/api/orders/${orderId}/status`, {
+        orderStatus: "completed",
+        orderPaymentStatus: "paid",
+      });
+      const result = data as SingleOrderPayloadType;
+
+      return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
 const ordersSlice = createSlice({
   name: "orders",
   initialState,
@@ -275,6 +292,33 @@ const ordersSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteOrder.rejected, (state, action) => {
+        state.loadingOrderAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(markOrderStatusAsCompleted.pending, (state) => {
+        state.loadingOrderAction = true;
+      })
+      .addCase(markOrderStatusAsCompleted.fulfilled, (state, action) => {
+        state.loadingOrderAction = false;
+        state.orders = state.orders.map((order) =>
+          order.id === action.payload._id
+            ? {
+                ...order,
+                ...action.payload,
+              }
+            : order
+        );
+
+        toast.success("Order successfully completed", {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+        state.error = null;
+      })
+      .addCase(markOrderStatusAsCompleted.rejected, (state, action) => {
         state.loadingOrderAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
