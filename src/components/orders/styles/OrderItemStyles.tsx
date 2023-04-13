@@ -3,12 +3,6 @@ import IconButton from "@mui/material/IconButton";
 import Chip from "@mui/material/Chip";
 import { styled } from "@mui/material/styles";
 
-export const ActionButton = styled(Button)({
-  minWidth: 64,
-  padding: "1rem 1.5rem",
-  borderRadius: "2rem",
-});
-
 export const StyledIconButton = styled(IconButton)(({ theme }) => ({
   background: theme.palette.error.main,
   width: 35,

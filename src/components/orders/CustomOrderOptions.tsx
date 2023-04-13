@@ -12,13 +12,13 @@ import { Link } from "react-router-dom";
 import { OrderReturnedPayload } from "src/services/orders/OrderTypes";
 import { StyledMenu } from "./styles/CustomOrderOptionsStyles";
 
-type CustomOptionsProps = {
+type CustomOrderOptionsProps = {
   order: OrderReturnedPayload;
   setOpenDeliveryStatus: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenEmailCustomer: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const CustomOptions = (props: CustomOptionsProps) => {
+const CustomOrderOptions = (props: CustomOrderOptionsProps) => {
   const { order, setOpenDeliveryStatus, setOpenEmailCustomer } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -108,4 +108,4 @@ const CustomOptions = (props: CustomOptionsProps) => {
   );
 };
 
-export default CustomOptions;
+export default CustomOrderOptions;
