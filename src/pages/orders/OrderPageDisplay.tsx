@@ -122,7 +122,7 @@ type OrderPageDisplayProps = {
   openEmailCustomer: boolean;
   setOpenEmailCustomer: React.Dispatch<React.SetStateAction<boolean>>;
   orderDataset: OrderReturnedPayload[];
-  onChange: () => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   loading: boolean;
 };
 
@@ -147,6 +147,7 @@ const OrderPageDisplay = (props: OrderPageDisplayProps) => {
   const loadingOrderAction = useTypedSelector(
     (state) => state.orders.loadingOrderAction
   );
+  const totalOrders = useTypedSelector((state) => state.orders.totalOrders);
 
   const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
@@ -240,7 +241,7 @@ const OrderPageDisplay = (props: OrderPageDisplayProps) => {
             setPage={setPage}
             rowsPerPage={+rowsPerPage}
             setRowsPerPage={setRowsPerPage}
-            total={orderDataset.length}
+            total={totalOrders}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
             loading={loading}
             notFoundText="No Order found"

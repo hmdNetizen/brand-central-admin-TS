@@ -2,19 +2,19 @@ import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import { DashboardProps } from "src/pages/dashboard/types";
 
-export const Container = styled(Grid)<DashboardProps>(
-  ({ theme, menuSlideIn }) => ({
-    padding: "4rem 3rem",
+export const Container = styled(Grid, {
+  shouldForwardProp: (prop) => prop !== "menuSlideIn",
+})<DashboardProps>(({ theme, menuSlideIn }) => ({
+  padding: "4rem 3rem",
 
-    [theme.breakpoints.only("sm")]: {
-      padding: menuSlideIn ? "4rem 3rem" : "4rem 1.5rem",
-    },
+  [theme.breakpoints.only("sm")]: {
+    padding: menuSlideIn ? "4rem 3rem" : "4rem 1.5rem",
+  },
 
-    [theme.breakpoints.only("xs")]: {
-      padding: "6rem 2rem 5rem",
-    },
-  })
-);
+  [theme.breakpoints.only("xs")]: {
+    padding: "6rem 2rem 5rem",
+  },
+}));
 
 export const InforTableWrapper = styled(Grid, {
   shouldForwardProp: (prop) => prop !== "menuSlideIn",

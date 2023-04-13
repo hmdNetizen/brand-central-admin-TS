@@ -1,3 +1,5 @@
+import { styled } from "@mui/material/styles";
+
 export const StyledTextArea = styled("textarea")(({ theme }) => ({
   width: "100%",
   border: `1px solid ${theme.palette.common.lightGrey}`,
@@ -14,8 +16,6 @@ export const StyledTextArea = styled("textarea")(({ theme }) => ({
     outline: "none",
   },
 }));
-
-import { styled } from "@mui/material/styles";
 
 export const Label = styled("label")(({ theme }) => ({
   display: "block",

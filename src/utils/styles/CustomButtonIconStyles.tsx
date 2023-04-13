@@ -9,25 +9,28 @@ type ButtonPropTypes = Omit<
   "loading" | "className" | "title"
 >;
 
-export const StyledButton = styled(Button)<
-  ButtonPropTypes & { component?: React.ElementType; to?: LinkProps["to"] }
->(({ background, minWidth, borderRadius }) => ({
-  borderRadius: borderRadius,
-  textTransform: "none",
-  boxShadow: "none",
-  fontSize: "1.35rem",
-  background: background.main,
-  minWidth: minWidth,
+export const StyledButton = styled(Button, {
+  shouldForwardProp: (prop) =>
+    prop !== "background" && prop !== "minWidth" && prop !== "borderRadius",
+})<ButtonPropTypes & { component?: React.ElementType; to?: LinkProps["to"] }>(
+  ({ background, minWidth, borderRadius }) => ({
+    borderRadius: borderRadius,
+    textTransform: "none",
+    boxShadow: "none",
+    fontSize: "1.35rem",
+    background: background.main,
+    minWidth: minWidth,
 
-  "&:hover": {
-    background: background.light,
-    boxShadow: "none",
-  },
-  "&:active": {
-    background: background.dark,
-    boxShadow: "none",
-  },
-}));
+    "&:hover": {
+      background: background.light,
+      boxShadow: "none",
+    },
+    "&:active": {
+      background: background.dark,
+      boxShadow: "none",
+    },
+  })
+);
 
 export const StyledCircularProgress = styled(CircularProgress)({
   marginRight: "1rem",

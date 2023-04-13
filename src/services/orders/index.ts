@@ -10,6 +10,8 @@ import {
   SendEmailType,
   SingleOrderPayloadType,
   OrderUpdateType,
+  PaginatedOrdersPayloadType,
+  PaginatedOrdersQueryType,
 } from "./OrderTypes";
 import React from "react";
 
@@ -17,6 +19,7 @@ const initialState: initStateType = {
   loadingOrders: false,
   loadingOrderAction: false,
   orders: [],
+  totalOrders: 0,
   completedOrders: [],
   recentOrders: [],
   pendingOrdersCount: 0,
@@ -30,6 +33,29 @@ const initialState: initStateType = {
   emailSuccess: "",
   error: null,
 };
+
+export const fetchAllOrders = createAsyncThunk(
+  "get-orders",
+  async (details: PaginatedOrdersQueryType, thunkAPI) => {
+    const { page, limit, status } = details;
+
+    const orderStatus = status ? `&status${status}` : "";
+
+    try {
+      const { data } = await axios.get(
+        `/api/orders/v1?page=${page}&limit=${limit}${orderStatus}`
+      );
+      const result = data as PaginatedOrdersPayloadType;
+
+      return {
+        orders: result.data.orders,
+        totalOrders: result.data.total,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+    }
+  }
+);
 
 export const getRecentSales = createAsyncThunk(
   "recent-sales",
@@ -186,6 +212,22 @@ const ordersSlice = createSlice({
     },
   },
   extraReducers(builder) {
+    builder
+      .addCase(fetchAllOrders.pending, (state) => {
+        state.loadingOrders = true;
+      })
+      .addCase(fetchAllOrders.fulfilled, (state, action) => {
+        state.loadingOrders = false;
+        state.orders = action.payload.orders;
+        state.totalOrders = action.payload.totalOrders;
+        state.error = null;
+      })
+      .addCase(fetchAllOrders.rejected, (state, action) => {
+        state.loadingOrders = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
     builder
       .addCase(getRecentSales.pending, (state) => {
         state.loadingOrders = true;

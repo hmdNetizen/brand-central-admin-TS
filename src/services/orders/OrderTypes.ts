@@ -119,7 +119,14 @@ export type OrderUpdateType = {
   orderPaymentStatus: string;
 };
 
-export type OrdersPayloadType = {
+export type PaginatedOrdersQueryType = {
+  page: number;
+  limit: number;
+  status?: string;
+  searchTerm?: string;
+};
+
+export type PaginatedOrdersPayloadType = {
   data: {
     orders: OrderReturnedPayload[];
     total: number;
@@ -130,6 +137,7 @@ export type initStateType = {
   loadingOrders: boolean;
   loadingOrderAction: boolean;
   orders: OrderReturnedPayload[];
+  totalOrders: number;
   completedOrders: OrderReturnedPayload[];
   recentOrders: RecentOrdersReturnedPayload[];
   pendingOrdersCount: number;
