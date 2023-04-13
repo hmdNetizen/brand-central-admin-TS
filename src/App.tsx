@@ -6,6 +6,8 @@ import { useActions } from "./hooks/useActions";
 import { ToastContainer } from "react-toastify";
 import ScrollToView from "./utils/ScrollToView";
 
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   const { getPaginatedProducts } = useActions();
 

@@ -5,13 +5,12 @@ import TableContainer from "@mui/material/TableContainer";
 import TablePagination, {
   TablePaginationProps,
 } from "@mui/material/TablePagination";
-import PropTypes from "prop-types";
 import TableHeader from "./TableHead";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Spinner from "src/utils/Spinner";
 import { styled } from "@mui/material/styles";
-import { TableHeaderColumnTypes } from "src/lib/dataset/tableDataTypes";
+import { TablePropsType } from "src/components/table/TablePropsType";
 import React from "react";
 
 const StyledTablePagination = styled(TablePagination)<
@@ -29,26 +28,7 @@ const StyledTablePagination = styled(TablePagination)<
   },
 });
 
-type TableProps = {
-  headerColumns: TableHeaderColumnTypes[];
-  page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
-  rowsPerPage: number;
-  setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
-  children: React.ReactNode;
-  total: number;
-  loading: boolean;
-  handleChangeRowsPerPage: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
-  hasPagination: boolean;
-  notFoundText: string;
-  loaderHeight: string | number;
-  notFoundHeight: string | number;
-  hasShadow: boolean;
-};
-
-const Tables = (props: TableProps) => {
+const Tables = (props: TablePropsType) => {
   const {
     headerColumns,
     page,
@@ -123,18 +103,6 @@ const Tables = (props: TableProps) => {
       )}
     </Paper>
   );
-};
-
-Tables.propTypes = {
-  headerColumns: PropTypes.array.isRequired,
-  children: PropTypes.node.isRequired,
-  page: PropTypes.number,
-  rowsPerPage: PropTypes.number,
-  total: PropTypes.number.isRequired,
-  setRowsPerPage: PropTypes.func,
-  setPage: PropTypes.func,
-  handleChangeRowsPerPage: PropTypes.func,
-  notFoundText: PropTypes.string,
 };
 
 Tables.defaultProps = {

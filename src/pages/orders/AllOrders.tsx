@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import OrderPageDisplay from "./OrderPageDisplay";
 import useTitle from "src/hooks/useTitle";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { useActions } from "src/hooks/useActions";
+import debounce from "lodash.debounce";
 
 const AllOrders = () => {
   useTitle("Admin : Find all orders");
@@ -16,21 +17,22 @@ const AllOrders = () => {
   const [openDeliveryStatus, setOpenDeliveryStatus] = useState(false);
   const [openEmailCustomer, setOpenEmailCustomer] = useState(false);
 
-  const { fetchAllOrders } = useActions();
+  const { fetchAllOrders, getAllSearchedOrders } = useActions();
 
   //   eslint-disable-next-line
-  //   const debounceFilteredOrders = useCallback(
-  //     debounce(handleFilteredOrdersData, 500),
-  //     []
-  //   );
+  const debounceSearchedOrders = useCallback(
+    debounce(getAllSearchedOrders, 500),
+    []
+  );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(event.target.value);
-    // debounceFilteredOrders({
-    //   orderData: orders,
-    //   text: event.target.value,
-    // });
     setPage(0);
+    debounceSearchedOrders({
+      limit: rowsPerPage,
+      page: page + 1,
+      searchTerm: event.target.value,
+    });
   };
 
   useEffect(() => {
@@ -38,8 +40,7 @@ const AllOrders = () => {
       page: page + 1,
       limit: rowsPerPage,
     });
-    // eslint-disable-next-line
-  }, []);
+  }, [page, rowsPerPage]);
 
   return (
     <OrderPageDisplay

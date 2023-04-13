@@ -247,84 +247,77 @@ const OrderPageDisplay = (props: OrderPageDisplayProps) => {
             notFoundText="No Order found"
           >
             {!loading &&
-              orderDataset
-                .slice(
-                  page * +rowsPerPage,
-                  page * Number(rowsPerPage) + Number(rowsPerPage)
-                )
-                .map((order) => {
-                  const {
-                    id,
-                    orderId,
-                    orderDate,
-                    orderStatus,
-                    orderPaymentAmount,
-                    ordersCustomer: { email },
-                    ordersProducts,
-                  } = order;
-                  return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={id}>
-                      <TableCell style={{ minWidth: 200 }}>
-                        <Moment format="YYYY-MM-DD hh:mm:ss">
-                          {orderDate}
-                        </Moment>
-                      </TableCell>
-                      <TableCell style={{ minWidth: 150 }}>{orderId}</TableCell>
-                      <TableCell style={{ minWidth: 250 }}>
-                        {order && email}
-                      </TableCell>
-                      <TableCell style={{ minWidth: 100 }} align="center">
-                        {ordersProducts.length}
-                      </TableCell>
-                      <TableCell style={{ minWidth: 120 }} align="center">
-                        {orderPaymentAmount.toFixed(2)}
-                      </TableCell>
-                      <TableCell align="center">
-                        <StyledChip
-                          label={capitalizeFirstLetters(orderStatus)}
-                          style={{
-                            background:
-                              orderStatus === "pending"
-                                ? theme.palette.warning.light
-                                : orderStatus === "declined"
-                                ? theme.palette.error.light
-                                : orderStatus === "completed"
-                                ? theme.palette.success.light
-                                : theme.palette.common.lightGreen,
-                            color:
-                              orderStatus === "processing"
-                                ? theme.palette.success.dark
-                                : "#fff",
-                          }}
+              orderDataset.map((order) => {
+                const {
+                  id,
+                  orderId,
+                  orderDate,
+                  orderStatus,
+                  orderPaymentAmount,
+                  ordersCustomer: { email },
+                  ordersProducts,
+                } = order;
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={id}>
+                    <TableCell style={{ minWidth: 200 }}>
+                      <Moment format="YYYY-MM-DD hh:mm:ss">{orderDate}</Moment>
+                    </TableCell>
+                    <TableCell style={{ minWidth: 150 }}>{orderId}</TableCell>
+                    <TableCell style={{ minWidth: 250 }}>
+                      {order && email}
+                    </TableCell>
+                    <TableCell style={{ minWidth: 100 }} align="center">
+                      {ordersProducts.length}
+                    </TableCell>
+                    <TableCell style={{ minWidth: 120 }} align="center">
+                      {orderPaymentAmount.toFixed(2)}
+                    </TableCell>
+                    <TableCell align="center">
+                      <StyledChip
+                        label={capitalizeFirstLetters(orderStatus)}
+                        style={{
+                          background:
+                            orderStatus === "pending"
+                              ? theme.palette.warning.light
+                              : orderStatus === "declined"
+                              ? theme.palette.error.light
+                              : orderStatus === "completed"
+                              ? theme.palette.success.light
+                              : theme.palette.common.lightGreen,
+                          color:
+                            orderStatus === "processing"
+                              ? theme.palette.success.dark
+                              : "#fff",
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <OptionsTableData>
+                        <CustomOrderOptions
+                          order={order}
+                          setOpenDeliveryStatus={setOpenDeliveryStatus}
+                          setOpenEmailCustomer={setOpenEmailCustomer}
                         />
-                      </TableCell>
-                      <TableCell>
-                        <OptionsTableData>
-                          <CustomOrderOptions
-                            order={order}
-                            setOpenDeliveryStatus={setOpenDeliveryStatus}
-                            setOpenEmailCustomer={setOpenEmailCustomer}
-                          />
-                          <StyledIconButton
-                            onClick={() => handleDeleteOrder(order)}
-                          >
-                            <DeleteSharpIcon />
-                          </StyledIconButton>
-                          {orderStatus !== "completed" &&
-                            orderStatus !== "declined" && (
-                              <CompletedButton
-                                variant="contained"
-                                disableRipple
-                                onClick={() => handleMarkAsCompleted(order)}
-                              >
-                                Mark Completed
-                              </CompletedButton>
-                            )}
-                        </OptionsTableData>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                        <StyledIconButton
+                          onClick={() => handleDeleteOrder(order)}
+                        >
+                          <DeleteSharpIcon />
+                        </StyledIconButton>
+                        {orderStatus !== "completed" &&
+                          orderStatus !== "declined" && (
+                            <CompletedButton
+                              variant="contained"
+                              disableRipple
+                              onClick={() => handleMarkAsCompleted(order)}
+                            >
+                              Mark Completed
+                            </CompletedButton>
+                          )}
+                      </OptionsTableData>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </Tables>
         </Grid>
       </ContainerWrapper>

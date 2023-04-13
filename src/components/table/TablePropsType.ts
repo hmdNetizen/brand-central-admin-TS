@@ -1,21 +1,21 @@
-import {
-  RecentOrdersReturnedPayload,
-  OrderExcerptDataTypes,
-} from "src/services/orders/OrderTypes";
-import { CustomerExcerptDataTypes } from "src/services/customers/CustomerTypes";
+import React from "react";
 import { TableHeaderColumnTypes } from "src/lib/dataset/tableDataTypes";
-import { DashboardProductType } from "src/services/products/ProductTypes";
 
 export type TablePropsType = {
-  heading: string;
-  dataset:
-    | RecentOrdersReturnedPayload[]
-    | OrderExcerptDataTypes[]
-    | DashboardProductType[]
-    | CustomerExcerptDataTypes[];
   headerColumns: TableHeaderColumnTypes[];
-  notFoundText: string;
-  children?: React.ReactNode;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  rowsPerPage: number;
+  setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
+  children: React.ReactNode;
+  total: number;
   loading: boolean;
-  hasPagination?: boolean;
+  handleChangeRowsPerPage: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
+  hasPagination: boolean;
+  notFoundText: string;
+  loaderHeight: string | number;
+  notFoundHeight: string | number;
+  hasShadow: boolean;
 };

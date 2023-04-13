@@ -57,6 +57,30 @@ export const fetchAllOrders = createAsyncThunk(
   }
 );
 
+export const getAllSearchedOrders = createAsyncThunk(
+  "searched-orders",
+  async (details: PaginatedOrdersQueryType, thunkAPI) => {
+    const { page, limit, status, searchTerm } = details;
+
+    const orderStatus = status ? `&status${status}` : "";
+    const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+
+    try {
+      const { data } = await axios.get(
+        `/api/orders/v1?page=${page}&limit=${limit}${orderStatus}${searchQuery}`
+      );
+      const result = data as PaginatedOrdersPayloadType;
+
+      return {
+        orders: result.data.orders,
+        totalOrders: result.data.total,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+    }
+  }
+);
+
 export const getRecentSales = createAsyncThunk(
   "recent-sales",
   async (_, thunkAPI) => {
@@ -223,6 +247,22 @@ const ordersSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchAllOrders.rejected, (state, action) => {
+        state.loadingOrders = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(getAllSearchedOrders.pending, (state) => {
+        state.loadingOrders = true;
+      })
+      .addCase(getAllSearchedOrders.fulfilled, (state, action) => {
+        state.loadingOrders = false;
+        state.orders = action.payload.orders;
+        state.totalOrders = action.payload.totalOrders;
+        state.error = null;
+      })
+      .addCase(getAllSearchedOrders.rejected, (state, action) => {
         state.loadingOrders = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
