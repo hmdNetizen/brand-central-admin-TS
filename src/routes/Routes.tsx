@@ -5,6 +5,7 @@ import DashboardLayout from "src/layouts/DashboardLayout";
 import Login from "src/pages/auth/Login";
 import Dashboard from "src/pages/dashboard/Dashboard";
 import AllOrders from "src/pages/orders/AllOrders";
+import CompletedOrders from "src/pages/orders/CompletedOrders";
 import PendingOrders from "src/pages/orders/PendingOrders";
 
 const PagesRoutes = () => {
@@ -28,6 +29,7 @@ const PagesRoutes = () => {
               <Route path="orders">
                 <Route index element={<AllOrders />} />
                 <Route path="pending" element={<PendingOrders />} />
+                <Route path="completed" element={<CompletedOrders />} />
               </Route>
             </Route>
           </Route>
