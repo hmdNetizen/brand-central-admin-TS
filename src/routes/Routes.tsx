@@ -9,6 +9,7 @@ import CompletedOrders from "src/pages/orders/CompletedOrders";
 import DeclinedOrders from "src/pages/orders/DeclinedOrders";
 import PendingOrders from "src/pages/orders/PendingOrders";
 import ProcessingOrders from "src/pages/orders/ProcessingOrders";
+import PreOrders from "src/pages/pre-orders/PreOrders";
 
 const PagesRoutes = () => {
   const [menuSlideIn, setMenuSlideIn] = useState<boolean>(false);
@@ -34,6 +35,9 @@ const PagesRoutes = () => {
                 <Route path="completed" element={<CompletedOrders />} />
                 <Route path="processing" element={<ProcessingOrders />} />
                 <Route path="declined" element={<DeclinedOrders />} />
+              </Route>
+              <Route path="pre-orders">
+                <Route index element={<PreOrders />} />
               </Route>
             </Route>
           </Route>
