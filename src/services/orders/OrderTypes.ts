@@ -122,7 +122,7 @@ export type OrderUpdateType = {
 export type PaginatedOrdersQueryType = {
   page: number;
   limit: number;
-  status?: string;
+  status?: "pending" | "processing" | "completed" | "declined";
   searchTerm?: string;
 };
 

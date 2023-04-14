@@ -16,8 +16,15 @@ import { Container, ContainerWrapper } from "./styles/OrderPageDisplayStyles";
 import OrderItem from "src/components/orders/OrderItem";
 import PageHeadingActions from "src/components/common/PageHeadingActions";
 
+type OrdersTitle =
+  | "All Orders"
+  | "Pending Orders"
+  | "Processing Orders"
+  | "Completed Orders"
+  | "Declined Orders";
+
 type OrderPageDisplayProps = {
-  title: string;
+  title: OrdersTitle;
   filterText: string;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
