@@ -5,7 +5,7 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { useActions } from "src/hooks/useActions";
 import debounce from "lodash.debounce";
 
-const CompletedOrders = () => {
+const ProcessingOrders = () => {
   useTitle("Admin : Find all processing orders");
 
   const loadingOrders = useTypedSelector((state) => state.orders.loadingOrders);
@@ -63,4 +63,4 @@ const CompletedOrders = () => {
   );
 };
 
-export default CompletedOrders;
+export default ProcessingOrders;
