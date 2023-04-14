@@ -6,6 +6,7 @@ import Login from "src/pages/auth/Login";
 import Dashboard from "src/pages/dashboard/Dashboard";
 import AllOrders from "src/pages/orders/AllOrders";
 import CompletedOrders from "src/pages/orders/CompletedOrders";
+import DeclinedOrders from "src/pages/orders/DeclinedOrders";
 import PendingOrders from "src/pages/orders/PendingOrders";
 import ProcessingOrders from "src/pages/orders/ProcessingOrders";
 
@@ -32,6 +33,7 @@ const PagesRoutes = () => {
                 <Route path="pending" element={<PendingOrders />} />
                 <Route path="completed" element={<CompletedOrders />} />
                 <Route path="processing" element={<ProcessingOrders />} />
+                <Route path="declined" element={<DeclinedOrders />} />
               </Route>
             </Route>
           </Route>

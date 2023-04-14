@@ -254,17 +254,17 @@ const ordersSlice = createSlice({
         }
       });
     builder
-      .addCase(getAllSearchedOrders.pending, (state) => {
-        state.loadingOrders = true;
-      })
+      //   .addCase(getAllSearchedOrders.pending, (state) => {
+      //     state.loadingOrders = true;
+      //   })
       .addCase(getAllSearchedOrders.fulfilled, (state, action) => {
-        state.loadingOrders = false;
+        // state.loadingOrders = false;
         state.orders = action.payload.orders;
         state.totalOrders = action.payload.totalOrders;
         state.error = null;
       })
       .addCase(getAllSearchedOrders.rejected, (state, action) => {
-        state.loadingOrders = false;
+        // state.loadingOrders = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }
