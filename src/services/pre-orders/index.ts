@@ -15,7 +15,7 @@ type UserWishListUserIdTypes = {
 };
 
 const initialState: initStateType = {
-  loadingPreOrder: false,
+  loadingPreOrders: false,
   loadingPreOrderAction: false,
   preOrders: [],
   filteredPreOrders: [],
@@ -107,15 +107,15 @@ const preorderSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(getAllPreOrders.pending, (state) => {
-        state.loadingPreOrder = true;
+        state.loadingPreOrders = true;
       })
       .addCase(getAllPreOrders.fulfilled, (state, action) => {
-        state.loadingPreOrder = false;
+        state.loadingPreOrders = false;
         state.preOrders = action.payload;
         state.error = null;
       })
       .addCase(getAllPreOrders.rejected, (state, action) => {
-        state.loadingPreOrder = false;
+        state.loadingPreOrders = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

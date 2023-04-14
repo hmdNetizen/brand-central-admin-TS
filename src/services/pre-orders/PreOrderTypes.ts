@@ -11,7 +11,7 @@ export type DeletePreOrderType = {
 };
 
 export type initStateType = {
-  loadingPreOrder: boolean;
+  loadingPreOrders: boolean;
   loadingPreOrderAction: boolean;
   preOrders: ProductTypes[];
   filteredPreOrders: ProductTypes[];

@@ -7,7 +7,7 @@ type DeletePreOrderProps = {
   openDeletePreOrder: boolean;
   setOpenDeletePreOrder: React.Dispatch<React.SetStateAction<boolean>>;
   actionType: string;
-  clickAction: () => void;
+  clickAction?: () => void;
   productName: string;
   isClickAction: boolean;
 };
@@ -44,13 +44,13 @@ const DeletePreOrder = (props: DeletePreOrderProps) => {
       openAction={openDeletePreOrder}
       setOpenAction={setOpenDeletePreOrder}
       data={productName}
-      handleAction={isClickAction ? clickAction : handleDeletePreOrder}
+      handleAction={isClickAction ? clickAction! : handleDeletePreOrder}
     />
   );
 };
 
 DeletePreOrder.defaultProps = {
-  DeletePreOrder: "Delete",
+  actionType: "Delete",
 };
 
 export default DeletePreOrder;
