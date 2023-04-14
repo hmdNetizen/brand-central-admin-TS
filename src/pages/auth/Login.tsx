@@ -147,7 +147,7 @@ const Login = () => {
               onChange={handleChange}
               label="Email Address"
               labelId="email"
-              error={emailError}
+              errorMessage={emailError}
             />
           </Grid>
           <Grid item container style={{ marginBottom: "3rem" }}>
@@ -160,7 +160,7 @@ const Login = () => {
               onChange={handleChange}
               label="Password"
               labelId="password"
-              error={passwordError}
+              errorMessage={passwordError}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
