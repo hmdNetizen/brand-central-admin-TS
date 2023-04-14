@@ -5,8 +5,8 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { useActions } from "src/hooks/useActions";
 import debounce from "lodash.debounce";
 
-const PendingOrders = () => {
-  useTitle("Admin : Find all pending orders");
+const CompletedOrders = () => {
+  useTitle("Admin : Find all processing orders");
 
   const loadingOrders = useTypedSelector((state) => state.orders.loadingOrders);
   const orders = useTypedSelector((state) => state.orders.orders);
@@ -31,7 +31,7 @@ const PendingOrders = () => {
     debounceSearchedOrders({
       limit: rowsPerPage,
       page: page + 1,
-      status: "pending",
+      status: "processing",
       searchTerm: event.target.value,
     });
   };
@@ -40,13 +40,13 @@ const PendingOrders = () => {
     fetchAllOrders({
       page: page + 1,
       limit: rowsPerPage,
-      status: "pending",
+      status: "processing",
     });
   }, [page, rowsPerPage]);
 
   return (
     <OrderPageDisplay
-      title="Pending Orders"
+      title="Processing Orders"
       onChange={handleSearch}
       openDeliveryStatus={openDeliveryStatus}
       openEmailCustomer={openEmailCustomer}
@@ -63,4 +63,4 @@ const PendingOrders = () => {
   );
 };
 
-export default PendingOrders;
+export default CompletedOrders;

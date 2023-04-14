@@ -4,15 +4,12 @@ import useTitle from "src/hooks/useTitle";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { useActions } from "src/hooks/useActions";
 import debounce from "lodash.debounce";
-import { useLocation } from "react-router-dom";
 
 const CompletedOrders = () => {
-  useTitle("Admin : Find all orders");
+  useTitle("Admin : Find all completed orders");
 
   const loadingOrders = useTypedSelector((state) => state.orders.loadingOrders);
   const orders = useTypedSelector((state) => state.orders.orders);
-
-  const { pathname } = useLocation();
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
