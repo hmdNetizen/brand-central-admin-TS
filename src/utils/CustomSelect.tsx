@@ -1,60 +1,12 @@
 import React from "react";
-import PropTypes from "prop-types";
-import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent, SelectProps } from "@mui/material/Select";
-import { styled } from "@mui/material/styles";
-
-type LabelProps = {
-  hasLabel: boolean;
-};
-
-const StyledSelect = styled(Select)(({ theme }) => ({
-  "& .MuiList-root &.MuiMenu-list": {
-    paddingTop: 0,
-    width: "100%",
-  },
-  "& .MuiOutlinedInput-input": {
-    padding: "1rem 1rem",
-    fontSize: "1.4rem",
-  },
-
-  "& .MuiOutlinedInput-notchedOutline": {
-    borderColor: theme.palette.common.lightGrey,
-  },
-
-  "&.MuiOutlinedInput-root": {
-    minWidth: 48,
-    "&.Mui-focused": {
-      "& .MuiOutlinedInput-notchedOutline": {
-        borderColor: `${theme.palette.common.lightGrey}`,
-        borderWidth: 1,
-      },
-    },
-  },
-}));
-
-const Label = styled("label", {
-  shouldForwardProp: (prop) => prop !== "hasLabel",
-})<LabelProps>(({ theme, hasLabel }) => ({
-  display: "block",
-  fontSize: "1.5rem",
-  color: theme.palette.secondary.main,
-  fontFamily: "Open Sans, Roboto",
-  fontWeight: 500,
-  marginBottom: hasLabel ? ".75rem" : 0,
-}));
-
-const StyledMenuItem = styled(MenuItem)({
-  fontSize: "1.4rem",
-});
-
-const Error = styled("small")(({ theme }) => ({
-  fontSize: "1.2rem",
-  color: theme.palette.error.main,
-  fontFamily: "Open Sans, Roboto",
-  fontWeight: 600,
-}));
+import { SelectChangeEvent, SelectProps } from "@mui/material/Select";
+import {
+  StyledSelect,
+  StyledMenuItem,
+  Label,
+  Error,
+} from "./styles/CustomSelectStyles";
 
 interface CustomSelectProps
   extends Omit<SelectProps<string>, "onChange" | "renderValue"> {
