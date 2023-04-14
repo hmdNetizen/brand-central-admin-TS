@@ -63,7 +63,7 @@ export const getAllSearchedOrders = createAsyncThunk(
   async (details: PaginatedOrdersQueryType, thunkAPI) => {
     const { page, limit, status, searchTerm } = details;
 
-    const orderStatus = status ? `&status${status}` : "";
+    const orderStatus = status ? `&status=${status}` : "";
     const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
 
     try {
