@@ -14,6 +14,7 @@ export type initStateType = {
   loadingPreOrder: boolean;
   loadingPreOrderAction: boolean;
   preOrders: ProductTypes[];
+  filteredPreOrders: ProductTypes[];
   singlePreOrder: null | ProductTypes;
   error: null | string;
 };

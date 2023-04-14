@@ -8,15 +8,22 @@ import {
 } from "./PreOrderTypes";
 import { ProductTypes } from "../products/ProductTypes";
 
+type UserWishListUserIdTypes = {
+  _id: string;
+  companyName: string;
+  companyEmail: string;
+};
+
 const initialState: initStateType = {
   loadingPreOrder: false,
   loadingPreOrderAction: false,
   preOrders: [],
+  filteredPreOrders: [],
   singlePreOrder: null,
   error: null,
 };
 
-export const getPreOrders = createAsyncThunk(
+export const getAllPreOrders = createAsyncThunk(
   "pre-orders",
   async (_, thunkAPI) => {
     try {
@@ -59,18 +66,55 @@ const preorderSlice = createSlice({
     setCurrentPreOrder: (state, action: PayloadAction<ProductTypes>) => {
       state.singlePreOrder = action.payload;
     },
+    getPreOrderData: (state, action: PayloadAction<ProductTypes[]>) => {
+      state.filteredPreOrders = action.payload;
+    },
+    handleFilteredPreOrdersData: (
+      state,
+      action: PayloadAction<{ text: string; preOrderData: ProductTypes[] }>
+    ) => {
+      const keys = ["companyEmail", "companyName"];
+      if (action.payload.text) {
+        let newPreOrder = [...action.payload.preOrderData]
+          .filter((element) =>
+            element.userWishList.some((subElement) =>
+              keys.some((key) =>
+                subElement.userId[key as keyof UserWishListUserIdTypes]
+                  .toLowerCase()
+                  .includes(action.payload.text.toLowerCase())
+              )
+            )
+          )
+          .map((element) => {
+            return {
+              ...element,
+              userWishList: element.userWishList.filter((subElement) =>
+                keys.some((key) =>
+                  subElement.userId[key as keyof UserWishListUserIdTypes]
+                    .toLowerCase()
+                    .includes(action.payload.text.toLowerCase())
+                )
+              ),
+            };
+          });
+
+        state.filteredPreOrders = newPreOrder;
+      } else {
+        state.filteredPreOrders = action.payload.preOrderData;
+      }
+    },
   },
   extraReducers(builder) {
     builder
-      .addCase(getPreOrders.pending, (state) => {
+      .addCase(getAllPreOrders.pending, (state) => {
         state.loadingPreOrder = true;
       })
-      .addCase(getPreOrders.fulfilled, (state, action) => {
+      .addCase(getAllPreOrders.fulfilled, (state, action) => {
         state.loadingPreOrder = false;
         state.preOrders = action.payload;
         state.error = null;
       })
-      .addCase(getPreOrders.rejected, (state, action) => {
+      .addCase(getAllPreOrders.rejected, (state, action) => {
         state.loadingPreOrder = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
@@ -101,5 +145,9 @@ const preorderSlice = createSlice({
   },
 });
 
-export const { setCurrentPreOrder } = preorderSlice.actions;
+export const {
+  setCurrentPreOrder,
+  getPreOrderData,
+  handleFilteredPreOrdersData,
+} = preorderSlice.actions;
 export default preorderSlice.reducer;

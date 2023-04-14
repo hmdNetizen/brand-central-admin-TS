@@ -10,7 +10,7 @@ type ProductHighlightTypes = {
   minimumQuantity: number;
 };
 
-type UserWishListTypes = {
+export type UserWishListTypes = {
   userId: {
     _id: string;
     companyName: string;

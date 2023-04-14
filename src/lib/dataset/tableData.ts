@@ -398,7 +398,7 @@ export const messagesColumns = [
   },
 ];
 
-export const preOrdersColumns = [
+export const preOrdersColumns: TableHeaderColumnTypes[] = [
   {
     id: 0,
     label: "Date",

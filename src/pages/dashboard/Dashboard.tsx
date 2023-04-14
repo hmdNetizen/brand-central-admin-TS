@@ -21,7 +21,7 @@ const Dashboard = ({ menuSlideIn }: DashboardProps) => {
     getRecentOrders,
     getOrdersCount,
     getRecentCustomers,
-    getPreOrders,
+    getAllPreOrders,
     getRecentlyAddedProducts,
     getDashboardPopularProducts,
   } = useActions();
@@ -31,10 +31,11 @@ const Dashboard = ({ menuSlideIn }: DashboardProps) => {
     getRecentOrders();
     getOrdersCount();
     getRecentCustomers();
-    getPreOrders();
+    getAllPreOrders();
     getRecentlyAddedProducts(1);
     getDashboardPopularProducts(1);
   }, []);
+
   return (
     <Container container direction="column" menuSlideIn={menuSlideIn}>
       <DashboardRectangularCards menuSlideIn={menuSlideIn} />
