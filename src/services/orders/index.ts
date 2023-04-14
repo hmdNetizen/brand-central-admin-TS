@@ -39,12 +39,13 @@ export const fetchAllOrders = createAsyncThunk(
   async (details: PaginatedOrdersQueryType, thunkAPI) => {
     const { page, limit, status } = details;
 
-    const orderStatus = status ? `&status${status}` : "";
+    const orderStatus = status ? `&status=${status}` : "";
 
     try {
       const { data } = await axios.get(
         `/api/orders/v1?page=${page}&limit=${limit}${orderStatus}`
       );
+
       const result = data as PaginatedOrdersPayloadType;
 
       return {

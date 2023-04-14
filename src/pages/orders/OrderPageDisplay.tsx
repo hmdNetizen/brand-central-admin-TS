@@ -6,7 +6,6 @@ import Tables from "src/components/table/Tables";
 import { allOrdersCategoryColumns } from "src/lib/dataset/tableData";
 import EmailCustomerOrder from "./modals/EmailCustomerOrder";
 import DeliveryStatus from "./modals/DeliveryStatus";
-import { useActions } from "src/hooks/useActions";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
 import DeleteOrder from "./modals/DeleteOrder";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
@@ -63,8 +62,6 @@ const OrderPageDisplay = (props: OrderPageDisplayProps) => {
   const totalOrders = useTypedSelector((state) => state.orders.totalOrders);
 
   const [openDeleteOrder, setOpenDeleteOrder] = useState(false);
-
-  const { markOrderStatusAsCompleted, setCurrentOrder } = useActions();
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
