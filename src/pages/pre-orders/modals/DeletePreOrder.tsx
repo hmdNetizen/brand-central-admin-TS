@@ -50,7 +50,7 @@ const DeletePreOrder = (props: DeletePreOrderProps) => {
 };
 
 DeletePreOrder.defaultProps = {
-  actionType: "Delete",
+  actionType: "delete",
 };
 
 export default DeletePreOrder;

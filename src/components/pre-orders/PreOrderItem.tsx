@@ -46,7 +46,7 @@ const PreOrderItem = (props: PreOrderItemProps) => {
       <TableCell style={{ minWidth: 250 }}>{productName}</TableCell>
       <TableCell style={{ minWidth: 150 }}>
         {userWishList.map((user, index) => (
-          <Typography variant="body2" key={index}>
+          <Typography variant="body2" key={index} style={{ minWidth: 150 }}>
             {user.userId.companyName}
           </Typography>
         ))}

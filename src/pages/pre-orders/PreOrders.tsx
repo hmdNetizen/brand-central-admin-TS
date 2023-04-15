@@ -7,19 +7,18 @@ import React, {
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { styled, useTheme } from "@mui/material/styles";
-import CustomSelect from "src/utils/CustomSelect";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Tables from "components/table/Tables";
+import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import EmailCustomer from "../orders/modals/EmailCustomerOrder";
 import DeletePreOrder from "./modals/DeletePreOrder";
 import debounce from "lodash.debounce";
 import useTitle from "src/hooks/useTitle";
-import { ProductTypes } from "src/services/products/ProductTypes";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import PageHeadingActions from "src/components/common/PageHeadingActions";
 import { SelectChangeEvent } from "@mui/material";
 import { preOrdersColumns } from "src/lib/dataset/tableData";
+import PreOrderItem from "src/components/pre-orders/PreOrderItem";
 
 const Container = styled(Grid)(({ theme }) => ({
   padding: "1rem 2rem 5rem 2rem",
@@ -146,9 +145,15 @@ const PreOrders = () => {
             {!loadingPreOrders &&
               filteredPreOrders
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((preorder, index) => {
-                  const { userWishList, updatedAt, productName } = preorder;
-                  return <p>Hello</p>;
+                .map((preOrder) => {
+                  return (
+                    <PreOrderItem
+                      key={preOrder._id}
+                      preOrder={preOrder}
+                      setOpenDeletePreOrder={setOpenDeletePreOrder}
+                      setOpenSendEmail={setOpenSendEmail}
+                    />
+                  );
                 })}
           </Tables>
         </Grid>

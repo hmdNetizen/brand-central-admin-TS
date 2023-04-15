@@ -48,11 +48,11 @@ export const menus = [
     icon: PreOrderIcon,
     path: "/pre-orders",
     subMenus: [
-      { subId: 0, title: "All Pre-orders", path: "/pre-orders" },
+      { subId: 0, title: "All Pre-orders", path: "/dashboard/pre-orders" },
       {
         subId: 1,
         title: "Available Pre-orders",
-        path: "/pre-orders/available",
+        path: "/dashboard/pre-orders/available",
       },
     ],
   },
