@@ -95,7 +95,7 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
             style={{ transform: "rotate(-20deg)", fontSize: "5rem" }}
           />
         }
-        path="/orders/pending"
+        path="/dashboard/orders/pending"
       />
       <DashboardRectangularCardItem
         heading="Orders Processing"
@@ -107,7 +107,7 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
             style={{ transform: "rotate(-20deg)", fontSize: "5rem" }}
           />
         }
-        path="/orders/processing"
+        path="/dashboard/orders/processing"
       />
       <DashboardRectangularCardItem
         heading="Orders Completed"
@@ -119,7 +119,7 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
             style={{ transform: "rotate(-20deg)", fontSize: "5rem" }}
           />
         }
-        path="/orders/completed"
+        path="/dashboard/orders/completed"
       />
       <DashboardRectangularCardItem
         heading="Total Products"
@@ -131,7 +131,7 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
             style={{ transform: "rotate(-20deg)", fontSize: "5rem" }}
           />
         }
-        path="/products"
+        path="/dashboard/products"
       />
       <DashboardRectangularCardItem
         heading="Total Customers"
@@ -143,7 +143,7 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
             style={{ transform: "rotate(-20deg)", fontSize: "5rem" }}
           />
         }
-        path="/customers"
+        path="/dashboard/customers"
       />
       <DashboardRectangularCardItem
         heading="Total Preorders"
@@ -155,7 +155,7 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
             style={{ transform: "rotate(-20deg)", fontSize: "5rem" }}
           />
         }
-        path="/pre-orders"
+        path="/dashboard/pre-orders"
       />
     </Container>
   );
