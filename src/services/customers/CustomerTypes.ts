@@ -16,6 +16,13 @@ export type CustomersPayloadType = {
   };
 };
 
+export type AllCustomersPayloadType = {
+  data: {
+    customers: UserProfileReturnedPayload[];
+    total: number;
+  };
+};
+
 export type SingleCustomerPayloadType = {
   data: UserProfileReturnedPayload;
 };
@@ -28,13 +35,19 @@ export type CustomerExcerptPayloadType = {
   };
 };
 
+export type PaginatedCustomersQueryType = {
+  page: number;
+  limit: number;
+  searchTerm?: string;
+};
+
 export type initStateTypes = {
   loadingCustomers: boolean;
-  customers: UserProfilePayloadType[];
+  customers: UserProfileReturnedPayload[];
   recentCustomers: CustomerExcerptDataTypes[];
   error: string | null;
   numberOfCustomersInThirtyDays: number;
   totalCustomers: number;
   loadingSingleCustomer: boolean;
-  singleCustomer: null | UserProfileReturnedPayload;
+  singleCustomer: UserProfileReturnedPayload | null;
 };

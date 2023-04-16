@@ -2,9 +2,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../axios";
 import {
   initStateTypes,
-  CustomersPayloadType,
   CustomerExcerptPayloadType,
   SingleCustomerPayloadType,
+  AllCustomersPayloadType,
+  PaginatedCustomersQueryType,
 } from "./CustomerTypes";
 
 const initialState: initStateTypes = {
@@ -17,6 +18,26 @@ const initialState: initStateTypes = {
   singleCustomer: null,
   error: null,
 };
+
+export const getAllCustomers = createAsyncThunk(
+  "all-customers",
+  async (details: PaginatedCustomersQueryType, thunkAPI) => {
+    try {
+      const { page, limit } = details;
+      const { data } = await axios.get(
+        `/api/customers?page=${page}&limit=${limit}`
+      );
+      const result = data as AllCustomersPayloadType;
+
+      return {
+        customers: result.data.customers,
+        totalCustomers: result.data.total,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
 
 export const getRecentCustomers = createAsyncThunk(
   "get-customers",
@@ -59,6 +80,22 @@ const customerSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
+    builder
+      .addCase(getAllCustomers.pending, (state) => {
+        state.loadingCustomers = true;
+      })
+      .addCase(getAllCustomers.fulfilled, (state, action) => {
+        state.loadingCustomers = false;
+        state.customers = action.payload.customers;
+        state.totalCustomers = action.payload.totalCustomers;
+        state.error = null;
+      })
+      .addCase(getAllCustomers.rejected, (state, action) => {
+        state.loadingCustomers = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
     builder
       .addCase(getRecentCustomers.pending, (state) => {
         state.loadingCustomers = true;

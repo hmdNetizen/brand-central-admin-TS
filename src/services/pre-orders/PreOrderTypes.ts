@@ -10,11 +10,22 @@ export type DeletePreOrderType = {
   setOpenDeletePreOrder: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+export type UpdateStockType = {
+  id: string;
+  customerData: {
+    id: string;
+    companyEmail: string;
+    companyName: string;
+  }[];
+  productData: ProductTypes[];
+};
+
 export type initStateType = {
   loadingPreOrders: boolean;
   loadingPreOrderAction: boolean;
   preOrders: ProductTypes[];
   filteredPreOrders: ProductTypes[];
+  preOrdersUpdatedStock: UpdateStockType[];
   singlePreOrder: null | ProductTypes;
   error: null | string;
 };
