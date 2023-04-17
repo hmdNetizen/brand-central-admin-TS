@@ -4,7 +4,7 @@ import userReducer from "./user";
 import productReducer from "./products";
 import utilsReducer from "./utils";
 import notificationReducer from "./notifications";
-// import commonReducer from "./common";
+import commonReducer from "./common";
 import orderReducer from "./orders";
 import customersReducer from "./customers";
 // import couponReducer from "./coupon";
@@ -21,6 +21,7 @@ const rootReducer = combineReducers({
   orders: orderReducer,
   preOrders: preOrderReducer,
   products: productReducer,
+  common: commonReducer,
 });
 
 const store = configureStore({
