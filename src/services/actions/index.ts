@@ -5,4 +5,4 @@ export * as customerActions from "../customers";
 export * as ordersActions from "../orders";
 export * as preOrderActions from "../pre-orders";
 export * as productActions from "../products";
-export * as commonAction from "../common";
+export * as commonActions from "../common";

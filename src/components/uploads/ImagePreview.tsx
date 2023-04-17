@@ -1,106 +1,39 @@
-import React, { ImgHTMLAttributes, useEffect, useState } from "react";
-import Grid, { GridProps } from "@mui/material/Grid";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import { styled } from "@mui/material/styles";
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { useActions } from "src/hooks/useActions";
-import { useSelector } from "react-redux";
-import CircularProgress from "src/utils/CustomCircularProgress";
 
-type SelectedFileType = File | null;
+import {
+  ImageWrapper,
+  Image,
+  Input,
+  StyledCameraIcon,
+  StyledProgressBar,
+} from "./styles/ImagePreview";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
 
-interface ImageWrapperProps extends GridProps {
-  selectedFile: SelectedFileType;
-  imagePreview: string | undefined;
-}
-
-const ImageWrapper = styled(Grid, {
-  shouldForwardProp: (prop) =>
-    prop !== "selectedFile" && prop !== "imagePreview",
-})<ImageWrapperProps>(({ theme, selectedFile, imagePreview }) => ({
-  width: 150,
-  height: 150,
-  padding: "1rem",
-  boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
-  position: "relative",
-
-  "&:hover": {
-    "& .MuiSvgIcon-root": {
-      opacity: 1,
-    },
-  },
-
-  "& .MuiIconButton-root": {
-    positon: "absolute",
-    top: "40%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    zIndex: 1,
-    display: selectedFile ? "none" : "inline-flex",
-  },
-
-  "& .MuiButton-root": {
-    positon: "absolute",
-    left: "50%",
-    top: "50%",
-    transform: "translate(-50%, -50%)",
-    bottom: 5,
-    width: "100%",
-    zIndex: 1,
-    display: imagePreview ? "inline-flex" : "none",
-  },
-}));
-
-const Image = styled("img")({
-  width: "100%",
-  height: "100%",
-  objectFit: "cover",
-  position: "absolute",
-  left: "50%",
-  top: "50%",
-  transform: "translate(-50%, -50%)",
-});
-
-const StyledCameraIcon = styled(PhotoCamera, {
-  shouldForwardProp: (prop) => prop !== "imagePreview",
-})<{ imagePreview: string | undefined }>(({ theme, imagePreview }) => ({
-  fontSize: "4rem",
-  color: theme.palette.secondary.light,
-  transition: "all .25s ease-in-out",
-  opacity: imagePreview ? 0.5 : 1,
-
-  "&:hover": {
-    transform: "scale(1.1)",
-  },
-}));
-
-const StyledProgressBar = styled(CircularProgress)({
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  zIndex: 5,
-});
-
-const Input = styled("input")({
-  display: "none",
-});
+export type SelectedFileType = File | null;
 
 const initialState = null;
 
-const ImagePreview = (props) => {
+async function urlToInputFile(url: string): Promise<File> {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  return new File([blob], "filename.jpg", { type: blob.type });
+}
+
+const ImagePreview = (props: { dataValue: { profileImage: string } }) => {
   const { dataValue } = props;
   // IMAGE PREVIEW STATES
   const [imagePreview, setImagePreview] = useState<string | undefined>(
     undefined
   );
-  const [selectedFile, setSelectedFile] = useState<SelectedFileType | null>(
-    initialState
-  );
+  const [selectedFile, setSelectedFile] =
+    useState<SelectedFileType>(initialState);
 
-  const { uploadingFile, uploadPercentage } = useSelector(
-    (state) => state.common
+  const uploadingFile = useTypedSelector((state) => state.common.uploadingFile);
+  const uploadPercentage = useTypedSelector(
+    (state) => state.common.uploadPercentage
   );
 
   const { uploadFile } = useActions();
@@ -116,15 +49,34 @@ const ImagePreview = (props) => {
   };
 
   useEffect(() => {
-    if (dataValue) {
-      let newSelectedFile = initialState;
-      if (dataValue.profileImage) {
-        newSelectedFile = dataValue.profileImage;
+    const mapUrlToFileType = async () => {
+      let file;
+      if (dataValue) {
+        if (dataValue.profileImage) {
+          file = await urlToInputFile(dataValue.profileImage);
+        }
       }
 
-      setSelectedFile(newSelectedFile);
-    }
-  }, [dataValue]);
+      if (file) {
+        setSelectedFile(file);
+      }
+    };
+
+    mapUrlToFileType();
+  }, []);
+
+  //   useEffect(() => {
+  //     if (dataValue) {
+  //       let newSelectedFile = "";
+  //       if (dataValue.profileImage) {
+  //         // newSelectedFile = dataValue.profileImage;
+  //       }
+
+  //       console.log(dataValue.profileImage);
+
+  //       setSelectedFile(newSelectedFile);
+  //     }
+  //   }, [dataValue]);
 
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
@@ -135,7 +87,6 @@ const ImagePreview = (props) => {
 
     const objectUrl = URL.createObjectURL(selectedFile);
     setImagePreview(objectUrl);
-    console.log({ objectURL: objectUrl });
 
     // free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(objectUrl);
