@@ -30,7 +30,8 @@ const CustomerItem = (prop: CustomerItemProp) => {
     prop;
   const { _id, companyName, companyEmail, isBlocked } = customer;
 
-  const { setCurrentCustomer, handleToggleCustomerBlock } = useActions();
+  const { setCurrentCustomer, handleToggleCustomerBlock, unblockCustomer } =
+    useActions();
 
   const handleSwitchChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -64,7 +65,7 @@ const CustomerItem = (prop: CustomerItemProp) => {
   };
 
   return (
-    <TableRow hover role="checkbox" tabIndex={-1} key={_id}>
+    <TableRow hover role="checkbox" tabIndex={-1}>
       <TableCell style={{ minWidth: 250 }}>{companyName}</TableCell>
       <TableCell style={{ minWidth: 200 }}>{companyEmail}</TableCell>
       <TableCell align="center">

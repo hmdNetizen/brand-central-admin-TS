@@ -95,6 +95,28 @@ export const handleToggleCustomerBlock = createAsyncThunk(
   }
 );
 
+export const unblockCustomer = createAsyncThunk(
+  "unblock-customer",
+  async (customerId: string, thunkAPI) => {
+    try {
+      const { status } = await axios.patch(
+        `/api/customers/${customerId}/block`,
+        {
+          isBlocked: false,
+        }
+      );
+
+      // if (status === 200) {
+      //   getAllBlockedCustomers();
+      // }
+
+      return customerId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
 const customerSlice = createSlice({
   name: "customers",
   initialState,
@@ -185,6 +207,45 @@ const customerSlice = createSlice({
             position: "top-center",
             hideProgressBar: true,
           });
+        }
+      })
+      .addCase(handleToggleCustomerBlock.rejected, (state, action) => {
+        state.loadingCustomerAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(unblockCustomer.pending, (state) => {
+        state.loadingCustomerAction = true;
+      })
+      .addCase(unblockCustomer.fulfilled, (state, action) => {
+        state.loadingCustomerAction = false;
+        state.customers = state.customers.map((customer) =>
+          customer._id === action.payload
+            ? { ...customer, isBlocked: false }
+            : customer
+        );
+        state.error = null;
+
+        // Handles toastify notification
+        const customerIndex = state.customers.findIndex(
+          (customer) => customer._id === action.payload
+        );
+        const customerName = state.customers[customerIndex].companyName;
+
+        toast.success(
+          `${capitalizeFirstLetters(customerName)} account has been unblocked`,
+          {
+            position: "top-center",
+            hideProgressBar: true,
+          }
+        );
+      })
+      .addCase(unblockCustomer.rejected, (state, action) => {
+        state.loadingCustomerAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
         }
       });
   },
