@@ -6,7 +6,7 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   type: string;
   placeholder: string;
-  error: string;
+  error?: string;
   labelColor?: string;
 }
 

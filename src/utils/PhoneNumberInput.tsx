@@ -43,11 +43,21 @@ type PhoneInputProps = {
   labelId: string;
   labelColor: string;
   label: string;
+  placeholder?: string;
 };
 
 const PhoneNumberInput = (props: PhoneInputProps) => {
-  const { value, onChange, name, error, labelId, label, labelColor, ...rest } =
-    props;
+  const {
+    value,
+    onChange,
+    name,
+    error,
+    labelId,
+    label,
+    labelColor,
+    placeholder,
+    ...rest
+  } = props;
 
   return (
     <StyledFormControl variant="outlined">
@@ -60,6 +70,7 @@ const PhoneNumberInput = (props: PhoneInputProps) => {
         onChange={onChange}
         enableSearch
         inputProps={{ name: name, id: labelId }}
+        placeholder={placeholder}
         {...rest}
       />
       {error && (
