@@ -1,5 +1,4 @@
-import React from "react";
-import Button, { ButtonProps } from "@mui/material/Button";
+import { ButtonProps } from "@mui/material/Button";
 import {
   StyledButton,
   StyledCircularProgress,

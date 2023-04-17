@@ -16,8 +16,7 @@ const StyledSwitch = styled(Switch, {
   },
 }));
 
-type CustomSwitchProps = {
-  labelText: string;
+interface CustomSwitchProps extends SwitchProps {
   color:
     | "error"
     | "default"
@@ -28,10 +27,10 @@ type CustomSwitchProps = {
     | "warning"
     | undefined;
   isActive: boolean;
-};
+}
 
 const CustomSwitch = (props: CustomSwitchProps) => {
-  const { labelText, color, isActive, ...rest } = props;
+  const { color, isActive, ...rest } = props;
   //   const label = { inputProps: { "aria-label": labelText } };
   return <StyledSwitch isActive={isActive} {...rest} color={color} />;
 };

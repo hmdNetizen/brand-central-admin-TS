@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "../axios";
 import {
   initStateTypes,
@@ -7,6 +7,7 @@ import {
   AllCustomersPayloadType,
   PaginatedCustomersQueryType,
 } from "./CustomerTypes";
+import { UserProfileReturnedPayload } from "../user/UserTypes";
 
 const initialState: initStateTypes = {
   loadingCustomers: false,
@@ -78,7 +79,14 @@ export const getSingleCustomer = createAsyncThunk(
 const customerSlice = createSlice({
   name: "customers",
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentCustomer: (
+      state,
+      action: PayloadAction<UserProfileReturnedPayload>
+    ) => {
+      state.singleCustomer = action.payload;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(getAllCustomers.pending, (state) => {
@@ -130,4 +138,5 @@ const customerSlice = createSlice({
   },
 });
 
+export const { setCurrentCustomer } = customerSlice.actions;
 export default customerSlice.reducer;

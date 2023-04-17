@@ -100,7 +100,7 @@ export const dashboardProductColumns: TableHeaderColumnTypes[] = [
   },
 ];
 
-export const customersListColumns = [
+export const customersListColumns: TableHeaderColumnTypes[] = [
   {
     id: 0,
     label: "Name",
