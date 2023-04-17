@@ -1,3 +1,4 @@
+import React from "react";
 import {
   UserProfileReturnedPayload,
   UserAddressType,
@@ -40,4 +41,21 @@ export type EditCustomerProps = {
   openEditCustomer: boolean;
   setOpenEditCustomer: React.Dispatch<React.SetStateAction<boolean>>;
   customerProfileData: CustomerProfileExcerpt;
+};
+
+export type CustomerPageLayoutProps = {
+  title: "Customers" | "Blocked Customers";
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  rowsPerPage: number;
+  setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
+  filterText: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  openEditCustomer: boolean;
+  setOpenEditCustomer: React.Dispatch<React.SetStateAction<boolean>>;
+  openDeleteCustomer: boolean;
+  setOpenDeleteCustomer: React.Dispatch<React.SetStateAction<boolean>>;
+  openEmail: boolean;
+  setOpenEmail: React.Dispatch<React.SetStateAction<boolean>>;
+  customerDataset: UserProfileReturnedPayload[];
 };

@@ -29,7 +29,7 @@ export const getAllCustomers = createAsyncThunk(
     try {
       const { page, limit } = details;
       const { data } = await axios.get(
-        `/api/customers?page=${page}&limit=${limit}`
+        `/api/customers/v1?page=${page}&limit=${limit}`
       );
       const result = data as AllCustomersPayloadType;
 
