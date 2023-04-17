@@ -30,7 +30,7 @@ const CustomerItem = (prop: CustomerItemProp) => {
     prop;
   const { _id, companyName, companyEmail, isBlocked } = customer;
 
-  const { setCurrentCustomer } = useActions();
+  const { setCurrentCustomer, handleToggleCustomerBlock } = useActions();
 
   const handleSwitchChange = (
     event: React.ChangeEvent<HTMLInputElement>,

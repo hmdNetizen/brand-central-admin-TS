@@ -8,6 +8,8 @@ import {
   PaginatedCustomersQueryType,
 } from "./CustomerTypes";
 import { UserProfileReturnedPayload } from "../user/UserTypes";
+import { toast } from "react-toastify";
+import { capitalizeFirstLetters } from "src/lib/helpers";
 
 const initialState: initStateTypes = {
   loadingCustomers: false,
@@ -16,6 +18,7 @@ const initialState: initStateTypes = {
   numberOfCustomersInThirtyDays: 0,
   totalCustomers: 0,
   loadingSingleCustomer: false,
+  loadingCustomerAction: false,
   singleCustomer: null,
   error: null,
 };
@@ -72,6 +75,22 @@ export const getSingleCustomer = createAsyncThunk(
       return thunkAPI.rejectWithValue(
         "Error occurred while fetching customer data"
       );
+    }
+  }
+);
+
+export const handleToggleCustomerBlock = createAsyncThunk(
+  "block-unblock-customer",
+  async (details: { customerId: string; isBlocked: boolean }, thunkAPI) => {
+    const { customerId, isBlocked } = details;
+    try {
+      await axios.patch(`/api/customers/${customerId}/block`, {
+        isBlocked,
+      });
+
+      return details;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
     }
   }
 );
@@ -133,6 +152,39 @@ const customerSlice = createSlice({
         state.loadingSingleCustomer = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(handleToggleCustomerBlock.pending, (state) => {
+        state.loadingCustomerAction = true;
+      })
+      .addCase(handleToggleCustomerBlock.fulfilled, (state, action) => {
+        state.loadingCustomerAction = false;
+        state.customers = state.customers.map((customer) =>
+          customer._id === action.payload.customerId
+            ? { ...customer, isBlocked: action.payload.isBlocked }
+            : customer
+        );
+        state.error = null;
+
+        // Handles toastify notification
+        const customerIndex = state.customers.findIndex(
+          (customer) => customer._id === action.payload.customerId
+        );
+        const customerName = capitalizeFirstLetters(
+          state.customers[customerIndex].companyName
+        );
+
+        if (action.payload.isBlocked) {
+          toast.error(`${customerName} account has been blocked`, {
+            position: "top-center",
+            hideProgressBar: true,
+          });
+        } else {
+          toast.success(`${customerName} account has been unblocked`, {
+            position: "top-center",
+            hideProgressBar: true,
+          });
         }
       });
   },

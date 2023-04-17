@@ -49,5 +49,6 @@ export type initStateTypes = {
   numberOfCustomersInThirtyDays: number;
   totalCustomers: number;
   loadingSingleCustomer: boolean;
+  loadingCustomerAction: boolean;
   singleCustomer: UserProfileReturnedPayload | null;
 };
