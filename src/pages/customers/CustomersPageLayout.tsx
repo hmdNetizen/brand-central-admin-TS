@@ -121,13 +121,13 @@ const CustomerPageLayout = (props: CustomerPageLayoutProps) => {
         openDeleteCustomer={openDeleteCustomer}
         setOpenDeleteCustomer={setOpenDeleteCustomer}
       />
-      {/* <EmailCustomer open={openEmail} setOpen={setOpenEmail} /> */}
-      {/* <CustomLoadingDialog
+      <EmailCustomer open={openEmail} setOpen={setOpenEmail} />
+      <CustomLoadingDialog
         loading={
           loadingCustomerAction !== undefined ? loadingCustomerAction : false
         }
         handleLoading={handleLoadingCustomerAction}
-      /> */}
+      />
     </Container>
   );
 };

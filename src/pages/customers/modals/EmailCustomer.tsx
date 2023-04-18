@@ -18,6 +18,7 @@ import {
   StyledCircularProgress,
 } from "../styles/EmailCustomerStyles";
 import { EmailCustomerInitialStateType, EmailCustomerProps } from "../types";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
 
 const initialState = {
   companyEmail: "",
@@ -29,7 +30,12 @@ const EmailCustomer = (props: EmailCustomerProps) => {
   const theme = useTheme();
   const { open, setOpen } = props;
 
-  const { singleCustomer } = useSelector((state) => state.customers);
+  const singleCustomer = useTypedSelector(
+    (state) => state.customers.singleCustomer
+  );
+  const loadingEmailAction = useTypedSelector(
+    (state) => state.customers.loadingCustomerAction
+  );
 
   const [mailData, setMailData] =
     useState<EmailCustomerInitialStateType>(initialState);
@@ -38,11 +44,13 @@ const EmailCustomer = (props: EmailCustomerProps) => {
   const [messageError, setMessageError] = useState("");
 
   const { companyEmail, message, subject } = mailData;
-  const { sendEmail } = useActions();
+  const { sendEmailToCustomer } = useActions();
 
   const handleClose = () => setOpen(false);
 
-  const handleSendEmail = (event) => {
+  const handleSendEmail = (
+    event: React.FormEvent<HTMLFormElement | HTMLDivElement>
+  ) => {
     event.preventDefault();
 
     if (!companyEmail && !subject && !message) {
@@ -71,7 +79,7 @@ const EmailCustomer = (props: EmailCustomerProps) => {
       return;
     }
 
-    sendEmail({
+    sendEmailToCustomer({
       setOpen,
       to: companyEmail,
       subject,
@@ -79,7 +87,9 @@ const EmailCustomer = (props: EmailCustomerProps) => {
     });
   };
 
-  const handleChange = (event) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = event.target;
     setMailData({ ...mailData, [name]: value });
 
@@ -198,9 +208,9 @@ const EmailCustomer = (props: EmailCustomerProps) => {
               variant="contained"
               color="secondary"
               disableRipple
-              disabled={sendingEmail}
+              disabled={loadingEmailAction}
             >
-              {sendingEmail && (
+              {loadingEmailAction && (
                 <StyledCircularProgress style={{ height: 25, width: 25 }} />
               )}{" "}
               Send Message

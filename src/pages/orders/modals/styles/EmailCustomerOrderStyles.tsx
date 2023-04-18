@@ -5,7 +5,7 @@ import Grid, { GridProps } from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 
 export const StyledBox = styled(Box)(({ theme }) => ({
-  background: "red",
+  width: 500,
   position: "absolute",
   bottom: 5,
   right: 5,

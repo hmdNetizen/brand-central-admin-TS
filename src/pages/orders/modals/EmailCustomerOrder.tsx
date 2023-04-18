@@ -42,7 +42,9 @@ const EmailCustomer = (props: EmailCustomerProps) => {
     (state) => state.customers.singleCustomer
   );
   const singleOrder = useTypedSelector((state) => state.orders.singleOrder);
-  const sendingEmail = useTypedSelector((state) => state.orders.sendingEmail);
+  const loadingEmailAction = useTypedSelector(
+    (state) => state.utils.loadingEmailAction
+  );
 
   const [mailData, setMailData] = useState<initialStateProps>(initialState);
   const [subjectError, setSubjectError] = useState("");
@@ -152,7 +154,7 @@ const EmailCustomer = (props: EmailCustomerProps) => {
         if (singleOrder.orderStatus === "completed") {
           newMailData[
             "message"
-          ] = `Hi ${singleCustomer.companyName}, \n\n Your order with the number # ${singleOrder.orderId} worth $${singleOrder.orderPaymentAmount} has been completed. Thank you for shopping with us. \n \n Regards, \n Brand Central`;
+          ] = `Hi ${singleCustomer.companyName}, \n\nYour order with the number # ${singleOrder.orderId} worth $${singleOrder.orderPaymentAmount} has been completed. Thank you for shopping with us. \n \n Regards, \n Brand Central`;
 
           setMailData(newMailData);
         }
@@ -160,7 +162,7 @@ const EmailCustomer = (props: EmailCustomerProps) => {
         if (singleOrder.orderStatus === "declined") {
           newMailData[
             "message"
-          ] = `Hi ${singleCustomer.companyName}, \n\n Your order with the number # ${singleOrder.orderId} worth $${singleOrder.orderPaymentAmount} has been declined. If you think this action was done in error. Please send us a mail and we will reply as soon as we can. \n\nThank you for shopping with us. \n\n Regards, \n Brand Central`;
+          ] = `Hi ${singleCustomer.companyName}, \n\nYour order with the number # ${singleOrder.orderId} worth $${singleOrder.orderPaymentAmount} has been declined. If you think this action was done in error. Please send us a mail and we will reply as soon as we can. \n\nThank you for shopping with us. \n\n Regards, \n Brand Central`;
 
           setMailData(newMailData);
         }
@@ -250,9 +252,9 @@ const EmailCustomer = (props: EmailCustomerProps) => {
               variant="contained"
               color="secondary"
               disableRipple
-              disabled={sendingEmail}
+              disabled={loadingEmailAction}
             >
-              {sendingEmail && (
+              {loadingEmailAction && (
                 <StyledCircularProgress style={{ height: 25, width: 25 }} />
               )}{" "}
               Send Message
