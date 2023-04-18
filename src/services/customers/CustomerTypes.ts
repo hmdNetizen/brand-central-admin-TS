@@ -36,7 +36,7 @@ export type CustomerExcerptPayloadType = {
 };
 
 export type PaginatedCustomersQueryType = {
-  isBlocked: boolean;
+  isBlocked?: boolean;
   page: number;
   limit: number;
   searchTerm?: string;

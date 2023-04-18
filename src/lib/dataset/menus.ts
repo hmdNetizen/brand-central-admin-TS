@@ -108,13 +108,13 @@ export const menus = [
     id: 4,
     title: "Customers",
     icon: CustomersIcon,
-    path: "/customers",
+    path: "/dashboard/customers",
     subMenus: [
-      { subId: 0, title: "Customers List", path: "/customers" },
+      { subId: 0, title: "Customers List", path: "/dashboard/customers" },
       {
         subId: 1,
         title: "Blocked Customers",
-        path: "/customers/blocked",
+        path: "/dashboard/customers/blocked",
       },
     ],
   },

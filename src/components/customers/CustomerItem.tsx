@@ -71,10 +71,10 @@ const CustomerItem = (prop: CustomerItemProp) => {
       <TableCell align="center">
         {!isBlocked ? (
           <CustomSwitch
-            color="error"
+            color={!isBlocked ? "success" : "error"}
             onChange={(event) => handleSwitchChange(event, customer)}
-            checked={isBlocked}
-            isActive={isBlocked}
+            checked={!isBlocked}
+            isActive={!isBlocked}
           />
         ) : (
           <UnblockButton

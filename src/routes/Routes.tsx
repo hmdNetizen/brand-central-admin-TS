@@ -3,6 +3,8 @@ import { Routes, Route } from "react-router-dom";
 import Prefetch from "src/components/features/Prefetch";
 import DashboardLayout from "src/layouts/DashboardLayout";
 import Login from "src/pages/auth/Login";
+import BlockedCustomers from "src/pages/customers/BlockedCustomers";
+import Customers from "src/pages/customers/Customers";
 import Dashboard from "src/pages/dashboard/Dashboard";
 import AllOrders from "src/pages/orders/AllOrders";
 import CompletedOrders from "src/pages/orders/CompletedOrders";
@@ -38,6 +40,10 @@ const PagesRoutes = () => {
               </Route>
               <Route path="pre-orders">
                 <Route index element={<PreOrders />} />
+              </Route>
+              <Route path="customers">
+                <Route index element={<Customers />} />
+                <Route path="blocked" element={<BlockedCustomers />} />
               </Route>
             </Route>
           </Route>

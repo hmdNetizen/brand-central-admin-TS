@@ -28,8 +28,9 @@ export const getAllCustomers = createAsyncThunk(
   async (details: PaginatedCustomersQueryType, thunkAPI) => {
     try {
       const { page, limit, isBlocked } = details;
+      const isInActive = isBlocked ? `&isBlocked=${isBlocked}` : "";
       const { data } = await axios.get(
-        `/api/customers/v1?isBlocked=${isBlocked}&page=${page}&limit=${limit}`
+        `/api/customers/v1?page=${page}&limit=${limit}${isInActive}`
       );
       const result = data as AllCustomersPayloadType;
 

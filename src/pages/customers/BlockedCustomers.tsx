@@ -1,29 +1,23 @@
-import React, {
-  useState,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-} from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useActions } from "src/hooks/useActions";
 import debounce from "lodash.debounce";
 import CustomerPageLayout from "./CustomersPageLayout";
 import useTitle from "src/hooks/useTitle";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 
-const Customers = () => {
-  useTitle("Admin : List of all customers");
+const BlockedCustomers = () => {
+  useTitle("Admin : List of all blocked customers");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [filterText, setFilterText] = useState("");
+  const [openEditCustomer, setOpenEditCustomer] = useState(false);
+  const [openDeleteCustomer, setOpenDeleteCustomer] = useState(false);
+  const [openEmail, setOpenEmail] = useState(false);
 
   const loadingCustomers = useTypedSelector(
     (state) => state.customers.loadingCustomers
   );
   const customers = useTypedSelector((state) => state.customers.customers);
-
-  const [openEditCustomer, setOpenEditCustomer] = useState(false);
-  const [openDeleteCustomer, setOpenDeleteCustomer] = useState(false);
-  const [openEmail, setOpenEmail] = useState(false);
 
   const { getAllCustomers } = useActions();
 
@@ -37,8 +31,8 @@ const Customers = () => {
     setFilterText(event.target.value);
 
     //   debounceFilteredCustomers({
-    //     text: event.target.value.trim(),
-    //     customerData: customers,
+    //     text: event.target.value,
+    //     customerData: blockedCustomers,
     //   });
 
     setPage(0);
@@ -46,8 +40,9 @@ const Customers = () => {
 
   useEffect(() => {
     getAllCustomers({
-      limit: rowsPerPage,
       page: page + 1,
+      limit: rowsPerPage,
+      isBlocked: true,
     });
 
     // eslint-disable-next-line
@@ -55,9 +50,9 @@ const Customers = () => {
 
   return (
     <CustomerPageLayout
-      title="Customers"
+      title="Blocked Customers"
       filterText={filterText}
-      //   setFilterText={setFilterText}
+      // setFilterText={setFilterText}
       page={page}
       setPage={setPage}
       rowsPerPage={rowsPerPage}
@@ -66,12 +61,12 @@ const Customers = () => {
       setOpenDeleteCustomer={setOpenDeleteCustomer}
       openEditCustomer={openEditCustomer}
       setOpenEditCustomer={setOpenEditCustomer}
+      onChange={handleSearch}
       openEmail={openEmail}
       setOpenEmail={setOpenEmail}
-      onChange={handleSearch}
       customerDataset={customers}
     />
   );
 };
 
-export default Customers;
+export default BlockedCustomers;
