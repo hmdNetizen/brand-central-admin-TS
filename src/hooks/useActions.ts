@@ -9,6 +9,7 @@ import {
   preOrderActions,
   productActions,
   commonActions,
+  utilActions,
 } from "src/services/actions";
 
 export const useActions = () => {
@@ -23,6 +24,7 @@ export const useActions = () => {
       ...preOrderActions,
       ...productActions,
       ...commonActions,
+      ...utilActions,
     },
     dispatch
   );

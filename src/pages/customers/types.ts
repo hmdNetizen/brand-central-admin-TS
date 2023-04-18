@@ -43,6 +43,17 @@ export type EditCustomerProps = {
   customerProfileData: CustomerProfileExcerpt;
 };
 
+export type EmailCustomerInitialStateType = {
+  companyEmail: string;
+  subject: string;
+  message: string;
+};
+
+export type EmailCustomerProps = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 export type CustomerPageLayoutProps = {
   title: "Customers" | "Blocked Customers";
   page: number;

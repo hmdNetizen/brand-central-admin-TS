@@ -61,7 +61,7 @@ const Customers = () => {
       openEmail={openEmail}
       setOpenEmail={setOpenEmail}
       onChange={handleSearch}
-      customerDataset={customers}
+      customerDataset={customers.filter((customer) => !customer.isBlocked)}
     />
   );
 };

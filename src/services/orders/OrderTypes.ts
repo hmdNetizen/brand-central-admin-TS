@@ -105,13 +105,6 @@ export type SingleOrderPayloadType = {
   data: OrderReturnedPayload;
 };
 
-export type SendEmailType = {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  to: string | string[];
-  subject: string;
-  content: string;
-};
-
 export type OrderUpdateType = {
   orderId: string;
   setOpenDeliveryStatus: React.Dispatch<React.SetStateAction<boolean>>;
@@ -147,7 +140,5 @@ export type initStateType = {
   totalSales: number;
   loadingSingleOrder: boolean;
   singleOrder: null | OrderReturnedPayload;
-  sendingEmail: boolean;
-  emailSuccess: string;
   error: string | null;
 };

@@ -29,6 +29,13 @@ export type ReceivedEmailTypes = {
   data: ReceivedEmailReturnedPayload[];
 };
 
+export type SendEmailToCustomerType = {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  to: string | string[];
+  subject: string;
+  content: string;
+};
+
 export type initStateTypes = {
   loadingEmails: boolean;
   loadingSentEmails: boolean;
@@ -39,5 +46,6 @@ export type initStateTypes = {
   filteredReceivedEmails: ReceivedEmailReturnedPayload[];
   singleEmail: SentEmailReturnedPayload | ReceivedEmailReturnedPayload | null;
   currentPage: number;
+  emailSuccess: string;
   error: null | string;
 };

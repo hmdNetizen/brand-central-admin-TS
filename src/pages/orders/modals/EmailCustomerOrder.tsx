@@ -51,7 +51,7 @@ const EmailCustomer = (props: EmailCustomerProps) => {
 
   const { companyEmail, message, subject } = mailData;
 
-  const { sendOrderStatusEmail, getSingleCustomer } = useActions();
+  const { sendEmailToCustomer, getSingleCustomer } = useActions();
 
   const handleClose = () => setOpen(false);
 
@@ -86,7 +86,7 @@ const EmailCustomer = (props: EmailCustomerProps) => {
       return;
     }
 
-    sendOrderStatusEmail({
+    sendEmailToCustomer({
       setOpen,
       to: companyEmail,
       subject,

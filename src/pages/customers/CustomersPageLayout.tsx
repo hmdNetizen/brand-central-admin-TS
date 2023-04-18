@@ -14,24 +14,7 @@ import { SelectChangeEvent } from "@mui/material";
 import PageHeadingActions from "src/components/common/PageHeadingActions";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { CustomerPageLayoutProps } from "./types";
-
-const Container = styled(Grid)(({ theme }) => ({
-  padding: "1rem 2rem 5rem 2rem",
-
-  [theme.breakpoints.only("xs")]: {
-    padding: "5rem 1rem 5rem 1rem",
-  },
-}));
-
-const ContainerWrapper = styled(Grid)(({ theme }) => ({
-  background: "#fff",
-  padding: "2rem 3rem",
-  borderRadius: 5,
-
-  [theme.breakpoints.only("xs")]: {
-    padding: "2rem 1rem",
-  },
-}));
+import { ContainerWrapper, Container } from "./styles/CustomerPageLayoutStyles";
 
 const CustomerPageLayout = (props: CustomerPageLayoutProps) => {
   const {
@@ -134,10 +117,10 @@ const CustomerPageLayout = (props: CustomerPageLayoutProps) => {
         setOpenEditCustomer={setOpenEditCustomer}
         customerProfileData={singleCustomer}
       /> */}
-      {/* <DeleteCustomer
+      <DeleteCustomer
         openDeleteCustomer={openDeleteCustomer}
         setOpenDeleteCustomer={setOpenDeleteCustomer}
-      /> */}
+      />
       {/* <EmailCustomer open={openEmail} setOpen={setOpenEmail} /> */}
       {/* <CustomLoadingDialog
         loading={

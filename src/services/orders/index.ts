@@ -7,7 +7,6 @@ import {
   RecentSalesPayloadType,
   OrdersCountReturnedPayload,
   OrderReturnedPayload,
-  SendEmailType,
   SingleOrderPayloadType,
   OrderUpdateType,
   PaginatedOrdersPayloadType,
@@ -29,8 +28,6 @@ const initialState: initStateType = {
   totalSales: 0,
   loadingSingleOrder: false,
   singleOrder: null,
-  sendingEmail: false,
-  emailSuccess: "",
   error: null,
 };
 
@@ -128,23 +125,6 @@ export const getOrdersCount = createAsyncThunk(
       };
     } catch (error) {
       return thunkAPI.rejectWithValue("Error occured while fetching orders");
-    }
-  }
-);
-
-export const sendOrderStatusEmail = createAsyncThunk(
-  "send-email",
-  async (details: SendEmailType, thunkAPI) => {
-    const { setOpen, ...fields } = details;
-
-    try {
-      const { status } = await axios.post(`/api/messages`, fields);
-
-      if (status === 200) setOpen(false);
-
-      return fields;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Email could not be sent");
     }
   }
 );
@@ -305,22 +285,7 @@ const ordersSlice = createSlice({
       state.pendingOrdersCount = action.payload.pendingOrders;
       state.processingOrdersCount = action.payload.processingOrders;
     });
-    builder
-      .addCase(sendOrderStatusEmail.pending, (state) => {
-        state.sendingEmail = true;
-      })
-      .addCase(sendOrderStatusEmail.fulfilled, (state, action) => {
-        state.sendingEmail = false;
-        state.emailSuccess = "Email Sent";
-        state.error = null;
-      })
-      .addCase(sendOrderStatusEmail.rejected, (state, action) => {
-        state.sendingEmail = false;
-        state.emailSuccess = "";
-        if (typeof action.payload === "string" || action.payload === null) {
-          state.error = action.payload;
-        }
-      });
+
     builder
       .addCase(getSingleOrder.pending, (state) => {
         state.loadingSingleOrder = true;
