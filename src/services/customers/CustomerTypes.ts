@@ -42,6 +42,11 @@ export type PaginatedCustomersQueryType = {
   searchTerm?: string;
 };
 
+export type DeleteCustomerType = {
+  customerId: string;
+  setOpenDeleteCustomer: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 export type initStateTypes = {
   loadingCustomers: boolean;
   customers: UserProfileReturnedPayload[];
@@ -51,5 +56,6 @@ export type initStateTypes = {
   totalCustomers: number;
   loadingSingleCustomer: boolean;
   loadingCustomerAction: boolean;
+  deletingCustomer: boolean;
   singleCustomer: UserProfileReturnedPayload | null;
 };

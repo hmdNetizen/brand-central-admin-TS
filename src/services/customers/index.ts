@@ -6,6 +6,7 @@ import {
   SingleCustomerPayloadType,
   AllCustomersPayloadType,
   PaginatedCustomersQueryType,
+  DeleteCustomerType,
 } from "./CustomerTypes";
 import { UserProfileReturnedPayload } from "../user/UserTypes";
 import { toast } from "react-toastify";
@@ -19,6 +20,7 @@ const initialState: initStateTypes = {
   totalCustomers: 0,
   loadingSingleCustomer: false,
   loadingCustomerAction: false,
+  deletingCustomer: false,
   singleCustomer: null,
   error: null,
 };
@@ -144,6 +146,27 @@ export const unblockCustomer = createAsyncThunk(
   }
 );
 
+export const deleteCustomer = createAsyncThunk(
+  "delete",
+  async (details: DeleteCustomerType, thunkAPI) => {
+    const { customerId, setOpenDeleteCustomer } = details;
+    try {
+      const { status } = await axios.delete(
+        `/api/customers/${customerId}/remove`
+      );
+
+      if (status === 200) {
+        setOpenDeleteCustomer(false);
+        thunkAPI.dispatch(clearSingleCustomer());
+      }
+
+      return customerId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Customer could not be deleted");
+    }
+  }
+);
+
 const customerSlice = createSlice({
   name: "customers",
   initialState,
@@ -153,6 +176,9 @@ const customerSlice = createSlice({
       action: PayloadAction<UserProfileReturnedPayload>
     ) => {
       state.singleCustomer = action.payload;
+    },
+    clearSingleCustomer: (state) => {
+      state.singleCustomer = null;
     },
   },
   extraReducers(builder) {
@@ -288,8 +314,30 @@ const customerSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder
+      .addCase(deleteCustomer.pending, (state) => {
+        state.deletingCustomer = true;
+      })
+      .addCase(deleteCustomer.fulfilled, (state, action) => {
+        state.deletingCustomer = false;
+        state.customers = state.customers.filter(
+          (customer) => customer._id !== action.payload
+        );
+        state.error = null;
+
+        toast.success("Customer deleted successfully", {
+          position: "top-center",
+        });
+      })
+      .addCase(deleteCustomer.rejected, (state, action) => {
+        state.deletingCustomer = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
   },
 });
 
-export const { setCurrentCustomer } = customerSlice.actions;
+export const { setCurrentCustomer, clearSingleCustomer } =
+  customerSlice.actions;
 export default customerSlice.reducer;
