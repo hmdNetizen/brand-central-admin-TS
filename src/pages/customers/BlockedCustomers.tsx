@@ -19,23 +19,23 @@ const BlockedCustomers = () => {
   );
   const customers = useTypedSelector((state) => state.customers.customers);
 
-  const { getAllCustomers } = useActions();
+  const { getAllCustomers, getSearchedCustomers } = useActions();
 
-  //   eslint-disable-next-line
-  // const debounceFilteredCustomers = useCallback(
-  //   debounce(getAllFilteredCustomers, 500),
-  //   []
-  // );
+  const debounceFilteredCustomers = useCallback(
+    debounce(getSearchedCustomers, 500),
+    []
+  );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPage(0);
     setFilterText(event.target.value);
 
-    //   debounceFilteredCustomers({
-    //     text: event.target.value,
-    //     customerData: blockedCustomers,
-    //   });
-
-    setPage(0);
+    debounceFilteredCustomers({
+      page: page + 1,
+      limit: rowsPerPage,
+      isBlocked: true,
+      searchTerm: event.target.value,
+    });
   };
 
   useEffect(() => {

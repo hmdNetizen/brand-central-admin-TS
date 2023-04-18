@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-} from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useActions } from "src/hooks/useActions";
 import debounce from "lodash.debounce";
 import CustomerPageLayout from "./CustomersPageLayout";
@@ -16,39 +11,37 @@ const Customers = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [filterText, setFilterText] = useState("");
 
-  const loadingCustomers = useTypedSelector(
-    (state) => state.customers.loadingCustomers
-  );
   const customers = useTypedSelector((state) => state.customers.customers);
 
   const [openEditCustomer, setOpenEditCustomer] = useState(false);
   const [openDeleteCustomer, setOpenDeleteCustomer] = useState(false);
   const [openEmail, setOpenEmail] = useState(false);
 
-  const { getAllCustomers } = useActions();
+  const { getAllCustomers, getSearchedCustomers } = useActions();
 
-  //   eslint-disable-next-line
-  // const debounceFilteredCustomers = useCallback(
-  //   debounce(getAllFilteredCustomers, 500),
-  //   []
-  // );
+  const debounceFilteredCustomers = useCallback(
+    debounce(getSearchedCustomers, 500),
+    []
+  );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPage(0);
     setFilterText(event.target.value);
 
-    //   debounceFilteredCustomers({
-    //     text: event.target.value.trim(),
-    //     customerData: customers,
-    //   });
-
-    setPage(0);
+    debounceFilteredCustomers({
+      searchTerm: event.target.value.trim(),
+      page: page + 1,
+      limit: rowsPerPage,
+    });
   };
 
   useEffect(() => {
-    getAllCustomers({
-      limit: rowsPerPage,
-      page: page + 1,
-    });
+    if (!filterText) {
+      getAllCustomers({
+        limit: rowsPerPage,
+        page: page + 1,
+      });
+    }
 
     // eslint-disable-next-line
   }, [page, rowsPerPage]);
@@ -57,7 +50,6 @@ const Customers = () => {
     <CustomerPageLayout
       title="Customers"
       filterText={filterText}
-      //   setFilterText={setFilterText}
       page={page}
       setPage={setPage}
       rowsPerPage={rowsPerPage}

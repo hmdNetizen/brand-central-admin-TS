@@ -24,7 +24,7 @@ const initialState: initStateTypes = {
 };
 
 export const getAllCustomers = createAsyncThunk(
-  "all-customers",
+  "get-all-customers",
   async (details: PaginatedCustomersQueryType, thunkAPI) => {
     try {
       const { page, limit, isBlocked } = details;
@@ -40,6 +40,32 @@ export const getAllCustomers = createAsyncThunk(
       };
     } catch (error) {
       return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
+export const getSearchedCustomers = createAsyncThunk(
+  "searched-customers",
+  async (details: PaginatedCustomersQueryType, thunkAPI) => {
+    try {
+      const { page, limit, isBlocked, searchTerm } = details;
+
+      const isInActive = isBlocked ? `&isBlocked=${isBlocked}` : "";
+      const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+
+      const { data } = await axios.get(
+        `/api/customers/v1?page=${page}&limit=${limit}${isInActive}${searchQuery}`
+      );
+      const result = data as AllCustomersPayloadType;
+
+      return {
+        customers: result.data.customers,
+        totalCustomers: result.data.total,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        "Error occurred while fetching customers"
+      );
     }
   }
 );
@@ -141,6 +167,19 @@ const customerSlice = createSlice({
         state.error = null;
       })
       .addCase(getAllCustomers.rejected, (state, action) => {
+        state.loadingCustomers = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(getSearchedCustomers.fulfilled, (state, action) => {
+        state.loadingCustomers = false;
+        state.customers = action.payload.customers;
+        state.totalCustomers = action.payload.totalCustomers;
+        state.error = null;
+      })
+      .addCase(getSearchedCustomers.rejected, (state, action) => {
         state.loadingCustomers = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
