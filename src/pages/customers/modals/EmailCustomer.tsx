@@ -1,0 +1,215 @@
+import React, { useState, useEffect } from "react";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import { styled, useTheme } from "@mui/material/styles";
+import CustomFormInput from "src/utils/CustomFormInput";
+import CustomTextArea from "src/utils/CustomTextArea";
+import { useSelector } from "react-redux";
+import { useActions } from "src/hooks/useActions";
+import {
+  FormContainer,
+  StyledBox,
+  StyledButton,
+  StyledCircularProgress,
+} from "../styles/EmailCustomerStyles";
+import { EmailCustomerInitialStateType, EmailCustomerProps } from "../types";
+
+const initialState = {
+  companyEmail: "",
+  subject: "",
+  message: "",
+};
+
+const EmailCustomer = (props: EmailCustomerProps) => {
+  const theme = useTheme();
+  const { open, setOpen } = props;
+
+  const { singleCustomer } = useSelector((state) => state.customers);
+
+  const [mailData, setMailData] =
+    useState<EmailCustomerInitialStateType>(initialState);
+  const [subjectError, setSubjectError] = useState("");
+  const [companyEmailError, setCompanyEmailError] = useState("");
+  const [messageError, setMessageError] = useState("");
+
+  const { companyEmail, message, subject } = mailData;
+  const { sendEmail } = useActions();
+
+  const handleClose = () => setOpen(false);
+
+  const handleSendEmail = (event) => {
+    event.preventDefault();
+
+    if (!companyEmail && !subject && !message) {
+      setCompanyEmailError("Email is required");
+      setSubjectError("Subject is required");
+      setMessageError("Message is required");
+      return;
+    }
+
+    if (!companyEmail) {
+      setCompanyEmailError("Email is required");
+      return;
+    }
+
+    if (!subject) {
+      setSubjectError("Subject is required");
+      return;
+    }
+
+    if (!message) {
+      setMessageError("Message is required");
+      return;
+    }
+
+    if (companyEmailError || subjectError || messageError) {
+      return;
+    }
+
+    sendEmail({
+      setOpen,
+      to: companyEmail,
+      subject,
+      content: encodeURIComponent(message),
+    });
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setMailData({ ...mailData, [name]: value });
+
+    switch (name) {
+      case "companyEmail":
+        if (!value.trim()) {
+          setCompanyEmailError("Email is required");
+        } else if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
+          setCompanyEmailError("Please enter a valid email");
+        } else {
+          setCompanyEmailError("");
+        }
+        break;
+      case "subject":
+        if (!value.trim()) {
+          setSubjectError("Subject is required");
+        } else {
+          setSubjectError("");
+        }
+        break;
+      case "message":
+        if (!value.trim()) {
+          setMessageError("Message is required");
+        } else {
+          setMessageError("");
+        }
+        break;
+      default:
+        setCompanyEmailError("");
+    }
+  };
+
+  useEffect(() => {
+    if (singleCustomer) {
+      const newCompanyEmail = { ...initialState };
+
+      if (singleCustomer.companyEmail) {
+        newCompanyEmail["companyEmail"] = singleCustomer.companyEmail;
+      }
+
+      setMailData(newCompanyEmail);
+    }
+  }, [singleCustomer]);
+
+  return (
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-Send-message"
+      aria-describedby="modal-send-message-to-customer"
+    >
+      <StyledBox>
+        <Grid
+          item
+          container
+          justifyContent="space-between"
+          sx={{
+            p: "1rem 2rem",
+            background: theme.palette.secondary.dark,
+            color: "#fff",
+          }}
+        >
+          <Grid item>
+            <Typography variant="h4" style={{ marginBottom: 0 }}>
+              Send Email
+            </Typography>
+          </Grid>
+          <Grid item>
+            <IconButton onClick={() => setOpen(false)}>
+              <CloseIcon style={{ color: "#fff" }} />
+            </IconButton>
+          </Grid>
+        </Grid>
+        <FormContainer
+          item
+          container
+          direction="column"
+          component="form"
+          onSubmit={handleSendEmail}
+        >
+          <Grid item container style={{ marginBottom: "2rem" }}>
+            <CustomFormInput
+              name="companyEmail"
+              type="text"
+              placeholder="Enter customer email"
+              label=""
+              value={companyEmail}
+              onChange={handleChange}
+              error={companyEmailError}
+            />
+          </Grid>
+          <Grid item container style={{ marginBottom: "2rem" }}>
+            <CustomFormInput
+              type="text"
+              name="subject"
+              placeholder="Subject"
+              label=""
+              value={subject}
+              onChange={handleChange}
+              error={subjectError}
+            />
+          </Grid>
+          <Grid item container style={{ marginBottom: "2rem" }}>
+            <CustomTextArea
+              label=""
+              name="message"
+              placeholder="Enter your message"
+              value={message}
+              onChange={handleChange}
+              error={messageError}
+            />
+          </Grid>
+          <Grid item container>
+            <StyledButton
+              type="submit"
+              variant="contained"
+              color="secondary"
+              disableRipple
+              disabled={sendingEmail}
+            >
+              {sendingEmail && (
+                <StyledCircularProgress style={{ height: 25, width: 25 }} />
+              )}{" "}
+              Send Message
+            </StyledButton>
+          </Grid>
+        </FormContainer>
+      </StyledBox>
+    </Modal>
+  );
+};
+
+export default EmailCustomer;
