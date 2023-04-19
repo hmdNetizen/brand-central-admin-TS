@@ -7,7 +7,7 @@ export type UserAddressType = {
 };
 
 export type UserProfileReturnedPayload = {
-  businesContact?: UserAddressType;
+  businesContact: UserAddressType;
   referrer: {
     name: string;
     description: string;
@@ -29,6 +29,7 @@ export type UserProfileReturnedPayload = {
   priceCode: string;
   profileImage: string;
   merchantName: string;
+  userId: string;
   document: "";
 };
 
