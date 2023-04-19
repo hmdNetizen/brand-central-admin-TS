@@ -123,7 +123,7 @@ export const customersListColumns: TableHeaderColumnTypes[] = [
   },
 ];
 
-export const customerOrderColumns = [
+export const customerOrderColumns: TableHeaderColumnTypes[] = [
   { id: 0, label: "Order ID", align: "left" },
   { id: 1, label: "Purchase Date", align: "left" },
   { id: 2, label: "Amount", align: "left" },

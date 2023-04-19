@@ -12,7 +12,7 @@ const CustomerDetailsTable = ({ singleCustomer }: CustomerDetailsProps) => {
       companyName,
       companyEmail,
       companyPhoneNumber,
-      businesContact: { address, city, state, postalCode, country },
+      businesContact,
       businessType,
       paymentMethod,
       taxID,
@@ -47,15 +47,15 @@ const CustomerDetailsTable = ({ singleCustomer }: CustomerDetailsProps) => {
           </tr>
           <tr>
             <td>Address</td>
-            <td>{address}</td>
+            <td>{businesContact?.address}</td>
           </tr>
           <tr>
             <td>City/State/Zip Code</td>
-            <td>{`${city}, ${state}, ${postalCode}`}</td>
+            <td>{`${businesContact?.city}, ${businesContact?.state}, ${businesContact?.postalCode}`}</td>
           </tr>
           <tr>
             <td>Country</td>
-            <td>{country}</td>
+            <td>{businesContact?.country}</td>
           </tr>
           <tr>
             <td>Business Type</td>
