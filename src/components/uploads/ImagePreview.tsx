@@ -17,12 +17,6 @@ export type SelectedFileType = File | null;
 
 const initialState = null;
 
-async function urlToInputFile(url: string): Promise<File> {
-  const response = await fetch(url);
-  const blob = await response.blob();
-  return new File([blob], "filename.jpg", { type: blob.type });
-}
-
 const ImagePreview = (props: { dataValue: UserProfileReturnedPayload }) => {
   const { dataValue } = props;
   // IMAGE PREVIEW STATES
@@ -50,34 +44,16 @@ const ImagePreview = (props: { dataValue: UserProfileReturnedPayload }) => {
   };
 
   useEffect(() => {
-    const mapUrlToFileType = async () => {
-      let file;
-      if (dataValue) {
-        if (dataValue.profileImage) {
-          file = await urlToInputFile(dataValue.profileImage);
-        }
+    if (dataValue) {
+      let newSelectedFile = "";
+      if (dataValue.profileImage) {
+        newSelectedFile = dataValue.profileImage;
       }
 
-      if (file) {
-        setSelectedFile(file);
-      }
-    };
-
-    mapUrlToFileType();
-  }, []);
-
-  //   useEffect(() => {
-  //     if (dataValue) {
-  //       let newSelectedFile = "";
-  //       if (dataValue.profileImage) {
-  //         // newSelectedFile = dataValue.profileImage;
-  //       }
-
-  //       console.log(dataValue.profileImage);
-
-  //       setSelectedFile(newSelectedFile);
-  //     }
-  //   }, [dataValue]);
+      // @ts-ignore
+      setSelectedFile(newSelectedFile);
+    }
+  }, [dataValue]);
 
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
