@@ -66,7 +66,7 @@ type OrderCardItemProps = {
   hasButton: boolean;
 };
 
-const OrdersCardItem = (props: OrderCardItemProps) => {
+const OrderDetailsCardItem = (props: OrderCardItemProps) => {
   const { heading, children, hasButton } = props;
   const theme = useTheme();
   const { orderId } = useParams();
@@ -102,8 +102,8 @@ const OrdersCardItem = (props: OrderCardItemProps) => {
   );
 };
 
-OrdersCardItem.defaultProps = {
+OrderDetailsCardItem.defaultProps = {
   hasButton: false,
 };
 
-export default OrdersCardItem;
+export default OrderDetailsCardItem;
