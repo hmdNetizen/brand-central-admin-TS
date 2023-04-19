@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { customerOrderColumns } from "src/lib/dataset/tableData";
 import Tables from "components/table/Tables";
-import { useTheme } from "@mui/material/styles";
 import { OrderReturnedPayload } from "src/services/orders/OrderTypes";
 import CustomerOrderItem from "./CustomerOrderItem";
 
@@ -12,7 +11,6 @@ type CustomerOrdersTableProps = {
 
 const CustomerOrdersTable = (props: CustomerOrdersTableProps) => {
   const { loading, customerOrders } = props;
-  const theme = useTheme();
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
