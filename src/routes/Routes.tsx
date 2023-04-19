@@ -10,6 +10,7 @@ import Dashboard from "src/pages/dashboard/Dashboard";
 import AllOrders from "src/pages/orders/AllOrders";
 import CompletedOrders from "src/pages/orders/CompletedOrders";
 import DeclinedOrders from "src/pages/orders/DeclinedOrders";
+import OrderDetails from "src/pages/orders/OrderDetails";
 import PendingOrders from "src/pages/orders/PendingOrders";
 import ProcessingOrders from "src/pages/orders/ProcessingOrders";
 import PreOrders from "src/pages/pre-orders/PreOrders";
@@ -38,6 +39,12 @@ const PagesRoutes = () => {
                 <Route path="completed" element={<CompletedOrders />} />
                 <Route path="processing" element={<ProcessingOrders />} />
                 <Route path="declined" element={<DeclinedOrders />} />
+                <Route path=":orderId">
+                  <Route
+                    index
+                    element={<OrderDetails menuSlideIn={menuSlideIn} />}
+                  />
+                </Route>
               </Route>
               <Route path="pre-orders">
                 <Route index element={<PreOrders />} />

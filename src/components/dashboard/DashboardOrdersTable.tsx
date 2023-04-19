@@ -53,7 +53,7 @@ const DashboardOrdersTable = () => {
                 variant="contained"
                 color="primary"
                 component={Link}
-                to={`/orders/${order._id}`}
+                to={`/dashboard/orders/${order._id}`}
               >
                 View Details
               </StyledButton>

@@ -81,7 +81,7 @@ const CustomOrderOptions = (props: CustomOrderOptionsProps) => {
           disableRipple
           onClick={() => handleOrderDetails(order)}
           component={Link}
-          to={`/admin/orders/${order.id}`}
+          to={`/dashboard/orders/${order.id}`}
         >
           <VisibilitySharpIcon />
           View Details
@@ -94,7 +94,7 @@ const CustomOrderOptions = (props: CustomOrderOptionsProps) => {
           disableRipple
           onClick={handleViewInvoice}
           component={Link}
-          to={`/admin/orders/${order.id}/invoice`}
+          to={`/dashboard/orders/${order.id}/invoice`}
         >
           <ReceiptSharpIcon />
           View Invoice

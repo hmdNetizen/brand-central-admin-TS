@@ -51,7 +51,7 @@ const DashboardCustomersTable = () => {
                 variant="contained"
                 color="primary"
                 component={Link}
-                to={`/customers/${customer._id}`}
+                to={`/dashboard/customers/${customer._id}`}
               >
                 View Details
               </StyledButton>

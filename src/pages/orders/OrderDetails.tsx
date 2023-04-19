@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { styled, useTheme } from "@mui/material/styles";
@@ -49,10 +49,10 @@ const OrderDetails = ({ menuSlideIn }: { menuSlideIn: boolean }) => {
 
   const { getSingleOrder } = useActions();
 
-  useLayoutEffect(() => {
-    getSingleOrder(orderId!);
-
-    // eslint-disable-next-line
+  useEffect(() => {
+    if (orderId) {
+      getSingleOrder(orderId);
+    }
   }, [orderId]);
 
   return (

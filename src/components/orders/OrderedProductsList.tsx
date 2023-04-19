@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { orderedProductsColumn } from "src/lib/dataset/tableData";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Tables from "components/table/Tables";
+import Tables from "src/components/table/Tables";
 import OrderedProductsItem from "./OrderedProductsItem";
 
 import { OrderReturnedPayload } from "src/services/orders/OrderTypes";
@@ -29,7 +29,7 @@ const OrderedProductsList = (props: OrderProductListProps) => {
   };
 
   return (
-    <Grid container direction="column" style={{ paddingTop: "2rem" }}>
+    <Grid container direction="column" style={{ paddingTop: "5rem" }}>
       <Grid item style={{ marginBottom: "1rem" }}>
         <Typography
           variant="h4"
