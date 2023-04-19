@@ -1,7 +1,6 @@
 import React, { ImgHTMLAttributes } from "react";
 import Grid, { GridProps } from "@mui/material/Grid";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import CircularProgress from "src/utils/CustomCircularProgress";
 import { styled } from "@mui/material/styles";
 import { SelectedFileType } from "../ImagePreview";
 
@@ -69,14 +68,6 @@ export const StyledCameraIcon = styled(PhotoCamera, {
     transform: "scale(1.1)",
   },
 }));
-
-export const StyledProgressBar = styled(CircularProgress)({
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  zIndex: 5,
-});
 
 export const Input = styled("input")({
   display: "none",

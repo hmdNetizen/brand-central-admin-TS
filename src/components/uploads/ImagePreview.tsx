@@ -3,14 +3,14 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { useActions } from "src/hooks/useActions";
 import { UserProfileReturnedPayload } from "src/services/user/UserTypes";
+import CircularProgress from "src/utils/CustomCircularProgress";
 
 import {
   ImageWrapper,
   Image,
   Input,
   StyledCameraIcon,
-  StyledProgressBar,
-} from "./styles/ImagePreview";
+} from "./styles/ImagePreviewStyles";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 
 export type SelectedFileType = File | null;
@@ -94,8 +94,8 @@ const ImagePreview = (props: { dataValue: UserProfileReturnedPayload }) => {
           <StyledCameraIcon imagePreview={imagePreview} />
         </IconButton>
       </label>
-      {(uploadingFile && uploadPercentage) > 0 && (
-        <StyledProgressBar value={uploadPercentage} />
+      {uploadingFile && uploadPercentage > 0 && (
+        <CircularProgress value={uploadPercentage} />
       )}
       <Image
         src={typeof selectedFile === "string" ? selectedFile : imagePreview}
