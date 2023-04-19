@@ -112,11 +112,11 @@ const CustomerPageLayout = (props: CustomerPageLayoutProps) => {
           </Tables>
         </Grid>
       </ContainerWrapper>
-      {/* <EditCustomerProfile
+      <EditCustomerProfile
         openEditCustomer={openEditCustomer}
         setOpenEditCustomer={setOpenEditCustomer}
-        customerProfileData={singleCustomer}
-      /> */}
+        customerProfileData={singleCustomer!}
+      />
       <DeleteCustomer
         openDeleteCustomer={openDeleteCustomer}
         setOpenDeleteCustomer={setOpenDeleteCustomer}

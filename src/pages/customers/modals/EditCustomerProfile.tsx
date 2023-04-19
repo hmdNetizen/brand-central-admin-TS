@@ -1,77 +1,31 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import ShowDialog from "src/utils/ShowDialog";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { styled, useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import CustomFormInput from "src/utils/CustomFormInput";
 import CustomSelect from "src/utils/CustomSelect";
 import { countryList } from "src/lib/dataset/countriesList";
-import CircularProgress from "@mui/material/CircularProgress";
-import { useSelector } from "react-redux";
 import PhoneNumberInput from "src/utils/PhoneNumberInput";
 import { useActions } from "src/hooks/useActions";
-import ImagePreview from "components/uploads/ImagePreview";
+import ImagePreview from "src/components/uploads/ImagePreview";
 import {
   ContactInitialStateType,
   CustomerProfileExcerpt,
   EditCustomerProps,
 } from "../types";
 import { SelectChangeEvent } from "@mui/material";
-import { UserProfileReturnedPayload } from "src/services/user/UserTypes";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-
-const ContentContainer = styled(Grid)({
-  paddingBottom: "3rem",
-});
-
-const FormContainer = styled(Grid)<{ component: React.ElementType }>({
-  padding: "2rem",
-});
-
-const SubmitButton = styled(Button)(({ theme }) => ({
-  minWidth: 180,
-  fontSize: "1.6rem",
-  fontWeight: 400,
-  textTransform: "none",
-  borderRadius: 0,
-
-  "&:hover": {
-    background: theme.palette.secondary.light,
-  },
-
-  "&:active": {
-    background: theme.palette.secondary.dark,
-  },
-
-  "&:disabled": {
-    cursor: "not-allowed",
-    pointerEvents: "all !important",
-    background: theme.palette.secondary.light,
-    color: "#fff",
-    // color: (props) => (props.loading ? "#fff" : "inherit"),
-  },
-}));
-
-const StyledCircularProgress = styled(CircularProgress)({
-  marginRight: "1rem",
-  "&.MuiCircularProgress-root": {
-    color: "#f2f2f2",
-  },
-});
-
-const CancelButton = styled(Button)(({ theme }) => ({
-  fontSize: "1.5rem",
-  textTransform: "none",
-  padding: ".5rem 2rem",
-  borderRadius: 0,
-  color: theme.palette.error.main,
-  background: theme.palette.common.lightRed,
-}));
+import {
+  ContentContainer,
+  FormContainer,
+  StyledCircularProgress,
+  SubmitButton,
+  CancelButton,
+} from "../styles/EditCustomerProfileStyles";
 
 const initialState = {
   companyName: "",
