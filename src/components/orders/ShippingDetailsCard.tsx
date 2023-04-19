@@ -1,21 +1,22 @@
 import React from "react";
 import OrderDetailsCardItem from "./OrderDetailsCardItem";
+import { useSelector } from "react-redux";
 import { OrderReturnedPayload } from "src/services/orders/OrderTypes";
 
-type BillingDetailsCardProps = {
+type ShippingDetailsCardProps = {
   singleOrder: OrderReturnedPayload;
 };
 
-const BillingDetailsCard = (props: BillingDetailsCardProps) => {
+const ShippingDetailsCard = (props: ShippingDetailsCardProps) => {
   const { singleOrder } = props;
 
   if (singleOrder) {
     const {
-      billingAddress: { customerName, phoneNumber, city, zipCode, address },
+      shippingAddress: { customerName, phoneNumber, address, city, zipCode },
       ordersCustomer: { email },
     } = singleOrder;
     return (
-      <OrderDetailsCardItem heading="Billing Details">
+      <OrderDetailsCardItem heading="Shipping Details">
         <tr>
           <td>Company Name</td>
           <td>{customerName}</td>
@@ -47,4 +48,4 @@ const BillingDetailsCard = (props: BillingDetailsCardProps) => {
   }
 };
 
-export default BillingDetailsCard;
+export default ShippingDetailsCard;
