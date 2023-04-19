@@ -23,6 +23,7 @@ import {
 } from "../types";
 import { SelectChangeEvent } from "@mui/material";
 import { UserProfileReturnedPayload } from "src/services/user/UserTypes";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
 
 const ContentContainer = styled(Grid)({
   paddingBottom: "3rem",
@@ -144,10 +145,13 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
 
   const { city, state, address, country, postalCode } = businessContact;
 
-  const { singleCustomer, updatingCustomer } = useSelector(
-    (state) => state.customers
+  const updatingCustomer = useTypedSelector(
+    (state) => state.customers.updatingCustomer
   );
-  const { uploadedFile } = useSelector((state) => state.common);
+  const singleCustomer = useTypedSelector(
+    (state) => state.customers.singleCustomer
+  );
+  const uploadedFile = useTypedSelector((state) => state.common.uploadedFile);
 
   const { updateCustomerProfile } = useActions();
 
@@ -369,7 +373,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
     }
 
     updateCustomerProfile({
-      customerId: singleCustomer._id,
+      customerId: singleCustomer?._id!,
       setOpenEditCustomer,
       companyName,
       companyEmail,
@@ -480,7 +484,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
             justifyContent="center"
             style={{ marginTop: "2rem" }}
           >
-            <ImagePreview dataValue={singleCustomer} />
+            <ImagePreview dataValue={singleCustomer!} />
           </Grid>
           <Grid
             item
@@ -598,7 +602,6 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 value={postalCode}
                 placeholder="Enter Zip Code"
                 onChange={handleContactChange}
-                // error={postalCodeError}
               />
             </Grid>
             <Grid item sx={{ flex: 1 }}>
