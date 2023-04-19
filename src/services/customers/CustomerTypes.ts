@@ -2,6 +2,7 @@ import {
   UserProfilePayloadType,
   UserProfileReturnedPayload,
 } from "../user/UserTypes";
+import { OrderReturnedPayload } from "../orders/OrderTypes";
 
 export type CustomerExcerptDataTypes = Pick<
   UserProfileReturnedPayload,
@@ -47,6 +48,13 @@ export type DeleteCustomerType = {
   setOpenDeleteCustomer: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+export type PaginatedCustomerOrderType = {
+  data: {
+    orders: OrderReturnedPayload[];
+    total: number;
+  };
+};
+
 export type UpdateCustomerType = {
   customerId: string;
   setOpenEditCustomer: React.Dispatch<React.SetStateAction<boolean>>;
@@ -80,5 +88,8 @@ export type initStateTypes = {
   loadingCustomerAction: boolean;
   updatingCustomer: boolean;
   deletingCustomer: boolean;
+  loadingCustomerOrders: boolean;
+  customerOrders: OrderReturnedPayload[];
+  totalCustomerOrders: number;
   singleCustomer: UserProfileReturnedPayload | null;
 };

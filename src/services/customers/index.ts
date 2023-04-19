@@ -8,6 +8,7 @@ import {
   PaginatedCustomersQueryType,
   DeleteCustomerType,
   UpdateCustomerType,
+  PaginatedCustomerOrderType,
 } from "./CustomerTypes";
 import { UserProfileReturnedPayload } from "../user/UserTypes";
 import { toast } from "react-toastify";
@@ -24,6 +25,9 @@ const initialState: initStateTypes = {
   updatingCustomer: false,
   deletingCustomer: false,
   singleCustomer: null,
+  loadingCustomerOrders: false,
+  customerOrders: [],
+  totalCustomerOrders: 0,
   error: null,
 };
 
@@ -189,6 +193,25 @@ export const deleteCustomer = createAsyncThunk(
       return customerId;
     } catch (error) {
       return thunkAPI.rejectWithValue("Customer could not be deleted");
+    }
+  }
+);
+
+export const getCustomerOrders = createAsyncThunk(
+  "get-customer-orders",
+  async (customerId: string, thunkAPI) => {
+    try {
+      const { data } = await axios.get(
+        `/api/orders/${customerId}/v1/user-orders`
+      );
+      const response = data as PaginatedCustomerOrderType;
+
+      return {
+        orders: response.data.orders,
+        totalOrders: response.data.total,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error occurred while fetching orders");
     }
   }
 );
@@ -381,6 +404,22 @@ const customerSlice = createSlice({
       })
       .addCase(deleteCustomer.rejected, (state, action) => {
         state.deletingCustomer = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(getCustomerOrders.pending, (state) => {
+        state.loadingCustomerOrders = true;
+      })
+      .addCase(getCustomerOrders.fulfilled, (state, action) => {
+        state.loadingCustomerOrders = false;
+        state.customerOrders = action.payload.orders;
+        state.totalCustomerOrders = action.payload.totalOrders;
+        state.error = null;
+      })
+      .addCase(getCustomerOrders.rejected, (state, action) => {
+        state.loadingCustomerOrders = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }
