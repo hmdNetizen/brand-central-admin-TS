@@ -7,6 +7,7 @@ import {
   AllCustomersPayloadType,
   PaginatedCustomersQueryType,
   DeleteCustomerType,
+  UpdateCustomerType,
 } from "./CustomerTypes";
 import { UserProfileReturnedPayload } from "../user/UserTypes";
 import { toast } from "react-toastify";
@@ -20,6 +21,7 @@ const initialState: initStateTypes = {
   totalCustomers: 0,
   loadingSingleCustomer: false,
   loadingCustomerAction: false,
+  updatingCustomer: false,
   deletingCustomer: false,
   singleCustomer: null,
   error: null,
@@ -142,6 +144,30 @@ export const unblockCustomer = createAsyncThunk(
       return customerId;
     } catch (error) {
       return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
+export const updateCustomerProfile = createAsyncThunk(
+  "update-customer",
+  async (details: UpdateCustomerType, thunkAPI) => {
+    const { customerId, setOpenEditCustomer, ...fields } = details;
+    try {
+      const { status } = await axios.patch(
+        `/api/customers/${customerId}`,
+        fields
+      );
+
+      if (status === 200) {
+        setOpenEditCustomer(false);
+      }
+
+      return {
+        customerId,
+        ...fields,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Profile Could not be updated");
     }
   }
 );
@@ -309,6 +335,30 @@ const customerSlice = createSlice({
         );
       })
       .addCase(unblockCustomer.rejected, (state, action) => {
+        state.loadingCustomerAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updateCustomerProfile.pending, (state) => {
+        state.updatingCustomer = true;
+      })
+      .addCase(updateCustomerProfile.fulfilled, (state, action) => {
+        state.updatingCustomer = false;
+        state.customers = state.customers.map((customer) =>
+          customer._id === action.payload.customerId
+            ? { ...customer, ...action.payload }
+            : customer
+        );
+        state.error = null;
+
+        toast.success(`Customer account has been updated`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(updateCustomerProfile.rejected, (state, action) => {
         state.loadingCustomerAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;

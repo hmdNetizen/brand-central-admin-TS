@@ -47,6 +47,28 @@ export type DeleteCustomerType = {
   setOpenDeleteCustomer: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+export type UpdateCustomerType = {
+  customerId: string;
+  setOpenEditCustomer: React.Dispatch<React.SetStateAction<boolean>>;
+  companyName: string;
+  companyEmail: string;
+  companyPhoneNumber: string;
+  priceCode: string;
+  city: string;
+  state: string;
+  address: string;
+  country: string;
+  postalCode: string;
+  paymentMethod: string;
+  businessType: string;
+  taxID: string;
+  primaryContactName: string;
+  primaryContactRole: string;
+  primaryContactPhoneNumber: string;
+  primaryContactEmail: string;
+  profileImage: string;
+};
+
 export type initStateTypes = {
   loadingCustomers: boolean;
   customers: UserProfileReturnedPayload[];
@@ -56,6 +78,7 @@ export type initStateTypes = {
   totalCustomers: number;
   loadingSingleCustomer: boolean;
   loadingCustomerAction: boolean;
+  updatingCustomer: boolean;
   deletingCustomer: boolean;
   singleCustomer: UserProfileReturnedPayload | null;
 };

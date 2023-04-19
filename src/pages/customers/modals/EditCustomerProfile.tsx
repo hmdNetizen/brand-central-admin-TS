@@ -16,8 +16,13 @@ import { useSelector } from "react-redux";
 import PhoneNumberInput from "src/utils/PhoneNumberInput";
 import { useActions } from "src/hooks/useActions";
 import ImagePreview from "components/uploads/ImagePreview";
-import { ContactInitialStateType, CustomerProfileExcerpt } from "../types";
+import {
+  ContactInitialStateType,
+  CustomerProfileExcerpt,
+  EditCustomerProps,
+} from "../types";
 import { SelectChangeEvent } from "@mui/material";
+import { UserProfileReturnedPayload } from "src/services/user/UserTypes";
 
 const ContentContainer = styled(Grid)({
   paddingBottom: "3rem",
@@ -99,7 +104,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
 
   const [customerData, setCustomerData] =
-    useState<InitialStateType>(initialState);
+    useState<CustomerProfileExcerpt>(initialState);
   const [businessContact, setBusinessContact] =
     useState<ContactInitialStateType>(contactInitialState);
   const [customPrimaryContactRole, setCustomPrimaryContactRole] = useState("");
@@ -396,7 +401,9 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
 
       for (const key in customerProfileData) {
         if (key in newCustomerData) {
-          newCustomerData[key] = customerProfileData[key];
+          // @ts-ignore
+          newCustomerData[key as keyof CustomerProfileExcerpt] =
+            customerProfileData[key as keyof CustomerProfileExcerpt];
 
           if (
             key === "primaryContactRole" &&

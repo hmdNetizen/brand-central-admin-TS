@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { useActions } from "src/hooks/useActions";
+import { UserProfileReturnedPayload } from "src/services/user/UserTypes";
 
 import {
   ImageWrapper,
@@ -22,7 +23,7 @@ async function urlToInputFile(url: string): Promise<File> {
   return new File([blob], "filename.jpg", { type: blob.type });
 }
 
-const ImagePreview = (props: { dataValue: { profileImage: string } }) => {
+const ImagePreview = (props: { dataValue: UserProfileReturnedPayload }) => {
   const { dataValue } = props;
   // IMAGE PREVIEW STATES
   const [imagePreview, setImagePreview] = useState<string | undefined>(

@@ -40,7 +40,7 @@ export type CustomerProfileExcerpt = Pick<
 export type EditCustomerProps = {
   openEditCustomer: boolean;
   setOpenEditCustomer: React.Dispatch<React.SetStateAction<boolean>>;
-  customerProfileData: CustomerProfileExcerpt;
+  customerProfileData: CustomerProfileExcerpt | UserProfileReturnedPayload;
 };
 
 export type EmailCustomerInitialStateType = {
