@@ -132,7 +132,7 @@ export const customerOrderColumns: TableHeaderColumnTypes[] = [
   { id: 5, label: "", align: "center" },
 ];
 
-export const orderedProductsColumn = [
+export const orderedProductsColumn: TableHeaderColumnTypes[] = [
   {
     id: 0,
     label: "Product Image",
