@@ -3,17 +3,9 @@ import { orderedProductsColumn } from "src/lib/dataset/tableData";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Tables from "components/table/Tables";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import { styled } from "@mui/material/styles";
-import { OrderReturnedPayload } from "src/services/orders/OrderTypes";
+import OrderedProductsItem from "./OrderedProductsItem";
 
-const ProductImage = styled("img")({
-  width: 50,
-  height: 50,
-  maxWidth: 100,
-  maxHeight: 100,
-});
+import { OrderReturnedPayload } from "src/services/orders/OrderTypes";
 
 type OrderProductListProps = {
   loading: boolean;
@@ -66,31 +58,8 @@ const OrderedProductsList = (props: OrderProductListProps) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((order) => {
                 if (typeof order.product !== "string") {
-                  const {
-                    product: { id, name, price, brandName, itemCode, image },
-                    productQuantity,
-                    productTotalCost,
-                  } = order;
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={id}>
-                      <TableCell>
-                        <ProductImage src={image} alt={`${name} icon`} />
-                      </TableCell>
-                      <TableCell>{itemCode}</TableCell>
-                      <TableCell>{brandName}</TableCell>
-                      <TableCell style={{ minWidth: 250 }}>{name}</TableCell>
-                      <TableCell style={{ minWidth: 100 }}>
-                        <Typography variant="body1" style={{ fontWeight: 600 }}>
-                          <span>Price: </span>${price}
-                        </Typography>
-                        <Typography variant="body2">
-                          <span>Qty: </span> {productQuantity}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="center">
-                        ${productTotalCost?.toFixed(2)}
-                      </TableCell>
-                    </TableRow>
+                    <OrderedProductsItem key={order.product.id} order={order} />
                   );
                 } else {
                   return null;

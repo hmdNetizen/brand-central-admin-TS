@@ -15,24 +15,22 @@ type PaymentMethodType = {
   };
 };
 
-type OrdersProductsType = {
-  product:
-    | {
-        id: string;
-        name: string;
-        price: number;
-        image: string;
-        itemCode: string;
-        brandName: string;
-        priceCode1: number;
-        priceCode2: number;
-        priceCode3: number;
-        priceCode4: number;
-        hasImage: boolean;
-        shippingCategory: string;
-        productUPC: string;
-      }
-    | string;
+export type OrdersProductsType = {
+  product: {
+    id: string;
+    name: string;
+    price: number;
+    image: string;
+    itemCode: string;
+    brandName: string;
+    priceCode1: number;
+    priceCode2: number;
+    priceCode3: number;
+    priceCode4: number;
+    hasImage: boolean;
+    shippingCategory: string;
+    productUPC: string;
+  };
   productQuantity: number;
   productTotalCost: number;
 };
