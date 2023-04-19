@@ -7,7 +7,7 @@ import KeyboardDoubleArrowRightSharpIcon from "@mui/icons-material/KeyboardDoubl
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import { Link, useParams } from "react-router-dom";
 import avatarPlaceholder from "src/assets/images/placeholder-avatar.png";
-import CustomerDetailsTable from "components/customers/CustomerDetailsTable";
+import CustomerDetailsTable from "src/components/customers/CustomerDetailsTable";
 import { useActions } from "src/hooks/useActions";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -50,9 +50,11 @@ const CustomerProfileDetails = ({ menuSlideIn }: { menuSlideIn: boolean }) => {
   );
 
   useTitle(
-    `Admin : Customers | ${capitalizeFirstLetters(
-      singleCustomer?.companyName!
-    )}`
+    `Admin : Customers | ${
+      singleCustomer?.companyName
+        ? capitalizeFirstLetters(singleCustomer.companyName)
+        : "Customers"
+    }`
   );
 
   const { getSingleCustomer, getCustomerOrders } = useActions();
@@ -89,7 +91,7 @@ const CustomerProfileDetails = ({ menuSlideIn }: { menuSlideIn: boolean }) => {
         <Grid
           item
           component={Link}
-          to="customers"
+          to="/dashboard/customers"
           style={{
             textDecoration: "none",
             color: theme.palette.secondary.dark,
@@ -101,7 +103,7 @@ const CustomerProfileDetails = ({ menuSlideIn }: { menuSlideIn: boolean }) => {
         <Grid
           item
           component={Link}
-          to={`customers/${customerId}`}
+          to={`/dashboard/customers/${customerId}`}
           style={{
             textDecoration: "none",
             color: theme.palette.secondary.dark,
@@ -130,7 +132,7 @@ const CustomerProfileDetails = ({ menuSlideIn }: { menuSlideIn: boolean }) => {
                 <Grid item>
                   <Avatar
                     src={
-                      singleCustomer && singleCustomer.profileImage
+                      singleCustomer?.profileImage
                         ? singleCustomer.profileImage
                         : avatarPlaceholder
                     }

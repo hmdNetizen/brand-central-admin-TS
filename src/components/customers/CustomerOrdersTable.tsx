@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { customerOrderColumns } from "src/lib/dataset/tableData";
-import Tables from "components/table/Tables";
+import Tables from "src/components/table/Tables";
 import { OrderReturnedPayload } from "src/services/orders/OrderTypes";
 import CustomerOrderItem from "./CustomerOrderItem";
 

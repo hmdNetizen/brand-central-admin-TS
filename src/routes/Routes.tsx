@@ -4,6 +4,7 @@ import Prefetch from "src/components/features/Prefetch";
 import DashboardLayout from "src/layouts/DashboardLayout";
 import Login from "src/pages/auth/Login";
 import BlockedCustomers from "src/pages/customers/BlockedCustomers";
+import CustomerProfileDetails from "src/pages/customers/CustomerProfileDetails";
 import Customers from "src/pages/customers/Customers";
 import Dashboard from "src/pages/dashboard/Dashboard";
 import AllOrders from "src/pages/orders/AllOrders";
@@ -44,6 +45,10 @@ const PagesRoutes = () => {
               <Route path="customers">
                 <Route index element={<Customers />} />
                 <Route path="blocked" element={<BlockedCustomers />} />
+                <Route
+                  path=":customerId"
+                  element={<CustomerProfileDetails menuSlideIn={menuSlideIn} />}
+                />
               </Route>
             </Route>
           </Route>

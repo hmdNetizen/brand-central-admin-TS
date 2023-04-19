@@ -15,9 +15,9 @@ export const Container = styled(Grid)(({ theme }) => ({
   },
 }));
 
-export const DetailsWrapper = styled(Grid)<
-  GridProps & { menuSlideIn: boolean }
->(({ theme, menuSlideIn }) => ({
+export const DetailsWrapper = styled(Grid, {
+  shouldForwardProp: (prop) => prop !== "menuSlideIn",
+})<GridProps & { menuSlideIn: boolean }>(({ theme, menuSlideIn }) => ({
   background: "#fff",
   padding: "5rem 2rem 5rem 0",
   marginBottom: "5rem",

@@ -15,11 +15,11 @@ export const Table = styled("table")(({ theme }) => ({
     fontFamily: "Open Sans, Roboto",
   },
 
-  "& td:nth-child(1)": {
+  "& td:nth-of-type(1)": {
     background: "rgba(249, 249, 249, 0.5)",
   },
 
-  "& td:nth-child(2)": {
+  "& td:nth-of-type(2)": {
     [theme.breakpoints.only("xs")]: {
       minWidth: 0,
     },

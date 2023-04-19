@@ -94,7 +94,7 @@ const CustomerItem = (prop: CustomerItemProp) => {
             background={theme.palette.secondary}
             title="Details"
             component={Link}
-            to={`customers/${_id}`}
+            to={`/dashboard/customers/${_id}`}
           />
           <ActionButton
             startIcon={<EditSharpIcon />}
