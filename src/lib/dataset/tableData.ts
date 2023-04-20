@@ -425,3 +425,31 @@ export const preOrdersColumns: TableHeaderColumnTypes[] = [
     align: "left",
   },
 ];
+
+export const invoiceColumns: TableHeaderColumnTypes[] = [
+  {
+    id: 0,
+    label: "Product Image",
+    align: "left",
+  },
+  {
+    id: 1,
+    label: "Brand",
+    align: "left",
+  },
+  {
+    id: 2,
+    label: "Product Name",
+    align: "left",
+  },
+  {
+    id: 3,
+    label: "Details",
+    align: "left",
+  },
+  {
+    id: 4,
+    label: "Total",
+    align: "center",
+  },
+];

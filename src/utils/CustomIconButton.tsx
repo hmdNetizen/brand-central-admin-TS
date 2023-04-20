@@ -1,4 +1,6 @@
 import { ButtonProps } from "@mui/material/Button";
+import React from "react";
+import { LinkProps } from "react-router-dom";
 import {
   StyledButton,
   StyledCircularProgress,
@@ -17,6 +19,9 @@ export interface CustomIconButtonProps extends ButtonProps {
   className?: string;
   title: string;
   loading?: string;
+  component?: React.ElementType;
+  to?: LinkProps["to"];
+  target?: string;
 }
 
 const CustomIconButton = (props: CustomIconButtonProps) => {
