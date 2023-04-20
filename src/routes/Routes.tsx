@@ -11,6 +11,7 @@ import AllOrders from "src/pages/orders/AllOrders";
 import CompletedOrders from "src/pages/orders/CompletedOrders";
 import DeclinedOrders from "src/pages/orders/DeclinedOrders";
 import OrderDetails from "src/pages/orders/OrderDetails";
+import OrderInvoice from "src/pages/orders/OrderInvoice";
 import PendingOrders from "src/pages/orders/PendingOrders";
 import ProcessingOrders from "src/pages/orders/ProcessingOrders";
 import PreOrders from "src/pages/pre-orders/PreOrders";
@@ -44,6 +45,9 @@ const PagesRoutes = () => {
                     index
                     element={<OrderDetails menuSlideIn={menuSlideIn} />}
                   />
+                  <Route path="invoice">
+                    <Route index element={<OrderInvoice />} />
+                  </Route>
                 </Route>
               </Route>
               <Route path="pre-orders">

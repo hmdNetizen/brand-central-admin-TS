@@ -5,14 +5,13 @@ import { styled, useTheme } from "@mui/material/styles";
 import PreviousButton from "src/utils/PreviousButton";
 import KeyboardDoubleArrowRightSharpIcon from "@mui/icons-material/KeyboardDoubleArrowRightSharp";
 import { Link, useParams } from "react-router-dom";
-import logo from "assets/images/logo-black.png";
+import logo from "src/assets/images/logo-black.png";
 import CustomIconButton from "src/utils/CustomIconButton";
 import LocalPrintshopSharpIcon from "@mui/icons-material/LocalPrintshopSharp";
-import Tables from "components/table/Tables";
+import Tables from "src/components/table/Tables";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Divider from "@mui/material/Divider";
-import { useSelector } from "react-redux";
 import { useActions } from "src/hooks/useActions";
 import Spinner from "src/utils/Spinner";
 import Moment from "react-moment";
@@ -20,6 +19,7 @@ import CustomerInvoicePersonalDetails from "src/components/orders/CustomerInvoic
 import useTitle from "src/hooks/useTitle";
 import { invoiceColumns } from "src/lib/dataset/tableData";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
+import OrderedProductsItem from "src/components/orders/OrderedProductsItem";
 
 const Container = styled(Grid)(({ theme }) => ({
   padding: "1rem 2rem 5rem 2rem",
@@ -110,7 +110,7 @@ const OrderInvoice = () => {
         <Grid
           item
           component={Link}
-          to={`orders`}
+          to={`/dashboard/orders`}
           style={{
             textDecoration: "none",
             color: theme.palette.secondary.dark,
@@ -122,7 +122,7 @@ const OrderInvoice = () => {
         <Grid
           item
           component={Link}
-          to={`orders/${orderId}`}
+          to={`/dashboard/orders/${orderId}`}
           style={{
             textDecoration: "none",
             color: theme.palette.secondary.dark,
@@ -134,7 +134,7 @@ const OrderInvoice = () => {
         <Grid
           item
           component={Link}
-          to={`orders/${orderId}/invoice`}
+          to={`/dashboard/orders/${orderId}/invoice`}
           style={{
             textDecoration: "none",
             color: theme.palette.secondary.dark,
@@ -167,7 +167,7 @@ const OrderInvoice = () => {
                   background={theme.palette.secondary}
                   title="Print Invoice"
                   component={Link}
-                  to={`/admin/orders/${orderId}/invoice/print`}
+                  to={`/dashboard/orders/${orderId}/invoice/print`}
                   target="_blank"
                 />
               </Grid>
@@ -201,9 +201,6 @@ const OrderInvoice = () => {
                 <Title variant="body1">
                   Order ID : <span>${singleOrder.orderId}</span>
                 </Title>
-                {/* <Title variant="body1">
-                  Shipping Method : <span>Ship To Address</span>
-                </Title> */}
                 <Title variant="body1">
                   Payment Method :{" "}
                   <span>
@@ -228,11 +225,6 @@ const OrderInvoice = () => {
                 heading="Shipping Details"
                 customerDetails={singleOrder.shippingAddress}
               />
-
-              {/* <CustomerInvoicePersonalDetails
-                heading="Billing Details"
-                customerDetails={singleOrder.billingAddress}
-              /> */}
             </Grid>
             {singleOrder?.orderNote && (
               <Grid item style={{ maxWidth: 400 }} sx={{ mb: 2 }}>
@@ -256,42 +248,20 @@ const OrderInvoice = () => {
                 hasShadow={false}
                 notFoundText="No Ordered Product(s) found"
               >
-                {singleOrder.ordersProducts.length > 0 &&
+                {singleOrder?.ordersProducts.length > 0 &&
                   singleOrder.ordersProducts
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((order) => {
-                      const {
-                        product: { id, name, brandName, price, image },
-                        productQuantity,
-                        productTotalCost,
-                      } = order;
-                      return (
-                        <TableRow hover role="checkbox" tabIndex={-1} key={id}>
-                          <TableCell style={{ width: 150 }}>
-                            <img
-                              src={image}
-                              alt={`${name} display`}
-                              style={{ width: 50 }}
-                            />
-                          </TableCell>
-
-                          <TableCell>{brandName}</TableCell>
-                          <TableCell style={{ minWidth: 200 }}>
-                            {name}
-                          </TableCell>
-                          <TableCell style={{ minWidth: 100 }}>
-                            <Title variant="body1">
-                              Price: <span>${price} </span>
-                            </Title>
-                            <Title variant="body2">
-                              Qty: <span>{productQuantity}</span>
-                            </Title>
-                          </TableCell>
-                          <TableCell align="center">
-                            ${productTotalCost.toFixed(2)}
-                          </TableCell>
-                        </TableRow>
-                      );
+                      if (typeof order.product !== "string") {
+                        return (
+                          <OrderedProductsItem
+                            key={order.product.id}
+                            order={order}
+                          />
+                        );
+                      } else {
+                        return null;
+                      }
                     })}
               </Tables>
               <Grid item container direction="column">
