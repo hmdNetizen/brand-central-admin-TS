@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import PreviousButton from "src/utils/PreviousButton";
 import KeyboardDoubleArrowRightSharpIcon from "@mui/icons-material/KeyboardDoubleArrowRightSharp";
 import { Link, useParams } from "react-router-dom";
@@ -9,50 +9,16 @@ import logo from "src/assets/images/logo-black.png";
 import CustomIconButton from "src/utils/CustomIconButton";
 import LocalPrintshopSharpIcon from "@mui/icons-material/LocalPrintshopSharp";
 import Tables from "src/components/table/Tables";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
 import Divider from "@mui/material/Divider";
 import { useActions } from "src/hooks/useActions";
 import Spinner from "src/utils/Spinner";
-import Moment from "react-moment";
 import CustomerInvoicePersonalDetails from "src/components/orders/CustomerInvoicePersonalDetails";
 import useTitle from "src/hooks/useTitle";
 import { invoiceColumns } from "src/lib/dataset/tableData";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import OrderedProductsItem from "src/components/orders/OrderedProductsItem";
-
-const Container = styled(Grid)(({ theme }) => ({
-  padding: "1rem 2rem 5rem 2rem",
-
-  [theme.breakpoints.only("xs")]: {
-    padding: "5rem 1rem 5rem 1rem",
-  },
-}));
-
-const Logo = styled("img")({
-  width: 200,
-});
-
-const ContentContainer = styled(Grid)({
-  background: "#fff",
-  padding: "3rem 2rem",
-  borderRadius: 5,
-});
-
-const Heading = styled(Typography)({
-  fontWeight: 700,
-  fontSize: "1.85rem",
-  marginBottom: "1rem",
-});
-
-const Title = styled(Typography)(({ theme }) => ({
-  fontWeight: 700,
-  fontSize: "1.5rem",
-
-  "& span": {
-    fontWeight: 400,
-  },
-}));
+import OrderInvoiceDetails from "src/components/orders/OrderInvoiceDetails";
+import { Container, ContentContainer, Logo } from "./styles/OrderInvoiceStyles";
 
 const OrderInvoice = () => {
   useTitle("Admin : Orders | Order Invoice");
@@ -180,47 +146,7 @@ const OrderInvoice = () => {
               rowSpacing={3}
               pt={5}
             >
-              <Grid item>
-                <Heading variant="h3">Order Details</Heading>
-                <Title variant="body1">
-                  Invoice Number :{" "}
-                  <span>
-                    {singleOrder.orderInVoiceNumber
-                      ? singleOrder.orderInVoiceNumber
-                      : "N/A"}
-                  </span>
-                </Title>
-                <Title variant="body1">
-                  Order Date :{" "}
-                  <span style={{ fontWeight: 400 }}>
-                    <Moment format="D MMM YYYY hh:mm:ss" withTitle>
-                      {singleOrder.orderDate}
-                    </Moment>
-                  </span>
-                </Title>
-                <Title variant="body1">
-                  Order ID : <span>${singleOrder.orderId}</span>
-                </Title>
-                <Title variant="body1">
-                  Payment Method :{" "}
-                  <span>
-                    {singleOrder.orderPaymentMethod === "Cash/Check"
-                      ? `${singleOrder.orderPaymentMethod} on delivery`
-                      : singleOrder.orderPaymentMethod}
-                  </span>
-                </Title>
-                {singleOrder.orderDiscount !== 0 && (
-                  <Title variant="body1">
-                    Order Discount : <span>${singleOrder.orderDiscount}</span>
-                  </Title>
-                )}
-                {singleOrder.orderShippingAmount !== 0 && (
-                  <Title variant="body1">
-                    Shipping Fee :{" "}
-                    <span>${singleOrder.orderShippingAmount.toFixed(2)}</span>
-                  </Title>
-                )}
-              </Grid>
+              <OrderInvoiceDetails singleOrder={singleOrder} />
               <CustomerInvoicePersonalDetails
                 heading="Shipping Details"
                 customerDetails={singleOrder.shippingAddress}
