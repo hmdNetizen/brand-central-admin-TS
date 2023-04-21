@@ -71,11 +71,7 @@ const DashboardLayout = (props: DashLayoutProps) => {
         selectedMenu={selectedMenu}
         selectedSubMenu={selectedSubMenu}
       />
-      <OutletContainer
-        menuSlideIn={menuSlideIn}
-        orderId={orderId!}
-        pathname={pathname}
-      >
+      <OutletContainer menuSlideIn={menuSlideIn} pathname={pathname}>
         <Outlet />
       </OutletContainer>
       <footer>Footer</footer>

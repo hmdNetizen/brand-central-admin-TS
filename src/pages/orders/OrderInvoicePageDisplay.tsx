@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, Fragment } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import PreviousButton from "src/utils/PreviousButton";
 import KeyboardDoubleArrowRightSharpIcon from "@mui/icons-material/KeyboardDoubleArrowRightSharp";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import logo from "src/assets/images/logo-black.png";
 import CustomIconButton from "src/utils/CustomIconButton";
 import LocalPrintshopSharpIcon from "@mui/icons-material/LocalPrintshopSharp";
@@ -23,12 +23,12 @@ import { Container, ContentContainer, Logo } from "./styles/OrderInvoiceStyles";
 const OrderInvoicePageDisplay = () => {
   useTitle("Admin : Orders | Order Invoice");
   const theme = useTheme();
+  const { pathname } = useLocation();
 
-  // eslint-disable-next-line
   const { orderId } = useParams();
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(100);
+  const [rowsPerPage, setRowsPerPage] = useState(200);
 
   const loadingSingleOrder = useTypedSelector(
     (state) => state.orders.loadingSingleOrder
@@ -57,58 +57,64 @@ const OrderInvoicePageDisplay = () => {
   }, [orderId]);
 
   return (
-    <Container container direction="column">
-      <Grid item container alignItems="center" columnSpacing={1}>
-        <Grid item>
-          <PreviousButton path={`orders/${orderId}`} />
-        </Grid>
-        <Grid item>
-          <Typography variant="h2">Order Invoice</Typography>
-        </Grid>
-      </Grid>
-      <Grid
-        item
-        container
-        alignItems="center"
-        columnGap={0.5}
-        style={{ paddingBottom: "2rem" }}
-      >
-        <Grid
-          item
-          component={Link}
-          to={`/dashboard/orders`}
-          style={{
-            textDecoration: "none",
-            color: theme.palette.secondary.dark,
-          }}
-        >
-          <Typography variant="body2">Orders</Typography>
-        </Grid>
-        <KeyboardDoubleArrowRightSharpIcon color="secondary" />
-        <Grid
-          item
-          component={Link}
-          to={`/dashboard/orders/${orderId}`}
-          style={{
-            textDecoration: "none",
-            color: theme.palette.secondary.dark,
-          }}
-        >
-          <Typography variant="body2">Order Details</Typography>
-        </Grid>
-        <KeyboardDoubleArrowRightSharpIcon color="secondary" />
-        <Grid
-          item
-          component={Link}
-          to={`/dashboard/orders/${orderId}/invoice`}
-          style={{
-            textDecoration: "none",
-            color: theme.palette.secondary.dark,
-          }}
-        >
-          <Typography variant="body2">Invoice</Typography>
-        </Grid>
-      </Grid>
+    <Container container direction="column" pathname={pathname}>
+      {!pathname.includes("/invoice/print") && (
+        <Fragment>
+          <Grid item container alignItems="center" columnSpacing={1}>
+            <Grid item>
+              <PreviousButton path={`orders/${orderId}`} />
+            </Grid>
+            <Grid item>
+              <Typography variant="h2">Order Invoice</Typography>
+            </Grid>
+          </Grid>
+
+          <Grid
+            item
+            container
+            alignItems="center"
+            columnGap={0.5}
+            style={{ paddingBottom: "2rem" }}
+          >
+            <Grid
+              item
+              component={Link}
+              to={`/dashboard/orders`}
+              style={{
+                textDecoration: "none",
+                color: theme.palette.secondary.dark,
+              }}
+            >
+              <Typography variant="body2">Orders</Typography>
+            </Grid>
+            <KeyboardDoubleArrowRightSharpIcon color="secondary" />
+            <Grid
+              item
+              component={Link}
+              to={`/dashboard/orders/${orderId}`}
+              style={{
+                textDecoration: "none",
+                color: theme.palette.secondary.dark,
+              }}
+            >
+              <Typography variant="body2">Order Details</Typography>
+            </Grid>
+            <KeyboardDoubleArrowRightSharpIcon color="secondary" />
+            <Grid
+              item
+              component={Link}
+              to={`/dashboard/orders/${orderId}/invoice`}
+              style={{
+                textDecoration: "none",
+                color: theme.palette.secondary.dark,
+              }}
+            >
+              <Typography variant="body2">Invoice</Typography>
+            </Grid>
+          </Grid>
+        </Fragment>
+      )}
+
       {loadingSingleOrder ? (
         <Grid item container style={{ height: "100vh" }}>
           <Spinner loaderHeight="100%" />
@@ -127,7 +133,14 @@ const OrderInvoicePageDisplay = () => {
               <Grid item alignSelf="center">
                 <Logo src={logo} alt="Brand Logo" />
               </Grid>
-              <Grid item>
+              <Grid
+                item
+                style={{
+                  display: pathname.includes("/invoice/print")
+                    ? "none"
+                    : "flex",
+                }}
+              >
                 <CustomIconButton
                   startIcon={<LocalPrintshopSharpIcon />}
                   background={theme.palette.secondary}

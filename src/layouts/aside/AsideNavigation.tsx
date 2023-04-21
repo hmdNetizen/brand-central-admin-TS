@@ -1,9 +1,9 @@
 import React from "react";
-import { styled } from "@mui/material/styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import AsideList from "./AsideList";
 import { Aside, ArrowIconWrapper } from "./styles/AsideNavigationStyles";
+import { useLocation } from "react-router-dom";
 
 type AsideNavigationProps = {
   menuSlideIn: boolean;
@@ -14,8 +14,14 @@ type AsideNavigationProps = {
 
 const AsideNavigation = (props: AsideNavigationProps) => {
   const { menuSlideIn, selectedMenu, selectedSubMenu, setMenuSlideIn } = props;
+  const { pathname } = useLocation();
   return (
-    <Aside menuSlideIn={menuSlideIn}>
+    <Aside
+      menuSlideIn={menuSlideIn}
+      style={{
+        display: pathname.includes("/invoice/print") ? "none" : "block",
+      }}
+    >
       <ArrowIconWrapper
         menuSlideIn={menuSlideIn}
         onClick={() => setMenuSlideIn((prev) => !prev)}

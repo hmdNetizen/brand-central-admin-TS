@@ -13,6 +13,7 @@ import DeclinedOrders from "src/pages/orders/DeclinedOrders";
 import OrderDetails from "src/pages/orders/OrderDetails";
 import OrderInvoice from "src/pages/orders/OrderInvoice";
 import PendingOrders from "src/pages/orders/PendingOrders";
+import PrintOrderInvoice from "src/pages/orders/PrintOrderInvoice";
 import ProcessingOrders from "src/pages/orders/ProcessingOrders";
 import PreOrders from "src/pages/pre-orders/PreOrders";
 
@@ -47,6 +48,7 @@ const PagesRoutes = () => {
                   />
                   <Route path="invoice">
                     <Route index element={<OrderInvoice />} />
+                    <Route path="print" element={<PrintOrderInvoice />} />
                   </Route>
                 </Route>
               </Route>
