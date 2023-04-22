@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Prefetch from "src/components/features/Prefetch";
 import DashboardLayout from "src/layouts/DashboardLayout";
 import Login from "src/pages/auth/Login";
+import Categories from "src/pages/categories/Categories";
 import BlockedCustomers from "src/pages/customers/BlockedCustomers";
 import CustomerProfileDetails from "src/pages/customers/CustomerProfileDetails";
 import Customers from "src/pages/customers/Customers";
@@ -62,6 +63,9 @@ const PagesRoutes = () => {
                   path=":customerId"
                   element={<CustomerProfileDetails menuSlideIn={menuSlideIn} />}
                 />
+              </Route>
+              <Route path="categories">
+                <Route index element={<Categories />} />
               </Route>
             </Route>
           </Route>

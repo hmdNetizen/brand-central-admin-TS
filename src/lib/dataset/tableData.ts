@@ -165,7 +165,7 @@ export const orderedProductsColumn: TableHeaderColumnTypes[] = [
   },
 ];
 
-export const categoryColumns = [
+export const categoryColumns: TableHeaderColumnTypes[] = [
   {
     id: 0,
     label: "Icon",

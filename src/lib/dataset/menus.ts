@@ -124,9 +124,13 @@ export const menus = [
     icon: CategoryIcon,
     path: "/categories",
     subMenus: [
-      { subId: 0, title: "Main Category", path: "/category" },
-      { subId: 1, title: "Sub Category", path: "/subcategory" },
-      { subId: 2, title: "Brands Category", path: "/brands-category" },
+      { subId: 0, title: "Main Category", path: "/dashboard/categories" },
+      { subId: 1, title: "Sub Category", path: "/dashboard/subcategories" },
+      {
+        subId: 2,
+        title: "Brands Category",
+        path: "/dashboard/brands-category",
+      },
     ],
   },
   {

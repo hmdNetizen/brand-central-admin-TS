@@ -51,6 +51,9 @@ const commonSlice = createSlice({
     setUploadPercentage: (state, action: PayloadAction<number>) => {
       state.uploadPercentage = action.payload;
     },
+    clearUploadedImages: (state) => {
+      state.uploadedFile = null;
+    },
   },
   extraReducers(builder) {
     builder
@@ -71,5 +74,5 @@ const commonSlice = createSlice({
   },
 });
 
-export const { setUploadPercentage } = commonSlice.actions;
+export const { setUploadPercentage, clearUploadedImages } = commonSlice.actions;
 export default commonSlice.reducer;

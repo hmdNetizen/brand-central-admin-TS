@@ -60,10 +60,10 @@ const CategoryItem = (props: CategoryItemProps) => {
       </TableCell>
       <TableCell align="center">
         <CustomSwitch
-          color={!isActivate ? "success" : "error"}
+          color={isActivate ? "success" : "error"}
           onChange={(event) => handleSwitchChange(event, category)}
-          checked={!isActivate}
-          isActive={!isActivate}
+          checked={isActivate}
+          isActive={isActivate}
         />
       </TableCell>
       <TableCell>
