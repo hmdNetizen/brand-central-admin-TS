@@ -27,7 +27,7 @@ const OrderedProductsItem = (props: OrderProductsItemProps) => {
       <TableCell>
         <ProductImage src={image} alt={`${name} icon`} />
       </TableCell>
-      <TableCell>{itemCode}</TableCell>
+      {/* <TableCell>{itemCode}</TableCell> */}
       <TableCell>{brandName}</TableCell>
       <TableCell style={{ minWidth: 250 }}>{name}</TableCell>
       <TableCell style={{ minWidth: 100 }}>

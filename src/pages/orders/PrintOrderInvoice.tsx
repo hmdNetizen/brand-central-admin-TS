@@ -17,7 +17,6 @@ const PrintOrderInvoice = () => {
     }
 
     return () => clearTimeout(timer);
-    // eslint-disable-next-line
   }, []);
 
   return <OrderInvoicePageDisplay />;
