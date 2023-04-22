@@ -11,6 +11,7 @@ import customersReducer from "./customers";
 // import settingsReducer from "./settings";
 // import shippingReducer from "./shipping";
 import preOrderReducer from "./pre-orders";
+import categoriesReducer from "./categories";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   preOrders: preOrderReducer,
   products: productReducer,
   common: commonReducer,
+  categories: categoriesReducer,
 });
 
 const store = configureStore({
