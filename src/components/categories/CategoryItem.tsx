@@ -1,48 +1,18 @@
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import IconButton from "@mui/material/IconButton";
+
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import CustomSwitch from "src/utils/CustomSwitch";
-import CustomIconButton from "src/utils/CustomIconButton";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import { CategoryReturnedPayload } from "src/services/categories/CategoryTypes";
-
-const CategoryIcon = styled("img")({
-  width: 40,
-  maxHeight: 60,
-});
-
-const OptionsTableData = styled("div")({
-  minWidth: 150,
-  display: "grid",
-  gridTemplateColumns: "repeat(2, 1fr)",
-  gridColumnGap: "1rem",
-});
-
-const ActionButton = styled(CustomIconButton)({
-  minWidth: 150,
-  display: "grid",
-  gridTemplateColumns: "repeat(2, 1fr)",
-  gridColumnGap: "1rem",
-});
-
-const StyledIconButton = styled(IconButton)(({ theme }) => ({
-  background: theme.palette.error.main,
-  maxWidth: 42,
-
-  "&:hover": {
-    background: theme.palette.error.light,
-  },
-
-  "&:active": {
-    background: theme.palette.error.dark,
-  },
-
-  "& .MuiSvgIcon-root": {
-    color: "#fff",
-  },
-}));
+import {
+  ActionButton,
+  CategoryIcon,
+  OptionsTableData,
+  StyledIconButton,
+} from "./styles/CategoryItemStyles";
+import { useActions } from "src/hooks/useActions";
 
 type CategoryItemProps = {
   category: CategoryReturnedPayload;
@@ -54,6 +24,8 @@ const CategoryItem = (props: CategoryItemProps) => {
   const theme = useTheme();
   const { category, setOpenEditCategory, setOpenDeleteCategory } = props;
   const { categoryName, categorySlug, isActivate, setIcon } = category;
+
+  const { setCurrentCategory, toggleCategoryActivation } = useActions();
 
   const handleSwitchChange = (
     event: React.ChangeEvent<HTMLInputElement>,

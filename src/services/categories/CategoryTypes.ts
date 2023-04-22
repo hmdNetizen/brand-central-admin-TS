@@ -10,6 +10,10 @@ export type ReturnedPayloadType<T> = {
   data: T[];
 };
 
+export type ReturnedSinglePayloadType<T> = {
+  data: T;
+};
+
 export type SubCategoryReturnedPayload = {
   _id: string;
   category: string;
@@ -20,7 +24,9 @@ export type SubCategoryReturnedPayload = {
 
 export type initStateType = {
   loading: boolean;
+  loadingActivation: boolean;
   categories: CategoryReturnedPayload[];
   subCategories: SubCategoryReturnedPayload[];
+  singleCategory: CategoryReturnedPayload | null;
   error: null | string;
 };
