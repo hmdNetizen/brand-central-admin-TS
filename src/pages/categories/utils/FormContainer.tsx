@@ -1,19 +1,17 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
-import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import CustomFormInput from "src/utils/CustomFormInput";
 import {
   StyledFormContainer,
   StyledChip,
   CancelButton,
   SubmitButton,
-  StyledIconButton,
   StyledCircularProgress,
 } from "../modals/styles/CategoryModalsStyles";
 import { configureSlug } from "src/lib/helpers";
+import FileUploadLayout from "src/components/uploads/FileUploadLayout";
 
 type FormContainerProps = {
   onSubmit: (event: React.FormEvent<HTMLInputElement | HTMLDivElement>) => void;
@@ -115,48 +113,13 @@ const FormContainer = (props: FormContainerProps) => {
           />
         </Grid>
       </Grid>
-      <Grid item container justifyContent="center">
-        <Grid item style={{ width: 200 }}>
-          <FileUploadBox
-            iconSize="5rem"
-            setImageError={setCategoryImageError}
-            errorMessage="Add an image for this category"
-            selectedFile={selectedFile}
-            setSelectedFile={setSelectedFile}
-          />
-        </Grid>
-        {selectedFile && (
-          <Grid
-            item
-            container
-            justifyContent="center"
-            columnGap={1}
-            sx={{ mt: 1 }}
-          >
-            <StyledIconButton onClick={onRemoveImage}>
-              <DeleteSharpIcon />
-            </StyledIconButton>
-            <label htmlFor="add-category-photo">
-              <input
-                accept="image/*"
-                id="add-category-photo"
-                multiple
-                type="file"
-                style={{ display: "none" }}
-                onChange={onImageChange}
-              />
-              <Button
-                variant="contained"
-                component="span"
-                style={{ width: 120 }}
-                color="secondary"
-              >
-                Change
-              </Button>
-            </label>
-          </Grid>
-        )}
-      </Grid>
+      <FileUploadLayout
+        onImageChange={onImageChange}
+        onRemoveImage={onRemoveImage}
+        selectedFile={selectedFile}
+        setCategoryImageError={setCategoryImageError}
+        setSelectedFile={setSelectedFile}
+      />
       <Grid
         item
         container
