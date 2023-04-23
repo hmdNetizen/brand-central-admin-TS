@@ -14,7 +14,7 @@ import AddIcon from "@mui/icons-material/Add";
 import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import { categoryColumns } from "src/lib/dataset/tableData";
-// import AddCategory from "./modals/AddCategory";
+import AddCategory from "./modals/AddCategory";
 // import EditCategory from "./modals/EditCategory";
 // import DeleteCategory from "./modals/DeleteCategory";
 
@@ -191,6 +191,7 @@ const Categories = () => {
                 .map((category) => {
                   return (
                     <CategoryItem
+                      key={category._id}
                       category={category}
                       setOpenDeleteCategory={setOpenDeleteCategory}
                       setOpenEditCategory={setOpenEditCategory}
@@ -200,15 +201,15 @@ const Categories = () => {
           </Tables>
         </Grid>
       </ContainerWrapper>
-      {/* <AddCategory
+      <AddCategory
         openAddCategory={openAddCategory}
         setOpenAddCategory={setOpenAddCategory}
       />
-      <EditCategory
+      {/* <EditCategory
         openEditCategory={openEditCategory}
         setOpenEditCategory={setOpenEditCategory}
-      />
-      <DeleteCategory
+      /> */}
+      {/* <DeleteCategory
         openDeleteCategory={openDeleteCategory}
         setOpenDeleteCategory={setOpenDeleteCategory}
       /> */}

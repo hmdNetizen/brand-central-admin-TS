@@ -37,6 +37,7 @@ export type CategoryRequestPayload = {
   categoryName: string;
   categorySlug: string;
   setIcon: string;
+  file: File | string;
 };
 
 export type initStateType = {

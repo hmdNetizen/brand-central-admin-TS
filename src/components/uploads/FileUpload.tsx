@@ -13,26 +13,29 @@ type FileUploadProps = {
   setImageError: React.Dispatch<React.SetStateAction<string>>;
   errorMessage: string;
   iconSize: string | number;
+  selectedFile: File | string;
+  setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
 };
 
 const FileUpload = (props: FileUploadProps) => {
-  const { setImageError, iconSize, errorMessage } = props;
-  const { uploadFile } = useActions();
-  const uploadedFile = useTypedSelector((state) => state.common.uploadedFile);
+  const {
+    setImageError,
+    iconSize,
+    errorMessage,
+    selectedFile,
+    setSelectedFile,
+  } = props;
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target?.files?.[0];
 
-    if (!file && uploadedFile === null) {
+    if (!file && !selectedFile) {
       setImageError(errorMessage);
       return;
     }
 
-    uploadFile({
-      file: file!,
-    });
-
-    setImageError(errorMessage);
+    setSelectedFile(file!);
+    setImageError("");
   };
 
   return (

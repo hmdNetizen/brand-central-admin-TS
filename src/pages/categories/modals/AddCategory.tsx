@@ -47,6 +47,7 @@ const AddCategory = (props: AddCategoryProps) => {
 
   const [categoryNameError, setCategoryNameError] = useState("");
   const [categorySlugError, setCategorySlugError] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | string>("");
   //   eslint-disable-next-line
   const [categoryImageError, setCategoryImageError] = useState("");
 
@@ -92,9 +93,7 @@ const AddCategory = (props: AddCategoryProps) => {
 
     if (!file) return;
 
-    uploadFile({
-      file,
-    });
+    setSelectedFile(file);
   };
 
   const handleClick = () => {
@@ -141,6 +140,7 @@ const AddCategory = (props: AddCategoryProps) => {
     addNewCategory({
       setCategoryData,
       setOpenAddCategory,
+      file: selectedFile,
       categoryName: capitalizeFirstLetters(categoryName),
       categorySlug: configureSlug(categorySlug),
       setIcon: uploadedFile ? uploadedFile.url : "",
@@ -255,9 +255,11 @@ const AddCategory = (props: AddCategoryProps) => {
                 iconSize="5rem"
                 setImageError={setCategoryImageError}
                 errorMessage="Add an image for this category"
+                selectedFile={selectedFile}
+                setSelectedFile={setSelectedFile}
               />
             </Grid>
-            {uploadedFile && (
+            {selectedFile && (
               <Grid
                 item
                 container
@@ -268,10 +270,10 @@ const AddCategory = (props: AddCategoryProps) => {
                 <StyledIconButton onClick={handleClearUploadedImages}>
                   <DeleteSharpIcon />
                 </StyledIconButton>
-                <label htmlFor="add-product-photo">
+                <label htmlFor="add-category-photo">
                   <input
                     accept="image/*"
-                    id="add-product-photo"
+                    id="add-category-photo"
                     multiple
                     type="file"
                     style={{ display: "none" }}

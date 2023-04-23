@@ -5,10 +5,13 @@ import { styled } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import CustomCircularProgress from "src/utils/CustomCircularProgress";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
+import NewItemImagePreview from "./NewItemImagePreview";
 
 const UploadWrapper = styled(Grid)(({ theme }) => ({
   background: "#f4f4f4",
   height: 200,
+  width: 200,
+  position: "relative",
 
   [theme.breakpoints.down("md")]: {
     maxWidth: 200,
@@ -25,27 +28,36 @@ type FileUploadBoxProps = {
   setImageError: React.Dispatch<React.SetStateAction<string>>;
   errorMessage: string;
   iconSize: string | number;
+  selectedFile: File | string;
+  setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
 };
 
 const FileUploadBox = (props: FileUploadBoxProps) => {
-  const { setImageError, iconSize, errorMessage } = props;
-  const uploadedFile = useTypedSelector((state) => state.common.uploadedFile);
-  const uploadPercentage = useTypedSelector(
-    (state) => state.common.uploadPercentage
-  );
-  const uploadingFile = useTypedSelector((state) => state.common.uploadingFile);
+  const {
+    setImageError,
+    iconSize,
+    errorMessage,
+    selectedFile,
+    setSelectedFile,
+  } = props;
 
   return (
     <UploadWrapper item container justifyContent="center" alignItems="center">
-      {uploadingFile || (uploadPercentage > 0 && uploadPercentage < 100) ? (
+      {/* {uploadingFile || (uploadPercentage > 0 && uploadPercentage < 100) ? (
         <CustomCircularProgress value={uploadPercentage} />
       ) : uploadedFile && uploadedFile.url ? (
         <StyledImage src={uploadedFile.url} alt="" />
+      ) : (
+      )} */}
+      {selectedFile ? (
+        <NewItemImagePreview selectedFile={selectedFile} />
       ) : (
         <FileUpload
           setImageError={setImageError}
           iconSize={iconSize}
           errorMessage={errorMessage}
+          selectedFile={selectedFile}
+          setSelectedFile={setSelectedFile}
         />
       )}
     </UploadWrapper>

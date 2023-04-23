@@ -7,7 +7,6 @@ import { styled } from "@mui/material/styles";
 import React from "react";
 
 interface CustomProgressProps extends CircularProgressProps {
-  boxClassName?: string;
   value: number;
 }
 
@@ -20,13 +19,12 @@ const StyledBox = styled(Box)({
 });
 
 const StyledCircularProgress = styled(CircularProgress)(({ theme }) => ({
-  color: theme.palette.success.dark,
+  color: theme.palette.primary.dark,
 }));
 
 const PercentageText = styled(Typography)<{ component: React.ElementType }>(
   ({ theme }) => ({
     fontSize: "1.25rem",
-    color: theme.palette.success.main,
   })
 );
 

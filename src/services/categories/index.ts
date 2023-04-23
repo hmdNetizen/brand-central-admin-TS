@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import axios from "../axios";
-import { clearUploadedImages } from "../common";
+import { clearUploadedImages, uploadFile } from "../common";
+import { UploadedFilePayload } from "../common/commonTypes";
+import { fileUploadConfig } from "src/config/fileUpload";
 import {
   CategoryReturnedPayload,
   ReturnedPayloadType,
@@ -61,23 +63,33 @@ export const toggleCategoryActivation = createAsyncThunk(
 export const addNewCategory = createAsyncThunk(
   "add-category",
   async (details: RequestPayloadType<CategoryRequestPayload>, thunkAPI) => {
-    const { setCategoryData, setOpenAddCategory, ...fields } = details;
+    const { setCategoryData, setOpenAddCategory, file, ...fields } = details;
+    const { config, formData } = fileUploadConfig(file);
     try {
-      const { data, status } = await axios.post(`/api/categories/add`, fields);
-      const result = data as ReturnedSinglePayloadType<CategoryReturnedPayload>;
+      const { data: uploadedFile } = await axios.post(
+        `/api/uploads/file`,
+        formData,
+        config
+      );
+      const result = uploadedFile as UploadedFilePayload;
 
-      if (status === 200) {
+      const { data, status } = await axios.post(`/api/categories/add`, {
+        ...fields,
+        setIcon: result.url,
+      });
+      const response =
+        data as ReturnedSinglePayloadType<CategoryReturnedPayload>;
+
+      if (status === 201) {
         thunkAPI.dispatch(clearUploadedImages());
         setCategoryData({
           categoryName: "",
           categorySlug: "",
         });
         setOpenAddCategory(false);
-      } else {
-        window.scrollTo(0, 0);
       }
 
-      return result.data;
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("Something went wrong");
     }
