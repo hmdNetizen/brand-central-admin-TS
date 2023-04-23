@@ -3,7 +3,6 @@ import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material/styles";
 
 export const ContentContainer = styled(Grid)({
@@ -30,7 +29,9 @@ export const ErrorMessage = styled(Typography)<{
   },
 });
 
-export const FormContainer = styled(Grid)<{ component: React.ElementType }>({
+export const StyledFormContainer = styled(Grid)<{
+  component: React.ElementType;
+}>({
   padding: "2rem",
 });
 
@@ -84,21 +85,4 @@ export const StyledChip = styled(Chip)(({ theme }) => ({
   display: "flex",
   width: 100,
   textAlign: "center",
-}));
-
-export const StyledIconButton = styled(IconButton)(({ theme }) => ({
-  background: theme.palette.error.main,
-  maxWidth: 42,
-
-  "&:hover": {
-    background: theme.palette.error.light,
-  },
-
-  "&:active": {
-    background: theme.palette.error.dark,
-  },
-
-  "& .MuiSvgIcon-root": {
-    color: "#fff",
-  },
 }));
