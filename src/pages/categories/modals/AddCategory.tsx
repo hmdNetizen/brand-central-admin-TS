@@ -58,7 +58,7 @@ const AddCategory = (props: AddCategoryProps) => {
     (state) => state.categories.loadingRequestAction
   );
 
-  const { addNewCategory, clearUploadedImages, uploadFile } = useActions();
+  const { addNewCategory } = useActions();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -110,8 +110,8 @@ const AddCategory = (props: AddCategoryProps) => {
     }
   };
 
-  const handleClearUploadedImages = () => {
-    clearUploadedImages();
+  const handleRemoveImage = () => {
+    setSelectedFile("");
   };
 
   const handleAddCategory = (
@@ -267,7 +267,7 @@ const AddCategory = (props: AddCategoryProps) => {
                 columnGap={1}
                 sx={{ mt: 1 }}
               >
-                <StyledIconButton onClick={handleClearUploadedImages}>
+                <StyledIconButton onClick={handleRemoveImage}>
                   <DeleteSharpIcon />
                 </StyledIconButton>
                 <label htmlFor="add-category-photo">

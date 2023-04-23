@@ -1,67 +1,27 @@
-import React, {
-  useState,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-} from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { styled, useTheme } from "@mui/material/styles";
-import CustomIconButton from "src/utils/CustomIconButton";
-import CustomSelect from "src/utils/CustomSelect";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import AddIcon from "@mui/icons-material/Add";
+import { useTheme } from "@mui/material/styles";
 import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import { categoryColumns } from "src/lib/dataset/tableData";
 import AddCategory from "./modals/AddCategory";
 // import EditCategory from "./modals/EditCategory";
 // import DeleteCategory from "./modals/DeleteCategory";
-
 import debounce from "lodash.debounce";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
 import useTitle from "src/hooks/useTitle";
 import CategoryItem from "src/components/categories/CategoryItem";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-import { SelectChangeEvent } from "@mui/material";
-
-const Container = styled(Grid)(({ theme }) => ({
-  padding: "1rem 2rem 5rem 2rem",
-
-  [theme.breakpoints.only("xs")]: {
-    padding: "5rem 1rem 5rem 1rem",
-  },
-}));
-
-const ContainerWrapper = styled(Grid)(({ theme }) => ({
-  background: "#fff",
-  padding: "2rem 3rem",
-  borderRadius: 5,
-
-  [theme.breakpoints.only("xs")]: {
-    padding: "2rem 1rem",
-  },
-}));
-
-const Input = styled("input")(({ theme }) => ({
-  fontSize: "1.6rem",
-  borderRadius: 5,
-  border: `1px solid ${theme.palette.common.lighterGrey}`,
-  padding: "1rem 1rem",
-  width: "100%",
-
-  "&:focus": {
-    outline: "none",
-  },
-}));
+import PageHeadingWithActionButton from "src/components/common/PageHeadingWithActionButton";
+import {
+  Container,
+  ContainerWrapper,
+} from "src/components/common/styles/PageContainerStyles";
 
 const Categories = () => {
   useTitle("Admin : List of all Categories");
   const theme = useTheme();
-
-  const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
-  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
-  const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
 
   const loading = useTypedSelector((state) => state.categories.loading);
   const loadingActivation = useTypedSelector(
@@ -76,13 +36,12 @@ const Categories = () => {
   const [openEditCategory, setOpenEditCategory] = useState(false);
   const [openDeleteCategory, setOpenDeleteCategory] = useState(false);
 
-  const { getAllCategories, clearUploadedImages } = useActions();
+  const { getAllCategories, getSearchedCategory } = useActions();
 
-  // eslint-disable-next-line
-  //   const debounceFilteredCategory = useCallback(
-  //     debounce(handleFilteredCategory, 500),
-  //     []
-  //   );
+  const debounceFilteredCategory = useCallback(
+    debounce(getSearchedCategory, 500),
+    []
+  );
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -91,19 +50,10 @@ const Categories = () => {
     setPage(0);
   };
 
-  const handleSelectRowsPerPage = (
-    event: SelectChangeEvent<unknown>,
-    child: React.ReactNode
-  ): void => {
-    const selectEvent = event as SelectChangeEvent<HTMLInputElement>;
-    setRowsPerPage(+selectEvent.target.value);
-    setPage(0);
-  };
-
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(event.target.value);
 
-    // debounceFilteredCategory(event.target.value);
+    debounceFilteredCategory(event.target.value);
 
     setPage(0);
   };
@@ -126,53 +76,14 @@ const Categories = () => {
         </Typography>
       </Grid>
       <ContainerWrapper item container>
-        <Grid
-          container
-          direction={matchesSM ? "column" : "row"}
-          justifyContent={matchesMD ? "space-around" : "space-between"}
-          rowSpacing={matchesSM ? 2 : matchesMD ? 3 : 0}
-          alignItems="center"
-        >
-          <Grid item>
-            <Grid container alignItems="center">
-              <Grid item>
-                <Typography variant="body2">Show</Typography>
-              </Grid>
-              <Grid item style={{ marginRight: 5, marginLeft: 5 }}>
-                <CustomSelect
-                  style={{ width: "100%" }}
-                  options={[10, 25, 50, 100]}
-                  value={rowsPerPage.toString()}
-                  onChange={handleSelectRowsPerPage}
-                  hasLabel={false}
-                />
-              </Grid>
-              <Grid item>
-                <Typography variant="body2">entries</Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item style={{ width: matchesSM ? "100%" : 350 }}>
-            <Input
-              placeholder="Search Category by name..."
-              value={filterText}
-              onChange={handleSearch}
-            />
-          </Grid>
-          <Grid item style={{ width: matchesXS ? "100%" : "auto" }}>
-            <CustomIconButton
-              title="Add New Category"
-              background={theme.palette.secondary}
-              startIcon={<AddIcon />}
-              borderRadius={0}
-              style={{ width: "100%" }}
-              onClick={() => {
-                setOpenAddCategory(true);
-                clearUploadedImages();
-              }}
-            />
-          </Grid>
-        </Grid>
+        <PageHeadingWithActionButton
+          filterText={filterText}
+          handleSearch={handleSearch}
+          rowsPerPage={rowsPerPage}
+          setOpenAddCategory={setOpenAddCategory}
+          setPage={setPage}
+          setRowsPerPage={setRowsPerPage}
+        />
         <Grid item container style={{ marginTop: "5rem" }}>
           <Tables
             headerColumns={categoryColumns}

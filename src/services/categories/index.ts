@@ -42,6 +42,23 @@ export const getAllCategories = createAsyncThunk(
   }
 );
 
+export const getSearchedCategory = createAsyncThunk(
+  "searched-category",
+  async (query: string, thunkAPI) => {
+    try {
+      const searchQuery = query ? `searchTerm=${query}` : "";
+      const { data } = await axios.get(`/api/categories/v1?${searchQuery}`);
+      const result = data as ReturnedPayloadType<CategoryReturnedPayload>;
+
+      return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        "Error occurred while fetching categories"
+      );
+    }
+  }
+);
+
 export const toggleCategoryActivation = createAsyncThunk(
   "toggle-category-activation",
   async (details: { categoryId: string; isActivate: boolean }, thunkAPI) => {
@@ -123,6 +140,11 @@ const categoriesSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder.addCase(getSearchedCategory.fulfilled, (state, action) => {
+      state.loading = false;
+      state.categories = action.payload;
+      state.error = null;
+    });
     builder
       .addCase(toggleCategoryActivation.pending, (state) => {
         state.loadingActivation = true;
