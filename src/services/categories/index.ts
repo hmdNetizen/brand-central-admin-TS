@@ -1,12 +1,15 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import axios from "../axios";
+import { clearUploadedImages } from "../common";
 import {
   CategoryReturnedPayload,
   ReturnedPayloadType,
   SubCategoryReturnedPayload,
   initStateType,
   ReturnedSinglePayloadType,
+  RequestPayloadType,
+  CategoryRequestPayload,
 } from "./CategoryTypes";
 
 const initialState: initStateType = {
@@ -48,6 +51,31 @@ export const toggleCategoryActivation = createAsyncThunk(
       const result = data as ReturnedSinglePayloadType<CategoryReturnedPayload>;
 
       return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
+export const addNewCategory = createAsyncThunk(
+  "add-category",
+  async (details: RequestPayloadType<CategoryRequestPayload>, thunkAPI) => {
+    const { setCategoryData, setOpenAddCategory, ...fields } = details;
+    try {
+      const { data, status } = await axios.post(`/api/categories/add`, fields);
+
+      if (status === 200) {
+        thunkAPI.dispatch(clearUploadedImages());
+        setCategoryData({
+          categoryName: "",
+          categorySlug: "",
+        });
+        setOpenAddCategory(false);
+      } else {
+        window.scrollTo(0, 0);
+      }
+
+      return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("Something went wrong");
     }

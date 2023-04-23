@@ -16,6 +16,8 @@ import { useActions } from "src/hooks/useActions";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 // import { configureSlug } from "lib/helpers";
 import { capitalizeFirstLetters } from "src/lib/helpers";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import { CategoryData } from "src/services/categories/CategoryTypes";
 
 const ContentContainer = styled(Grid)({
   paddingBottom: "3rem",
@@ -118,7 +120,7 @@ const AddCategory = ({ openAddCategory, setOpenAddCategory }) => {
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
 
-  const [categoryData, setCategoryData] = useState({
+  const [categoryData, setCategoryData] = useState<CategoryData>({
     categoryName: "",
     categorySlug: "",
   });
@@ -129,11 +131,10 @@ const AddCategory = ({ openAddCategory, setOpenAddCategory }) => {
   const [categoryImageError, setCategoryImageError] = useState("");
 
   const { categoryName, categorySlug } = categoryData;
-  const;
+  const uploadedFile = useTypedSelector((state) => state.common.uploadedFile);
+  //   const error = useTypedSelector(state => state.common.error);
 
-  const { loadingAction, uploadedFile, error } = useSelector(
-    (state) => state.common
-  );
+  const { loadingAction } = useSelector((state) => state.common);
   const { addNewCategory, clearUploadedImages, uploadFile } = useActions();
 
   const handleChange = (event) => {

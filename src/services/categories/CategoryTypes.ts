@@ -1,3 +1,5 @@
+import React from "react";
+
 export type CategoryReturnedPayload = {
   _id: string;
   categoryName: string;
@@ -20,6 +22,21 @@ export type SubCategoryReturnedPayload = {
   name: string;
   categorySlug: string;
   isActivate: boolean;
+};
+
+export type RequestPayloadType<T> = T;
+
+export type CategoryData = {
+  categoryName: string;
+  categorySlug: string;
+};
+
+export type CategoryRequestPayload = {
+  setCategoryData: React.Dispatch<React.SetStateAction<CategoryData>>;
+  setOpenAddCategory: React.Dispatch<React.SetStateAction<boolean>>;
+  categoryName: string;
+  categorySlug: string;
+  setIcon: string;
 };
 
 export type initStateType = {
