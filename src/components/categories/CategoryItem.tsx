@@ -1,6 +1,5 @@
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import CustomSwitch from "src/utils/CustomSwitch";
