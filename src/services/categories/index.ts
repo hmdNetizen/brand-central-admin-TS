@@ -15,6 +15,7 @@ import {
 const initialState: initStateType = {
   loading: false,
   loadingActivation: false,
+  loadingRequestAction: false,
   categories: [],
   subCategories: [],
   //   brandCategories: [],
@@ -63,6 +64,7 @@ export const addNewCategory = createAsyncThunk(
     const { setCategoryData, setOpenAddCategory, ...fields } = details;
     try {
       const { data, status } = await axios.post(`/api/categories/add`, fields);
+      const result = data as ReturnedSinglePayloadType<CategoryReturnedPayload>;
 
       if (status === 200) {
         thunkAPI.dispatch(clearUploadedImages());
@@ -75,7 +77,7 @@ export const addNewCategory = createAsyncThunk(
         window.scrollTo(0, 0);
       }
 
-      return data.data;
+      return result.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("Something went wrong");
     }
@@ -144,6 +146,21 @@ const categoriesSlice = createSlice({
       })
       .addCase(toggleCategoryActivation.rejected, (state, action) => {
         state.loadingActivation = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(addNewCategory.pending, (state) => {
+        state.loadingRequestAction = true;
+      })
+      .addCase(addNewCategory.fulfilled, (state, action) => {
+        state.loadingRequestAction = false;
+        state.categories = [action.payload, ...state.categories];
+        state.error = null;
+      })
+      .addCase(addNewCategory.rejected, (state, action) => {
+        state.loadingRequestAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

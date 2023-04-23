@@ -42,6 +42,7 @@ export type CategoryRequestPayload = {
 export type initStateType = {
   loading: boolean;
   loadingActivation: boolean;
+  loadingRequestAction: boolean;
   categories: CategoryReturnedPayload[];
   subCategories: SubCategoryReturnedPayload[];
   singleCategory: CategoryReturnedPayload | null;
