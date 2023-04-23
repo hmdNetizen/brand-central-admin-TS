@@ -46,3 +46,13 @@ export const capitalizeFirstLetters = (sentence: string) => {
 
 //   return lastThirtyDaysCount;
 // };
+
+export const configureSlug = (name: string) =>
+  name
+    .split(" ")
+    .join("%20")
+    .split(" / ")
+    .join("%20or%20")
+    .split("/")
+    .join("-or-")
+    .toLowerCase();

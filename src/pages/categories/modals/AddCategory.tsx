@@ -6,116 +6,36 @@ import CustomFormInput from "src/utils/CustomFormInput";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import { useSelector } from "react-redux";
-import CircularProgress from "@mui/material/CircularProgress";
-import Chip from "@mui/material/Chip";
 import FileUploadBox from "src/components/uploads/FileUploadBox";
 import { useActions } from "src/hooks/useActions";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
-// import { configureSlug } from "lib/helpers";
+import { configureSlug } from "src/lib/helpers";
 import { capitalizeFirstLetters } from "src/lib/helpers";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { CategoryData } from "src/services/categories/CategoryTypes";
 
-const ContentContainer = styled(Grid)({
-  paddingBottom: "3rem",
-});
+import {
+  ContentContainer,
+  ErrorsList,
+  ErrorMessage,
+  FormContainer,
+  CancelButton,
+  StyledChip,
+  StyledCircularProgress,
+  StyledIconButton,
+  SubmitButton,
+} from "./styles/AddCategoryStyles";
 
-const ErrorsList = styled(Grid)<{ component: React.ElementType }>(
-  ({ theme }) => ({
-    padding: "2rem 2rem 2rem 3rem",
-    background: theme.palette.common.lightRed,
-    alignSelf: "center",
-    marginTop: "1rem",
-    borderRadius: 5,
-    listStyle: "none",
-  })
-);
+type AddCategoryProps = {
+  openAddCategory: boolean;
+  setOpenAddCategory: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-const ErrorMessage = styled(Typography)<{ component: React.ElementType }>({
-  fontSize: "1.5rem",
-  "&:not(:first-of-type)": {
-    paddingTop: ".5rem",
-  },
-});
-
-const FormContainer = styled(Grid)<{ component: React.ElementType }>({
-  padding: "2rem",
-});
-
-const SubmitButton = styled(Button)(({ theme }) => ({
-  minWidth: 180,
-  fontSize: "1.6rem",
-  fontWeight: 400,
-  textTransform: "none",
-  borderRadius: 0,
-
-  "&:hover": {
-    background: theme.palette.secondary.light,
-  },
-
-  "&:active": {
-    background: theme.palette.secondary.dark,
-  },
-
-  "&:disabled": {
-    cursor: "not-allowed",
-    pointerEvents: "all !important",
-    background: theme.palette.secondary.light,
-    color: "#fff",
-    // color: (props) => (props.loading ? "#fff" : "inherit"),
-  },
-}));
-
-const StyledCircularProgress = styled(CircularProgress)({
-  marginRight: "1rem",
-  "&.MuiCircularProgress-root": {
-    color: "#f2f2f2",
-  },
-});
-
-const CancelButton = styled(Button)(({ theme }) => ({
-  fontSize: "1.5rem",
-  textTransform: "none",
-  padding: ".5rem 2rem",
-  borderRadius: 0,
-  color: theme.palette.error.main,
-  background: theme.palette.common.lightRed,
-}));
-
-const StyledChip = styled(Chip)(({ theme }) => ({
-  marginTop: ".5rem",
-  borderRadius: 0,
-  height: 25,
-  fontSize: "1rem",
-  borderColor: theme.palette.secondary.light,
-  color: theme.palette.secondary.dark,
-  display: "flex",
-  width: 100,
-  textAlign: "center",
-}));
-
-const StyledIconButton = styled(IconButton)(({ theme }) => ({
-  background: theme.palette.error.main,
-  maxWidth: 42,
-
-  "&:hover": {
-    background: theme.palette.error.light,
-  },
-
-  "&:active": {
-    background: theme.palette.error.dark,
-  },
-
-  "& .MuiSvgIcon-root": {
-    color: "#fff",
-  },
-}));
-
-const AddCategory = ({ openAddCategory, setOpenAddCategory }) => {
+const AddCategory = (props: AddCategoryProps) => {
   const theme = useTheme();
+  const { openAddCategory, setOpenAddCategory } = props;
 
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
@@ -132,12 +52,14 @@ const AddCategory = ({ openAddCategory, setOpenAddCategory }) => {
 
   const { categoryName, categorySlug } = categoryData;
   const uploadedFile = useTypedSelector((state) => state.common.uploadedFile);
-  //   const error = useTypedSelector(state => state.common.error);
+  const error = useTypedSelector((state) => state.categories.error);
+  const loadingRequestAction = useTypedSelector(
+    (state) => state.categories.loadingRequestAction
+  );
 
-  const { loadingAction } = useSelector((state) => state.common);
   const { addNewCategory, clearUploadedImages, uploadFile } = useActions();
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
     setCategoryData((prev) => ({ ...prev, [name]: value }));
@@ -260,7 +182,7 @@ const AddCategory = ({ openAddCategory, setOpenAddCategory }) => {
             </IconButton>
           </Grid>
         </Grid>
-        {!loadingAction && error && (
+        {!loadingRequestAction && error && (
           <ErrorsList item component="ul">
             <ErrorMessage variant="body1" component="li" color="error">
               {error}
@@ -386,9 +308,9 @@ const AddCategory = ({ openAddCategory, setOpenAddCategory }) => {
                 variant="contained"
                 disableRipple
                 color="secondary"
-                disabled={loadingAction}
+                disabled={loadingRequestAction}
               >
-                {loadingAction && (
+                {loadingRequestAction && (
                   <StyledCircularProgress style={{ height: 25, width: 25 }} />
                 )}{" "}
                 Add Category
