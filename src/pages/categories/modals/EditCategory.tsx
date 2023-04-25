@@ -38,6 +38,7 @@ const EditCategory = (props: EditCategoryProps) => {
   const [categoryData, setCategoryData] =
     useState<CategoryDataExcerpt>(initialCategoryData);
   const [selectedFile, setSelectedFile] = useState<File | string>("");
+  const [preview, setPreview] = useState<string | undefined>("");
 
   const { categoryName, categorySlug } = categoryData;
 
@@ -186,7 +187,7 @@ const EditCategory = (props: EditCategoryProps) => {
               style={{ marginBottom: 0 }}
               color="secondary"
             >
-              Add New Category
+              Edit Category
             </Typography>
           </Grid>
           <Grid item>
@@ -221,6 +222,8 @@ const EditCategory = (props: EditCategoryProps) => {
           categoryNameError={categoryNameError}
           categorySlugError={categorySlugError}
           setCategoryImageError={setCategoryImageError}
+          preview={preview}
+          setPreview={setPreview}
         />
       </ContentContainer>
     </ShowDialog>

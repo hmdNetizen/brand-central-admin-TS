@@ -39,6 +39,7 @@ const AddCategory = (props: AddCategoryProps) => {
   const [categoryNameError, setCategoryNameError] = useState("");
   const [categorySlugError, setCategorySlugError] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | string>("");
+  const [preview, setPreview] = useState<string | undefined>();
   //   eslint-disable-next-line
   const [categoryImageError, setCategoryImageError] = useState("");
 
@@ -195,6 +196,8 @@ const AddCategory = (props: AddCategoryProps) => {
           categoryNameError={categoryNameError}
           categorySlugError={categorySlugError}
           setCategoryImageError={setCategoryImageError}
+          preview={preview}
+          setPreview={setPreview}
         />
       </ContentContainer>
     </ShowDialog>

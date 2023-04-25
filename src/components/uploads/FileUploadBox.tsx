@@ -30,6 +30,8 @@ type FileUploadBoxProps = {
   iconSize: string | number;
   selectedFile: File | string;
   setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
+  preview: string | undefined;
+  setPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
 const FileUploadBox = (props: FileUploadBoxProps) => {
@@ -39,6 +41,8 @@ const FileUploadBox = (props: FileUploadBoxProps) => {
     errorMessage,
     selectedFile,
     setSelectedFile,
+    preview,
+    setPreview,
   } = props;
 
   return (
@@ -50,7 +54,11 @@ const FileUploadBox = (props: FileUploadBoxProps) => {
       ) : (
       )} */}
       {selectedFile ? (
-        <NewItemImagePreview selectedFile={selectedFile} />
+        <NewItemImagePreview
+          selectedFile={selectedFile}
+          preview={preview}
+          setPreview={setPreview}
+        />
       ) : (
         <FileUpload
           setImageError={setImageError}

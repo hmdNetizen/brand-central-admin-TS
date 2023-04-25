@@ -11,6 +11,8 @@ type FileUploadLayoutProps = {
   setCategoryImageError: React.Dispatch<React.SetStateAction<string>>;
   onRemoveImage: () => void;
   onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  preview: string | undefined;
+  setPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
 const FileUploadLayout = (props: FileUploadLayoutProps) => {
@@ -20,6 +22,8 @@ const FileUploadLayout = (props: FileUploadLayoutProps) => {
     selectedFile,
     setCategoryImageError,
     setSelectedFile,
+    preview,
+    setPreview,
   } = props;
   return (
     <Grid item container justifyContent="center">
@@ -30,6 +34,8 @@ const FileUploadLayout = (props: FileUploadLayoutProps) => {
           errorMessage="Add an image for this category"
           selectedFile={selectedFile}
           setSelectedFile={setSelectedFile}
+          preview={preview}
+          setPreview={setPreview}
         />
       </Grid>
       {selectedFile && (

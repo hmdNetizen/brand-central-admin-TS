@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 
 type NewItemImagePreviewProps = {
   selectedFile: File | string;
+  preview: string | undefined;
+  setPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
 const Image = styled("img")(({ theme }) => ({
@@ -15,8 +17,7 @@ const Image = styled("img")(({ theme }) => ({
 }));
 
 const NewItemImagePreview = (props: NewItemImagePreviewProps) => {
-  const { selectedFile } = props;
-  const [preview, setPreview] = useState<string | undefined>();
+  const { selectedFile, preview, setPreview } = props;
 
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {

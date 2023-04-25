@@ -31,6 +31,8 @@ const FormContainer = (props: FormContainerProps) => {
     loadingRequestAction,
     setOpen,
     onImageChange,
+    preview,
+    setPreview,
   } = props;
 
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
@@ -103,6 +105,8 @@ const FormContainer = (props: FormContainerProps) => {
         selectedFile={selectedFile}
         setCategoryImageError={setCategoryImageError}
         setSelectedFile={setSelectedFile}
+        preview={preview}
+        setPreview={setPreview}
       />
       <Grid
         item
