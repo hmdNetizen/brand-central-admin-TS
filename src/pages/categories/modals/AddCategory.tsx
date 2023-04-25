@@ -2,15 +2,11 @@ import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import ShowDialog from "src/utils/ShowDialog";
-import CustomFormInput from "src/utils/CustomFormInput";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
-import Button from "@mui/material/Button";
-import FileUploadBox from "src/components/uploads/FileUploadBox";
 import { useActions } from "src/hooks/useActions";
-import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import { configureSlug } from "src/lib/helpers";
 import { capitalizeFirstLetters } from "src/lib/helpers";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
@@ -20,13 +16,8 @@ import {
   ContentContainer,
   ErrorsList,
   ErrorMessage,
-  FormContainer,
-  CancelButton,
-  StyledChip,
-  StyledCircularProgress,
-  StyledIconButton,
-  SubmitButton,
-} from "./styles/AddCategoryStyles";
+} from "./styles/CategoryModalsStyles";
+import FormContainer from "../utils/FormContainer";
 
 type AddCategoryProps = {
   openAddCategory: boolean;
@@ -86,7 +77,7 @@ const AddCategory = (props: AddCategoryProps) => {
     }
   };
 
-  const handleChangeProductImage = (
+  const handleChangeCategoryImage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
@@ -139,7 +130,7 @@ const AddCategory = (props: AddCategoryProps) => {
 
     addNewCategory({
       setCategoryData,
-      setOpenAddCategory,
+      setOpen: setOpenAddCategory,
       file: selectedFile,
       categoryName: capitalizeFirstLetters(categoryName),
       categorySlug: configureSlug(categorySlug),
@@ -190,136 +181,21 @@ const AddCategory = (props: AddCategoryProps) => {
           </ErrorsList>
         )}
         <FormContainer
-          item
-          container
-          direction="column"
-          component="form"
+          categoryName={categoryName}
+          categorySlug={categorySlug}
+          onClick={handleClick}
+          onChange={handleChange}
           onSubmit={handleAddCategory}
-        >
-          <Grid
-            item
-            container
-            justifyContent="center"
-            style={{ marginBottom: "2rem" }}
-          >
-            <Grid
-              item
-              style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
-            >
-              <CustomFormInput
-                type="text"
-                label="Category Name (required)"
-                labelId="categoryName"
-                name="categoryName"
-                value={categoryName}
-                placeholder="Enter Category Name"
-                onChange={handleChange}
-                error={categoryNameError}
-                autoComplete="off"
-              />
-            </Grid>
-          </Grid>
-          <Grid
-            item
-            container
-            justifyContent="center"
-            alignItems="center"
-            direction="column"
-            style={{ marginBottom: "2rem" }}
-          >
-            <Grid
-              item
-              style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
-            >
-              <CustomFormInput
-                type="text"
-                label="Category Slug"
-                labelId="categorySlug"
-                name="categorySlug"
-                value={configureSlug(categorySlug)}
-                placeholder="Enter Category Slug"
-                onChange={handleChange}
-                error={categorySlugError}
-                autoComplete="off"
-              />
-              <StyledChip
-                label="Generate Slug"
-                variant="outlined"
-                onClick={handleClick}
-              />
-            </Grid>
-          </Grid>
-          <Grid item container justifyContent="center">
-            <Grid item style={{ width: 200 }}>
-              <FileUploadBox
-                iconSize="5rem"
-                setImageError={setCategoryImageError}
-                errorMessage="Add an image for this category"
-                selectedFile={selectedFile}
-                setSelectedFile={setSelectedFile}
-              />
-            </Grid>
-            {selectedFile && (
-              <Grid
-                item
-                container
-                justifyContent="center"
-                columnGap={1}
-                sx={{ mt: 1 }}
-              >
-                <StyledIconButton onClick={handleRemoveImage}>
-                  <DeleteSharpIcon />
-                </StyledIconButton>
-                <label htmlFor="add-category-photo">
-                  <input
-                    accept="image/*"
-                    id="add-category-photo"
-                    multiple
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={handleChangeProductImage}
-                  />
-                  <Button
-                    variant="contained"
-                    component="span"
-                    style={{ width: 120 }}
-                    color="secondary"
-                  >
-                    Change
-                  </Button>
-                </label>
-              </Grid>
-            )}
-          </Grid>
-          <Grid
-            item
-            container
-            justifyContent="center"
-            alignItems="center"
-            columnSpacing={1}
-            style={{ marginTop: "5rem" }}
-          >
-            <Grid item>
-              <CancelButton onClick={() => setOpenAddCategory(false)}>
-                Cancel
-              </CancelButton>
-            </Grid>
-            <Grid item>
-              <SubmitButton
-                type="submit"
-                variant="contained"
-                disableRipple
-                color="secondary"
-                disabled={loadingRequestAction}
-              >
-                {loadingRequestAction && (
-                  <StyledCircularProgress style={{ height: 25, width: 25 }} />
-                )}{" "}
-                Add Category
-              </SubmitButton>
-            </Grid>
-          </Grid>
-        </FormContainer>
+          selectedFile={selectedFile}
+          setSelectedFile={setSelectedFile}
+          onRemoveImage={handleRemoveImage}
+          loadingRequestAction={loadingRequestAction}
+          onImageChange={handleChangeCategoryImage}
+          setOpen={setOpenAddCategory}
+          categoryNameError={categoryNameError}
+          categorySlugError={categorySlugError}
+          setCategoryImageError={setCategoryImageError}
+        />
       </ContentContainer>
     </ShowDialog>
   );

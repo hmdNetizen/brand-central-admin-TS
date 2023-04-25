@@ -12,23 +12,7 @@ import {
 } from "../modals/styles/CategoryModalsStyles";
 import { configureSlug } from "src/lib/helpers";
 import FileUploadLayout from "src/components/uploads/FileUploadLayout";
-
-type FormContainerProps = {
-  onSubmit: (event: React.FormEvent<HTMLInputElement | HTMLDivElement>) => void;
-  categoryName: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  categoryNameError: string;
-  categorySlug: string;
-  categorySlugError: string;
-  setCategoryImageError: React.Dispatch<React.SetStateAction<string>>;
-  onClick: () => void;
-  onRemoveImage: () => void;
-  selectedFile: File | string;
-  setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
-  setOpenAddCategory: React.Dispatch<React.SetStateAction<boolean>>;
-  loadingRequestAction: boolean;
-  onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-};
+import { FormContainerProps } from "./types";
 
 const FormContainer = (props: FormContainerProps) => {
   const theme = useTheme();
@@ -45,7 +29,7 @@ const FormContainer = (props: FormContainerProps) => {
     selectedFile,
     setSelectedFile,
     loadingRequestAction,
-    setOpenAddCategory,
+    setOpen,
     onImageChange,
   } = props;
 
@@ -129,9 +113,7 @@ const FormContainer = (props: FormContainerProps) => {
         style={{ marginTop: "5rem" }}
       >
         <Grid item>
-          <CancelButton onClick={() => setOpenAddCategory(false)}>
-            Cancel
-          </CancelButton>
+          <CancelButton onClick={() => setOpen(false)}>Cancel</CancelButton>
         </Grid>
         <Grid item>
           <SubmitButton

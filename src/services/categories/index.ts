@@ -12,6 +12,7 @@ import {
   ReturnedSinglePayloadType,
   RequestPayloadType,
   CategoryRequestPayload,
+  CategoryRequestNewPayload,
 } from "./CategoryTypes";
 
 const initialState: initStateType = {
@@ -80,7 +81,7 @@ export const toggleCategoryActivation = createAsyncThunk(
 export const addNewCategory = createAsyncThunk(
   "add-category",
   async (details: RequestPayloadType<CategoryRequestPayload>, thunkAPI) => {
-    const { setCategoryData, setOpenAddCategory, file, ...fields } = details;
+    const { setCategoryData, setOpen, file, ...fields } = details;
     const { config, formData } = fileUploadConfig(file);
     try {
       const { data: uploadedFile } = await axios.post(
@@ -98,15 +99,72 @@ export const addNewCategory = createAsyncThunk(
         data as ReturnedSinglePayloadType<CategoryReturnedPayload>;
 
       if (status === 201) {
-        thunkAPI.dispatch(clearUploadedImages());
         setCategoryData({
           categoryName: "",
           categorySlug: "",
         });
-        setOpenAddCategory(false);
+        setOpen(false);
       }
 
       return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
+export const updateCategory = createAsyncThunk(
+  "update-category",
+  async (details: RequestPayloadType<CategoryRequestNewPayload>, thunkAPI) => {
+    const { categoryId, setOpen, setCategoryData, file, ...fields } = details;
+    const { config, formData } = fileUploadConfig(file);
+
+    try {
+      // Checks whether a new icon is being uploaded (which by default is an object type)
+      if (typeof file === "object") {
+        const { data: uploadedFile } = await axios.post(
+          `/api/uploads/file`,
+          formData,
+          config
+        );
+        const result = uploadedFile as UploadedFilePayload;
+
+        const { data, status } = await axios.patch(
+          `/api/categories/${categoryId}/update`,
+          { ...fields, setIcon: result.url }
+        );
+
+        const response =
+          data as ReturnedSinglePayloadType<CategoryReturnedPayload>;
+
+        if (status === 200) {
+          setOpen(false);
+          setCategoryData({
+            categoryName: "",
+            categorySlug: "",
+          });
+        }
+
+        return response.data;
+      } else {
+        const { data, status } = await axios.patch(
+          `/api/categories/${categoryId}/update`,
+          fields
+        );
+
+        const response =
+          data as ReturnedSinglePayloadType<CategoryReturnedPayload>;
+
+        if (status === 200) {
+          setOpen(false);
+          setCategoryData({
+            categoryName: "",
+            categorySlug: "",
+          });
+        }
+
+        return response.data;
+      }
     } catch (error) {
       return thunkAPI.rejectWithValue("Something went wrong");
     }
@@ -194,6 +252,28 @@ const categoriesSlice = createSlice({
         state.error = null;
       })
       .addCase(addNewCategory.rejected, (state, action) => {
+        state.loadingRequestAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updateCategory.pending, (state) => {
+        state.loadingRequestAction = true;
+      })
+      .addCase(updateCategory.fulfilled, (state, action) => {
+        state.loadingRequestAction = false;
+        state.categories = state.categories.map((category) =>
+          category._id === action.payload._id ? { ...action.payload } : category
+        );
+        toast.success(`${action.payload.categoryName} has been updated`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+
+        state.error = null;
+      })
+      .addCase(updateCategory.rejected, (state, action) => {
         state.loadingRequestAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;

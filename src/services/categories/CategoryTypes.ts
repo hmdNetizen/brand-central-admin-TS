@@ -26,19 +26,28 @@ export type SubCategoryReturnedPayload = {
 
 export type RequestPayloadType<T> = T;
 
-export type CategoryData = {
+export interface CategoryData {
   categoryName: string;
   categorySlug: string;
-};
+}
 
-export type CategoryRequestPayload = {
+export interface CategoryRequestPayload {
   setCategoryData: React.Dispatch<React.SetStateAction<CategoryData>>;
-  setOpenAddCategory: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   categoryName: string;
   categorySlug: string;
   setIcon: string;
   file: File | string;
-};
+}
+
+// This is for edit category api request
+export interface CategoryRequestNewPayload extends CategoryRequestPayload {
+  categoryId: string;
+}
+
+export interface CategoryDataExcerpt extends CategoryData {
+  setIcon?: string;
+}
 
 export type initStateType = {
   loading: boolean;
