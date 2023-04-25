@@ -22,7 +22,7 @@ const NewItemImagePreview = (props: NewItemImagePreviewProps) => {
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
     if (!selectedFile || typeof selectedFile === "string") {
-      setPreview(undefined);
+      // setPreview(undefined);
       return;
     }
 

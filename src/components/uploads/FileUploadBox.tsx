@@ -47,13 +47,7 @@ const FileUploadBox = (props: FileUploadBoxProps) => {
 
   return (
     <UploadWrapper item container justifyContent="center" alignItems="center">
-      {/* {uploadingFile || (uploadPercentage > 0 && uploadPercentage < 100) ? (
-        <CustomCircularProgress value={uploadPercentage} />
-      ) : uploadedFile && uploadedFile.url ? (
-        <StyledImage src={uploadedFile.url} alt="" />
-      ) : (
-      )} */}
-      {selectedFile ? (
+      {selectedFile || preview ? (
         <NewItemImagePreview
           selectedFile={selectedFile}
           preview={preview}

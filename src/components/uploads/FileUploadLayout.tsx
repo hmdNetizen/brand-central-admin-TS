@@ -38,7 +38,7 @@ const FileUploadLayout = (props: FileUploadLayoutProps) => {
           setPreview={setPreview}
         />
       </Grid>
-      {selectedFile && (
+      {(selectedFile || preview) && (
         <Grid
           item
           container

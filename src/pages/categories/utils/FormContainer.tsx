@@ -33,6 +33,7 @@ const FormContainer = (props: FormContainerProps) => {
     onImageChange,
     preview,
     setPreview,
+    buttonTitle,
   } = props;
 
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
@@ -130,7 +131,7 @@ const FormContainer = (props: FormContainerProps) => {
             {loadingRequestAction && (
               <StyledCircularProgress style={{ height: 25, width: 25 }} />
             )}{" "}
-            Add Category
+            {buttonTitle}
           </SubmitButton>
         </Grid>
       </Grid>

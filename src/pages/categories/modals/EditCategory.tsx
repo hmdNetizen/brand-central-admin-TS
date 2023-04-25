@@ -155,9 +155,9 @@ const EditCategory = (props: EditCategoryProps) => {
             singleCategory[key as keyof CategoryDataExcerpt];
         }
 
-        // if (singleCategory.setIcon) {
-        //   setFeaturedImage(singleCategory.setIcon);
-        // }
+        if (singleCategory.setIcon) {
+          setPreview(singleCategory.setIcon);
+        }
       }
       setCategoryData(newCategoryData);
     }
@@ -224,6 +224,7 @@ const EditCategory = (props: EditCategoryProps) => {
           setCategoryImageError={setCategoryImageError}
           preview={preview}
           setPreview={setPreview}
+          buttonTitle="Update Category"
         />
       </ContentContainer>
     </ShowDialog>

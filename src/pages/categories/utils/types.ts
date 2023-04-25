@@ -15,4 +15,5 @@ export type FormContainerProps = {
   onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   preview: string | undefined;
   setPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
+  buttonTitle: string;
 };

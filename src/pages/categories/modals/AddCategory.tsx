@@ -198,6 +198,7 @@ const AddCategory = (props: AddCategoryProps) => {
           setCategoryImageError={setCategoryImageError}
           preview={preview}
           setPreview={setPreview}
+          buttonTitle="Add Category"
         />
       </ContentContainer>
     </ShowDialog>
