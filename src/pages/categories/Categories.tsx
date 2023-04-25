@@ -6,7 +6,7 @@ import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import { categoryColumns } from "src/lib/dataset/tableData";
 import AddCategory from "./modals/AddCategory";
-// import EditCategory from "./modals/EditCategory";
+import EditCategory from "./modals/EditCategory";
 // import DeleteCategory from "./modals/DeleteCategory";
 import debounce from "lodash.debounce";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
@@ -116,10 +116,10 @@ const Categories = () => {
         openAddCategory={openAddCategory}
         setOpenAddCategory={setOpenAddCategory}
       />
-      {/* <EditCategory
+      <EditCategory
         openEditCategory={openEditCategory}
         setOpenEditCategory={setOpenEditCategory}
-      /> */}
+      />
       {/* <DeleteCategory
         openDeleteCategory={openDeleteCategory}
         setOpenDeleteCategory={setOpenDeleteCategory}

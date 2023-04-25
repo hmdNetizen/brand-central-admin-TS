@@ -5,9 +5,7 @@ import ShowDialog from "src/utils/ShowDialog";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { makeStyles, useTheme } from "@mui/styles";
-import Button from "@mui/material/Button";
-import { useSelector } from "react-redux";
+import { useTheme } from "@mui/material/styles";
 import { useActions } from "src/hooks/useActions";
 import { configureSlug, capitalizeFirstLetters } from "src/lib/helpers";
 import {
@@ -16,34 +14,49 @@ import {
   ErrorMessage,
 } from "./styles/CategoryModalsStyles";
 import FormContainer from "../utils/FormContainer";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import { CategoryDataExcerpt } from "src/services/categories/CategoryTypes";
 
 const initialCategoryData = {
   categoryName: "",
   categorySlug: "",
+  setIcon: "",
 };
 
-const EditCategory = ({ openEditCategory, setOpenEditCategory }) => {
+type EditCategoryProps = {
+  openEditCategory: boolean;
+  setOpenEditCategory: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const EditCategory = (props: EditCategoryProps) => {
+  const { openEditCategory, setOpenEditCategory } = props;
   const theme = useTheme();
 
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
 
-  const [categoryData, setCategoryData] = useState(initialCategoryData);
+  const [categoryData, setCategoryData] =
+    useState<CategoryDataExcerpt>(initialCategoryData);
+  const [selectedFile, setSelectedFile] = useState<File | string>("");
 
   const { categoryName, categorySlug } = categoryData;
 
   const [categoryNameError, setCategoryNameError] = useState("");
   const [categorySlugError, setCategorySlugError] = useState("");
   //   eslint-disable-next-line
-  const [productImageError, setProductImageError] = useState("");
+  const [categoryImageError, setCategoryImageError] = useState("");
 
-  const { loadingAction, uploadedFile, singleCategory, error } = useSelector(
-    (state) => state.common
+  const loadingRequestAction = useTypedSelector(
+    (state) => state.categories.loadingRequestAction
   );
-  const { uploadFile, clearUploadedImages, setFeaturedImage, updateCategory } =
-    useActions();
+  const singleCategory = useTypedSelector(
+    (state) => state.categories.singleCategory
+  );
+  const error = useTypedSelector((state) => state.categories.error);
 
-  const handleChange = (event) => {
+  const { updateCategory } = useActions();
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
     setCategoryData((prev) => ({ ...prev, [name]: value }));
@@ -69,14 +82,14 @@ const EditCategory = ({ openEditCategory, setOpenEditCategory }) => {
     }
   };
 
-  const handleChangeProductImage = (event) => {
-    const file = event.target.files[0];
+  const handleChangeCategoryImage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
 
     if (!file) return;
 
-    uploadFile({
-      file,
-    });
+    setSelectedFile(file);
   };
 
   const handleClick = () => {
@@ -91,6 +104,10 @@ const EditCategory = ({ openEditCategory, setOpenEditCategory }) => {
       setCategoryNameError("");
       setCategorySlugError("");
     }
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedFile("");
   };
 
   const handleUpdateCategory = (
@@ -117,11 +134,13 @@ const EditCategory = ({ openEditCategory, setOpenEditCategory }) => {
     if (categoryNameError || categorySlugError) return;
 
     updateCategory({
-      categoryId: singleCategory._id,
-      setOpenEditCategory,
+      categoryId: singleCategory?._id!,
+      setOpen: setOpenEditCategory,
       categoryName: capitalizeFirstLetters(categoryName),
       categorySlug,
-      setIcon: uploadedFile ? uploadedFile.url : "",
+      setIcon: singleCategory?.setIcon!,
+      setCategoryData,
+      file: selectedFile,
     });
   };
 
@@ -131,12 +150,13 @@ const EditCategory = ({ openEditCategory, setOpenEditCategory }) => {
 
       for (const key in newCategoryData) {
         if (key in singleCategory) {
-          newCategoryData[key] = singleCategory[key];
+          newCategoryData[key as keyof CategoryDataExcerpt] =
+            singleCategory[key as keyof CategoryDataExcerpt];
         }
 
-        if (singleCategory.setIcon) {
-          setFeaturedImage(singleCategory.setIcon);
-        }
+        // if (singleCategory.setIcon) {
+        //   setFeaturedImage(singleCategory.setIcon);
+        // }
       }
       setCategoryData(newCategoryData);
     }
@@ -191,12 +211,12 @@ const EditCategory = ({ openEditCategory, setOpenEditCategory }) => {
           categorySlug={categorySlug}
           onClick={handleClick}
           onChange={handleChange}
-          onSubmit={handleAddCategory}
+          onSubmit={handleUpdateCategory}
           selectedFile={selectedFile}
           setSelectedFile={setSelectedFile}
           onRemoveImage={handleRemoveImage}
           loadingRequestAction={loadingRequestAction}
-          onImageChange={handleChangeProductImage}
+          onImageChange={handleChangeCategoryImage}
           setOpen={setOpenEditCategory}
           categoryNameError={categoryNameError}
           categorySlugError={categorySlugError}
