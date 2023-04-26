@@ -7,7 +7,7 @@ import { useActions } from "src/hooks/useActions";
 import { categoryColumns } from "src/lib/dataset/tableData";
 import AddCategory from "./modals/AddCategory";
 import EditCategory from "./modals/EditCategory";
-// import DeleteCategory from "./modals/DeleteCategory";
+import DeleteCategory from "./modals/DeleteCategory";
 import debounce from "lodash.debounce";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
 import useTitle from "src/hooks/useTitle";
@@ -120,10 +120,10 @@ const Categories = () => {
         openEditCategory={openEditCategory}
         setOpenEditCategory={setOpenEditCategory}
       />
-      {/* <DeleteCategory
+      <DeleteCategory
         openDeleteCategory={openDeleteCategory}
         setOpenDeleteCategory={setOpenDeleteCategory}
-      /> */}
+      />
       <CustomLoadingDialog
         loading={loadingActivation}
         handleLoading={handleCategoryAction}

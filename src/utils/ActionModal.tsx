@@ -13,7 +13,7 @@ import {
   DeleteButton,
 } from "./styles/ActionModalStyles";
 
-type DeleteItemProps = {
+type ActionModalProps = {
   openAction: boolean;
   setOpenAction: React.Dispatch<React.SetStateAction<boolean>>;
   loading: boolean;
@@ -22,7 +22,7 @@ type DeleteItemProps = {
   data: string;
 };
 
-const DeleteItem = (props: DeleteItemProps) => {
+const ActionModal = (props: ActionModalProps) => {
   const { openAction, setOpenAction, loading, actionType, handleAction, data } =
     props;
   const theme = useTheme();
@@ -108,4 +108,4 @@ const DeleteItem = (props: DeleteItemProps) => {
   );
 };
 
-export default DeleteItem;
+export default ActionModal;

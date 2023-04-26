@@ -56,5 +56,6 @@ export type initStateType = {
   categories: CategoryReturnedPayload[];
   subCategories: SubCategoryReturnedPayload[];
   singleCategory: CategoryReturnedPayload | null;
+  singleSubCategory: SubCategoryReturnedPayload | null;
   error: null | string;
 };

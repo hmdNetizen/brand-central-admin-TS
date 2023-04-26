@@ -23,6 +23,7 @@ const initialState: initStateType = {
   subCategories: [],
   //   brandCategories: [],
   singleCategory: null,
+  singleSubCategory: null,
   error: null,
 };
 
@@ -171,6 +172,67 @@ export const updateCategory = createAsyncThunk(
   }
 );
 
+export const deleteCategory = createAsyncThunk(
+  "delete-category",
+  async (
+    details: {
+      categoryId: string;
+      setOpenDeleteCategory: React.Dispatch<React.SetStateAction<boolean>>;
+    },
+    thunkAPI
+  ) => {
+    const { categoryId, setOpenDeleteCategory } = details;
+
+    try {
+      const { status } = await axios.delete(
+        `/api/categories/${categoryId}/remove`
+      );
+
+      if (status === 200) {
+        setOpenDeleteCategory(false);
+      }
+
+      return categoryId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Category could not be deleted");
+    }
+  }
+);
+
+// Sub Categories
+export const getAllSubcategories = createAsyncThunk(
+  "subCategories",
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await axios.get(`/api/sub-categories`);
+      const result = data as ReturnedPayloadType<SubCategoryReturnedPayload>;
+
+      return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
+export const toggleSubCategoryActivation = createAsyncThunk(
+  "toggle-subcategory-activation",
+  async (details: { subCategoryId: string; isActivate: boolean }, thunkAPI) => {
+    const { subCategoryId, isActivate } = details;
+    try {
+      await axios.patch(`/api/sub-categories/${subCategoryId}/activate`, {
+        isActivate,
+      });
+
+      return {
+        subCategoryId,
+        isActivate,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
 const categoriesSlice = createSlice({
   name: "categories",
   initialState,
@@ -180,6 +242,12 @@ const categoriesSlice = createSlice({
       action: PayloadAction<CategoryReturnedPayload>
     ) => {
       state.singleCategory = action.payload;
+    },
+    setCurrentSubCategory: (
+      state,
+      action: PayloadAction<SubCategoryReturnedPayload>
+    ) => {
+      state.singleSubCategory = action.payload;
     },
   },
   extraReducers(builder) {
@@ -279,8 +347,81 @@ const categoriesSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder
+      .addCase(deleteCategory.pending, (state) => {
+        state.loadingRequestAction = true;
+      })
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        state.loadingRequestAction = false;
+        state.categories = state.categories.filter(
+          (category) => category._id !== action.payload
+        );
+
+        toast.error(`Category is successfully deleted`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+
+        state.error = null;
+      })
+      .addCase(deleteCategory.rejected, (state, action) => {
+        state.loadingRequestAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(getAllSubcategories.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllSubcategories.fulfilled, (state, action) => {
+        state.loading = false;
+        state.subCategories = action.payload;
+        state.error = null;
+      })
+      .addCase(getAllSubcategories.rejected, (state, action) => {
+        state.loading = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(toggleSubCategoryActivation.pending, (state) => {
+        state.loadingActivation = true;
+      })
+      .addCase(toggleSubCategoryActivation.fulfilled, (state, action) => {
+        const { subCategoryId, isActivate } = action.payload;
+        state.subCategories = state.subCategories.map((subCategory) =>
+          subCategory._id === subCategoryId
+            ? {
+                ...subCategory,
+                isActivate,
+              }
+            : subCategory
+        );
+        if (isActivate) {
+          toast.success("Subcategory activated successfully", {
+            position: "top-center",
+            hideProgressBar: true,
+          });
+        } else {
+          toast.error(`Subcategory has been deactivated`, {
+            position: "top-center",
+            hideProgressBar: true,
+          });
+        }
+
+        state.error = null;
+      })
+      .addCase(toggleSubCategoryActivation.rejected, (state, action) => {
+        state.loadingActivation = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
   },
 });
 
-export const { setCurrentCategory } = categoriesSlice.actions;
+export const { setCurrentCategory, setCurrentSubCategory } =
+  categoriesSlice.actions;
 export default categoriesSlice.reducer;
