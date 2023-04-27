@@ -2,30 +2,20 @@ import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import ShowDialog from "src/utils/ShowDialog";
-import CustomFormInput from "src/utils/CustomFormInput";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { styled, useTheme } from "@mui/material/styles";
-import Button from "@mui/material/Button";
-import { useSelector } from "react-redux";
-import CircularProgress from "@mui/material/CircularProgress";
-import Chip from "@mui/material/Chip";
-import CustomSelect from "src/utils/CustomSelect";
+import { useTheme } from "@mui/material/styles";
 import { configureSlug, capitalizeFirstLetters } from "src/lib/helpers";
 import { useActions } from "src/hooks/useActions";
 import {
   ContentContainer,
-  FormContainer,
   ErrorsList,
   ErrorMsg,
-  SubmitButton,
-  StyledCircularProgress,
-  CancelButton,
-  StyledChip,
 } from "src/utilityStyles/categoriesUtilityStyles";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { SelectChangeEvent } from "@mui/material";
+import FormContainer from "../utils/FormContainer";
 
 type AddSubCategoryProps = {
   openAddSubCategory: boolean;
@@ -54,8 +44,6 @@ const AddSubCategory = (props: AddSubCategoryProps) => {
   const [subCategorySlugError, setSubCategorySlugError] = useState("");
   const [subCategoryNameError, setSubCategoryNameError] = useState("");
   const [categoryNameError, setCategoryNameError] = useState("");
-  //   eslint-disable-next-line
-  const [productImageError, setProductImageError] = useState("");
 
   const { name, category, categorySlug } = subCategoryData;
 
@@ -65,7 +53,7 @@ const AddSubCategory = (props: AddSubCategoryProps) => {
   );
   const error = useTypedSelector((state) => state.categories.error);
 
-  //   const { addNewSubCategory } = useActions();
+  const { addNewSubCategory } = useActions();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -160,13 +148,13 @@ const AddSubCategory = (props: AddSubCategoryProps) => {
     if (categoryNameError || subCategoryNameError || subCategorySlugError)
       return;
 
-    // addNewSubCategory({
-    //   setSubCategoryData,
-    //   setOpenAddSubCategory,
-    //   category,
-    //   name: capitalizeFirstLetters(name),
-    //   categorySlug: configureSlug(categorySlug),
-    // });
+    addNewSubCategory({
+      setSubCategoryData,
+      setOpen: setOpenAddSubCategory,
+      category,
+      name: capitalizeFirstLetters(name),
+      categorySlug: configureSlug(categorySlug),
+    });
   };
 
   return (
@@ -208,117 +196,20 @@ const AddSubCategory = (props: AddSubCategoryProps) => {
           </ErrorsList>
         )}
         <FormContainer
-          item
-          container
-          direction="column"
-          component="form"
+          categories={categories}
+          category={category}
+          categoryNameError={categoryNameError}
+          categorySlug={categorySlug}
+          name={name}
+          subCategoryNameError={subCategoryNameError}
+          subCategorySlugError={subCategorySlugError}
+          loadingRequestAction={loadingRequestAction}
+          onChange={handleChange}
+          onClick={handleClick}
+          onSelect={handleSelectChange}
           onSubmit={handleAddCategory}
-        >
-          <Grid
-            item
-            container
-            justifyContent="center"
-            style={{ marginBottom: "2rem" }}
-          >
-            <Grid
-              item
-              style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
-            >
-              <CustomSelect
-                options={categories
-                  .filter((category) => category.isActivate)
-                  .map((category) => category.categoryName)}
-                name="category"
-                value={category}
-                onChange={handleSelectChange}
-                label="Category"
-                placeholder="Select Category"
-                errorMessage={categoryNameError}
-              />
-            </Grid>
-          </Grid>
-          <Grid
-            item
-            container
-            justifyContent="center"
-            style={{ marginBottom: "2rem" }}
-          >
-            <Grid
-              item
-              style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
-            >
-              <CustomFormInput
-                type="text"
-                label="Sub Category Name (required)"
-                labelId="name"
-                name="name"
-                value={name}
-                placeholder="Enter Sub Category Name"
-                onChange={handleChange}
-                error={subCategoryNameError}
-                autoComplete="off"
-              />
-            </Grid>
-          </Grid>
-          <Grid
-            item
-            container
-            justifyContent="center"
-            alignItems="center"
-            direction="column"
-            style={{ marginBottom: "2rem" }}
-          >
-            <Grid
-              item
-              style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
-            >
-              <CustomFormInput
-                type="text"
-                label="Sub Category Slug"
-                labelId="categorySlug"
-                name="categorySlug"
-                value={configureSlug(categorySlug)}
-                placeholder="Enter Sub Category Slug"
-                onChange={handleChange}
-                autoComplete="off"
-                error={subCategorySlugError}
-              />
-              <StyledChip
-                label="Generate Slug"
-                variant="outlined"
-                onClick={handleClick}
-              />
-            </Grid>
-          </Grid>
-          <Grid
-            item
-            container
-            justifyContent="center"
-            alignItems="center"
-            columnSpacing={1}
-            style={{ marginTop: "5rem" }}
-          >
-            <Grid item>
-              <CancelButton onClick={() => setOpenAddSubCategory(false)}>
-                Cancel
-              </CancelButton>
-            </Grid>
-            <Grid item>
-              <SubmitButton
-                type="submit"
-                variant="contained"
-                disableRipple
-                color="secondary"
-                disabled={loadingRequestAction}
-              >
-                {loadingRequestAction && (
-                  <StyledCircularProgress style={{ height: 25, width: 25 }} />
-                )}{" "}
-                Add Sub Category
-              </SubmitButton>
-            </Grid>
-          </Grid>
-        </FormContainer>
+          setOpen={setOpenAddSubCategory}
+        />
       </ContentContainer>
     </ShowDialog>
   );

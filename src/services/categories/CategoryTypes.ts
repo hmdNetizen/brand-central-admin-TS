@@ -31,13 +31,22 @@ export interface CategoryData {
   categorySlug: string;
 }
 
-export interface CategoryRequestPayload {
+export interface SubCategoryData {
+  category: string;
+  name: string;
+  categorySlug: string;
+}
+
+export interface CategoryRequestPayload extends CategoryData {
   setCategoryData: React.Dispatch<React.SetStateAction<CategoryData>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  categoryName: string;
-  categorySlug: string;
   setIcon: string;
   file: File | string;
+}
+
+export interface SubCategoryRequestPayload extends SubCategoryData {
+  setSubCategoryData: React.Dispatch<React.SetStateAction<SubCategoryData>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // This is for edit category api request

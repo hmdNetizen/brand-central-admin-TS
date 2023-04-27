@@ -13,7 +13,9 @@ import {
   RequestPayloadType,
   CategoryRequestPayload,
   CategoryRequestNewPayload,
+  SubCategoryRequestPayload,
 } from "./CategoryTypes";
+import { AxiosError } from "axios";
 
 const initialState: initStateType = {
   loading: false,
@@ -250,6 +252,43 @@ export const toggleSubCategoryActivation = createAsyncThunk(
   }
 );
 
+export const addNewSubCategory = createAsyncThunk(
+  "add-sub-category",
+  async (details: RequestPayloadType<SubCategoryRequestPayload>, thunkAPI) => {
+    const { setSubCategoryData, setOpen, ...fields } = details;
+    try {
+      const { data, status } = await axios.post(
+        `/api/sub-categories/add/v1`,
+        fields
+      );
+
+      const result =
+        data as ReturnedSinglePayloadType<SubCategoryReturnedPayload>;
+
+      if (status === 200) {
+        setSubCategoryData({
+          category: "",
+          name: "",
+          categorySlug: "",
+        });
+        setOpen(false);
+      } else {
+        window.scrollTo(0, 0);
+      }
+
+      return result.data;
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
+    }
+  }
+);
+
 const categoriesSlice = createSlice({
   name: "categories",
   initialState,
@@ -437,6 +476,21 @@ const categoriesSlice = createSlice({
       })
       .addCase(toggleSubCategoryActivation.rejected, (state, action) => {
         state.loadingActivation = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(addNewSubCategory.pending, (state, action) => {
+        state.loadingRequestAction = true;
+      })
+      .addCase(addNewSubCategory.fulfilled, (state, action) => {
+        state.loadingRequestAction = false;
+        state.subCategories = [action.payload, ...state.subCategories];
+        state.error = null;
+      })
+      .addCase(addNewSubCategory.rejected, (state, action) => {
+        state.loadingRequestAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

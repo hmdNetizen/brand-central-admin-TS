@@ -12,23 +12,23 @@ export const ContentContainer = styled(Grid)({
 
 export const ErrorsList = styled(Grid)<{ component?: React.ElementType }>(
   ({ theme }) => ({
-    padding: "2rem 2rem 2rem 3rem",
+    padding: "1rem 2rem 1rem 3rem",
     background: theme.palette.common.lightRed,
     alignSelf: "center",
     marginTop: "1rem",
     borderRadius: 5,
     listStyle: "none",
+    borderLeft: `4px solid ${theme.palette.error.main}`,
   })
 );
 
 export const ErrorMsg = styled(Typography)<{ component?: React.ElementType }>({
   fontSize: "1.5rem",
-  "&:not(:first-of-type)": {
-    paddingTop: ".5rem",
-  },
 });
 
-export const FormContainer = styled(Grid)<{ component?: React.ElementType }>({
+export const StyledFormContainer = styled(Grid)<{
+  component?: React.ElementType;
+}>({
   padding: "2rem",
 });
 
