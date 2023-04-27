@@ -193,7 +193,7 @@ export const categoryColumns: TableHeaderColumnTypes[] = [
   },
 ];
 
-export const subCategoryColumns = [
+export const subCategoryColumns: TableHeaderColumnTypes[] = [
   {
     id: 0,
     label: "Category",
