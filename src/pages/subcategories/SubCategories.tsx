@@ -6,8 +6,8 @@ import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import { subCategoryColumns } from "src/lib/dataset/tableData";
 import AddSubCategory from "./modals/AddSubCategory";
+import EditSubCategory from "./modals/EditSubCategory";
 
-// import EditSubCategory from "./modals/EditSubCategory";
 // import DeleteSubCategory from "./modals/DeleteSubCategory";
 
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
@@ -123,10 +123,10 @@ const SubCategories = () => {
         openAddSubCategory={openAddSubCategory}
         setOpenAddSubCategory={setOpenAddSubCategory}
       />
-      {/* <EditSubCategory
-          openEditSubCategory={openEditSubCategory}
-          setOpenEditSubCategory={setOpenEditSubCategory}
-        /> */}
+      <EditSubCategory
+        openEditSubCategory={openEditSubCategory}
+        setOpenEditSubCategory={setOpenEditSubCategory}
+      />
       {/* <DeleteSubCategory
           openDeleteSubCategory={openDeleteSubCategory}
           setOpenDeleteSubCategory={setOpenDeleteSubCategory}

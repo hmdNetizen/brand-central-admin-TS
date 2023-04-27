@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import ShowDialog from "src/utils/ShowDialog";
@@ -16,30 +16,29 @@ import {
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { SelectChangeEvent } from "@mui/material";
 import FormContainer from "../utils/FormContainer";
+import { SubCategoryData } from "src/services/categories/CategoryTypes";
 
-type AddSubCategoryProps = {
-  openAddSubCategory: boolean;
-  setOpenAddSubCategory: React.Dispatch<React.SetStateAction<boolean>>;
+type EditSubCategoryProps = {
+  openEditSubCategory: boolean;
+  setOpenEditSubCategory: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-type SubCategoryDataTypes = {
-  name: string;
-  category: string;
-  categorySlug: string;
+const initialSubCategoryData = {
+  name: "",
+  category: "",
+  categorySlug: "",
 };
 
-const AddSubCategory = (props: AddSubCategoryProps) => {
-  const { openAddSubCategory, setOpenAddSubCategory } = props;
+const EditSubCategory = (props: EditSubCategoryProps) => {
+  const { openEditSubCategory, setOpenEditSubCategory } = props;
   const theme = useTheme();
 
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
 
-  const [subCategoryData, setSubCategoryData] = useState<SubCategoryDataTypes>({
-    name: "",
-    category: "",
-    categorySlug: "",
-  });
+  const [subCategoryData, setSubCategoryData] = useState<SubCategoryData>(
+    initialSubCategoryData
+  );
 
   const [subCategorySlugError, setSubCategorySlugError] = useState("");
   const [subCategoryNameError, setSubCategoryNameError] = useState("");
@@ -52,6 +51,9 @@ const AddSubCategory = (props: AddSubCategoryProps) => {
     (state) => state.categories.loadingRequestAction
   );
   const error = useTypedSelector((state) => state.categories.error);
+  const singleSubCategory = useTypedSelector(
+    (state) => state.categories.singleSubCategory
+  );
 
   const { addNewSubCategory } = useActions();
 
@@ -118,7 +120,7 @@ const AddSubCategory = (props: AddSubCategoryProps) => {
     }
   };
 
-  const handleAddSubCategory = (
+  const handleEditSubCategory = (
     event: React.FormEvent<HTMLFormElement | HTMLDivElement>
   ) => {
     event.preventDefault();
@@ -150,17 +152,31 @@ const AddSubCategory = (props: AddSubCategoryProps) => {
 
     addNewSubCategory({
       setSubCategoryData,
-      setOpen: setOpenAddSubCategory,
+      setOpen: setOpenEditSubCategory,
       category,
       name: capitalizeFirstLetters(name),
       categorySlug: configureSlug(categorySlug),
     });
   };
 
+  useEffect(() => {
+    if (singleSubCategory) {
+      const newSubCategoryData = { ...initialSubCategoryData };
+
+      for (const key in newSubCategoryData) {
+        if (key in singleSubCategory) {
+          newSubCategoryData[key as keyof SubCategoryData] =
+            singleSubCategory[key as keyof SubCategoryData];
+        }
+      }
+      setSubCategoryData(newSubCategoryData);
+    }
+  }, [singleSubCategory]);
+
   return (
     <ShowDialog
-      openModal={openAddSubCategory}
-      handleClose={() => setOpenAddSubCategory(false)}
+      openModal={openEditSubCategory}
+      handleClose={() => setOpenEditSubCategory(false)}
       width={matchesXS ? "95%" : matchesSM ? "85%" : 800}
     >
       <ContentContainer container direction="column">
@@ -179,11 +195,11 @@ const AddSubCategory = (props: AddSubCategoryProps) => {
               style={{ marginBottom: 0 }}
               color="secondary"
             >
-              Add New Sub Category
+              Edit Subcategory
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton onClick={() => setOpenAddSubCategory(false)}>
+            <IconButton onClick={() => setOpenEditSubCategory(false)}>
               <CloseIcon />
             </IconButton>
           </Grid>
@@ -207,13 +223,13 @@ const AddSubCategory = (props: AddSubCategoryProps) => {
           onChange={handleChange}
           onClick={handleClick}
           onSelect={handleSelectChange}
-          onSubmit={handleAddSubCategory}
-          setOpen={setOpenAddSubCategory}
-          buttonTitle="Add Subcategory"
+          onSubmit={handleEditSubCategory}
+          setOpen={setOpenEditSubCategory}
+          buttonTitle="Edit Subcategory"
         />
       </ContentContainer>
     </ShowDialog>
   );
 };
 
-export default AddSubCategory;
+export default EditSubCategory;

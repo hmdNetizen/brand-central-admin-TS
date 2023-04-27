@@ -15,4 +15,5 @@ export type FormContainerProps = {
   categoryNameError: string;
   subCategoryNameError: string;
   onClick: () => void;
+  buttonTitle: string;
 };
