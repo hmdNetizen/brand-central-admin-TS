@@ -15,6 +15,7 @@ import {
   CategoryRequestNewPayload,
   SubCategoryRequestPayload,
   SubCategoryRequestNewPayload,
+  BrandsCategoryReturnedPayload,
 } from "./CategoryTypes";
 import { AxiosError } from "axios";
 import React from "react";
@@ -25,9 +26,10 @@ const initialState: initStateType = {
   loadingRequestAction: false,
   categories: [],
   subCategories: [],
-  //   brandCategories: [],
+  brandCategories: [],
   singleCategory: null,
   singleSubCategory: null,
+  singleBrandCategory: null,
   error: null,
 };
 
@@ -347,6 +349,44 @@ export const deleteSubCategory = createAsyncThunk(
   }
 );
 
+// Brands categories
+export const getAllBrandsCategories = createAsyncThunk(
+  "brands-categories",
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await axios.get(`/api/brand-name/v1`);
+      const result = data as ReturnedPayloadType<BrandsCategoryReturnedPayload>;
+      return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        "Error occurred while fetching brands categories"
+      );
+    }
+  }
+);
+
+export const toggleBrandCategoryActivation = createAsyncThunk(
+  "toggle-brand-category-activation",
+  async (
+    details: { brandCategoryId: string; isActivate: boolean },
+    thunkAPI
+  ) => {
+    const { brandCategoryId, isActivate } = details;
+    try {
+      await axios.patch(`/api/brand-name/${brandCategoryId}/activate`, {
+        isActivate,
+      });
+
+      return {
+        brandCategoryId,
+        isActivate,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
 const categoriesSlice = createSlice({
   name: "categories",
   initialState,
@@ -362,6 +402,12 @@ const categoriesSlice = createSlice({
       action: PayloadAction<SubCategoryReturnedPayload>
     ) => {
       state.singleSubCategory = action.payload;
+    },
+    setCurrentBrandCategory: (
+      state,
+      action: PayloadAction<BrandsCategoryReturnedPayload>
+    ) => {
+      state.singleBrandCategory = action.payload;
     },
   },
   extraReducers(builder) {
@@ -604,9 +650,62 @@ const categoriesSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder
+      .addCase(getAllBrandsCategories.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllBrandsCategories.fulfilled, (state, action) => {
+        state.loading = false;
+        state.brandCategories = action.payload;
+        state.error = null;
+      })
+      .addCase(getAllBrandsCategories.rejected, (state, action) => {
+        state.loading = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(toggleBrandCategoryActivation.pending, (state) => {
+        state.loadingActivation = true;
+      })
+      .addCase(toggleBrandCategoryActivation.fulfilled, (state, action) => {
+        state.loadingActivation = false;
+        const { brandCategoryId, isActivate } = action.payload;
+        state.brandCategories = state.brandCategories.map((brandCategory) =>
+          brandCategory._id === brandCategoryId
+            ? {
+                ...brandCategory,
+                isActivate,
+              }
+            : brandCategory
+        );
+        if (isActivate) {
+          toast.success("Brand Category activated successfully", {
+            position: "top-center",
+            hideProgressBar: true,
+          });
+        } else {
+          toast.error(`Brand Category has been deactivated`, {
+            position: "top-center",
+            hideProgressBar: true,
+          });
+        }
+
+        state.error = null;
+      })
+      .addCase(toggleBrandCategoryActivation.rejected, (state, action) => {
+        state.loadingActivation = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
   },
 });
 
-export const { setCurrentCategory, setCurrentSubCategory } =
-  categoriesSlice.actions;
+export const {
+  setCurrentCategory,
+  setCurrentSubCategory,
+  setCurrentBrandCategory,
+} = categoriesSlice.actions;
 export default categoriesSlice.reducer;

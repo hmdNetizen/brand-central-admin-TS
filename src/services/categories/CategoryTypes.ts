@@ -31,6 +31,10 @@ export interface CategoryData {
   categorySlug: string;
 }
 
+export interface CategoryDataExcerpt extends CategoryData {
+  setIcon?: string;
+}
+
 export interface SubCategoryData {
   category: string;
   name: string;
@@ -60,8 +64,13 @@ export interface SubCategoryRequestNewPayload
   subCategoryId: string;
 }
 
-export interface CategoryDataExcerpt extends CategoryData {
-  setIcon?: string;
+export interface BrandsCategoryReturnedPayload {
+  _id: string;
+  category: string;
+  subCategory: string;
+  name: string;
+  categorySlug: string;
+  isActivate: boolean;
 }
 
 export type initStateType = {
@@ -70,7 +79,9 @@ export type initStateType = {
   loadingRequestAction: boolean;
   categories: CategoryReturnedPayload[];
   subCategories: SubCategoryReturnedPayload[];
+  brandCategories: BrandsCategoryReturnedPayload[];
   singleCategory: CategoryReturnedPayload | null;
   singleSubCategory: SubCategoryReturnedPayload | null;
+  singleBrandCategory: BrandsCategoryReturnedPayload | null;
   error: null | string;
 };
