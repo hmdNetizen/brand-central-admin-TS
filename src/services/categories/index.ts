@@ -17,6 +17,7 @@ import {
   SubCategoryRequestNewPayload,
 } from "./CategoryTypes";
 import { AxiosError } from "axios";
+import React from "react";
 
 const initialState: initStateType = {
   loading: false,
@@ -320,6 +321,32 @@ export const updateSubCategory = createAsyncThunk(
   }
 );
 
+export const deleteSubCategory = createAsyncThunk(
+  "delete-Subcategory",
+  async (
+    details: {
+      subCategoryId: string;
+      setOpenDeleteSubCategory: React.Dispatch<React.SetStateAction<boolean>>;
+    },
+    thunkAPI
+  ) => {
+    const { subCategoryId, setOpenDeleteSubCategory } = details;
+    try {
+      const { status } = await axios.delete(
+        `/api/sub-categories/${subCategoryId}/remove`
+      );
+
+      if (status === 200) {
+        setOpenDeleteSubCategory(false);
+      }
+
+      return subCategoryId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Sub Category could not be deleted");
+    }
+  }
+);
+
 const categoriesSlice = createSlice({
   name: "categories",
   initialState,
@@ -550,6 +577,28 @@ const categoriesSlice = createSlice({
         });
       })
       .addCase(updateSubCategory.rejected, (state, action) => {
+        state.loadingRequestAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(deleteSubCategory.pending, (state) => {
+        state.loadingRequestAction = true;
+      })
+      .addCase(deleteSubCategory.fulfilled, (state, action) => {
+        state.loadingRequestAction = false;
+        state.subCategories = state.subCategories.filter(
+          (subCategory) => subCategory._id !== action.payload
+        );
+        state.error = null;
+
+        toast.error(`SubCategory is successfully deleted`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(deleteSubCategory.rejected, (state, action) => {
         state.loadingRequestAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
