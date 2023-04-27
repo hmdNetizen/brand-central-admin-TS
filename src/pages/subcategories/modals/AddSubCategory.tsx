@@ -110,14 +110,18 @@ const AddSubCategory = (props: AddSubCategoryProps) => {
 
   const handleSelectChange = (event: SelectChangeEvent<unknown>) => {
     const selectEvent = event as SelectChangeEvent<HTMLInputElement>;
+    const {
+      target: { name, value },
+    } = selectEvent;
+
     setSubCategoryData((prev) => ({
       ...prev,
-      [name]: selectEvent.target.value,
+      [name]: value,
     }));
 
     switch (name) {
       case "category":
-        if (!selectEvent.target.value) {
+        if (!value) {
           setCategoryNameError("Please select a category");
         } else {
           setCategoryNameError("");

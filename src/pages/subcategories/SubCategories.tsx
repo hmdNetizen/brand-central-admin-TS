@@ -5,10 +5,10 @@ import { useTheme } from "@mui/material/styles";
 import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import { subCategoryColumns } from "src/lib/dataset/tableData";
+import AddSubCategory from "./modals/AddSubCategory";
 
 // import EditSubCategory from "./modals/EditSubCategory";
 // import DeleteSubCategory from "./modals/DeleteSubCategory";
-// import AddSubCategory from "./modals/AddSubCategory";
 
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
 import debounce from "lodash.debounce";
@@ -119,10 +119,10 @@ const SubCategories = () => {
           </Tables>
         </Grid>
       </ContainerWrapper>
-      {/* <AddSubCategory
-          openAddSubCategory={openAddSubCategory}
-          setOpenAddSubCategory={setOpenAddSubCategory}
-        /> */}
+      <AddSubCategory
+        openAddSubCategory={openAddSubCategory}
+        setOpenAddSubCategory={setOpenAddSubCategory}
+      />
       {/* <EditSubCategory
           openEditSubCategory={openEditSubCategory}
           setOpenEditSubCategory={setOpenEditSubCategory}
