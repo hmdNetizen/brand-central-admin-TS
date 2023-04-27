@@ -54,6 +54,12 @@ export interface CategoryRequestNewPayload extends CategoryRequestPayload {
   categoryId: string;
 }
 
+// This is for edit subcategory api request
+export interface SubCategoryRequestNewPayload
+  extends SubCategoryRequestPayload {
+  subCategoryId: string;
+}
+
 export interface CategoryDataExcerpt extends CategoryData {
   setIcon?: string;
 }

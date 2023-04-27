@@ -14,6 +14,7 @@ import {
   CategoryRequestPayload,
   CategoryRequestNewPayload,
   SubCategoryRequestPayload,
+  SubCategoryRequestNewPayload,
 } from "./CategoryTypes";
 import { AxiosError } from "axios";
 
@@ -289,6 +290,36 @@ export const addNewSubCategory = createAsyncThunk(
   }
 );
 
+export const updateSubCategory = createAsyncThunk(
+  "update-subcategory",
+  async (details: SubCategoryRequestNewPayload, thunkAPI) => {
+    const { subCategoryId, setOpen, ...fields } = details;
+    try {
+      const { data, status } = await axios.patch(
+        `/api/sub-categories/${subCategoryId}/update/v1`,
+        fields
+      );
+
+      const result =
+        data as ReturnedSinglePayloadType<SubCategoryReturnedPayload>;
+
+      if (status === 200) {
+        setOpen(false);
+      }
+
+      return result.data;
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
+    }
+  }
+);
+
 const categoriesSlice = createSlice({
   name: "categories",
   initialState,
@@ -488,8 +519,37 @@ const categoriesSlice = createSlice({
         state.loadingRequestAction = false;
         state.subCategories = [action.payload, ...state.subCategories];
         state.error = null;
+
+        toast.success(`${action.payload.name} added to Subcategory`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
       })
       .addCase(addNewSubCategory.rejected, (state, action) => {
+        state.loadingRequestAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updateSubCategory.pending, (state) => {
+        state.loadingRequestAction = true;
+      })
+      .addCase(updateSubCategory.fulfilled, (state, action) => {
+        state.loadingRequestAction = false;
+        state.subCategories = state.subCategories.map((subCategory) =>
+          subCategory._id === action.payload._id
+            ? { ...action.payload }
+            : subCategory
+        );
+        state.error = null;
+
+        toast.success(`${action.payload.name} has been updated`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(updateSubCategory.rejected, (state, action) => {
         state.loadingRequestAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;

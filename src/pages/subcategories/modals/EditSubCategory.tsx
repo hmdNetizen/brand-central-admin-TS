@@ -55,7 +55,7 @@ const EditSubCategory = (props: EditSubCategoryProps) => {
     (state) => state.categories.singleSubCategory
   );
 
-  const { addNewSubCategory } = useActions();
+  const { updateSubCategory } = useActions();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -150,7 +150,8 @@ const EditSubCategory = (props: EditSubCategoryProps) => {
     if (categoryNameError || subCategoryNameError || subCategorySlugError)
       return;
 
-    addNewSubCategory({
+    updateSubCategory({
+      subCategoryId: singleSubCategory?._id!,
       setSubCategoryData,
       setOpen: setOpenEditSubCategory,
       category,
@@ -225,7 +226,7 @@ const EditSubCategory = (props: EditSubCategoryProps) => {
           onSelect={handleSelectChange}
           onSubmit={handleEditSubCategory}
           setOpen={setOpenEditSubCategory}
-          buttonTitle="Edit Subcategory"
+          buttonTitle="Update Subcategory"
         />
       </ContentContainer>
     </ShowDialog>
