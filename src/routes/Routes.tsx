@@ -17,6 +17,7 @@ import PendingOrders from "src/pages/orders/PendingOrders";
 import PrintOrderInvoice from "src/pages/orders/PrintOrderInvoice";
 import ProcessingOrders from "src/pages/orders/ProcessingOrders";
 import PreOrders from "src/pages/pre-orders/PreOrders";
+import SubCategories from "src/pages/subcategories/SubCategories";
 
 const PagesRoutes = () => {
   const [menuSlideIn, setMenuSlideIn] = useState<boolean>(false);
@@ -66,6 +67,9 @@ const PagesRoutes = () => {
               </Route>
               <Route path="categories">
                 <Route index element={<Categories />} />
+              </Route>
+              <Route path="subcategories">
+                <Route index element={<SubCategories />} />
               </Route>
             </Route>
           </Route>

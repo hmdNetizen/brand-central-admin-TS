@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
-import Tables from "components/table/Tables";
+import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import { subCategoryColumns } from "src/lib/dataset/tableData";
 
@@ -21,7 +21,7 @@ import {
 import SubCategoryItem from "src/components/subcategories/SubCategoryItem";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 
-const SubCategory = () => {
+const SubCategories = () => {
   useTitle("Admin : List of all Subcategories");
 
   const theme = useTheme();
@@ -40,20 +40,19 @@ const SubCategory = () => {
   const [openAddSubCategory, setOpenAddSubCategory] = useState(false);
   const [openEditSubCategory, setOpenEditSubCategory] = useState(false);
   const [openDeleteSubCategory, setOpenDeleteSubCategory] = useState(false);
-  // const [filteredSubCategory, setFilteredSubCategory] = useState(subCategories);
 
-  const { getAllSubcategories, getAllCategories } = useActions();
+  const { getAllSubcategories, getAllCategories, getSearchedSubCategory } =
+    useActions();
 
-  // eslint-disable-next-line
-  // const debounceFilteredSubCategory = useCallback(
-  //   debounce(handleFilteredSubCategory, 500),
-  //   []
-  // );
+  const debounceSearchedSubCategory = useCallback(
+    debounce(getSearchedSubCategory, 500),
+    []
+  );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(event.target.value);
 
-    // debounceFilteredSubCategory(event.target.value);
+    debounceSearchedSubCategory(event.target.value);
 
     setPage(0);
   };
@@ -140,4 +139,4 @@ const SubCategory = () => {
   );
 };
 
-export default SubCategory;
+export default SubCategories;
