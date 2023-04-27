@@ -1,24 +1,28 @@
 import React from "react";
 import ActionModal from "src/utils/ActionModal";
 import { useActions } from "src/hooks/useActions";
-import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
 
 type DeleteSubCategoryProps = {
   openDeleteSubCategory: boolean;
   setOpenDeleteSubCategory: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const DeleteSubCategory = ({}) => {
-  const { loadingAction, singleSubCategory } = useSelector(
-    (state) => state.common
+const DeleteSubCategory = (props: DeleteSubCategoryProps) => {
+  const { openDeleteSubCategory, setOpenDeleteSubCategory } = props;
+  const loadingRequestAction = useTypedSelector(
+    (state) => state.categories.loadingRequestAction
+  );
+  const singleSubCategory = useTypedSelector(
+    (state) => state.categories.singleSubCategory
   );
 
   const { deleteSubCategory } = useActions();
 
   const handleDeleteCategory = () => {
     deleteSubCategory({
-      subCategoryId: singleSubCategory._id,
+      subCategoryId: singleSubCategory?._id!,
       setOpenDeleteSubCategory,
     });
   };
@@ -26,11 +30,11 @@ const DeleteSubCategory = ({}) => {
   return (
     <ActionModal
       actionType="Delete"
-      loading={loadingAction}
+      loading={loadingRequestAction}
       openAction={openDeleteSubCategory}
       setOpenAction={setOpenDeleteSubCategory}
       handleAction={handleDeleteCategory}
-      data={singleSubCategory && singleSubCategory.name}
+      data={singleSubCategory?.name!}
     />
   );
 };

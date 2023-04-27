@@ -7,9 +7,7 @@ import { useActions } from "src/hooks/useActions";
 import { subCategoryColumns } from "src/lib/dataset/tableData";
 import AddSubCategory from "./modals/AddSubCategory";
 import EditSubCategory from "./modals/EditSubCategory";
-
-// import DeleteSubCategory from "./modals/DeleteSubCategory";
-
+import DeleteSubCategory from "./modals/DeleteSubCategory";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
 import debounce from "lodash.debounce";
 import useTitle from "src/hooks/useTitle";
@@ -71,8 +69,6 @@ const SubCategories = () => {
   useEffect(() => {
     getAllSubcategories();
     getAllCategories();
-
-    // eslint-disable-next-line
   }, []);
 
   return (
@@ -127,10 +123,10 @@ const SubCategories = () => {
         openEditSubCategory={openEditSubCategory}
         setOpenEditSubCategory={setOpenEditSubCategory}
       />
-      {/* <DeleteSubCategory
-          openDeleteSubCategory={openDeleteSubCategory}
-          setOpenDeleteSubCategory={setOpenDeleteSubCategory}
-        /> */}
+      <DeleteSubCategory
+        openDeleteSubCategory={openDeleteSubCategory}
+        setOpenDeleteSubCategory={setOpenDeleteSubCategory}
+      />
       <CustomLoadingDialog
         loading={loadingActivation}
         handleLoading={handleSubCategoryAction}
