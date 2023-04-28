@@ -5,11 +5,9 @@ import { useTheme } from "@mui/material/styles";
 import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import { brandCategoryColumns } from "src/lib/dataset/tableData";
-import TableRow from "@mui/material/TableRow";
 import AddBrandCategory from "./modals/AddBrandCategory";
 import EditBrandCategory from "./modals/EditBrandCategory";
-//   import DeleteBrandCategory from "./modals/DeleteBrandCategory";
-import CustomSwitch from "src/utils/CustomSwitch";
+import DeleteBrandCategory from "./modals/DeleteBrandCategory";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
 import debounce from "lodash.debounce";
 import useTitle from "src/hooks/useTitle";
@@ -149,10 +147,10 @@ const BrandsCategory = () => {
         openEditBrandCategory={openEditBrandCategory}
         setOpenEditBrandCategory={setOpenEditBrandCategory}
       />
-      {/* <DeleteBrandCategory
+      <DeleteBrandCategory
         setOpenDeleteBrandCategory={setOpenDeleteBrandCategory}
         openDeleteBrandCategory={openDeleteBrandCategory}
-      /> */}
+      />
       <CustomLoadingDialog
         loading={loadingActivation}
         handleLoading={handleBrandCategoryAction}
