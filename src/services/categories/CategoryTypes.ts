@@ -60,6 +60,11 @@ export interface SubCategoryRequestPayload extends SubCategoryData {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+export interface BrandCategoryRequestPayload extends BrandCategoryData {
+  setBrandCategoryData: React.Dispatch<React.SetStateAction<BrandCategoryData>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 // This is for edit category api request
 export interface CategoryRequestNewPayload extends CategoryRequestPayload {
   categoryId: string;

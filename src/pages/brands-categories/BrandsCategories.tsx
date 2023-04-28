@@ -2,16 +2,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
-import CustomIconButton from "src/utils/CustomIconButton";
-import CustomSelect from "src/utils/CustomSelect";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import AddIcon from "@mui/icons-material/Add";
 import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import { brandCategoryColumns } from "src/lib/dataset/tableData";
 import TableRow from "@mui/material/TableRow";
-import { useSelector } from "react-redux";
-//   import AddBrandCategory from "./modals/AddBrandCategory";
+import AddBrandCategory from "./modals/AddBrandCategory";
 //   import EditBrandCategory from "./modals/EditBrandCategory";
 //   import DeleteBrandCategory from "./modals/DeleteBrandCategory";
 import CustomSwitch from "src/utils/CustomSwitch";
@@ -29,10 +25,6 @@ import PageHeadingWithActionButton from "src/components/common/PageHeadingWithAc
 const BrandsCategory = () => {
   useTitle("Admin : List of all Brands categories");
   const theme = useTheme();
-
-  const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
-  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
-  const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
 
   const loading = useTypedSelector((state) => state.categories.loading);
   const loadingActivation = useTypedSelector(
@@ -131,10 +123,10 @@ const BrandsCategory = () => {
           </Tables>
         </Grid>
       </ContainerWrapper>
-      {/* <AddBrandCategory
+      <AddBrandCategory
         openAddBrandCategory={openAddBrandCategory}
         setOpenAddBrandCategory={setOpenAddBrandCategory}
-      /> */}
+      />
       {/* <EditBrandCategory
         openEditBrandCategory={openEditBrandCategory}
         setOpenEditBrandCategory={setOpenEditBrandCategory}

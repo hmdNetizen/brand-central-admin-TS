@@ -66,11 +66,6 @@ const FormContainer = (props: FormContainerProps) => {
             }
             name="category"
             value={category}
-            // onChange={(event) => {
-            //   handleSelectChange(event);
-            //   const value = event.target.value as string;
-            //   handleSubCategoryListFilter(value);
-            // }}
             onChange={onSelectChange}
             label="Category"
             placeholder="Select Category"
