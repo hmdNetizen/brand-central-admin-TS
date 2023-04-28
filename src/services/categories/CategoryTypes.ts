@@ -83,6 +83,12 @@ export interface SubCategoryRequestNewPayload
   subCategoryId: string;
 }
 
+// This is for edit brand category api request
+export interface BrandCategoryRequestNewPayload
+  extends BrandCategoryRequestPayload {
+  brandCategoryId: string;
+}
+
 export interface BrandsCategoryReturnedPayload {
   _id: string;
   category: string;

@@ -22,13 +22,13 @@ import {
   ErrorMsg,
 } from "src/utilityStyles/categoriesUtilityStyles";
 
-type AddBrandCategoryProps = {
-  openAddBrandCategory: boolean;
-  setOpenAddBrandCategory: React.Dispatch<React.SetStateAction<boolean>>;
+type EditBrandCategoryProps = {
+  openEditBrandCategory: boolean;
+  setOpenEditBrandCategory: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const AddBrandCategory = (props: AddBrandCategoryProps) => {
-  const { openAddBrandCategory, setOpenAddBrandCategory } = props;
+const EditBrandCategory = (props: EditBrandCategoryProps) => {
+  const { openEditBrandCategory, setOpenEditBrandCategory } = props;
   const theme = useTheme();
 
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
@@ -59,9 +59,12 @@ const AddBrandCategory = (props: AddBrandCategoryProps) => {
   const subCategories = useTypedSelector(
     (state) => state.categories.subCategories
   );
+  const singleBrandCategory = useTypedSelector(
+    (state) => state.categories.singleBrandCategory
+  );
   const error = useTypedSelector((state) => state.categories.error);
 
-  const { addNewBrandCategory } = useActions();
+  const { updateBrandCategory } = useActions();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -143,7 +146,7 @@ const AddBrandCategory = (props: AddBrandCategoryProps) => {
     setFilterListSubCategory(newSubCategory);
   };
 
-  const handleAddCategory = (
+  const handleEditCategory = (
     event: React.FormEvent<HTMLFormElement | HTMLDivElement>
   ) => {
     event.preventDefault();
@@ -184,9 +187,10 @@ const AddBrandCategory = (props: AddBrandCategoryProps) => {
     )
       return;
 
-    addNewBrandCategory({
+    updateBrandCategory({
+      brandCategoryId: singleBrandCategory?._id!,
       setBrandCategoryData,
-      setOpen: setOpenAddBrandCategory,
+      setOpen: setOpenEditBrandCategory,
       category,
       subCategory,
       name: capitalizeFirstLetters(name),
@@ -196,8 +200,8 @@ const AddBrandCategory = (props: AddBrandCategoryProps) => {
 
   return (
     <ShowDialog
-      openModal={openAddBrandCategory}
-      handleClose={() => setOpenAddBrandCategory(false)}
+      openModal={openEditBrandCategory}
+      handleClose={() => setOpenEditBrandCategory(false)}
       width={matchesXS ? "95%" : matchesSM ? "85%" : 800}
     >
       <ContentContainer container direction="column">
@@ -216,11 +220,11 @@ const AddBrandCategory = (props: AddBrandCategoryProps) => {
               style={{ marginBottom: 0 }}
               color="secondary"
             >
-              Add New Brand Category
+              Update Brand Category
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton onClick={() => setOpenAddBrandCategory(false)}>
+            <IconButton onClick={() => setOpenEditBrandCategory(false)}>
               <CloseIcon />
             </IconButton>
           </Grid>
@@ -244,11 +248,11 @@ const AddBrandCategory = (props: AddBrandCategoryProps) => {
           subCategory={subCategory}
           subCategoryError={subCategoryError}
           loadingRequestAction={loadingRequestAction}
-          setOpen={setOpenAddBrandCategory}
+          setOpen={setOpenEditBrandCategory}
           onClick={handleClick}
           onChange={handleChange}
           onSelect={handleSelectChange}
-          onSubmit={handleAddCategory}
+          onSubmit={handleEditCategory}
           onSelectChange={(event) => {
             handleSelectChange(event);
             const value = event.target.value as string;
@@ -260,4 +264,4 @@ const AddBrandCategory = (props: AddBrandCategoryProps) => {
   );
 };
 
-export default AddBrandCategory;
+export default EditBrandCategory;

@@ -18,6 +18,7 @@ import {
   BrandsCategoryReturnedPayload,
   BrandCategoryRequestPayload,
   ReturnPaginationPayloadType,
+  BrandCategoryRequestNewPayload,
 } from "./CategoryTypes";
 import { AxiosError } from "axios";
 import React from "react";
@@ -466,6 +467,35 @@ export const addNewBrandCategory = createAsyncThunk(
   }
 );
 
+export const updateBrandCategory = createAsyncThunk(
+  "update-brand-category",
+  async (details: BrandCategoryRequestNewPayload, thunkAPI) => {
+    const { brandCategoryId, setOpen, ...fields } = details;
+    try {
+      const { data, status } = await axios.patch(
+        `/api/brand-name/${brandCategoryId}/update/v1`,
+        fields
+      );
+      const result =
+        data as ReturnedSinglePayloadType<BrandsCategoryReturnedPayload>;
+
+      if (status === 200) {
+        setOpen(false);
+      }
+
+      return result.data;
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
+    }
+  }
+);
+
 const categoriesSlice = createSlice({
   name: "categories",
   initialState,
@@ -803,6 +833,30 @@ const categoriesSlice = createSlice({
       .addCase(addNewBrandCategory.rejected, (state, action) => {
         state.loadingRequestAction = false;
 
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updateBrandCategory.pending, (state) => {
+        state.loadingRequestAction = true;
+      })
+      .addCase(updateBrandCategory.fulfilled, (state, action) => {
+        state.loadingRequestAction = false;
+        state.brandCategories = state.brandCategories.map((brandCategory) =>
+          brandCategory._id === action.payload._id
+            ? { ...action.payload }
+            : brandCategory
+        );
+        state.error = null;
+
+        toast.success(`${action.payload.name} has been updated`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(updateBrandCategory.rejected, (state, action) => {
+        state.loadingRequestAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }
