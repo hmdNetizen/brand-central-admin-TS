@@ -7,7 +7,7 @@ import { useActions } from "src/hooks/useActions";
 import { brandCategoryColumns } from "src/lib/dataset/tableData";
 import TableRow from "@mui/material/TableRow";
 import AddBrandCategory from "./modals/AddBrandCategory";
-//   import EditBrandCategory from "./modals/EditBrandCategory";
+import EditBrandCategory from "./modals/EditBrandCategory";
 //   import DeleteBrandCategory from "./modals/DeleteBrandCategory";
 import CustomSwitch from "src/utils/CustomSwitch";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
@@ -145,10 +145,10 @@ const BrandsCategory = () => {
         openAddBrandCategory={openAddBrandCategory}
         setOpenAddBrandCategory={setOpenAddBrandCategory}
       />
-      {/* <EditBrandCategory
+      <EditBrandCategory
         openEditBrandCategory={openEditBrandCategory}
         setOpenEditBrandCategory={setOpenEditBrandCategory}
-      /> */}
+      />
       {/* <DeleteBrandCategory
         setOpenDeleteBrandCategory={setOpenDeleteBrandCategory}
         openDeleteBrandCategory={openDeleteBrandCategory}

@@ -234,7 +234,6 @@ const AddBrandCategory = (props: AddBrandCategoryProps) => {
         )}
         <FormContainer
           categories={categories}
-          filterListSubCategory={filterListSubCategory}
           category={category}
           brandNameError={brandNameError}
           brandSlugError={brandSlugError}
@@ -254,6 +253,8 @@ const AddBrandCategory = (props: AddBrandCategoryProps) => {
             const value = event.target.value as string;
             handleSubCategoryListFilter(value);
           }}
+          filteredSubCategory={filterListSubCategory}
+          buttonTitle="Add Brand Category"
         />
       </ContentContainer>
     </ShowDialog>

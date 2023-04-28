@@ -10,7 +10,7 @@ export type FormContainerProps = {
   categories: CategoryReturnedPayload[];
   onSelectChange: (event: SelectChangeEvent<unknown>) => void;
   onSelect: (event: SelectChangeEvent<unknown>) => void;
-  filterListSubCategory: SubCategoryReturnedPayload[];
+  filteredSubCategory: SubCategoryReturnedPayload[];
   category: string;
   subCategory: string;
   categoryNameError: string;
@@ -22,4 +22,5 @@ export type FormContainerProps = {
   brandSlugError: string;
   loadingRequestAction: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  buttonTitle: string;
 };

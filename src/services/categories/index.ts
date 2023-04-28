@@ -442,7 +442,7 @@ export const addNewBrandCategory = createAsyncThunk(
       const result =
         data as ReturnedSinglePayloadType<BrandsCategoryReturnedPayload>;
 
-      if (status === 200) {
+      if (status === 201) {
         setBrandCategoryData({
           category: "",
           subCategory: "",
@@ -492,6 +492,32 @@ export const updateBrandCategory = createAsyncThunk(
       } else {
         return thunkAPI.rejectWithValue("Something went wrong");
       }
+    }
+  }
+);
+
+export const deleteBrandCategory = createAsyncThunk(
+  "delete-brand-category",
+  async (
+    details: {
+      brandCategoryId: string;
+      setOpenDeleteBrandCategory: React.Dispatch<React.SetStateAction<boolean>>;
+    },
+    thunkAPI
+  ) => {
+    const { brandCategoryId, setOpenDeleteBrandCategory } = details;
+    try {
+      const { status } = await axios.delete(
+        `/api/brand-name/${brandCategoryId}/remove`
+      );
+
+      if (status === 200) {
+        setOpenDeleteBrandCategory(false);
+      }
+
+      return brandCategoryId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Brand Category could not be deleted");
     }
   }
 );
@@ -856,6 +882,28 @@ const categoriesSlice = createSlice({
         });
       })
       .addCase(updateBrandCategory.rejected, (state, action) => {
+        state.loadingRequestAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(deleteBrandCategory.pending, (state) => {
+        state.loadingRequestAction = true;
+      })
+      .addCase(deleteBrandCategory.fulfilled, (state, action) => {
+        state.loadingRequestAction = false;
+        state.brandCategories = state.brandCategories.filter(
+          (brandCategory) => brandCategory._id !== action.payload
+        );
+        state.error = null;
+
+        toast.error(`Brand Category is successfully deleted`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(deleteBrandCategory.rejected, (state, action) => {
         state.loadingRequestAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;

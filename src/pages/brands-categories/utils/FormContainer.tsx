@@ -21,7 +21,7 @@ const FormContainer = (props: FormContainerProps) => {
     categories,
     category,
     categoryNameError,
-    filterListSubCategory,
+    filteredSubCategory,
     onClick,
     onSelect,
     onSelectChange,
@@ -34,6 +34,7 @@ const FormContainer = (props: FormContainerProps) => {
     categorySlug,
     loadingRequestAction,
     setOpen,
+    buttonTitle,
   } = props;
 
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
@@ -58,12 +59,9 @@ const FormContainer = (props: FormContainerProps) => {
           style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
         >
           <CustomSelect
-            options={
-              categories &&
-              categories
-                .filter((category) => category.isActivate)
-                .map((category) => category.categoryName)
-            }
+            options={categories
+              .filter((category) => category.isActivate)
+              .map((category) => category.categoryName.toLowerCase())}
             name="category"
             value={category}
             onChange={onSelectChange}
@@ -84,10 +82,9 @@ const FormContainer = (props: FormContainerProps) => {
           style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
         >
           <CustomSelect
-            options={
-              filterListSubCategory &&
-              filterListSubCategory.map((subCategory) => subCategory.name)
-            }
+            options={filteredSubCategory
+              .filter((subCategory) => subCategory.isActivate)
+              .map((subCategory) => subCategory.name.toLowerCase())}
             name="subCategory"
             value={subCategory}
             onChange={onSelect}
@@ -172,7 +169,7 @@ const FormContainer = (props: FormContainerProps) => {
             {loadingRequestAction && (
               <StyledCircularProgress style={{ height: 25, width: 25 }} />
             )}{" "}
-            Add Brand Category
+            {buttonTitle}
           </SubmitButton>
         </Grid>
       </Grid>

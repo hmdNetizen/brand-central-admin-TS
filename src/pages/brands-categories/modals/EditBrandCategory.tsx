@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import ShowDialog from "src/utils/ShowDialog";
@@ -27,6 +27,13 @@ type EditBrandCategoryProps = {
   setOpenEditBrandCategory: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+const initialBrandCategoryData = {
+  category: "",
+  subCategory: "",
+  name: "",
+  categorySlug: "",
+};
+
 const EditBrandCategory = (props: EditBrandCategoryProps) => {
   const { openEditBrandCategory, setOpenEditBrandCategory } = props;
   const theme = useTheme();
@@ -35,21 +42,13 @@ const EditBrandCategory = (props: EditBrandCategoryProps) => {
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
 
   const [brandCategoryData, setBrandCategoryData] = useState<BrandCategoryData>(
-    {
-      name: "",
-      category: "",
-      subCategory: "",
-      categorySlug: "",
-    }
+    initialBrandCategoryData
   );
 
   const [brandSlugError, setBrandSlugError] = useState("");
   const [subCategoryError, setSubCategoryError] = useState("");
   const [categoryNameError, setCategoryNameError] = useState("");
   const [brandNameError, setBrandNameError] = useState("");
-  const [filterListSubCategory, setFilterListSubCategory] = useState<
-    SubCategoryReturnedPayload[]
-  >([]);
 
   const { name, category, subCategory, categorySlug } = brandCategoryData;
   const loadingRequestAction = useTypedSelector(
@@ -63,6 +62,8 @@ const EditBrandCategory = (props: EditBrandCategoryProps) => {
     (state) => state.categories.singleBrandCategory
   );
   const error = useTypedSelector((state) => state.categories.error);
+  const [filteredSubCategory, setFilteredSubCategory] =
+    useState<SubCategoryReturnedPayload[]>(subCategories);
 
   const { updateBrandCategory } = useActions();
 
@@ -135,15 +136,23 @@ const EditBrandCategory = (props: EditBrandCategoryProps) => {
     }
   };
 
-  const handleSubCategoryListFilter = (value: string) => {
-    const newSubCategory = [...subCategories]
-      .filter((subCategory) => subCategory.isActivate)
-      .filter(
-        (subCategoryData) =>
-          subCategoryData.category.toLowerCase() === value.toLowerCase()
-      );
+  //   const handleSubCategoryListFilter = (value: string) => {
+  //     const newSubCategory = [...subCategories]
+  //       .filter((subCategory) => subCategory.isActivate)
+  //       .filter(
+  //         (subCategoryData) =>
+  //           subCategoryData.category.toLowerCase() === value.toLowerCase()
+  //       );
 
-    setFilterListSubCategory(newSubCategory);
+  //     setFilterListSubCategory(newSubCategory);
+  //   };
+
+  const handleFilter = (value: string) => {
+    const newSubCategories = [...subCategories].filter((subCategory) =>
+      subCategory.category.toLowerCase().includes(value.toLowerCase())
+    );
+
+    setFilteredSubCategory(newSubCategories);
   };
 
   const handleEditCategory = (
@@ -198,6 +207,23 @@ const EditBrandCategory = (props: EditBrandCategoryProps) => {
     });
   };
 
+  useEffect(() => {
+    if (singleBrandCategory) {
+      const newbrandCategoryData = { ...initialBrandCategoryData };
+
+      for (const key in newbrandCategoryData) {
+        if (key in singleBrandCategory) {
+          newbrandCategoryData[key as keyof BrandCategoryData] =
+            singleBrandCategory[key as keyof BrandCategoryData].toLowerCase();
+        }
+      }
+      setBrandCategoryData(newbrandCategoryData);
+      handleFilter(singleBrandCategory.category.toLowerCase());
+    }
+
+    // eslint-disable-next-line
+  }, [singleBrandCategory]);
+
   return (
     <ShowDialog
       openModal={openEditBrandCategory}
@@ -238,7 +264,7 @@ const EditBrandCategory = (props: EditBrandCategoryProps) => {
         )}
         <FormContainer
           categories={categories}
-          filterListSubCategory={filterListSubCategory}
+          filteredSubCategory={filteredSubCategory}
           category={category}
           brandNameError={brandNameError}
           brandSlugError={brandSlugError}
@@ -256,8 +282,9 @@ const EditBrandCategory = (props: EditBrandCategoryProps) => {
           onSelectChange={(event) => {
             handleSelectChange(event);
             const value = event.target.value as string;
-            handleSubCategoryListFilter(value);
+            handleFilter(value);
           }}
+          buttonTitle="Update Brand Category"
         />
       </ContentContainer>
     </ShowDialog>
