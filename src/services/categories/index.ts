@@ -396,7 +396,10 @@ export const addNewBrandCategory = createAsyncThunk(
   ) => {
     const { setBrandCategoryData, setOpen, ...fields } = details;
     try {
-      const { data, status } = await axios.post(`/api/brand-name/add`, fields);
+      const { data, status } = await axios.post(
+        `/api/brand-name/add/v1`,
+        fields
+      );
 
       const result =
         data as ReturnedSinglePayloadType<BrandsCategoryReturnedPayload>;
