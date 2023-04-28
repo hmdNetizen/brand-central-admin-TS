@@ -49,7 +49,7 @@ const CustomerOrderItem = (props: CustomerOrderItemProps) => {
           variant="contained"
           color="secondary"
           component={Link}
-          to={`/dashboard/admin/orders/${order.id}`}
+          to={`/dashboard/orders/${order.id}`}
         >
           View Details
         </StyledButton>
@@ -63,7 +63,7 @@ const CustomerOrderItem = (props: CustomerOrderItemProps) => {
             fontWeight: 600,
           }}
           component={Link}
-          to={`/dashboard/admin/orders/${order.id}/invoice`}
+          to={`/dashboard/orders/${order.id}/invoice`}
         >
           View Invoice
         </StyledButton>
