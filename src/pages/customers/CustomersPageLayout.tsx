@@ -1,9 +1,8 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import Tables from "src/components/table/Tables";
-import { useActions } from "src/hooks/useActions";
 import { customersListColumns } from "src/lib/dataset/tableData";
 import CustomerItem from "src/components/customers/CustomerItem";
 import EditCustomerProfile from "./modals/EditCustomerProfile";
@@ -47,9 +46,6 @@ const CustomerPageLayout = (props: CustomerPageLayoutProps) => {
   const totalCustomers = useTypedSelector(
     (state) => state.customers.totalCustomers
   );
-
-  const { setCurrentCustomer, handleToggleCustomerBlock, unblockCustomer } =
-    useActions();
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

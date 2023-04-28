@@ -17,6 +17,7 @@ import {
   SubCategoryRequestNewPayload,
   BrandsCategoryReturnedPayload,
   BrandCategoryRequestPayload,
+  ReturnPaginationPayloadType,
 } from "./CategoryTypes";
 import { AxiosError } from "axios";
 import React from "react";
@@ -28,6 +29,7 @@ const initialState: initStateType = {
   categories: [],
   subCategories: [],
   brandCategories: [],
+  total: 0,
   singleCategory: null,
   singleSubCategory: null,
   singleBrandCategory: null,
@@ -353,11 +355,46 @@ export const deleteSubCategory = createAsyncThunk(
 // Brands categories
 export const getAllBrandsCategories = createAsyncThunk(
   "brands-categories",
-  async (_, thunkAPI) => {
+  async (details: { page: number; limit: number }, thunkAPI) => {
+    const { page, limit } = details;
+
     try {
-      const { data } = await axios.get(`/api/brand-name/v1`);
-      const result = data as ReturnedPayloadType<BrandsCategoryReturnedPayload>;
-      return result.data;
+      const { data } = await axios.get(
+        `/api/brand-name/v1?page=${page}&limit=${limit}`
+      );
+      const result =
+        data as ReturnPaginationPayloadType<BrandsCategoryReturnedPayload>;
+      return {
+        total: result.data.total,
+        brandCategories: result.data.data,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        "Error occurred while fetching brands categories"
+      );
+    }
+  }
+);
+
+export const getSearchedBrandsCategories = createAsyncThunk(
+  "searched-brands-categories",
+  async (
+    details: { page: number; limit: number; searchTerm: string },
+    thunkAPI
+  ) => {
+    const { page, limit, searchTerm } = details;
+    const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+
+    try {
+      const { data } = await axios.get(
+        `/api/brand-name/v1?page=${page}&limit=${limit}${searchQuery}`
+      );
+      const result =
+        data as ReturnPaginationPayloadType<BrandsCategoryReturnedPayload>;
+      return {
+        total: result.data.total,
+        brandCategories: result.data.data,
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue(
         "Error occurred while fetching brands categories"
@@ -698,7 +735,8 @@ const categoriesSlice = createSlice({
       })
       .addCase(getAllBrandsCategories.fulfilled, (state, action) => {
         state.loading = false;
-        state.brandCategories = action.payload;
+        state.brandCategories = action.payload.brandCategories;
+        state.total = action.payload.total;
         state.error = null;
       })
       .addCase(getAllBrandsCategories.rejected, (state, action) => {
@@ -707,6 +745,12 @@ const categoriesSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder.addCase(getSearchedBrandsCategories.fulfilled, (state, action) => {
+      state.loading = false;
+      state.brandCategories = action.payload.brandCategories;
+      state.total = action.payload.total;
+      state.error = null;
+    });
     builder
       .addCase(toggleBrandCategoryActivation.pending, (state) => {
         state.loadingActivation = true;

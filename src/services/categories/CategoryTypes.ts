@@ -12,6 +12,13 @@ export type ReturnedPayloadType<T> = {
   data: T[];
 };
 
+export type ReturnPaginationPayloadType<T> = {
+  data: {
+    total: number;
+    data: T[];
+  };
+};
+
 export type ReturnedSinglePayloadType<T> = {
   data: T;
 };
@@ -89,6 +96,7 @@ export type initStateType = {
   loading: boolean;
   loadingActivation: boolean;
   loadingRequestAction: boolean;
+  total: number;
   categories: CategoryReturnedPayload[];
   subCategories: SubCategoryReturnedPayload[];
   brandCategories: BrandsCategoryReturnedPayload[];

@@ -41,6 +41,12 @@ const Customers = () => {
         limit: rowsPerPage,
         page: page + 1,
       });
+    } else {
+      getSearchedCustomers({
+        searchTerm: filterText,
+        page: page + 1,
+        limit: rowsPerPage,
+      });
     }
 
     // eslint-disable-next-line

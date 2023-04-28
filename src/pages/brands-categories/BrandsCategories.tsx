@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import { brandCategoryColumns } from "src/lib/dataset/tableData";
@@ -33,6 +32,7 @@ const BrandsCategory = () => {
   const brandCategories = useTypedSelector(
     (state) => state.categories.brandCategories
   );
+  const total = useTypedSelector((state) => state.categories.total);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -43,21 +43,27 @@ const BrandsCategory = () => {
   // const [filteredBrandCategory, setFilterBrandCategory] =
   //   useState(brandCategories);
 
-  const { getAllSubcategories, getAllCategories, getAllBrandsCategories } =
-    useActions();
+  const {
+    getAllSubcategories,
+    getAllCategories,
+    getAllBrandsCategories,
+    getSearchedBrandsCategories,
+  } = useActions();
 
-  // eslint-disable-next-line
-  //   const debounceFilteredBrandCategory = useCallback(
-  //     debounce(handleFilteredBrandCategory, 500),
-  //     []
-  //   );
+  const debounceFilteredBrandCategory = useCallback(
+    debounce(getSearchedBrandsCategories, 500),
+    []
+  );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPage(0);
     setFilterText(event.target.value);
 
-    // debounceFilteredBrandCategory(event.target.value);
-
-    setPage(0);
+    debounceFilteredBrandCategory({
+      limit: rowsPerPage,
+      page: page + 1,
+      searchTerm: event.target.value,
+    });
   };
 
   const handleChangeRowsPerPage = (
@@ -74,10 +80,24 @@ const BrandsCategory = () => {
   useEffect(() => {
     getAllSubcategories();
     getAllCategories();
-    getAllBrandsCategories();
 
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (!filterText) {
+      getAllBrandsCategories({
+        limit: rowsPerPage,
+        page: page + 1,
+      });
+    } else {
+      getSearchedBrandsCategories({
+        limit: rowsPerPage,
+        page: page + 1,
+        searchTerm: filterText,
+      });
+    }
+  }, [rowsPerPage, page]);
 
   return (
     <Container container direction="column">
@@ -102,24 +122,22 @@ const BrandsCategory = () => {
             setPage={setPage}
             rowsPerPage={rowsPerPage}
             setRowsPerPage={setRowsPerPage}
-            total={brandCategories.length}
+            total={total}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
             loading={loading}
-            notFoundText="No Brand Found"
+            notFoundText="No Brand Category Found"
           >
             {!loading &&
-              brandCategories
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((brandCategory) => {
-                  return (
-                    <BrandsCategoryItem
-                      key={brandCategory._id}
-                      brandCategory={brandCategory}
-                      setOpenEditBrandCategory={setOpenEditBrandCategory}
-                      setOpenDeleteBrandCategory={setOpenDeleteBrandCategory}
-                    />
-                  );
-                })}
+              brandCategories.map((brandCategory) => {
+                return (
+                  <BrandsCategoryItem
+                    key={brandCategory._id}
+                    brandCategory={brandCategory}
+                    setOpenEditBrandCategory={setOpenEditBrandCategory}
+                    setOpenDeleteBrandCategory={setOpenDeleteBrandCategory}
+                  />
+                );
+              })}
           </Tables>
         </Grid>
       </ContainerWrapper>

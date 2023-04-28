@@ -36,10 +36,18 @@ const AllOrders = () => {
   };
 
   useEffect(() => {
-    fetchAllOrders({
-      page: page + 1,
-      limit: rowsPerPage,
-    });
+    if (!filterText) {
+      fetchAllOrders({
+        page: page + 1,
+        limit: rowsPerPage,
+      });
+    } else {
+      getAllSearchedOrders({
+        limit: rowsPerPage,
+        page: page + 1,
+        searchTerm: filterText,
+      });
+    }
   }, [page, rowsPerPage]);
 
   return (
