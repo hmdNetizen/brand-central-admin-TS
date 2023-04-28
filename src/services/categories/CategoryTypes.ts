@@ -41,6 +41,13 @@ export interface SubCategoryData {
   categorySlug: string;
 }
 
+export interface BrandCategoryData {
+  category: string;
+  subCategory: string;
+  name: string;
+  categorySlug: string;
+}
+
 export interface CategoryRequestPayload extends CategoryData {
   setCategoryData: React.Dispatch<React.SetStateAction<CategoryData>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;

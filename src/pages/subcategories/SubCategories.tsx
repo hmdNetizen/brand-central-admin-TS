@@ -83,7 +83,7 @@ const SubCategories = () => {
           filterText={filterText}
           handleSearch={handleSearch}
           rowsPerPage={rowsPerPage}
-          setOpenAddCategory={setOpenAddSubCategory}
+          setOpen={setOpenAddSubCategory}
           setPage={setPage}
           setRowsPerPage={setRowsPerPage}
         />

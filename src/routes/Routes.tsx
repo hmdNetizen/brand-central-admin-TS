@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Prefetch from "src/components/features/Prefetch";
 import DashboardLayout from "src/layouts/DashboardLayout";
 import Login from "src/pages/auth/Login";
+import BrandsCategory from "src/pages/brands-categories/BrandsCategories";
 import Categories from "src/pages/categories/Categories";
 import BlockedCustomers from "src/pages/customers/BlockedCustomers";
 import CustomerProfileDetails from "src/pages/customers/CustomerProfileDetails";
@@ -70,6 +71,9 @@ const PagesRoutes = () => {
               </Route>
               <Route path="subcategories">
                 <Route index element={<SubCategories />} />
+              </Route>
+              <Route path="brands-categories">
+                <Route index element={<BrandsCategory />} />
               </Route>
             </Route>
           </Route>

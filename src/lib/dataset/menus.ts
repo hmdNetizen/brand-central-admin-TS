@@ -129,7 +129,7 @@ export const menus = [
       {
         subId: 2,
         title: "Brands Category",
-        path: "/dashboard/brands-category",
+        path: "/dashboard/brands-categories",
       },
     ],
   },

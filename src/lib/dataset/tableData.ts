@@ -221,7 +221,7 @@ export const subCategoryColumns: TableHeaderColumnTypes[] = [
   },
 ];
 
-export const brandCategoryColumns = [
+export const brandCategoryColumns: TableHeaderColumnTypes[] = [
   {
     id: 0,
     label: "Category",

@@ -80,7 +80,7 @@ const Categories = () => {
           filterText={filterText}
           handleSearch={handleSearch}
           rowsPerPage={rowsPerPage}
-          setOpenAddCategory={setOpenAddCategory}
+          setOpen={setOpenAddCategory}
           setPage={setPage}
           setRowsPerPage={setRowsPerPage}
         />

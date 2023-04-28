@@ -10,6 +10,7 @@ import {
   ActionButton,
   StyledIconButton,
 } from "src/components/common/styles/CommonPageStyles";
+import { capitalizeFirstLetters } from "src/lib/helpers";
 import { useActions } from "src/hooks/useActions";
 import { BrandsCategoryReturnedPayload } from "src/services/categories/CategoryTypes";
 
@@ -52,7 +53,9 @@ const BrandsCategoryItem = (props: BrandsCategoryProps) => {
     <TableRow hover role="checkbox" tabIndex={-1}>
       <TableCell sx={{ minWidth: 200 }}>{category.toUpperCase()}</TableCell>
       <TableCell sx={{ minWidth: 150 }}>{subCategory.toUpperCase()}</TableCell>
-      <TableCell sx={{ minWidth: 150 }}>{name.toUpperCase()}</TableCell>
+      <TableCell sx={{ minWidth: 150 }}>
+        {capitalizeFirstLetters(name)}
+      </TableCell>
       <TableCell sx={{ minWidth: 150 }} align="center">
         {categorySlug.toLowerCase()}
       </TableCell>

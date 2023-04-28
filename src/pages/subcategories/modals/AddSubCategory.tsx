@@ -115,6 +115,8 @@ const AddSubCategory = (props: AddSubCategoryProps) => {
           setCategoryNameError("");
         }
         break;
+      default:
+        setCategoryNameError("");
     }
   };
 

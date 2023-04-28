@@ -15,7 +15,7 @@ type PageHeadingActionProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>;
   setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
   handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  setOpenAddCategory: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const PageHeadingWithActionButton = (props: PageHeadingActionProps) => {
@@ -26,7 +26,7 @@ const PageHeadingWithActionButton = (props: PageHeadingActionProps) => {
     setPage,
     setRowsPerPage,
     handleSearch,
-    setOpenAddCategory,
+    setOpen,
   } = props;
 
   const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
@@ -84,7 +84,7 @@ const PageHeadingWithActionButton = (props: PageHeadingActionProps) => {
           borderRadius={0}
           style={{ width: "100%" }}
           onClick={() => {
-            setOpenAddCategory(true);
+            setOpen(true);
           }}
         />
       </Grid>
