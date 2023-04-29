@@ -112,6 +112,7 @@ const BrandsCategory = () => {
           setOpen={setOpenAddBrandCategory}
           setPage={setPage}
           setRowsPerPage={setRowsPerPage}
+          buttonTitle="Add New Brand Category"
         />
         <Grid item container style={{ marginTop: "5rem" }}>
           <Tables

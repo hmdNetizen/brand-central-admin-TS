@@ -83,6 +83,7 @@ const Categories = () => {
           setOpen={setOpenAddCategory}
           setPage={setPage}
           setRowsPerPage={setRowsPerPage}
+          buttonTitle="Add New Category"
         />
         <Grid item container style={{ marginTop: "5rem" }}>
           <Tables

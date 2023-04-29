@@ -11,6 +11,7 @@ const initialState: initStateType = {
   loadingBrands: false,
   loadingBrandActivation: false,
   brands: [],
+  total: 0,
   singleBrand: null,
   error: null,
 };
@@ -67,6 +68,7 @@ const brandsSlice = createSlice({
       .addCase(getAllBrands.fulfilled, (state, action) => {
         state.loadingBrands = false;
         state.brands = action.payload.brands;
+        state.total = action.payload.total;
         state.error = null;
       })
       .addCase(getAllBrands.rejected, (state, action) => {

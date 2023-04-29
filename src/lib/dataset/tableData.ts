@@ -292,7 +292,7 @@ export const allOrdersCategoryColumns: TableHeaderColumnTypes[] = [
   },
 ];
 
-export const brandsColumn = [
+export const brandsColumn: TableHeaderColumnTypes[] = [
   {
     id: 0,
     label: "Brand Icon",

@@ -16,6 +16,7 @@ type PageHeadingActionProps = {
   setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
   handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  buttonTitle: string;
 };
 
 const PageHeadingWithActionButton = (props: PageHeadingActionProps) => {
@@ -27,6 +28,7 @@ const PageHeadingWithActionButton = (props: PageHeadingActionProps) => {
     setRowsPerPage,
     handleSearch,
     setOpen,
+    buttonTitle,
   } = props;
 
   const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
@@ -78,7 +80,7 @@ const PageHeadingWithActionButton = (props: PageHeadingActionProps) => {
       </Grid>
       <Grid item style={{ width: matchesXS ? "100%" : "auto" }}>
         <CustomIconButton
-          title="Add New Category"
+          title={buttonTitle}
           background={theme.palette.secondary}
           startIcon={<AddIcon />}
           borderRadius={0}

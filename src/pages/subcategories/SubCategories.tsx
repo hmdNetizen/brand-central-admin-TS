@@ -86,6 +86,7 @@ const SubCategories = () => {
           setOpen={setOpenAddSubCategory}
           setPage={setPage}
           setRowsPerPage={setRowsPerPage}
+          buttonTitle="Add New Subcategory"
         />
         <Grid item container style={{ marginTop: "5rem" }}>
           <Tables
