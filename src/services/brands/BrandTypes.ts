@@ -17,6 +17,7 @@ export type ResponsePayloadType<T> = {
 
 export type initStateType = {
   loadingBrands: boolean;
+  loadingBrandActivation: boolean;
   brands: BrandReturnedPayload[];
   error: string | null;
   singleBrand: BrandReturnedPayload | null;

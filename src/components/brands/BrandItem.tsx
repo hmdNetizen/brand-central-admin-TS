@@ -1,29 +1,56 @@
 import React from "react";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import IconButton from "@mui/material/IconButton";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import CustomSwitch from "src/utils/CustomSwitch";
 import plcaceholderIcon from "src/assets/images/placeholder-icon.png";
 import { BrandReturnedPayload } from "src/services/brands/BrandTypes";
-import CustomIconButton from "src/utils/CustomIconButton";
+import { useTheme } from "@mui/material/styles";
+import { useActions } from "src/hooks/useActions";
+import {
+  OptionsTableData,
+  ActionButton,
+  StyledIconButton,
+} from "src/components/common/styles/CommonPageStyles";
 
 type BrandItemProps = {
   brand: BrandReturnedPayload;
+  setOpenEditBrand: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenDeleteBrand: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const BrandItem = (props: BrandItemProps) => {
-  const {
-    brand: { icon, isActivated, name, slug },
-  } = props;
+  const theme = useTheme();
+  const { brand, setOpenDeleteBrand, setOpenEditBrand } = props;
+
+  const { setCurrentBrand, toggleBrandActivation } = useActions();
+
+  const handleSwitchChange = () => {
+    toggleBrandActivation({
+      brandId: brand._id,
+      isActivated: !brand.isActivated,
+    });
+  };
+
+  const handleEditBrand = () => {
+    setOpenEditBrand(true);
+    setCurrentBrand(brand);
+  };
+
+  const handleDeleteBrand = () => {
+    setOpenDeleteBrand(true);
+    setCurrentBrand(brand);
+  };
+
+  const { icon, isActivated, name, slug } = brand;
   return (
     <TableRow hover role="checkbox" tabIndex={-1}>
       <TableCell>
         <img
           src={!icon || icon === "-" ? plcaceholderIcon : icon}
           alt={`${name}'s Icon`}
-          className={classes.icon}
+          style={{ width: 70 }}
         />
       </TableCell>
       <TableCell style={{ minWidth: 250 }}>{name.toUpperCase()}</TableCell>
@@ -31,28 +58,24 @@ const BrandItem = (props: BrandItemProps) => {
       <TableCell align="center">
         <CustomSwitch
           color={isActivated ? "success" : "error"}
-          onChange={(event) => handleSwitchChange(event, category)}
+          onChange={handleSwitchChange}
           checked={isActivated}
           isActive={isActivated}
         />
       </TableCell>
       <TableCell>
-        <div className={classes.optionsTableData}>
-          <CustomIconButton
+        <OptionsTableData>
+          <ActionButton
             startIcon={<EditSharpIcon />}
             background={theme.palette.secondary}
             title="Edit"
-            className={classes.actionButton}
-            onClick={() => handleEditBrand(brand)}
+            onClick={handleEditBrand}
           />
 
-          <IconButton
-            className={classes.iconButton}
-            onClick={() => handleDeleteBrand(brand)}
-          >
+          <StyledIconButton onClick={handleDeleteBrand}>
             <DeleteSharpIcon />
-          </IconButton>
-        </div>
+          </StyledIconButton>
+        </OptionsTableData>
       </TableCell>
     </TableRow>
   );
