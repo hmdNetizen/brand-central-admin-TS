@@ -11,6 +11,7 @@ import {
   commonActions,
   utilActions,
   categoriesActions,
+  brandsActions,
 } from "src/services/actions";
 
 export const useActions = () => {
@@ -27,6 +28,7 @@ export const useActions = () => {
       ...commonActions,
       ...utilActions,
       ...categoriesActions,
+      ...brandsActions,
     },
     dispatch
   );
