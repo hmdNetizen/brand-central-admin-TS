@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useActions } from "src/hooks/useActions";
-import {
-  Container,
-  ContainerWrapper,
-} from "src/components/common/styles/PageContainerStyles";
 
-//   import AddBrand from "./modals/AddBrand";
+import AddBrand from "./modals/AddBrand";
 //   import EditBrand from "./modals/EditBrand";
 //   import DeleteBrand from "./modals/DeleteBrand";
 import debounce from "lodash.debounce";
@@ -46,11 +42,12 @@ const Brands = () => {
       page={page}
       rowsPerPage={rowsPerPage}
       setFilterText={setFilterText}
-      setOpen={setOpenAddBrand}
+      setOpenAddBrand={setOpenAddBrand}
       setOpenDeleteBrand={setOpenDeleteBrand}
       setOpenEditBrand={setOpenEditBrand}
       setPage={setPage}
       setRowsPerPage={setRowsPerPage}
+      openAddBrand={openAddBrand}
     />
   );
 };

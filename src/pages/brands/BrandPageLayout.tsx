@@ -13,19 +13,8 @@ import PageHeadingWithActionButton from "src/components/common/PageHeadingWithAc
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { BrandReturnedPayload } from "src/services/brands/BrandTypes";
 import BrandItem from "src/components/brands/BrandItem";
-
-type PageLayoutProps = {
-  filterText: string;
-  rowsPerPage: number;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
-  setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
-  page: number;
-  brands: BrandReturnedPayload[];
-  setFilterText: React.Dispatch<React.SetStateAction<string>>;
-  setOpenDeleteBrand: React.Dispatch<React.SetStateAction<boolean>>;
-  setOpenEditBrand: React.Dispatch<React.SetStateAction<boolean>>;
-};
+import AddBrand from "./modals/AddBrand";
+import { PageLayoutProps } from "./types";
 
 const BrandPageLayout = (props: PageLayoutProps) => {
   const theme = useTheme();
@@ -34,12 +23,13 @@ const BrandPageLayout = (props: PageLayoutProps) => {
     filterText,
     page,
     rowsPerPage,
-    setOpen,
+    setOpenAddBrand,
     setPage,
     setRowsPerPage,
     setFilterText,
     setOpenEditBrand,
     setOpenDeleteBrand,
+    openAddBrand,
   } = props;
   const total = useTypedSelector((state) => state.brands.total);
   const loadingBrands = useTypedSelector((state) => state.brands.loadingBrands);
@@ -74,7 +64,7 @@ const BrandPageLayout = (props: PageLayoutProps) => {
           filterText={filterText}
           handleSearch={handleSearch}
           rowsPerPage={rowsPerPage}
-          setOpen={setOpen}
+          setOpen={setOpenAddBrand}
           setPage={setPage}
           setRowsPerPage={setRowsPerPage}
           buttonTitle="Add New Brand"
@@ -95,6 +85,7 @@ const BrandPageLayout = (props: PageLayoutProps) => {
               brands.map((brand) => {
                 return (
                   <BrandItem
+                    key={brand._id}
                     brand={brand}
                     setOpenDeleteBrand={setOpenDeleteBrand}
                     setOpenEditBrand={setOpenEditBrand}
@@ -104,7 +95,7 @@ const BrandPageLayout = (props: PageLayoutProps) => {
           </Tables>
         </Grid>
       </ContainerWrapper>
-      {/* <AddBrand openAddBrand={openAddBrand} setOpenAddBrand={setOpenAddBrand} /> */}
+      <AddBrand openAddBrand={openAddBrand} setOpenAddBrand={setOpenAddBrand} />
       {/* <EditBrand
           openEditBrand={openEditBrand}
           setOpenEditBrand={setOpenEditBrand}

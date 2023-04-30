@@ -102,7 +102,7 @@ export const addNewCategory = createAsyncThunk(
       );
       const result = uploadedFile as UploadedFilePayload;
 
-      const { data, status } = await axios.post(`/api/categories/add`, {
+      const { data, status } = await axios.post(`/api/categories/add/v1`, {
         ...fields,
         setIcon: result.url,
       });

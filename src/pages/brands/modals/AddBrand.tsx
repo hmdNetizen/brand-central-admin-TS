@@ -99,7 +99,7 @@ const AddBrand = ({ openAddBrand, setOpenAddBrand }: AddBrandProps) => {
     }
   };
 
-  const handleAddBrand = (
+  const handleAddBrand = async (
     event: React.FormEvent<HTMLFormElement | HTMLDivElement>
   ) => {
     event.preventDefault();
@@ -122,7 +122,7 @@ const AddBrand = ({ openAddBrand, setOpenAddBrand }: AddBrandProps) => {
 
     if (brandNameError || brandSlugError) return;
 
-    createNewBrand({
+    await createNewBrand({
       setBrandData,
       setOpen: setOpenAddBrand,
       file: selectedFile,
@@ -135,6 +135,9 @@ const AddBrand = ({ openAddBrand, setOpenAddBrand }: AddBrandProps) => {
           ? preview
           : "",
     });
+
+    setPreview(undefined);
+    setSelectedFile("");
   };
 
   useEffect(() => {
