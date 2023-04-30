@@ -135,7 +135,12 @@ const AddCategory = (props: AddCategoryProps) => {
       file: selectedFile,
       categoryName: capitalizeFirstLetters(categoryName),
       categorySlug: configureSlug(categorySlug),
-      setIcon: uploadedFile ? uploadedFile.url : "",
+      setIcon:
+        typeof selectedFile === "object"
+          ? selectedFile
+          : preview
+          ? preview
+          : "",
     });
   };
 

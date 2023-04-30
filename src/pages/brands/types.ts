@@ -15,4 +15,5 @@ export type FormContainerProps = {
   setBrandImageError: React.Dispatch<React.SetStateAction<string>>;
   preview: string | undefined;
   setPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
+  buttonTitle: string;
 };

@@ -33,6 +33,7 @@ const FormContainer = (props: FormContainerProps) => {
     selectedFile,
     setBrandImageError,
     setPreview,
+    buttonTitle,
   } = props;
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
@@ -133,7 +134,7 @@ const FormContainer = (props: FormContainerProps) => {
             {loadingBrands && (
               <StyledCircularProgress style={{ height: 25, width: 25 }} />
             )}{" "}
-            Add Brand
+            {buttonTitle}
           </SubmitButton>
         </Grid>
       </Grid>

@@ -5,11 +5,17 @@ import {
   initStateType,
   ResponsePayloadType,
   BrandReturnedPayload,
+  BrandRequestPayload,
+  SingleResponsePayloadType,
 } from "./BrandTypes";
+import { fileUploadConfig } from "src/config/fileUpload";
+import { UploadedFilePayload } from "../common/commonTypes";
+import { AxiosError } from "axios";
 
 const initialState: initStateType = {
   loadingBrands: false,
   loadingBrandActivation: false,
+  loadingBrandAction: false,
   brands: [],
   total: 0,
   singleBrand: null,
@@ -48,6 +54,64 @@ export const toggleBrandActivation = createAsyncThunk(
       };
     } catch (error) {
       return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
+export const createNewBrand = createAsyncThunk(
+  "add-new-brand",
+  async (details: BrandRequestPayload, thunkAPI) => {
+    const { setBrandData, setOpen, file, ...fields } = details;
+    const { config, formData } = fileUploadConfig(file);
+    try {
+      if (typeof file === "object") {
+        const { data: uploadedFile } = await axios.post(
+          `/api/uploads/file`,
+          formData,
+          config
+        );
+
+        const result = uploadedFile as UploadedFilePayload;
+
+        const { data, status } = await axios.post(`/api/brand/add/v1`, {
+          ...fields,
+          icon: result.url,
+        });
+        const response = data as SingleResponsePayloadType;
+
+        if (status === 201) {
+          setBrandData({
+            name: "",
+            slug: "",
+          });
+
+          setOpen(false);
+        }
+
+        return response.data;
+      } else {
+        const { data, status } = await axios.post(`/api/brand/add/v1`, fields);
+        const response = data as SingleResponsePayloadType;
+
+        if (status === 201) {
+          setBrandData({
+            name: "",
+            slug: "",
+          });
+
+          setOpen(false);
+        }
+
+        return response.data;
+      }
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
     }
   }
 );
@@ -101,6 +165,26 @@ const brandsSlice = createSlice({
       })
       .addCase(toggleBrandActivation.rejected, (state, action) => {
         state.loadingBrandActivation = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(createNewBrand.pending, (state) => {
+        state.loadingBrandAction = true;
+      })
+      .addCase(createNewBrand.fulfilled, (state, action) => {
+        state.loadingBrandAction = false;
+        state.brands = [action.payload, ...state.brands];
+
+        toast.success(`${action.payload.name} added to Brands`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+        state.error = null;
+      })
+      .addCase(createNewBrand.rejected, (state, action) => {
+        state.loadingBrandAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }
