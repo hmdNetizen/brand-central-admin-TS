@@ -10,28 +10,9 @@ import {
   SubmitButton,
 } from "src/utilityStyles/categoriesUtilityStyles";
 import { configureSlug } from "src/lib/helpers";
-import FileUploadBox from "src/components/uploads/FileUploadBox";
 import CustomFormInput from "src/utils/CustomFormInput";
 import FileUploadLayout from "src/components/uploads/FileUploadLayout";
-
-type FormContainerProps = {
-  name: string;
-  slug: string;
-  onSubmit: (event: React.FormEvent<HTMLFormElement | HTMLDivElement>) => void;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  brandNameError: string;
-  brandSlugError: string;
-  onClick: () => void;
-  loadingBrands: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onRemoveImage: () => void;
-  selectedFile: File | string;
-  setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
-  setBrandImageError: React.Dispatch<React.SetStateAction<string>>;
-  preview: string | undefined;
-  setPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
-};
+import { FormContainerProps } from "../types";
 
 const FormContainer = (props: FormContainerProps) => {
   const theme = useTheme();
