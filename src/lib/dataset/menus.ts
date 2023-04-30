@@ -139,7 +139,7 @@ export const menus = [
     icon: BrandsIcon,
     path: "/brands",
     subMenus: [
-      { subId: 0, title: "All Brands", path: "/brands" },
+      { subId: 0, title: "All Brands", path: "/dashboard/brands" },
       {
         subId: 1,
         title: "Deactivated Brands",

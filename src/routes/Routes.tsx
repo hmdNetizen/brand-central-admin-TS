@@ -4,6 +4,7 @@ import Prefetch from "src/components/features/Prefetch";
 import DashboardLayout from "src/layouts/DashboardLayout";
 import Login from "src/pages/auth/Login";
 import BrandsCategory from "src/pages/brands-categories/BrandsCategories";
+import Brands from "src/pages/brands/Brands";
 import Categories from "src/pages/categories/Categories";
 import BlockedCustomers from "src/pages/customers/BlockedCustomers";
 import CustomerProfileDetails from "src/pages/customers/CustomerProfileDetails";
@@ -74,6 +75,9 @@ const PagesRoutes = () => {
               </Route>
               <Route path="brands-categories">
                 <Route index element={<BrandsCategory />} />
+              </Route>
+              <Route path="brands">
+                <Route index element={<Brands />} />
               </Route>
             </Route>
           </Route>
