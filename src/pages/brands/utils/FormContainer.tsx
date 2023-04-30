@@ -2,43 +2,59 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import CustomFormInput from "src/utils/CustomFormInput";
 import {
   StyledFormContainer,
-  StyledChip,
   CancelButton,
-  SubmitButton,
+  StyledChip,
   StyledCircularProgress,
-} from "../modals/styles/CategoryModalsStyles";
+  SubmitButton,
+} from "src/utilityStyles/categoriesUtilityStyles";
 import { configureSlug } from "src/lib/helpers";
+import FileUploadBox from "src/components/uploads/FileUploadBox";
+import CustomFormInput from "src/utils/CustomFormInput";
 import FileUploadLayout from "src/components/uploads/FileUploadLayout";
-import { FormContainerProps } from "./types";
+
+type FormContainerProps = {
+  name: string;
+  slug: string;
+  onSubmit: (event: React.FormEvent<HTMLFormElement | HTMLDivElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  brandNameError: string;
+  brandSlugError: string;
+  onClick: () => void;
+  loadingBrands: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onRemoveImage: () => void;
+  selectedFile: File | string;
+  setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
+  setBrandImageError: React.Dispatch<React.SetStateAction<string>>;
+  preview: string | undefined;
+  setPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
+};
 
 const FormContainer = (props: FormContainerProps) => {
   const theme = useTheme();
   const {
-    categoryNameError,
-    categoryName,
-    categorySlug,
-    categorySlugError,
+    brandNameError,
+    name,
+    slug,
     onChange,
-    onClick,
     onSubmit,
-    setCategoryImageError,
-    onRemoveImage,
-    selectedFile,
-    setSelectedFile,
-    loadingRequestAction,
+    brandSlugError,
+    onClick,
+    loadingBrands,
     setOpen,
     onImageChange,
+    setSelectedFile,
+    onRemoveImage,
     preview,
+    selectedFile,
+    setBrandImageError,
     setPreview,
-    buttonTitle,
   } = props;
-
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
-
   return (
     <StyledFormContainer
       item
@@ -59,13 +75,13 @@ const FormContainer = (props: FormContainerProps) => {
         >
           <CustomFormInput
             type="text"
-            label="Category Name (required)"
-            labelId="categoryName"
-            name="categoryName"
-            value={categoryName}
-            placeholder="Enter Category Name"
+            label="Brand Name (required)"
+            labelId="name"
+            name="name"
+            value={name}
+            placeholder="Enter Brand Name"
             onChange={onChange}
-            error={categoryNameError}
+            error={brandNameError}
             autoComplete="off"
           />
         </Grid>
@@ -84,13 +100,13 @@ const FormContainer = (props: FormContainerProps) => {
         >
           <CustomFormInput
             type="text"
-            label="Category Slug"
-            labelId="categorySlug"
-            name="categorySlug"
-            value={configureSlug(categorySlug)}
-            placeholder="Enter Category Slug"
+            label="Brand Slug"
+            labelId="slug"
+            name="slug"
+            value={configureSlug(slug)}
+            placeholder="Enter Brand Slug"
             onChange={onChange}
-            error={categorySlugError}
+            error={brandSlugError}
             autoComplete="off"
           />
           <StyledChip
@@ -100,21 +116,26 @@ const FormContainer = (props: FormContainerProps) => {
           />
         </Grid>
       </Grid>
-      <FileUploadLayout
-        onImageChange={onImageChange}
-        onRemoveImage={onRemoveImage}
-        selectedFile={selectedFile}
-        setImageError={setCategoryImageError}
-        setSelectedFile={setSelectedFile}
-        preview={preview}
-        setPreview={setPreview}
-      />
+      <Grid item container justifyContent="center">
+        <Grid item style={{ width: 200 }}>
+          <FileUploadLayout
+            onImageChange={onImageChange}
+            onRemoveImage={onRemoveImage}
+            selectedFile={selectedFile}
+            setImageError={setBrandImageError}
+            setSelectedFile={setSelectedFile}
+            preview={preview}
+            setPreview={setPreview}
+          />
+        </Grid>
+      </Grid>
       <Grid
         item
         container
         justifyContent="center"
         alignItems="center"
         columnSpacing={1}
+        rowSpacing={1}
         style={{ marginTop: "5rem" }}
       >
         <Grid item>
@@ -126,12 +147,12 @@ const FormContainer = (props: FormContainerProps) => {
             variant="contained"
             disableRipple
             color="secondary"
-            disabled={loadingRequestAction}
+            disabled={loadingBrands}
           >
-            {loadingRequestAction && (
+            {loadingBrands && (
               <StyledCircularProgress style={{ height: 25, width: 25 }} />
             )}{" "}
-            {buttonTitle}
+            Add Brand
           </SubmitButton>
         </Grid>
       </Grid>

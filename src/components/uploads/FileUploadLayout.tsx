@@ -8,7 +8,7 @@ import FileUploadBox from "./FileUploadBox";
 type FileUploadLayoutProps = {
   selectedFile: File | string;
   setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
-  setCategoryImageError: React.Dispatch<React.SetStateAction<string>>;
+  setImageError: React.Dispatch<React.SetStateAction<string>>;
   onRemoveImage: () => void;
   onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   preview: string | undefined;
@@ -20,7 +20,7 @@ const FileUploadLayout = (props: FileUploadLayoutProps) => {
     onImageChange,
     onRemoveImage,
     selectedFile,
-    setCategoryImageError,
+    setImageError,
     setSelectedFile,
     preview,
     setPreview,
@@ -30,7 +30,7 @@ const FileUploadLayout = (props: FileUploadLayoutProps) => {
       <Grid item style={{ width: 200 }}>
         <FileUploadBox
           iconSize="5rem"
-          setImageError={setCategoryImageError}
+          setImageError={setImageError}
           errorMessage="Add an image for this category"
           selectedFile={selectedFile}
           setSelectedFile={setSelectedFile}
