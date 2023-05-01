@@ -34,6 +34,9 @@ export type BrandRequestPayload = {
   setBrandData: React.Dispatch<React.SetStateAction<BrandData>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   file: File | string;
+  brandId?: string;
+  setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
+  setPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
 export type initStateType = {

@@ -89,7 +89,14 @@ export const toggleBrandActivation = createAsyncThunk(
 export const createNewBrand = createAsyncThunk(
   "add-new-brand",
   async (details: BrandRequestPayload, thunkAPI) => {
-    const { setBrandData, setOpen, file, ...fields } = details;
+    const {
+      setBrandData,
+      setOpen,
+      file,
+      setPreview,
+      setSelectedFile,
+      ...fields
+    } = details;
     const { config, formData } = fileUploadConfig(file);
     try {
       if (typeof file === "object") {
@@ -113,6 +120,8 @@ export const createNewBrand = createAsyncThunk(
             slug: "",
           });
 
+          setPreview(undefined);
+          setSelectedFile("");
           setOpen(false);
         }
 
@@ -127,7 +136,85 @@ export const createNewBrand = createAsyncThunk(
             slug: "",
           });
 
+          setPreview(undefined);
+          setSelectedFile("");
           setOpen(false);
+        }
+
+        return response.data;
+      }
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
+    }
+  }
+);
+
+export const updateBrand = createAsyncThunk(
+  "update-brand",
+  async (details: BrandRequestPayload, thunkAPI) => {
+    const {
+      setBrandData,
+      setOpen,
+      brandId,
+      file,
+      setPreview,
+      setSelectedFile,
+      ...fields
+    } = details;
+    const { config, formData } = fileUploadConfig(file);
+    try {
+      if (typeof file === "object") {
+        const { data: uploadedFile } = await axios.post(
+          `/api/uploads/file`,
+          formData,
+          config
+        );
+
+        const result = uploadedFile as UploadedFilePayload;
+
+        const { data, status } = await axios.patch(
+          `/api/brand/${brandId}/update/v1`,
+          {
+            ...fields,
+            icon: result.url,
+          }
+        );
+        const response = data as SingleResponsePayloadType;
+
+        if (status === 200) {
+          setBrandData({
+            name: "",
+            slug: "",
+          });
+
+          setOpen(false);
+          setPreview(undefined);
+          setSelectedFile("");
+        }
+
+        return response.data;
+      } else {
+        const { data, status } = await axios.patch(
+          `/api/brand/${brandId}/update/v1`,
+          fields
+        );
+        const response = data as SingleResponsePayloadType;
+
+        if (status === 200) {
+          setBrandData({
+            name: "",
+            slug: "",
+          });
+
+          setOpen(false);
+          setPreview(undefined);
+          setSelectedFile("");
         }
 
         return response.data;
@@ -150,6 +237,9 @@ const brandsSlice = createSlice({
   reducers: {
     setCurrentBrand: (state, action: PayloadAction<BrandReturnedPayload>) => {
       state.singleBrand = action.payload;
+    },
+    clearBrandErrors: (state) => {
+      state.error = "";
     },
   },
   extraReducers(builder) {
@@ -223,8 +313,29 @@ const brandsSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder
+      .addCase(updateBrand.pending, (state) => {
+        state.loadingBrandAction = true;
+      })
+      .addCase(updateBrand.fulfilled, (state, action) => {
+        state.loadingBrandAction = false;
+        state.brands = state.brands.map((brand) =>
+          brand._id === action.payload._id ? { ...action.payload } : brand
+        );
+
+        toast.success(`${action.payload.name} has been updated`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(updateBrand.rejected, (state, action) => {
+        state.loadingBrandAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
   },
 });
 
-export const { setCurrentBrand } = brandsSlice.actions;
+export const { setCurrentBrand, clearBrandErrors } = brandsSlice.actions;
 export default brandsSlice.reducer;

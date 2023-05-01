@@ -124,6 +124,8 @@ const AddBrand = ({ openAddBrand, setOpenAddBrand }: AddBrandProps) => {
 
     await createNewBrand({
       setBrandData,
+      setPreview,
+      setSelectedFile,
       setOpen: setOpenAddBrand,
       file: selectedFile,
       name,
@@ -135,9 +137,6 @@ const AddBrand = ({ openAddBrand, setOpenAddBrand }: AddBrandProps) => {
           ? preview
           : "",
     });
-
-    setPreview(undefined);
-    setSelectedFile("");
   };
 
   useEffect(() => {

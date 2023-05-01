@@ -49,7 +49,7 @@ const EditBrand = ({ openEditBrand, setOpenEditBrand }: EditBrandProps) => {
   const error = useTypedSelector((state) => state.brands.error);
   const singleBrand = useTypedSelector((state) => state.brands.singleBrand);
 
-  const { createNewBrand } = useActions();
+  const { updateBrand, clearBrandErrors } = useActions();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -90,6 +90,17 @@ const EditBrand = ({ openEditBrand, setOpenEditBrand }: EditBrandProps) => {
     setPreview(undefined);
   };
 
+  const handleClose = () => {
+    setOpenEditBrand(false);
+    setBrandData({
+      name: "",
+      slug: "",
+    });
+    clearBrandErrors();
+    setBrandNameError("");
+    setBrandSlugError("");
+  };
+
   const handleClick = () => {
     if (!name.trim()) {
       setBrandNameError("Please enter brand name");
@@ -104,7 +115,7 @@ const EditBrand = ({ openEditBrand, setOpenEditBrand }: EditBrandProps) => {
     }
   };
 
-  const handleEditBrand = async (
+  const handleEditBrand = (
     event: React.FormEvent<HTMLFormElement | HTMLDivElement>
   ) => {
     event.preventDefault();
@@ -127,31 +138,26 @@ const EditBrand = ({ openEditBrand, setOpenEditBrand }: EditBrandProps) => {
 
     if (brandNameError || brandSlugError) return;
 
-    // await updateBrand({
-    //   setBrandData,
-    //   setOpen: setOpenEditBrand,
-    //   file: selectedFile,
-    //   name,
-    //   slug: configureSlug(slug),
-    //   icon:
-    //     typeof selectedFile === "object"
-    //       ? selectedFile
-    //       : preview
-    //       ? preview
-    //       : "",
-    // });
-
-    setPreview(undefined);
-    setSelectedFile("");
+    updateBrand({
+      setBrandData,
+      setPreview,
+      setSelectedFile,
+      setOpen: setOpenEditBrand,
+      brandId: singleBrand?._id!,
+      file: selectedFile,
+      name,
+      slug: configureSlug(slug),
+      icon:
+        typeof selectedFile === "object"
+          ? selectedFile
+          : preview
+          ? preview
+          : "",
+    });
   };
 
   useEffect(() => {
-    setBrandNameError("");
-    setBrandSlugError("");
-  }, []);
-
-  useEffect(() => {
-    if (singleBrand) {
+    if (singleBrand && openEditBrand) {
       const newBrandData = { ...initialBrandData };
 
       for (const key in newBrandData) {
@@ -166,12 +172,12 @@ const EditBrand = ({ openEditBrand, setOpenEditBrand }: EditBrandProps) => {
       }
       setBrandData(newBrandData);
     }
-  }, [singleBrand]);
+  }, [singleBrand, openEditBrand]);
 
   return (
     <ShowDialog
       openModal={openEditBrand}
-      handleClose={() => setOpenEditBrand(false)}
+      handleClose={handleClose}
       width={matchesXS ? "95%" : matchesSM ? "85%" : 800}
     >
       <ContentContainer container direction="column">
@@ -194,11 +200,7 @@ const EditBrand = ({ openEditBrand, setOpenEditBrand }: EditBrandProps) => {
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton
-              onClick={() => {
-                setOpenEditBrand(false);
-              }}
-            >
+            <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
           </Grid>
