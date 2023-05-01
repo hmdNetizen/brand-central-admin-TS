@@ -16,6 +16,10 @@ export type BrandReturnedPayload = {
   appliedBy: string[];
 };
 
+export type BrandReturnedPayloadType = {
+  data: BrandReturnedPayload[];
+};
+
 export type InitStateType = {
   loading: boolean;
   error: null | string;
