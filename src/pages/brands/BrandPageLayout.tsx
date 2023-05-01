@@ -15,6 +15,7 @@ import { BrandReturnedPayload } from "src/services/brands/BrandTypes";
 import BrandItem from "src/components/brands/BrandItem";
 import AddBrand from "./modals/AddBrand";
 import { PageLayoutProps } from "./types";
+import debounce from "lodash.debounce";
 
 const BrandPageLayout = (props: PageLayoutProps) => {
   const theme = useTheme();
@@ -34,15 +35,22 @@ const BrandPageLayout = (props: PageLayoutProps) => {
   const total = useTypedSelector((state) => state.brands.total);
   const loadingBrands = useTypedSelector((state) => state.brands.loadingBrands);
 
+  const { getSearchedBrands } = useActions();
+
+  const debounceFilteredBrands = useCallback(
+    debounce(getSearchedBrands, 500),
+    []
+  );
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPage(0);
     setFilterText(event.target.value);
 
-    //   debounceFilteredBrands({
-    //     brandData: brands,
-    //     text: event.target.value,
-    //   });
-
-    setPage(0);
+    debounceFilteredBrands({
+      page: page + 1,
+      limit: rowsPerPage,
+      searchTerm: event.target.value,
+    });
   };
 
   const handleChangeRowsPerPage = (

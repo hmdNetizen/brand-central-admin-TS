@@ -11,6 +11,7 @@ import {
 import { fileUploadConfig } from "src/config/fileUpload";
 import { UploadedFilePayload } from "../common/commonTypes";
 import { AxiosError } from "axios";
+import { VideoFileRounded } from "@mui/icons-material";
 
 const initialState: initStateType = {
   loadingBrands: false,
@@ -24,9 +25,36 @@ const initialState: initStateType = {
 
 export const getAllBrands = createAsyncThunk(
   "get-all-brands",
-  async (_, thunkAPI) => {
+  async (query: { page: number; limit: number }, thunkAPI) => {
+    const { page, limit } = query;
     try {
-      const { data } = await axios.get(`/api/brand/v1`);
+      const { data } = await axios.get(
+        `/api/brand/v1?page=${page}&limit=${limit}`
+      );
+      const result = data as ResponsePayloadType<BrandReturnedPayload>;
+
+      return {
+        brands: result.data.data,
+        total: result.data.total,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error occurred while fetching brands");
+    }
+  }
+);
+
+export const getSearchedBrands = createAsyncThunk(
+  "get-searched-brands",
+  async (
+    query: { page: number; limit: number; searchTerm: string },
+    thunkAPI
+  ) => {
+    const { page, limit, searchTerm } = query;
+    const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+    try {
+      const { data } = await axios.get(
+        `/api/brand/v1?page=${page}&limit=${limit}${searchQuery}`
+      );
       const result = data as ResponsePayloadType<BrandReturnedPayload>;
 
       return {
@@ -141,6 +169,12 @@ const brandsSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder.addCase(getSearchedBrands.fulfilled, (state, action) => {
+      state.loadingBrands = false;
+      state.brands = action.payload.brands;
+      state.total = action.payload.total;
+      state.error = null;
+    });
     builder
       .addCase(toggleBrandActivation.pending, (state) => {
         state.loadingBrandActivation = true;

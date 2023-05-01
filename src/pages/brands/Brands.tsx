@@ -1,10 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useActions } from "src/hooks/useActions";
-
-import AddBrand from "./modals/AddBrand";
-//   import EditBrand from "./modals/EditBrand";
-//   import DeleteBrand from "./modals/DeleteBrand";
-import debounce from "lodash.debounce";
 import useTitle from "src/hooks/useTitle";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import BrandPageLayout from "./BrandPageLayout";
@@ -23,21 +18,26 @@ const Brands = () => {
   const brands = useTypedSelector((state) => state.brands.brands);
   const total = useTypedSelector((state) => state.brands.total);
 
-  const { getAllBrands } = useActions();
-
-  //   eslint-disable-next-line
-  // const debounceFilteredBrands = useCallback(
-  //   debounce(handleFilteredBrandsData, 500),
-  //   []
-  // );
+  const { getAllBrands, getSearchedBrands } = useActions();
 
   useEffect(() => {
-    getAllBrands();
-  }, []);
+    if (!filterText) {
+      getAllBrands({
+        page: page + 1,
+        limit: rowsPerPage,
+      });
+    } else {
+      getSearchedBrands({
+        page: page + 1,
+        limit: rowsPerPage,
+        searchTerm: filterText,
+      });
+    }
+  }, [filterText, page, rowsPerPage]);
 
   return (
     <BrandPageLayout
-      brands={brands}
+      brands={brands.filter((brand) => brand.isActivated)}
       filterText={filterText}
       page={page}
       rowsPerPage={rowsPerPage}
