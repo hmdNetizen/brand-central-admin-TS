@@ -32,4 +32,5 @@ export type PageLayoutProps = {
   setOpenDeleteBrand: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenEditBrand: React.Dispatch<React.SetStateAction<boolean>>;
   openAddBrand: boolean;
+  openEditBrand: boolean;
 };

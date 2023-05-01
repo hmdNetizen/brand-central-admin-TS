@@ -48,6 +48,7 @@ const Brands = () => {
       setPage={setPage}
       setRowsPerPage={setRowsPerPage}
       openAddBrand={openAddBrand}
+      openEditBrand={openEditBrand}
     />
   );
 };

@@ -16,6 +16,7 @@ import BrandItem from "src/components/brands/BrandItem";
 import AddBrand from "./modals/AddBrand";
 import { PageLayoutProps } from "./types";
 import debounce from "lodash.debounce";
+import EditBrand from "./modals/EditBrand";
 
 const BrandPageLayout = (props: PageLayoutProps) => {
   const theme = useTheme();
@@ -31,6 +32,7 @@ const BrandPageLayout = (props: PageLayoutProps) => {
     setOpenEditBrand,
     setOpenDeleteBrand,
     openAddBrand,
+    openEditBrand,
   } = props;
   const total = useTypedSelector((state) => state.brands.total);
   const loadingBrands = useTypedSelector((state) => state.brands.loadingBrands);
@@ -104,10 +106,10 @@ const BrandPageLayout = (props: PageLayoutProps) => {
         </Grid>
       </ContainerWrapper>
       <AddBrand openAddBrand={openAddBrand} setOpenAddBrand={setOpenAddBrand} />
-      {/* <EditBrand
-          openEditBrand={openEditBrand}
-          setOpenEditBrand={setOpenEditBrand}
-        /> */}
+      <EditBrand
+        openEditBrand={openEditBrand}
+        setOpenEditBrand={setOpenEditBrand}
+      />
       {/* <DeleteBrand
           openDeleteBrand={openDeleteBrand}
           setOpenDeleteBrand={setOpenDeleteBrand}

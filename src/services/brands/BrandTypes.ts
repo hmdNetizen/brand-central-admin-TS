@@ -24,6 +24,7 @@ export type SingleResponsePayloadType = {
 export type BrandData = {
   name: string;
   slug: string;
+  icon?: string;
 };
 
 export type BrandRequestPayload = {
