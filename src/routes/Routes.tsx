@@ -5,6 +5,7 @@ import DashboardLayout from "src/layouts/DashboardLayout";
 import Login from "src/pages/auth/Login";
 import BrandsCategory from "src/pages/brands-categories/BrandsCategories";
 import Brands from "src/pages/brands/Brands";
+import DeactivatedBrands from "src/pages/brands/DeactivatedBrands";
 import Categories from "src/pages/categories/Categories";
 import BlockedCustomers from "src/pages/customers/BlockedCustomers";
 import CustomerProfileDetails from "src/pages/customers/CustomerProfileDetails";
@@ -78,6 +79,7 @@ const PagesRoutes = () => {
               </Route>
               <Route path="brands">
                 <Route index element={<Brands />} />
+                <Route path="deactivated" element={<DeactivatedBrands />} />
               </Route>
             </Route>
           </Route>

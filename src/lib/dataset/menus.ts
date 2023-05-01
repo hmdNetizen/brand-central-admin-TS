@@ -143,7 +143,7 @@ export const menus = [
       {
         subId: 1,
         title: "Deactivated Brands",
-        path: "/brands/deactivated",
+        path: "/dashboard/brands/deactivated",
       },
     ],
   },
