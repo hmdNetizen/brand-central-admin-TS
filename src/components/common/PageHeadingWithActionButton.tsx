@@ -17,6 +17,7 @@ type PageHeadingActionProps = {
   handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   buttonTitle: string;
+  isDeactivatedPage?: boolean;
 };
 
 const PageHeadingWithActionButton = (props: PageHeadingActionProps) => {
@@ -29,6 +30,7 @@ const PageHeadingWithActionButton = (props: PageHeadingActionProps) => {
     handleSearch,
     setOpen,
     buttonTitle,
+    isDeactivatedPage,
   } = props;
 
   const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
@@ -78,18 +80,20 @@ const PageHeadingWithActionButton = (props: PageHeadingActionProps) => {
           onChange={handleSearch}
         />
       </Grid>
-      <Grid item style={{ width: matchesXS ? "100%" : "auto" }}>
-        <CustomIconButton
-          title={buttonTitle}
-          background={theme.palette.secondary}
-          startIcon={<AddIcon />}
-          borderRadius={0}
-          style={{ width: "100%" }}
-          onClick={() => {
-            setOpen(true);
-          }}
-        />
-      </Grid>
+      {!isDeactivatedPage ? (
+        <Grid item style={{ width: matchesXS ? "100%" : "auto" }}>
+          <CustomIconButton
+            title={buttonTitle}
+            background={theme.palette.secondary}
+            startIcon={<AddIcon />}
+            borderRadius={0}
+            style={{ width: "100%" }}
+            onClick={() => {
+              setOpen(true);
+            }}
+          />
+        </Grid>
+      ) : null}
     </Grid>
   );
 };

@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import Tables from "src/components/table/Tables";
-import { useActions } from "src/hooks/useActions";
 import { brandsColumn } from "src/lib/dataset/tableData";
 import {
   Container,
@@ -14,7 +12,6 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import BrandItem from "src/components/brands/BrandItem";
 import AddBrand from "./modals/AddBrand";
 import { PageLayoutProps } from "./types";
-import debounce from "lodash.debounce";
 import EditBrand from "./modals/EditBrand";
 import DeleteBrand from "./modals/DeleteBrand";
 
@@ -28,33 +25,17 @@ const BrandPageLayout = (props: PageLayoutProps) => {
     setOpenAddBrand,
     setPage,
     setRowsPerPage,
-    setFilterText,
     setOpenEditBrand,
     setOpenDeleteBrand,
     openAddBrand,
     openEditBrand,
     openDeleteBrand,
+    onSearch,
+    isDeactivatedPage,
   } = props;
+
   const total = useTypedSelector((state) => state.brands.total);
   const loadingBrands = useTypedSelector((state) => state.brands.loadingBrands);
-
-  const { getSearchedBrands } = useActions();
-
-  const debounceFilteredBrands = useCallback(
-    debounce(getSearchedBrands, 500),
-    []
-  );
-
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPage(0);
-    setFilterText(event.target.value);
-
-    debounceFilteredBrands({
-      page: page + 1,
-      limit: rowsPerPage,
-      searchTerm: event.target.value,
-    });
-  };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -73,12 +54,13 @@ const BrandPageLayout = (props: PageLayoutProps) => {
       <ContainerWrapper item container>
         <PageHeadingWithActionButton
           filterText={filterText}
-          handleSearch={handleSearch}
+          handleSearch={onSearch}
           rowsPerPage={rowsPerPage}
           setOpen={setOpenAddBrand}
           setPage={setPage}
           setRowsPerPage={setRowsPerPage}
           buttonTitle="Add New Brand"
+          isDeactivatedPage={isDeactivatedPage}
         />
         <Grid item container style={{ marginTop: "5rem" }}>
           <Tables
@@ -100,6 +82,7 @@ const BrandPageLayout = (props: PageLayoutProps) => {
                     brand={brand}
                     setOpenDeleteBrand={setOpenDeleteBrand}
                     setOpenEditBrand={setOpenEditBrand}
+                    isDeactivatedPage={isDeactivatedPage}
                   />
                 );
               })}

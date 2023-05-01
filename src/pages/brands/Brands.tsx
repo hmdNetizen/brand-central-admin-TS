@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import debounce from "lodash.debounce";
+import { useState, useEffect, useCallback } from "react";
 import { useActions } from "src/hooks/useActions";
 import useTitle from "src/hooks/useTitle";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
@@ -17,6 +18,22 @@ const Brands = () => {
   const brands = useTypedSelector((state) => state.brands.brands);
 
   const { getAllBrands, getSearchedBrands } = useActions();
+
+  const debounceFilteredBrands = useCallback(
+    debounce(getSearchedBrands, 500),
+    []
+  );
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPage(0);
+    setFilterText(event.target.value);
+
+    debounceFilteredBrands({
+      page: page + 1,
+      limit: rowsPerPage,
+      searchTerm: event.target.value,
+    });
+  };
 
   useEffect(() => {
     if (!filterText) {
@@ -39,7 +56,6 @@ const Brands = () => {
       filterText={filterText}
       page={page}
       rowsPerPage={rowsPerPage}
-      setFilterText={setFilterText}
       setOpenAddBrand={setOpenAddBrand}
       setOpenDeleteBrand={setOpenDeleteBrand}
       setOpenEditBrand={setOpenEditBrand}
@@ -49,6 +65,7 @@ const Brands = () => {
       openEditBrand={openEditBrand}
       openDeleteBrand={openDeleteBrand}
       isDeactivatedPage={false}
+      onSearch={handleSearch}
     />
   );
 };

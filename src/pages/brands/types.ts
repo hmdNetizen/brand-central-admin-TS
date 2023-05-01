@@ -28,11 +28,11 @@ export type PageLayoutProps = {
   setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
   page: number;
   brands: BrandReturnedPayload[];
-  setFilterText: React.Dispatch<React.SetStateAction<string>>;
   setOpenDeleteBrand: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenEditBrand: React.Dispatch<React.SetStateAction<boolean>>;
   openAddBrand: boolean;
   openEditBrand: boolean;
   openDeleteBrand: boolean;
   isDeactivatedPage: boolean;
+  onSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };

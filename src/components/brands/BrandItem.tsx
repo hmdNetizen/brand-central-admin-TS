@@ -1,12 +1,13 @@
 import React from "react";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
+import Button from "@mui/material/Button";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import CustomSwitch from "src/utils/CustomSwitch";
 import plcaceholderIcon from "src/assets/images/placeholder-icon.png";
 import { BrandReturnedPayload } from "src/services/brands/BrandTypes";
-import { useTheme } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import { useActions } from "src/hooks/useActions";
 import {
   OptionsTableData,
@@ -18,11 +19,21 @@ type BrandItemProps = {
   brand: BrandReturnedPayload;
   setOpenEditBrand: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenDeleteBrand: React.Dispatch<React.SetStateAction<boolean>>;
+  isDeactivatedPage: boolean;
 };
+
+const ActivateButton = styled(Button)({
+  fontSize: "1.2rem",
+  color: "#fff",
+  fontWeight: 600,
+});
 
 const BrandItem = (props: BrandItemProps) => {
   const theme = useTheme();
-  const { brand, setOpenDeleteBrand, setOpenEditBrand } = props;
+  const { brand, setOpenDeleteBrand, setOpenEditBrand, isDeactivatedPage } =
+    props;
+
+  const { icon, isActivated, name, slug } = brand;
 
   const { setCurrentBrand, toggleBrandActivation } = useActions();
 
@@ -43,7 +54,13 @@ const BrandItem = (props: BrandItemProps) => {
     setCurrentBrand(brand);
   };
 
-  const { icon, isActivated, name, slug } = brand;
+  const handleBrandActivation = () => {
+    toggleBrandActivation({
+      brandId: brand._id,
+      isActivated: true,
+    });
+  };
+
   return (
     <TableRow hover role="checkbox" tabIndex={-1}>
       <TableCell>
@@ -56,12 +73,23 @@ const BrandItem = (props: BrandItemProps) => {
       <TableCell style={{ minWidth: 250 }}>{name.toUpperCase()}</TableCell>
       <TableCell style={{ minWidth: 150 }}>{slug.toLowerCase()}</TableCell>
       <TableCell align="center">
-        <CustomSwitch
-          color={isActivated ? "success" : "error"}
-          onChange={handleSwitchChange}
-          checked={isActivated}
-          isActive={isActivated}
-        />
+        {!isDeactivatedPage ? (
+          <CustomSwitch
+            color={isActivated ? "success" : "error"}
+            onChange={handleSwitchChange}
+            checked={isActivated}
+            isActive={isActivated}
+          />
+        ) : (
+          <ActivateButton
+            variant="contained"
+            color="success"
+            disableRipple
+            onClick={handleBrandActivation}
+          >
+            Activate
+          </ActivateButton>
+        )}
       </TableCell>
       <TableCell>
         <OptionsTableData>

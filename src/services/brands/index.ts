@@ -431,6 +431,7 @@ const brandsSlice = createSlice({
       .addCase(getDeactivatedBrands.fulfilled, (state, action) => {
         state.loadingBrands = false;
         state.brands = action.payload.brands;
+        state.total = action.payload.total;
         state.error = null;
       })
       .addCase(getDeactivatedBrands.rejected, (state, action) => {
