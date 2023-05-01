@@ -275,6 +275,30 @@ export const getDeactivatedBrands = createAsyncThunk(
   }
 );
 
+export const getSearchedDeactivatedBrands = createAsyncThunk(
+  "searched-deactivated-brands",
+  async (
+    details: { page: number; limit: number; searchTerm: string },
+    thunkAPI
+  ) => {
+    const { page, limit, searchTerm } = details;
+    const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+    try {
+      const { data } = await axios.get(
+        `/api/brand/deactivated?page=${page}&limit=${limit}${searchQuery}`
+      );
+      const result = data as ResponsePayloadType<BrandReturnedPayload>;
+
+      return {
+        brands: result.data.data,
+        total: result.data.total,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error occurred while fetching data");
+    }
+  }
+);
+
 const brandsSlice = createSlice({
   name: "brands",
   initialState,
@@ -415,6 +439,12 @@ const brandsSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder.addCase(getSearchedDeactivatedBrands.fulfilled, (state, action) => {
+      state.loadingBrands = false;
+      state.brands = action.payload.brands;
+      state.total = action.payload.total;
+      state.error = null;
+    });
   },
 });
 
