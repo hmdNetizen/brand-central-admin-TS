@@ -9,3 +9,4 @@ export * as commonActions from "../common";
 export * as utilActions from "../utils";
 export * as categoriesActions from "../categories";
 export * as brandsActions from "../brands";
+export * as couponActions from "../coupon";

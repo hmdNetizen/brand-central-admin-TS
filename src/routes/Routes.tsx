@@ -28,6 +28,7 @@ const PagesRoutes = () => {
     <main>
       <Routes>
         <Route path="/">
+          <Route index element={<Login />} />
           <Route path="login" element={<Login />} />
           <Route element={<Prefetch />}>
             <Route

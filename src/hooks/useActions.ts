@@ -12,6 +12,7 @@ import {
   utilActions,
   categoriesActions,
   brandsActions,
+  couponActions,
 } from "src/services/actions";
 
 export const useActions = () => {
@@ -29,6 +30,7 @@ export const useActions = () => {
       ...utilActions,
       ...categoriesActions,
       ...brandsActions,
+      ...couponActions,
     },
     dispatch
   );

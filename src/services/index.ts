@@ -7,7 +7,7 @@ import notificationReducer from "./notifications";
 import commonReducer from "./common";
 import orderReducer from "./orders";
 import customersReducer from "./customers";
-// import couponReducer from "./coupon";
+import couponReducer from "./coupon";
 // import settingsReducer from "./settings";
 // import shippingReducer from "./shipping";
 import preOrderReducer from "./pre-orders";
@@ -26,6 +26,7 @@ const rootReducer = combineReducers({
   common: commonReducer,
   categories: categoriesReducer,
   brands: brandsReducer,
+  coupon: couponReducer,
 });
 
 const store = configureStore({
