@@ -231,6 +231,30 @@ export const updateBrand = createAsyncThunk(
   }
 );
 
+export const deleteBrand = createAsyncThunk(
+  "delete-brand",
+  async (
+    details: {
+      brandId: string;
+      setOpenDeleteBrand: React.Dispatch<React.SetStateAction<boolean>>;
+    },
+    thunkAPI
+  ) => {
+    const { brandId, setOpenDeleteBrand } = details;
+    try {
+      const { status } = await axios.delete(`/api/brand/${brandId}/remove`);
+
+      if (status === 200) {
+        setOpenDeleteBrand(false);
+      }
+
+      return brandId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Brand could not be deleted");
+    }
+  }
+);
+
 const brandsSlice = createSlice({
   name: "brands",
   initialState,
@@ -329,6 +353,28 @@ const brandsSlice = createSlice({
         });
       })
       .addCase(updateBrand.rejected, (state, action) => {
+        state.loadingBrandAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(deleteBrand.pending, (state) => {
+        state.loadingBrandAction = true;
+      })
+      .addCase(deleteBrand.fulfilled, (state, action) => {
+        state.loadingBrandAction = false;
+        state.brands = state.brands.filter(
+          (brand) => brand._id !== action.payload
+        );
+        state.error = null;
+
+        toast.success(`Brand deleted successfully`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(deleteBrand.rejected, (state, action) => {
         state.loadingBrandAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
