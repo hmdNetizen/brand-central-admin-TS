@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useActions } from "src/hooks/useActions";
 import useTitle from "src/hooks/useTitle";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
@@ -14,9 +14,7 @@ const Brands = () => {
   const [openEditBrand, setOpenEditBrand] = useState(false);
   const [openDeleteBrand, setOpenDeleteBrand] = useState(false);
 
-  const loadingBrands = useTypedSelector((state) => state.brands.loadingBrands);
   const brands = useTypedSelector((state) => state.brands.brands);
-  const total = useTypedSelector((state) => state.brands.total);
 
   const { getAllBrands, getSearchedBrands } = useActions();
 
@@ -49,6 +47,8 @@ const Brands = () => {
       setRowsPerPage={setRowsPerPage}
       openAddBrand={openAddBrand}
       openEditBrand={openEditBrand}
+      openDeleteBrand={openDeleteBrand}
+      isDeactivatedPage={false}
     />
   );
 };

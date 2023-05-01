@@ -11,12 +11,12 @@ import {
 } from "src/components/common/styles/PageContainerStyles";
 import PageHeadingWithActionButton from "src/components/common/PageHeadingWithActionButton";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-import { BrandReturnedPayload } from "src/services/brands/BrandTypes";
 import BrandItem from "src/components/brands/BrandItem";
 import AddBrand from "./modals/AddBrand";
 import { PageLayoutProps } from "./types";
 import debounce from "lodash.debounce";
 import EditBrand from "./modals/EditBrand";
+import DeleteBrand from "./modals/DeleteBrand";
 
 const BrandPageLayout = (props: PageLayoutProps) => {
   const theme = useTheme();
@@ -33,6 +33,7 @@ const BrandPageLayout = (props: PageLayoutProps) => {
     setOpenDeleteBrand,
     openAddBrand,
     openEditBrand,
+    openDeleteBrand,
   } = props;
   const total = useTypedSelector((state) => state.brands.total);
   const loadingBrands = useTypedSelector((state) => state.brands.loadingBrands);
@@ -110,10 +111,10 @@ const BrandPageLayout = (props: PageLayoutProps) => {
         openEditBrand={openEditBrand}
         setOpenEditBrand={setOpenEditBrand}
       />
-      {/* <DeleteBrand
-          openDeleteBrand={openDeleteBrand}
-          setOpenDeleteBrand={setOpenDeleteBrand}
-        /> */}
+      <DeleteBrand
+        openDeleteBrand={openDeleteBrand}
+        setOpenDeleteBrand={setOpenDeleteBrand}
+      />
     </Container>
   );
 };
