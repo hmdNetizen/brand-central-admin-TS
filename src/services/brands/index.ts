@@ -255,6 +255,26 @@ export const deleteBrand = createAsyncThunk(
   }
 );
 
+export const getDeactivatedBrands = createAsyncThunk(
+  "deactivated-brands",
+  async (details: { page: number; limit: number }, thunkAPI) => {
+    const { page, limit } = details;
+    try {
+      const { data } = await axios.get(
+        `/api/brand/deactivated?page=${page}&limit=${limit}`
+      );
+      const result = data as ResponsePayloadType<BrandReturnedPayload>;
+
+      return {
+        brands: result.data.data,
+        total: result.data.total,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error occurred while fetching data");
+    }
+  }
+);
+
 const brandsSlice = createSlice({
   name: "brands",
   initialState,
@@ -376,6 +396,21 @@ const brandsSlice = createSlice({
       })
       .addCase(deleteBrand.rejected, (state, action) => {
         state.loadingBrandAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(getDeactivatedBrands.pending, (state) => {
+        state.loadingBrands = true;
+      })
+      .addCase(getDeactivatedBrands.fulfilled, (state, action) => {
+        state.loadingBrands = false;
+        state.brands = action.payload.brands;
+        state.error = null;
+      })
+      .addCase(getDeactivatedBrands.rejected, (state, action) => {
+        state.loadingBrands = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

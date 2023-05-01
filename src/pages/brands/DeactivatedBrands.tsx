@@ -16,11 +16,11 @@ const DeactivatedBrands = () => {
 
   const brands = useTypedSelector((state) => state.brands.brands);
 
-  const { getAllBrands, getSearchedBrands } = useActions();
+  const { getDeactivatedBrands, getSearchedBrands } = useActions();
 
   useEffect(() => {
     if (!filterText) {
-      getAllBrands({
+      getDeactivatedBrands({
         page: page + 1,
         limit: rowsPerPage,
       });
