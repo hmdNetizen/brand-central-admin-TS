@@ -56,3 +56,14 @@ export const configureSlug = (name: string) =>
     .split("/")
     .join("-or-")
     .toLowerCase();
+
+export function generateCode() {
+  let text = "";
+  const possible =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < 10; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text.toUpperCase();
+}

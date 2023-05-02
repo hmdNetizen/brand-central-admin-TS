@@ -12,7 +12,7 @@ import {
   ContentContainer,
   ErrorsList,
   ErrorMsg,
-} from "src/utilityStyles/categoriesUtilityStyles";
+} from "src/utilityStyles/pagesUtilityStyles";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { SelectChangeEvent } from "@mui/material";
 import FormContainer from "../utils/FormContainer";

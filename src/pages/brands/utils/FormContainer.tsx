@@ -8,7 +8,7 @@ import {
   StyledChip,
   StyledCircularProgress,
   SubmitButton,
-} from "src/utilityStyles/categoriesUtilityStyles";
+} from "src/utilityStyles/pagesUtilityStyles";
 import { configureSlug } from "src/lib/helpers";
 import CustomFormInput from "src/utils/CustomFormInput";
 import FileUploadLayout from "src/components/uploads/FileUploadLayout";

@@ -14,7 +14,7 @@ import {
   ContentContainer,
   ErrorsList,
   ErrorMsg,
-} from "src/utilityStyles/categoriesUtilityStyles";
+} from "src/utilityStyles/pagesUtilityStyles";
 import { BrandData } from "src/services/brands/BrandTypes";
 
 const initialBrandData = {

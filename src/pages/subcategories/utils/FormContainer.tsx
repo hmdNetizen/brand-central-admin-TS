@@ -10,7 +10,7 @@ import {
   StyledCircularProgress,
   CancelButton,
   StyledChip,
-} from "src/utilityStyles/categoriesUtilityStyles";
+} from "src/utilityStyles/pagesUtilityStyles";
 import { FormContainerProps } from "../types";
 
 const FormContainer = (props: FormContainerProps) => {
