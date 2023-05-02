@@ -320,7 +320,7 @@ export const brandsColumn: TableHeaderColumnTypes[] = [
   },
 ];
 
-export const couponColumn = [
+export const couponColumn: TableHeaderColumnTypes[] = [
   {
     id: 0,
     label: "ID",

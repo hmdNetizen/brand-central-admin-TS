@@ -26,7 +26,7 @@ export type SingleCouponPayloadType = {
 
 export type InitStateType = {
   loading: boolean;
-  loadingActivation: boolean;
+  loadingCouponActivation: boolean;
   loadingRequestAction: boolean;
   error: null | string;
   coupons: CouponReturnedPayload[];

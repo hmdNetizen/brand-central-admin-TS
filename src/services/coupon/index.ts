@@ -10,7 +10,7 @@ import {
 
 const initialState: InitStateType = {
   loading: false,
-  loadingActivation: false,
+  loadingCouponActivation: false,
   loadingRequestAction: false,
   coupons: [],
   singleCoupon: null,
@@ -75,10 +75,10 @@ const couponSlice = createSlice({
       });
     builder
       .addCase(toggleCouponActivation.pending, (state) => {
-        state.loadingActivation = true;
+        state.loadingCouponActivation = true;
       })
       .addCase(toggleCouponActivation.fulfilled, (state, action) => {
-        state.loadingActivation = false;
+        state.loadingCouponActivation = false;
         state.coupons = state.coupons.map((coupon) =>
           coupon._id === action.payload._id
             ? { ...coupon, isActive: action.payload.isActive }
@@ -99,7 +99,7 @@ const couponSlice = createSlice({
         }
       })
       .addCase(toggleCouponActivation.rejected, (state, action) => {
-        state.loadingActivation = false;
+        state.loadingCouponActivation = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }
