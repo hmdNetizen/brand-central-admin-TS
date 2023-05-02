@@ -151,7 +151,7 @@ export const menus = [
     id: 7,
     title: "Set Coupons",
     icon: CouponIcon,
-    path: "/coupons",
+    path: "/dashboard/coupons",
   },
   {
     id: 8,

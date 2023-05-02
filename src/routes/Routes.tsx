@@ -7,6 +7,7 @@ import BrandsCategory from "src/pages/brands-categories/BrandsCategories";
 import Brands from "src/pages/brands/Brands";
 import DeactivatedBrands from "src/pages/brands/DeactivatedBrands";
 import Categories from "src/pages/categories/Categories";
+import Coupons from "src/pages/coupons/Coupons";
 import BlockedCustomers from "src/pages/customers/BlockedCustomers";
 import CustomerProfileDetails from "src/pages/customers/CustomerProfileDetails";
 import Customers from "src/pages/customers/Customers";
@@ -81,6 +82,9 @@ const PagesRoutes = () => {
               <Route path="brands">
                 <Route index element={<Brands />} />
                 <Route path="deactivated" element={<DeactivatedBrands />} />
+              </Route>
+              <Route path="coupons">
+                <Route index element={<Coupons />} />
               </Route>
             </Route>
           </Route>
