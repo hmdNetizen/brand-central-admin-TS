@@ -10,8 +10,57 @@ import {
   SubmitButton,
 } from "src/utilityStyles/pagesUtilityStyles";
 import CustomSelect from "src/utils/CustomSelect";
+import React from "react";
+import { FormContainerProps } from "../types";
+import CustomCheckbox from "src/utils/CustomCheckbox";
 
-const FormContainer = () => {
+const FormContainer = (props: FormContainerProps) => {
+  const {
+    onSubmit,
+    couponCode,
+    couponCodeError,
+    isEdit,
+    onChange,
+    onClick,
+    onSelectChange,
+    couponType,
+    couponTypeError,
+    couponQuantity,
+    amountOff,
+    percentageOff,
+    amountOffError,
+    percentageOffError,
+    couponQuantityError,
+    couponUsageQuantity,
+    couponUsageQuantityError,
+    usePerCustomer,
+    usesPerCustomerError,
+    customerUsageQuantity,
+    customerUsageQuantityError,
+    endDate,
+    startDate,
+    endDateError,
+    startDateError,
+    minPurchaseAmount,
+    minAmountChecked,
+    setMinPurchaseAmountError,
+    setMinAmountChecked,
+    couponDescription,
+    couponDescriptionError,
+    minPurchaseAmountError,
+    onClose,
+    loadingRequestAction,
+    onEndDate,
+    onStartDate,
+  } = props;
+
+  const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.checked) {
+      setMinPurchaseAmountError("");
+    }
+    setMinAmountChecked(event.target.checked);
+  };
+
   return (
     <StyledFormContainer
       item
@@ -170,14 +219,7 @@ const FormContainer = () => {
           <CustomDatePicker
             name="startDate"
             value={startDate}
-            onChange={(newValue) => {
-              if (!newValue) {
-                setStartDateError("Enter a start date");
-              } else {
-                setStartDateError("");
-              }
-              setDateData({ ...dateData, startDate: newValue });
-            }}
+            onDateChange={onStartDate}
             label="Start Date"
             error={startDateError}
           />
@@ -186,15 +228,7 @@ const FormContainer = () => {
           <CustomDatePicker
             name="endDate"
             value={endDate}
-            onChange={(newValue) => {
-              if (!newValue) {
-                setEndDateError("Enter an end date");
-              } else {
-                setEndDateError("");
-              }
-
-              setDateData({ ...dateData, endDate: newValue });
-            }}
+            onDateChange={onEndDate}
             label="End Date"
             error={endDateError}
           />
@@ -214,12 +248,7 @@ const FormContainer = () => {
             label="Set Minimum Purchase Amount"
             id="purchaseAmount"
             checked={minAmountChecked}
-            onChange={(event) => {
-              if (!event.target.checked) {
-                setMinPurchaseAmountError("");
-              }
-              setMinAmountChecked(event.target.checked);
-            }}
+            onChange={handleCheck}
           />
         </Grid>
         {minAmountChecked && (
@@ -256,9 +285,7 @@ const FormContainer = () => {
         style={{ marginTop: "5rem" }}
       >
         <Grid item>
-          <CancelButton onClick={() => setOpenCoupon(false)}>
-            Cancel
-          </CancelButton>
+          <CancelButton onClick={onClose}>Cancel</CancelButton>
         </Grid>
         <Grid item>
           <SubmitButton
@@ -266,9 +293,9 @@ const FormContainer = () => {
             variant="contained"
             disableRipple
             color="secondary"
-            disabled={loadingCouponAction}
+            disabled={loadingRequestAction}
           >
-            {loadingCouponAction && (
+            {loadingRequestAction && (
               <StyledCircularProgress style={{ height: 25, width: 25 }} />
             )}{" "}
             {isEdit ? "Update Coupon" : "Add Coupon"}
