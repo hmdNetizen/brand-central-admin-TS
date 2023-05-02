@@ -1,4 +1,4 @@
-export type BrandReturnedPayload = {
+export type CouponReturnedPayload = {
   _id: string;
   couponCode: string;
   couponType: string;
@@ -16,12 +16,19 @@ export type BrandReturnedPayload = {
   appliedBy: string[];
 };
 
-export type BrandReturnedPayloadType = {
-  data: BrandReturnedPayload[];
+export type CouponReturnedPayloadType = {
+  data: CouponReturnedPayload[];
+};
+
+export type SingleCouponPayloadType = {
+  data: CouponReturnedPayload;
 };
 
 export type InitStateType = {
   loading: boolean;
+  loadingActivation: boolean;
+  loadingRequestAction: boolean;
   error: null | string;
-  coupons: BrandReturnedPayload[];
+  coupons: CouponReturnedPayload[];
+  singleCoupon: CouponReturnedPayload | null;
 };
