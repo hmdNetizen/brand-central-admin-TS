@@ -1,9 +1,12 @@
+import { Dayjs } from "dayjs";
+import React from "react";
+
 export type CouponReturnedPayload = {
   _id: string;
   couponCode: string;
   couponType: string;
   couponQuantity: string;
-  couponUsageQuantity: null | number;
+  couponUsageQuantity: string;
   usePerCustomer: string;
   usageQuantity: number;
   startDate: string;
@@ -13,8 +16,40 @@ export type CouponReturnedPayload = {
   couponDescription: string;
   isActive: boolean;
   usageCount: number;
-  appliedBy: string[];
 };
+
+export interface CouponRequestPayloadData {
+  couponCode: string;
+  couponType: string;
+  couponUsageQuantity: number | string;
+  usePerCustomer: string;
+  couponDescription: string;
+  minimumPurchaseAmount: number | string;
+  priceOff: number;
+  couponQuantity: string;
+  usageQuantity: number | string;
+  startDate: Dayjs | string;
+  endDate: Dayjs | string;
+}
+
+// export interface CouponData {
+//   couponCode: string;
+//   couponType: string;
+//   couponUsageQuantity: number | string;
+//   usePerCustomer: string;
+//   customerUsageQuantity: number;
+//   couponDescription: string;
+//   minPurchaseAmount: string;
+//   percentageOff: string;
+//   priceOff: number;
+//   couponQuantity: string;
+//   usageQuantity: number | string
+// }
+
+export interface CouponRequestData extends CouponRequestPayloadData {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  couponId?: string;
+}
 
 export type CouponReturnedPayloadType = {
   data: CouponReturnedPayload[];

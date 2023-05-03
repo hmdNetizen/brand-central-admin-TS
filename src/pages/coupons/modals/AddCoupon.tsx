@@ -25,15 +25,20 @@ const AddNewCoupon = (props: AddCouponProps) => {
 
   const [couponData, setCouponData] = useState<CouponDataPropTypes>({
     couponCode: "",
-    couponType: "",
-    couponUsageQuantity: "",
-    usePerCustomer: "limited",
-    customerUsageQuantity: 1,
-    couponDescription: "",
-    minPurchaseAmount: "",
-    percentageOff: "",
-    amountOff: "",
-    couponQuantity: "unlimited",
+    couponType: "" /* Limited or Unlimited */,
+    couponQuantity:
+      "unlimited" /* Whether there should be a limit to usage or not */,
+    couponUsageQuantity:
+      "" /* Number of times the coupon can be used if it's limited */,
+    usePerCustomer:
+      "limited" /* Whether there should be a limit to how many time customer can use it  */,
+    customerUsageQuantity: 1 /* The number of times customer can use it if it's limited */,
+    couponDescription: "" /* A description for the coupon if any */,
+    minPurchaseAmount:
+      "" /* A minimum threshold amount before coupon can be applied */,
+    percentageOff: "" /* Percentage off */,
+    amountOff:
+      "" /* Amount off. PS: It can either be one of percentageOff or priceOff */,
   });
 
   const [dateData, setDateData] = useState<DateData>({

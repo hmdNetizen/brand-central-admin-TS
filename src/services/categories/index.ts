@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import axios from "../axios";
-import { clearUploadedImages, uploadFile } from "../common";
 import { UploadedFilePayload } from "../common/commonTypes";
 import { fileUploadConfig } from "src/config/fileUpload";
 import {

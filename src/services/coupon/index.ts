@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import axios from "../axios";
 import {
@@ -6,6 +7,7 @@ import {
   CouponReturnedPayload,
   CouponReturnedPayloadType,
   SingleCouponPayloadType,
+  CouponRequestData,
 } from "./CouponTypes";
 
 const initialState: InitStateType = {
@@ -45,6 +47,53 @@ export const toggleCouponActivation = createAsyncThunk(
       return result.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
+export const addNewCoupon = createAsyncThunk(
+  "add-new-coupon",
+  async (details: CouponRequestData, thunkAPI) => {
+    const { setOpen, ...fields } = details;
+    try {
+      const { data, status } = await axios.post(`/api/coupon-code`, fields);
+      const result = data as SingleCouponPayloadType;
+
+      if (status === 201) {
+        setOpen(false);
+      }
+
+      return result.data;
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
+    }
+  }
+);
+
+export const updateCoupon = createAsyncThunk(
+  "update-coupon",
+  async (details: CouponRequestData, thunkAPI) => {
+    const { couponId, setOpen, ...fields } = details;
+    try {
+      const { data, status } = await axios.patch(
+        `/api/coupon-code/update/${couponId}`,
+        fields
+      );
+      const result = data as SingleCouponPayloadType;
+
+      if (status === 200) {
+        setOpen(false);
+      }
+
+      return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error Adding Coupon");
     }
   }
 );
@@ -100,6 +149,52 @@ const couponSlice = createSlice({
       })
       .addCase(toggleCouponActivation.rejected, (state, action) => {
         state.loadingCouponActivation = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(addNewCoupon.pending, (state, action) => {
+        state.loadingRequestAction = true;
+      })
+      .addCase(addNewCoupon.fulfilled, (state, action) => {
+        state.loadingRequestAction = false;
+        state.coupons = [action.payload, ...state.coupons];
+
+        toast.success(`${action.payload?.couponCode} added successfully`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+
+        state.error = null;
+      })
+      .addCase(addNewCoupon.rejected, (state, action) => {
+        state.loadingRequestAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updateCoupon.pending, (state) => {
+        state.loadingRequestAction = true;
+      })
+      .addCase(updateCoupon.fulfilled, (state, action) => {
+        state.loadingRequestAction = false;
+        state.coupons = state.coupons.map((coupon) =>
+          coupon._id === action.payload._id
+            ? { ...coupon, ...action.payload }
+            : coupon
+        );
+
+        toast.success(`${action.payload?.couponCode} updated successfully`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+
+        state.error = null;
+      })
+      .addCase(updateCoupon.rejected, (state, action) => {
+        state.loadingRequestAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

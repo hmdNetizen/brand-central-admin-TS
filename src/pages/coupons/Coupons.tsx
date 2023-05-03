@@ -6,7 +6,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import { couponColumn } from "src/lib/dataset/tableData";
-//   import AddNewCoupon from "./modals/AddNewCoupon";
+import AddNewCoupon from "./modals/AddCoupon";
 //   import EditCoupon from "./modals/EditCoupon";
 //   import DeleteCoupon from "./modals/DeleteCoupon";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
@@ -19,10 +19,13 @@ import {
   ContainerWrapper,
 } from "src/components/common/styles/PageContainerStyles";
 import PageHeadingWithActionButton from "src/components/common/PageHeadingWithActionButton";
+import dayjs from "dayjs";
 
 const Coupons = () => {
   useTitle("Admin : Coupon");
   const theme = useTheme();
+
+  console.log(dayjs("2022-04-17T15:30"));
 
   const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
@@ -124,10 +127,10 @@ const Coupons = () => {
           </Tables>
         </Grid>
       </ContainerWrapper>
-      {/* <AddNewCoupon
+      <AddNewCoupon
         openAddCoupon={openAddCoupon}
         setOpenAddCoupon={setOpenAddCoupon}
-      /> */}
+      />
       {/* <EditCoupon
         openEditCoupon={openEditCoupon}
         setOpenEditCoupon={setOpenEditCoupon}
