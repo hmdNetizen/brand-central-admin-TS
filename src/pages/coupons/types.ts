@@ -41,3 +41,33 @@ export type FormContainerProps = {
   onStartDate: (newValue: Dayjs | null) => void;
   onEndDate: (newValue: Dayjs | null) => void;
 };
+
+export type CouponDataPropTypes = {
+  couponCode: string;
+  couponType: string;
+  couponUsageQuantity: string;
+  usePerCustomer: string;
+  customerUsageQuantity: number;
+  couponDescription: string;
+  minPurchaseAmount: string;
+  percentageOff: string;
+  amountOff: string;
+  couponQuantity: string;
+};
+
+export type DateData = {
+  startDate: Dayjs | null;
+  endDate: Dayjs | null;
+};
+
+export type CouponFieldsLayoutProps = {
+  openCoupon: boolean;
+  setOpenCoupon: React.Dispatch<React.SetStateAction<boolean>>;
+  dateData: DateData;
+  setDateData: React.Dispatch<React.SetStateAction<DateData>>;
+  minAmountChecked: boolean;
+  setMinAmountChecked: React.Dispatch<React.SetStateAction<boolean>>;
+  couponData: CouponDataPropTypes;
+  setCouponData: React.Dispatch<React.SetStateAction<CouponDataPropTypes>>;
+  isEdit?: boolean;
+};
