@@ -343,8 +343,8 @@ const CouponFieldsLayout = (props: CouponFieldsLayoutProps) => {
         couponQuantity: couponQuantity.toLowerCase(),
         usageQuantity:
           usePerCustomer === "limited" ? Number(customerUsageQuantity) : "",
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
+        startDate,
+        endDate,
       });
     } else {
       updateCoupon({

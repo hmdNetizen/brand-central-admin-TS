@@ -56,15 +56,14 @@ export const addNewCoupon = createAsyncThunk(
   async (details: CouponRequestData, thunkAPI) => {
     const { setOpen, ...fields } = details;
     try {
-      // const { data, status } = await axios.post(`/api/coupon-code`, fields);
-      // const result = data as SingleCouponPayloadType;
+      const { data, status } = await axios.post(`/api/coupon-code`, fields);
+      const result = data as SingleCouponPayloadType;
 
-      // if (status === 201) {
-      //   setOpen(false);
-      // }
+      if (status === 201) {
+        setOpen(false);
+      }
 
-      // return result.data;
-      console.log(fields);
+      return result.data;
     } catch (error: AxiosError | any) {
       if (error.response) {
         return thunkAPI.rejectWithValue(error.response.data.error);
@@ -154,27 +153,27 @@ const couponSlice = createSlice({
           state.error = action.payload;
         }
       });
-    // builder
-    //   .addCase(addNewCoupon.pending, (state, action) => {
-    //     state.loadingRequestAction = true;
-    //   })
-    //   .addCase(addNewCoupon.fulfilled, (state, action) => {
-    //     state.loadingRequestAction = false;
-    //     state.coupons = [action.payload, ...state.coupons];
+    builder
+      .addCase(addNewCoupon.pending, (state, action) => {
+        state.loadingRequestAction = true;
+      })
+      .addCase(addNewCoupon.fulfilled, (state, action) => {
+        state.loadingRequestAction = false;
+        state.coupons = [action.payload, ...state.coupons];
 
-    //     toast.success(`${action.payload?.couponCode} added successfully`, {
-    //       position: "top-center",
-    //       hideProgressBar: true,
-    //     });
+        toast.success(`${action.payload?.couponCode} added successfully`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
 
-    //     state.error = null;
-    //   })
-    //   .addCase(addNewCoupon.rejected, (state, action) => {
-    //     state.loadingRequestAction = false;
-    //     if (typeof action.payload === "string" || action.payload === null) {
-    //       state.error = action.payload;
-    //     }
-    //   });
+        state.error = null;
+      })
+      .addCase(addNewCoupon.rejected, (state, action) => {
+        state.loadingRequestAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
     builder
       .addCase(updateCoupon.pending, (state) => {
         state.loadingRequestAction = true;
