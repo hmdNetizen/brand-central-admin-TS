@@ -5,7 +5,7 @@ export type CouponReturnedPayload = {
   _id: string;
   couponCode: string;
   couponType: string;
-  couponQuantity: string;
+  couponQuantity: "limited" | "unlimited";
   couponUsageQuantity: string;
   usePerCustomer: string;
   usageQuantity: number;
@@ -26,7 +26,7 @@ export interface CouponRequestPayloadData {
   couponDescription: string;
   minimumPurchaseAmount: number | string;
   priceOff: number;
-  couponQuantity: string;
+  couponQuantity: "limited" | "unlimited" | string;
   usageQuantity: number | string;
   startDate: Dayjs | string;
   endDate: Dayjs | string;

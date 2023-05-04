@@ -13,7 +13,7 @@ export type FormContainerProps = {
   onSelectChange: (event: SelectChangeEvent<unknown>) => void;
   couponType: string;
   couponTypeError: string;
-  couponQuantity: string;
+  couponQuantity: "limited" | "unlimited";
   amountOff: string;
   percentageOff: string;
   amountOffError: string;
@@ -52,7 +52,7 @@ export type CouponDataPropTypes = {
   minPurchaseAmount: string;
   percentageOff: string;
   amountOff: string;
-  couponQuantity: string;
+  couponQuantity: "limited" | "unlimited";
 };
 
 export type DateData = {

@@ -58,6 +58,7 @@ const AddNewCoupon = (props: AddCouponProps) => {
       setDateData={setDateData}
       minAmountChecked={minAmountChecked}
       setMinAmountChecked={setMinAmountChecked}
+      isEdit={false}
     />
   );
 };
