@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import CouponFieldsLayout from "./CouponFieldsLayout";
-import PropTypes from "prop-types";
 import { CouponDataPropTypes, DateData } from "../types";
 
 type AddCouponProps = {
@@ -10,22 +9,9 @@ type AddCouponProps = {
 
 const AddNewCoupon = (props: AddCouponProps) => {
   const { openAddCoupon, setOpenAddCoupon } = props;
-  // const [dataSet, setDataset] = useState({
-  //   couponCode: "",
-  //   couponType: "",
-  //   couponQuantityLimit: "",
-  //   couponQuantity: "unlimited",
-  //   usesPerCustomerLimit: "limited",
-  //   usesPerCustomerQuantity: 1,
-  //   couponDescription: "",
-  //   percentageOff: "",
-  //   minPurchaseAmount: "",
-  //   amountOff: "",
-  // });
-
   const [couponData, setCouponData] = useState<CouponDataPropTypes>({
     couponCode: "",
-    couponType: "" /* Limited or Unlimited */,
+    couponType: "" /* discount by percentage or discount by amount */,
     couponQuantity:
       "unlimited" /* Whether there should be a limit to usage or not */,
     couponUsageQuantity:
@@ -61,11 +47,6 @@ const AddNewCoupon = (props: AddCouponProps) => {
       isEdit={false}
     />
   );
-};
-
-AddNewCoupon.propTypes = {
-  openAddCoupon: PropTypes.bool.isRequired,
-  setOpenAddCoupon: PropTypes.func.isRequired,
 };
 
 export default AddNewCoupon;
