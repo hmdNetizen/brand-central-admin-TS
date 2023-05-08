@@ -7,7 +7,7 @@ import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import { couponColumn } from "src/lib/dataset/tableData";
 import AddNewCoupon from "./modals/AddCoupon";
-//   import EditCoupon from "./modals/EditCoupon";
+import EditCoupon from "./modals/EditCoupon";
 //   import DeleteCoupon from "./modals/DeleteCoupon";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
 import debounce from "lodash.debounce";
@@ -24,12 +24,6 @@ import dayjs from "dayjs";
 const Coupons = () => {
   useTitle("Admin : Coupon");
   const theme = useTheme();
-
-  console.log(dayjs("2022-04-17T15:30"));
-
-  const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
-  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
-  const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -131,10 +125,10 @@ const Coupons = () => {
         openAddCoupon={openAddCoupon}
         setOpenAddCoupon={setOpenAddCoupon}
       />
-      {/* <EditCoupon
+      <EditCoupon
         openEditCoupon={openEditCoupon}
         setOpenEditCoupon={setOpenEditCoupon}
-      /> */}
+      />
       {/* <DeleteCoupon
         openDeleteCoupon={openDeleteCoupon}
         setOpenDeleteCoupon={setOpenDeleteCoupon}

@@ -441,7 +441,7 @@ const CouponFieldsLayout = (props: CouponFieldsLayoutProps) => {
           setMinAmountChecked={setMinAmountChecked}
           setMinPurchaseAmountError={setMinPurchaseAmountError}
           startDate={startDate}
-          isEdit={false}
+          isEdit={isEdit}
           startDateError={startDateError}
           usePerCustomer={usePerCustomer}
           usesPerCustomerError={usesPerCustomerError}
@@ -455,10 +455,6 @@ const CouponFieldsLayout = (props: CouponFieldsLayoutProps) => {
       </ContentContainer>
     </ShowDialog>
   );
-};
-
-CouponFieldsLayout.defaultProps = {
-  isEdit: false,
 };
 
 export default CouponFieldsLayout;

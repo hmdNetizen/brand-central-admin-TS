@@ -81,7 +81,7 @@ const FormContainer = (props: FormContainerProps) => {
             onChange={onChange}
             error={couponCodeError}
             autoComplete="off"
-            disabled={isEdit}
+            disabled={isEdit === true}
           />
         </Grid>
         {!isEdit && (
