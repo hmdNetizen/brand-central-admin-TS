@@ -18,9 +18,9 @@ const AddNewCoupon = (props: AddCouponProps) => {
       "" /* Number of times the coupon can be used if it's limited */,
     usePerCustomer:
       "limited" /* Whether there should be a limit to how many time customer can use it  */,
-    customerUsageQuantity: 1 /* The number of times customer can use it if it's limited */,
+    usageQuantity: 1 /* The number of times customer can use it if usePerCustomer is limited */,
     couponDescription: "" /* A description for the coupon if any */,
-    minPurchaseAmount:
+    minimumPurchaseAmount:
       "" /* A minimum threshold amount before coupon can be applied */,
     percentageOff: "" /* Percentage off */,
     amountOff:

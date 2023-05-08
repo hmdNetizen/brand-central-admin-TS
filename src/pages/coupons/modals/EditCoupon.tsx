@@ -3,6 +3,7 @@ import CouponFieldsLayout from "./CouponFieldsLayout";
 import { CouponDataPropTypes, DateData } from "../types";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import dayjs from "dayjs";
+import { CouponReturnedPayload } from "src/services/coupon/CouponTypes";
 
 type EditCouponProps = {
   openEditCoupon: boolean;
@@ -10,11 +11,12 @@ type EditCouponProps = {
 };
 
 const initialDateData = {
-  startDate: null,
-  endDate: null,
+  startDate: dayjs(new Date()),
+  endDate: dayjs(new Date()),
 };
 
 const initialState = {
+  _id: "",
   couponCode: "",
   couponType: "" /* discount by percentage or discount by amount */,
   couponQuantity:
@@ -23,14 +25,16 @@ const initialState = {
     "" /* Number of times the coupon can be used if it's limited */,
   usePerCustomer:
     "limited" /* Whether there should be a limit to how many time customer can use it  */,
-  customerUsageQuantity: 1 /* The number of times customer can use it if it's limited */,
+  usageQuantity: 1 /* The number of times customer can use it if it's limited */,
   couponDescription: "" /* A description for the coupon if any */,
-  minPurchaseAmount:
+  minimumPurchaseAmount:
     "" /* A minimum threshold amount before coupon can be applied */,
   percentageOff: "" /* Percentage off */,
   amountOff:
     "" /* Amount off. PS: It can either be one of percentageOff or priceOff */,
 };
+
+const initialMinAmountChecked = false;
 
 const EditCoupon = (props: EditCouponProps) => {
   const { openEditCoupon, setOpenEditCoupon } = props;
@@ -39,7 +43,9 @@ const EditCoupon = (props: EditCouponProps) => {
 
   const [dateData, setDateData] = useState<DateData>(initialDateData);
 
-  const [minAmountChecked, setMinAmountChecked] = useState(false);
+  const [minAmountChecked, setMinAmountChecked] = useState(
+    initialMinAmountChecked
+  );
 
   const singleCoupon = useTypedSelector((state) => state.coupon.singleCoupon);
 
@@ -51,14 +57,16 @@ const EditCoupon = (props: EditCouponProps) => {
 
       for (let key in singleCoupon) {
         if (key in newCouponData) {
-          newCouponData[key] = singleCoupon[key];
+          // @ts-ignore
+          newCouponData[key as keyof CouponReturnedPayload] =
+            singleCoupon[key as keyof CouponReturnedPayload];
 
           setCouponData(newCouponData);
         }
 
-        newCouponData["customerUsageQuantity"] = singleCoupon["usageQuantity"];
-        newCouponData["minPurchaseAmount"] =
-          singleCoupon["minimumPurchaseAmount"];
+        // newCouponData["customerUsageQuantity"] = singleCoupon["usageQuantity"];
+        // newCouponData["minPurchaseAmount"] =
+        //   singleCoupon["minimumPurchaseAmount"];
 
         if (key in newDateData) {
           newDateData[key as keyof DateData] = dayjs(
@@ -71,9 +79,9 @@ const EditCoupon = (props: EditCouponProps) => {
         if (
           singleCoupon.couponType.toLowerCase() === "discount by percentage"
         ) {
-          newCouponData["percentageOff"] = singleCoupon["priceOff"];
+          newCouponData["percentageOff"] = singleCoupon["priceOff"].toString();
         } else {
-          newCouponData["amountOff"] = singleCoupon["priceOff"];
+          newCouponData["amountOff"] = singleCoupon["priceOff"].toString();
         }
 
         if (singleCoupon.minimumPurchaseAmount) {

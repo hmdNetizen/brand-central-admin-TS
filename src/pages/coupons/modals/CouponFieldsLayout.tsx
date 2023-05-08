@@ -65,10 +65,10 @@ const CouponFieldsLayout = (props: CouponFieldsLayoutProps) => {
     couponUsageQuantity,
     usePerCustomer,
     couponDescription,
-    minPurchaseAmount,
+    minimumPurchaseAmount,
     percentageOff,
     amountOff,
-    customerUsageQuantity,
+    usageQuantity,
   } = couponData;
   const { startDate, endDate } = dateData;
 
@@ -277,7 +277,7 @@ const CouponFieldsLayout = (props: CouponFieldsLayoutProps) => {
 
     if (
       usePerCustomer === "limited" &&
-      (!usePerCustomer.toString().trim() || Number(customerUsageQuantity) === 0)
+      (!usePerCustomer.toString().trim() || Number(usageQuantity) === 0)
     ) {
       setCustomerUsageQuantityError("Enter usage quantity for each customer");
       return;
@@ -295,8 +295,8 @@ const CouponFieldsLayout = (props: CouponFieldsLayoutProps) => {
 
     if (
       minAmountChecked &&
-      (!minPurchaseAmount.toString().trim() ||
-        parseFloat(minPurchaseAmount) === 0)
+      (!minimumPurchaseAmount.toString().trim() ||
+        parseFloat(minimumPurchaseAmount) === 0)
     ) {
       setMinPurchaseAmountError("Enter a valid minimum amount");
       return;
@@ -334,7 +334,7 @@ const CouponFieldsLayout = (props: CouponFieldsLayoutProps) => {
         usePerCustomer: usePerCustomer.toLowerCase(),
         couponDescription,
         minimumPurchaseAmount: minAmountChecked
-          ? Number(minPurchaseAmount)
+          ? Number(minimumPurchaseAmount)
           : "",
         priceOff:
           couponType === "discount by amount"
@@ -342,7 +342,7 @@ const CouponFieldsLayout = (props: CouponFieldsLayoutProps) => {
             : Number(percentageOff),
         couponQuantity: couponQuantity.toLowerCase(),
         usageQuantity:
-          usePerCustomer === "limited" ? Number(customerUsageQuantity) : "",
+          usePerCustomer === "limited" ? Number(usageQuantity) : "",
         startDate,
         endDate,
       });
@@ -357,7 +357,7 @@ const CouponFieldsLayout = (props: CouponFieldsLayoutProps) => {
         usePerCustomer: usePerCustomer.toLowerCase(),
         couponDescription,
         minimumPurchaseAmount: minAmountChecked
-          ? Number(minPurchaseAmount)
+          ? Number(minimumPurchaseAmount)
           : "",
         priceOff:
           couponType === "discount by amount"
@@ -365,7 +365,7 @@ const CouponFieldsLayout = (props: CouponFieldsLayoutProps) => {
             : Number(percentageOff),
         couponQuantity: couponQuantity.toLowerCase(),
         usageQuantity:
-          usePerCustomer === "limited" ? Number(customerUsageQuantity) : "",
+          usePerCustomer === "limited" ? Number(usageQuantity) : "",
         startDate,
         endDate,
       });
@@ -427,12 +427,12 @@ const CouponFieldsLayout = (props: CouponFieldsLayoutProps) => {
           couponTypeError={couponTypeError}
           couponUsageQuantity={couponUsageQuantity}
           couponUsageQuantityError={couponUsageQuantityError}
-          customerUsageQuantity={customerUsageQuantity}
+          usageQuantity={usageQuantity}
           customerUsageQuantityError={customerUsageQuantityError}
           endDate={endDate}
           endDateError={endDateError}
           minAmountChecked={minAmountChecked}
-          minPurchaseAmount={minPurchaseAmount}
+          minimumPurchaseAmount={minimumPurchaseAmount}
           minPurchaseAmountError={minPurchaseAmountError}
           onClick={handleClick}
           onSubmit={handleSubmit}

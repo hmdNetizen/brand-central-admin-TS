@@ -35,13 +35,13 @@ const FormContainer = (props: FormContainerProps) => {
     couponUsageQuantityError,
     usePerCustomer,
     usesPerCustomerError,
-    customerUsageQuantity,
+    usageQuantity,
     customerUsageQuantityError,
     endDate,
     startDate,
     endDateError,
     startDateError,
-    minPurchaseAmount,
+    minimumPurchaseAmount,
     minAmountChecked,
     setMinPurchaseAmountError,
     setMinAmountChecked,
@@ -205,7 +205,7 @@ const FormContainer = (props: FormContainerProps) => {
               label="Set Usage Quantity"
               labelId="customerUsageQuantity"
               name="customerUsageQuantity"
-              value={customerUsageQuantity}
+              value={usageQuantity}
               placeholder="Enter number of usage per Customer"
               onChange={onChange}
               autoComplete="off"
@@ -257,7 +257,7 @@ const FormContainer = (props: FormContainerProps) => {
               type="number"
               label=""
               name="minPurchaseAmount"
-              value={minPurchaseAmount}
+              value={minimumPurchaseAmount}
               placeholder="Enter Minimum Purchase Amount"
               onChange={onChange}
               autoComplete="off"

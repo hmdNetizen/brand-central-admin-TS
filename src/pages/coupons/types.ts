@@ -13,9 +13,9 @@ export type FormContainerProps = {
   onSelectChange: (event: SelectChangeEvent<unknown>) => void;
   couponType: string;
   couponTypeError: string;
-  couponQuantity: "limited" | "unlimited";
+  couponQuantity: string;
   amountOff: string;
-  percentageOff: string;
+  percentageOff: string | number;
   amountOffError: string;
   percentageOffError: string;
   couponQuantityError: string;
@@ -23,13 +23,13 @@ export type FormContainerProps = {
   couponUsageQuantityError: string;
   usePerCustomer: string;
   usesPerCustomerError: string;
-  customerUsageQuantity: number;
+  usageQuantity: number /* The number of times a customer can use a coupon if usePerCustomer is limited (default to 1) */;
   customerUsageQuantityError: string;
   startDateError: string;
   endDateError: string;
   startDate: Dayjs | null;
   endDate: Dayjs | null;
-  minPurchaseAmount: string;
+  minimumPurchaseAmount: string;
   minAmountChecked: boolean;
   setMinPurchaseAmountError: React.Dispatch<React.SetStateAction<string>>;
   setMinAmountChecked: React.Dispatch<React.SetStateAction<boolean>>;
@@ -47,12 +47,12 @@ export type CouponDataPropTypes = {
   couponType: string;
   couponUsageQuantity: string;
   usePerCustomer: string;
-  customerUsageQuantity: number;
+  usageQuantity: number;
   couponDescription: string;
-  minPurchaseAmount: string;
+  minimumPurchaseAmount: string;
   percentageOff: string;
   amountOff: string;
-  couponQuantity: "limited" | "unlimited";
+  couponQuantity: string;
 };
 
 export type DateData = {
