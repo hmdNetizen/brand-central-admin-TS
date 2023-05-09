@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CouponFieldsLayout from "./CouponFieldsLayout";
+import CouponFieldsLayout from "../CouponFieldsLayout";
 import { CouponDataPropTypes, DateData } from "../types";
 
 type AddCouponProps = {

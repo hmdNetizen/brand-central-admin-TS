@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import CouponFieldsLayout from "./CouponFieldsLayout";
+import CouponFieldsLayout from "../CouponFieldsLayout";
 import { CouponDataPropTypes, DateData } from "../types";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import dayjs from "dayjs";

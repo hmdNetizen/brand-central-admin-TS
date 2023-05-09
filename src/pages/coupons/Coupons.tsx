@@ -2,13 +2,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import { couponColumn } from "src/lib/dataset/tableData";
 import AddNewCoupon from "./modals/AddCoupon";
 import EditCoupon from "./modals/EditCoupon";
-//   import DeleteCoupon from "./modals/DeleteCoupon";
+import DeleteCoupon from "./modals/DeleteCoupon";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
 import debounce from "lodash.debounce";
 import useTitle from "src/hooks/useTitle";
@@ -19,7 +18,6 @@ import {
   ContainerWrapper,
 } from "src/components/common/styles/PageContainerStyles";
 import PageHeadingWithActionButton from "src/components/common/PageHeadingWithActionButton";
-import dayjs from "dayjs";
 
 const Coupons = () => {
   useTitle("Admin : Coupon");
@@ -129,10 +127,10 @@ const Coupons = () => {
         openEditCoupon={openEditCoupon}
         setOpenEditCoupon={setOpenEditCoupon}
       />
-      {/* <DeleteCoupon
+      <DeleteCoupon
         openDeleteCoupon={openDeleteCoupon}
         setOpenDeleteCoupon={setOpenDeleteCoupon}
-      /> */}
+      />
       <CustomLoadingDialog
         loading={loadingCouponActivation}
         handleLoading={handleLoadingCouponAction}

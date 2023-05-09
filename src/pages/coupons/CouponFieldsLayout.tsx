@@ -8,7 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
 import { useActions } from "src/hooks/useActions";
 import { generateCode } from "src/lib/helpers";
-import FormContainer from "../utils/FormContainer";
+import FormContainer from "./utils/FormContainer";
 import { SelectChangeEvent } from "@mui/material";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import {
@@ -17,7 +17,7 @@ import {
   ErrorMsg,
 } from "src/utilityStyles/pagesUtilityStyles";
 import { Dayjs } from "dayjs";
-import { CouponFieldsLayoutProps } from "../types";
+import { CouponFieldsLayoutProps } from "./types";
 
 const CouponFieldsLayout = (props: CouponFieldsLayoutProps) => {
   const {

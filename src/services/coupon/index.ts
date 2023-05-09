@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
+import React from "react";
 import { toast } from "react-toastify";
 import axios from "../axios";
 import {
@@ -94,6 +95,32 @@ export const updateCoupon = createAsyncThunk(
       return result.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("Error Adding Coupon");
+    }
+  }
+);
+
+export const deleteCoupon = createAsyncThunk(
+  "delete-coupon",
+  async (
+    details: {
+      couponId: string;
+      setOpenDeleteCoupon: React.Dispatch<React.SetStateAction<boolean>>;
+    },
+    thunkAPI
+  ) => {
+    const { couponId, setOpenDeleteCoupon } = details;
+    try {
+      const { status } = await axios.delete(
+        `/api/coupon-code/delete/${couponId}`
+      );
+
+      if (status === 200) {
+        setOpenDeleteCoupon(false);
+      }
+
+      return couponId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error occurred while deleting coupon");
     }
   }
 );
@@ -194,6 +221,28 @@ const couponSlice = createSlice({
         state.error = null;
       })
       .addCase(updateCoupon.rejected, (state, action) => {
+        state.loadingRequestAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(deleteCoupon.pending, (state) => {
+        state.loadingRequestAction = true;
+      })
+      .addCase(deleteCoupon.fulfilled, (state, action) => {
+        state.loadingRequestAction = false;
+        state.coupons = state.coupons.filter(
+          (coupon) => coupon._id !== action.payload
+        );
+        state.error = null;
+
+        toast.error(`Coupon is successfully deleted`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(deleteCoupon.rejected, (state, action) => {
         state.loadingRequestAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
