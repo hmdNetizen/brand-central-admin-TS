@@ -13,6 +13,7 @@ import couponReducer from "./coupon";
 import preOrderReducer from "./pre-orders";
 import categoriesReducer from "./categories";
 import brandsReducer from "./brands";
+import messagesReducer from "./messages";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   categories: categoriesReducer,
   brands: brandsReducer,
   coupon: couponReducer,
+  messages: messagesReducer,
 });
 
 const store = configureStore({
