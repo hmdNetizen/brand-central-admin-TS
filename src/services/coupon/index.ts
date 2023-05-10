@@ -9,6 +9,7 @@ import {
   CouponReturnedPayloadType,
   SingleCouponPayloadType,
   CouponRequestData,
+  CouponReturnedPayloadTypes,
 } from "./CouponTypes";
 
 const initialState: InitStateType = {
@@ -17,17 +18,48 @@ const initialState: InitStateType = {
   loadingRequestAction: false,
   coupons: [],
   singleCoupon: null,
+  total: 0,
   error: null,
 };
 
 export const getAllCoupons = createAsyncThunk(
   "get-all-coupons",
-  async (_, thunkAPI) => {
+  async (query: { page: number; limit: number }, thunkAPI) => {
+    const { page, limit } = query;
     try {
-      const { data } = await axios.get(`/api/coupon-code`);
-      const result = data as CouponReturnedPayloadType;
+      const { data } = await axios.get(
+        `/api/coupon-code/v1?page=${page}&limit=${limit}`
+      );
+      const result = data as CouponReturnedPayloadTypes;
 
-      return result.data.reverse();
+      return {
+        coupons: result.data.data,
+        total: result.data.total,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error occurred while fetching coupons");
+    }
+  }
+);
+
+export const getSearchedCoupon = createAsyncThunk(
+  "get-searched-coupons",
+  async (
+    query: { page: number; limit: number; searchTerm: string },
+    thunkAPI
+  ) => {
+    const { page, limit, searchTerm } = query;
+    const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+    try {
+      const { data } = await axios.get(
+        `/api/coupon-code/v1?page=${page}&limit=${limit}${searchQuery}`
+      );
+      const result = data as CouponReturnedPayloadTypes;
+
+      return {
+        coupons: result.data.data,
+        total: result.data.total,
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue("Error occurred while fetching coupons");
     }
@@ -140,7 +172,8 @@ const couponSlice = createSlice({
       })
       .addCase(getAllCoupons.fulfilled, (state, action) => {
         state.loading = false;
-        state.coupons = action.payload;
+        state.coupons = action.payload.coupons;
+        state.total = action.payload.total;
         state.error = null;
       })
       .addCase(getAllCoupons.rejected, (state, action) => {
@@ -149,6 +182,12 @@ const couponSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder.addCase(getSearchedCoupon.fulfilled, (state, action) => {
+      state.loading = false;
+      state.coupons = action.payload.coupons;
+      state.total = action.payload.total;
+      state.error = null;
+    });
     builder
       .addCase(toggleCouponActivation.pending, (state) => {
         state.loadingCouponActivation = true;

@@ -27,9 +27,7 @@ const Coupons = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [filterText, setFilterText] = useState("");
   const [openAddCoupon, setOpenAddCoupon] = useState(false);
-  //   eslint-disable-next-line
   const [openEditCoupon, setOpenEditCoupon] = useState(false);
-  //   eslint-disable-next-line
   const [openDeleteCoupon, setOpenDeleteCoupon] = useState(false);
 
   const loading = useTypedSelector((state) => state.coupon.loading);
@@ -37,8 +35,9 @@ const Coupons = () => {
     (state) => state.coupon.loadingCouponActivation
   );
   const coupons = useTypedSelector((state) => state.coupon.coupons);
+  const total = useTypedSelector((state) => state.coupon.total);
 
-  const { getAllCoupons } = useActions();
+  const { getAllCoupons, getSearchedCoupon } = useActions();
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -47,18 +46,20 @@ const Coupons = () => {
     setPage(0);
   };
 
-  // eslint-disable-next-line
-  // const debounceFilteredCoupon = useCallback(
-  //   debounce(handleFilteredCoupons, 500),
-  //   []
-  // );
+  const debounceFilteredCoupon = useCallback(
+    debounce(getSearchedCoupon, 500),
+    []
+  );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPage(0);
     setFilterText(event.target.value);
 
-    // debounceFilteredCoupon(event.target.value);
-
-    setPage(0);
+    debounceFilteredCoupon({
+      page: page + 1,
+      limit: rowsPerPage,
+      searchTerm: event.target.value,
+    });
   };
 
   const handleLoadingCouponAction = () => {
@@ -66,10 +67,19 @@ const Coupons = () => {
   };
 
   useEffect(() => {
-    getAllCoupons();
-
-    // eslint-disable-next-line
-  }, []);
+    if (!filterText) {
+      getAllCoupons({
+        page: page + 1,
+        limit: rowsPerPage,
+      });
+    } else {
+      getSearchedCoupon({
+        page: page + 1,
+        limit: rowsPerPage,
+        searchTerm: filterText,
+      });
+    }
+  }, [filterText, page, rowsPerPage]);
 
   return (
     <Container container direction="column">
@@ -96,26 +106,24 @@ const Coupons = () => {
             setPage={setPage}
             rowsPerPage={rowsPerPage}
             setRowsPerPage={setRowsPerPage}
-            total={coupons.length}
+            total={total}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
             loading={loading}
             notFoundText="No Coupon Found"
           >
             {!loading &&
               coupons.length > 0 &&
-              coupons
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((coupon, index) => {
-                  return (
-                    <CouponItem
-                      key={coupon._id}
-                      coupon={coupon}
-                      index={index}
-                      setOpenDeleteCoupon={setOpenDeleteCoupon}
-                      setOpenEditCoupon={setOpenEditCoupon}
-                    />
-                  );
-                })}
+              coupons.map((coupon, index) => {
+                return (
+                  <CouponItem
+                    key={coupon._id}
+                    coupon={coupon}
+                    index={index}
+                    setOpenDeleteCoupon={setOpenDeleteCoupon}
+                    setOpenEditCoupon={setOpenEditCoupon}
+                  />
+                );
+              })}
           </Tables>
         </Grid>
       </ContainerWrapper>

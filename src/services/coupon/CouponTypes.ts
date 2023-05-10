@@ -18,6 +18,13 @@ export type CouponReturnedPayload = {
   usageCount: number;
 };
 
+export type CouponReturnedPayloadTypes = {
+  data: {
+    data: CouponReturnedPayload[];
+    total: number;
+  };
+};
+
 export interface CouponRequestPayloadData {
   couponCode: string;
   couponType: string;
@@ -66,4 +73,5 @@ export type InitStateType = {
   error: null | string;
   coupons: CouponReturnedPayload[];
   singleCoupon: CouponReturnedPayload | null;
+  total: number;
 };

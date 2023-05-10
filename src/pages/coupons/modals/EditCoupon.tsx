@@ -17,6 +17,7 @@ const initialDateData = {
 
 const initialState = {
   _id: "",
+
   couponCode: "",
   couponType: "" /* discount by percentage or discount by amount */,
   couponQuantity:
@@ -63,10 +64,6 @@ const EditCoupon = (props: EditCouponProps) => {
 
           setCouponData(newCouponData);
         }
-
-        // newCouponData["customerUsageQuantity"] = singleCoupon["usageQuantity"];
-        // newCouponData["minPurchaseAmount"] =
-        //   singleCoupon["minimumPurchaseAmount"];
 
         if (key in newDateData) {
           newDateData[key as keyof DateData] = dayjs(
