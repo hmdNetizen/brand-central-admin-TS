@@ -221,6 +221,28 @@ const CouponFieldsLayout = (props: CouponFieldsLayoutProps) => {
 
   const handleClose = () => {
     setOpenCoupon(false);
+    setCouponData({
+      couponCode: "",
+      couponType: "" /* discount by percentage or discount by amount */,
+      couponQuantity:
+        "unlimited" /* Whether there should be a limit to usage or not */,
+      couponUsageQuantity:
+        "" /* Number of times the coupon can be used if it's limited */,
+      usePerCustomer:
+        "limited" /* Whether there should be a limit to how many time customer can use it  */,
+      usageQuantity: 1 /* The number of times customer can use it if usePerCustomer is limited */,
+      couponDescription: "" /* A description for the coupon if any */,
+      minimumPurchaseAmount:
+        "" /* A minimum threshold amount before coupon can be applied */,
+      percentageOff: "" /* Percentage off */,
+      amountOff:
+        "" /* Amount off. PS: It can either be one of percentageOff or priceOff */,
+    });
+
+    setDateData({
+      startDate: null,
+      endDate: null,
+    });
   };
 
   const handleSubmit = (
@@ -398,11 +420,7 @@ const CouponFieldsLayout = (props: CouponFieldsLayoutProps) => {
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton
-              onClick={() => {
-                setOpenCoupon(false);
-              }}
-            >
+            <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
           </Grid>
