@@ -1,4 +1,4 @@
-import { ReceivedEmailReturnedPayload } from "../utils/UtilsTypes";
+import { ReceivedEmailReturnedPayload } from "../messages/MessageTypes";
 
 interface NotificationDataTypes {
   _id: string;
