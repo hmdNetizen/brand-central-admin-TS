@@ -15,10 +15,17 @@ type PageHeadingTypes = {
   ) => void;
   filterText: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholderText?: string;
 };
 
 const PageHeadingActions = (props: PageHeadingTypes) => {
-  const { rowsPerPage, filterText, handleSelectRowsPerPage, onChange } = props;
+  const {
+    rowsPerPage,
+    filterText,
+    handleSelectRowsPerPage,
+    onChange,
+    placeholderText,
+  } = props;
   const theme = useTheme();
 
   const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
@@ -59,13 +66,17 @@ const PageHeadingActions = (props: PageHeadingTypes) => {
         style={{ width: matchesSM ? "100%" : 350 }}
       >
         <Input
-          placeholder="Search by order number or status..."
+          placeholder={placeholderText}
           value={filterText}
           onChange={onChange}
         />
       </Grid>
     </Grid>
   );
+};
+
+PageHeadingActions.defaultProps = {
+  placeholderText: "Search...",
 };
 
 export default PageHeadingActions;
