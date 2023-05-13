@@ -36,12 +36,22 @@ export type SendEmailToCustomerType = {
   content: string;
 };
 
+export type MessagesPayloadResponse = {
+  _id: string;
+  fullName?: string;
+  emails: string[] | string;
+  subject: string;
+  body: string;
+  isRead?: boolean;
+  createdAt: string;
+};
+
 export type initStateTypes = {
   loading: boolean;
   loadingMessageAction: boolean;
-  sentMessages: SentEmailReturnedPayload[];
-  receivedMessages: ReceivedEmailReturnedPayload[];
-  singleEmail: SentEmailReturnedPayload | ReceivedEmailReturnedPayload | null;
+  sentMessages: MessagesPayloadResponse[];
+  receivedMessages: MessagesPayloadResponse[];
+  singleEmail: MessagesPayloadResponse | null;
   emailSuccess: string;
   error: null | string;
 };

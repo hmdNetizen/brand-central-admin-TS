@@ -5,10 +5,7 @@ import TableCell from "@mui/material/TableCell";
 import MailSharpIcon from "@mui/icons-material/MailSharp";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import Moment from "react-moment";
-import {
-  SentEmailReturnedPayload,
-  ReceivedEmailReturnedPayload,
-} from "src/services/messages/MessageTypes";
+import { MessagesPayloadResponse } from "src/services/messages/MessageTypes";
 import {
   OptionsTableData,
   ActionButton,
@@ -17,11 +14,9 @@ import {
 import { useActions } from "src/hooks/useActions";
 
 type MessageItemProps = {
-  isReceivedMessage: boolean;
   setOpenDeleteEmail: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenSendEmail: React.Dispatch<React.SetStateAction<boolean>>;
-  sentMessage?: SentEmailReturnedPayload;
-  receivedMessage?: ReceivedEmailReturnedPayload;
+  message: MessagesPayloadResponse;
 };
 
 const constructContent = (content: string) => {
@@ -30,61 +25,33 @@ const constructContent = (content: string) => {
 
 const MessageItem = (props: MessageItemProps) => {
   const theme = useTheme();
-  const {
-    sentMessage,
-    receivedMessage,
-    isReceivedMessage,
-    setOpenDeleteEmail,
-    setOpenSendEmail,
-  } = props;
+  const { message, setOpenDeleteEmail, setOpenSendEmail } = props;
 
   const { setCurrentEmail } = useActions();
 
   const handleDeleteEmail = () => {
     setOpenDeleteEmail(true);
-
-    if (!receivedMessage) {
-      setCurrentEmail(sentMessage);
-      return;
-    }
-
-    setCurrentEmail(receivedMessage);
+    setCurrentEmail(message);
   };
 
   const handleOpenEmailBox = () => {
     setOpenSendEmail(true);
-
-    if (!receivedMessage) {
-      setCurrentEmail(sentMessage);
-      return;
-    }
-
-    setCurrentEmail(receivedMessage);
+    setCurrentEmail(message);
   };
 
   return (
     <TableRow hover role="checkbox" tabIndex={-1}>
       <TableCell style={{ minWidth: 150 }}>
-        {!isReceivedMessage
-          ? sentMessage?.to.map((mail) => <p key={mail}>{mail}</p>)
-          : receivedMessage?.emailAddress}
+        {Array.isArray(message.emails)
+          ? message.emails.map((m) => <p key={m}>{m}</p>)
+          : message.emails}
       </TableCell>
-      <TableCell style={{ minWidth: 200 }}>
-        {!isReceivedMessage
-          ? sentMessage?.subject
-          : receivedMessage?.messageSubject}
-      </TableCell>
+      <TableCell style={{ minWidth: 200 }}>{message.subject}</TableCell>
       <TableCell style={{ minWidth: 300 }}>
-        {!isReceivedMessage
-          ? constructContent(sentMessage?.content!)
-          : receivedMessage?.messageBody}
+        {constructContent(message.body)}
       </TableCell>
       <TableCell style={{ minWidth: 100 }} align="center">
-        <Moment fromNow>
-          {!receivedMessage
-            ? sentMessage?.createdAt
-            : receivedMessage?.createdAt}
-        </Moment>
+        <Moment fromNow>{message.createdAt}</Moment>
       </TableCell>
       <TableCell>
         <OptionsTableData>

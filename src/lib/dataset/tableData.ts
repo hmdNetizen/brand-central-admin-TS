@@ -370,7 +370,7 @@ export const couponColumn: TableHeaderColumnTypes[] = [
   },
 ];
 
-export const messagesColumns = [
+export const messagesColumns: TableHeaderColumnTypes[] = [
   {
     id: 0,
     label: "Email",

@@ -157,10 +157,10 @@ export const menus = [
     id: 8,
     title: "Messages",
     icon: MessagesIcon,
-    path: "/messages",
+    path: "/dashboard/messages",
     subMenus: [
-      { subId: 0, title: "Sent", path: "/sent-emails" },
-      { subId: 1, title: "Recieved", path: "/received-emails" },
+      { subId: 0, title: "Sent", path: "/dashboard/sent-emails" },
+      { subId: 1, title: "Recieved", path: "/dashboard/received-emails" },
     ],
   },
   {
