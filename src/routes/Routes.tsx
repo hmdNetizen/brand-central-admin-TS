@@ -12,6 +12,8 @@ import BlockedCustomers from "src/pages/customers/BlockedCustomers";
 import CustomerProfileDetails from "src/pages/customers/CustomerProfileDetails";
 import Customers from "src/pages/customers/Customers";
 import Dashboard from "src/pages/dashboard/Dashboard";
+import ReceivedMessages from "src/pages/messages/ReceivedMessages";
+import SentMessages from "src/pages/messages/SentMessages";
 import AllOrders from "src/pages/orders/AllOrders";
 import CompletedOrders from "src/pages/orders/CompletedOrders";
 import DeclinedOrders from "src/pages/orders/DeclinedOrders";
@@ -85,6 +87,13 @@ const PagesRoutes = () => {
               </Route>
               <Route path="coupons">
                 <Route index element={<Coupons />} />
+              </Route>
+              <Route path="messages">
+                <Route index path="sent-messages" element={<SentMessages />} />
+                <Route
+                  path="received-messages"
+                  element={<ReceivedMessages />}
+                />
               </Route>
             </Route>
           </Route>

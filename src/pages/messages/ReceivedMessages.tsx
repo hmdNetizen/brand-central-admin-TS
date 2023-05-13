@@ -1,55 +1,54 @@
 import React, { useState, useEffect, useCallback } from "react";
 import MessagesPageLayout from "./utils/MessagesPageLayout";
 import { useActions } from "src/hooks/useActions";
+import { useSelector } from "react-redux";
 import debounce from "lodash.debounce";
 import useTitle from "src/hooks/useTitle";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 
-const SentMessages = () => {
-  useTitle("Admin : Messages | Sent Messages");
+const ReceivedMessages = () => {
+  useTitle("Admin : Messages | Received Messages");
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [filterText, setFilterText] = useState("");
 
   const loading = useTypedSelector((state) => state.messages.loading);
-  const sendMessages = useTypedSelector((state) => state.messages.sentMessages);
+  const receivedMessages = useTypedSelector(
+    (state) => state.messages.receivedMessages
+  );
 
-  const { getAllSentMessages } = useActions();
+  const { getAllReceivedMessages } = useActions();
 
-  //   eslint-disable-next-line
-  // const debounceFilteredCompletedOrders = useCallback(
-  //   debounce(handleFilteredEmailData, 500),
+  // const debounceFilteredReceivedEmail = useCallback(
+  //   debounce(handleFilterReceivedEmail, 500),
   //   []
   // );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPage(0);
     setFilterText(event.target.value);
 
-    //   debounceFilteredCompletedOrders({
-    //     emailData: sentEmails,
-    //     text: event.target.value,
-    //   });
-
-    setPage(0);
+    //   debounceFilteredReceivedEmail(event.target.value);
   };
 
   useEffect(() => {
-    getAllSentMessages();
+    getAllReceivedMessages();
   }, []);
 
   return (
     <MessagesPageLayout
       filterText={filterText}
       loading={loading}
-      messages={sendMessages}
+      messages={receivedMessages}
       rowsPerPage={rowsPerPage}
       setRowsPerPage={setRowsPerPage}
       onChange={handleSearch}
       page={page}
       setPage={setPage}
-      title="Sent Messages"
+      title="Received Messages"
     />
   );
 };
 
-export default SentMessages;
+export default ReceivedMessages;

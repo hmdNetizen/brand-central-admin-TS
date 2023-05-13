@@ -18,7 +18,7 @@ const initialState: initStateTypes = {
   error: null,
 };
 
-export const getAllSentEmails = createAsyncThunk(
+export const getAllSentMessages = createAsyncThunk(
   "messages/sent",
   async (_, thunkAPI) => {
     try {
@@ -40,13 +40,14 @@ export const getAllSentEmails = createAsyncThunk(
   }
 );
 
-export const getAllRecievedEmails = createAsyncThunk(
+export const getAllReceivedMessages = createAsyncThunk(
   "messages/received",
   async (_, thunkAPI) => {
     try {
       const { data } = await axios.get("/api/contact");
       const result = data as ReceivedEmailTypes;
-      const transformResult = result.data.map((message) => ({
+
+      const transformResult = result.data.data.map((message) => ({
         _id: message._id,
         emails: message.emailAddress,
         subject: message.messageSubject,
@@ -93,30 +94,30 @@ const messagesSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(getAllRecievedEmails.pending, (state) => {
+      .addCase(getAllReceivedMessages.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getAllRecievedEmails.fulfilled, (state, action) => {
+      .addCase(getAllReceivedMessages.fulfilled, (state, action) => {
         state.loading = false;
         state.receivedMessages = action.payload;
         state.error = null;
       })
-      .addCase(getAllRecievedEmails.rejected, (state, action) => {
+      .addCase(getAllReceivedMessages.rejected, (state, action) => {
         state.loading = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }
       });
     builder
-      .addCase(getAllSentEmails.pending, (state) => {
+      .addCase(getAllSentMessages.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getAllSentEmails.fulfilled, (state, action) => {
+      .addCase(getAllSentMessages.fulfilled, (state, action) => {
         state.loading = false;
         state.sentMessages = action.payload;
         state.error = null;
       })
-      .addCase(getAllSentEmails.rejected, (state, action) => {
+      .addCase(getAllSentMessages.rejected, (state, action) => {
         state.loading = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
-import Tables from "components/table/Tables";
+import Tables from "src/components/table/Tables";
 import { messagesColumns } from "src/lib/dataset/tableData";
 // import DeleteEmail from "./modals/DeleteEmail";
 // import ReplyEmail from "./modals/ReplyEmail";
@@ -25,10 +25,9 @@ type PageLayoutProps = {
   messages: MessagesPayloadResponse[];
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   loading: boolean;
-  isReceivedMessage: boolean;
 };
 
-const MessagePageLayout = (props: PageLayoutProps) => {
+const MessagePagesLayout = (props: PageLayoutProps) => {
   const {
     title,
     filterText,
@@ -39,7 +38,6 @@ const MessagePageLayout = (props: PageLayoutProps) => {
     messages,
     onChange,
     loading,
-    isReceivedMessage,
   } = props;
   const theme = useTheme();
 
@@ -94,6 +92,7 @@ const MessagePageLayout = (props: PageLayoutProps) => {
                 .map((message) => {
                   return (
                     <MessageItem
+                      key={message._id}
                       message={message}
                       setOpenDeleteEmail={setOpenDeleteEmail}
                       setOpenSendEmail={setOpenSendEmail}
@@ -117,4 +116,4 @@ const MessagePageLayout = (props: PageLayoutProps) => {
   );
 };
 
-export default MessagePageLayout;
+export default MessagePagesLayout;

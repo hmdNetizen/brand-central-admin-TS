@@ -26,7 +26,9 @@ export type SentEmailTypes = {
 };
 
 export type ReceivedEmailTypes = {
-  data: ReceivedEmailReturnedPayload[];
+  data: {
+    data: ReceivedEmailReturnedPayload[];
+  };
 };
 
 export type SendEmailToCustomerType = {

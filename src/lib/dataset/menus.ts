@@ -137,7 +137,7 @@ export const menus = [
     id: 6,
     title: "Brands",
     icon: BrandsIcon,
-    path: "/brands",
+    path: "/dashboard/brands",
     subMenus: [
       { subId: 0, title: "All Brands", path: "/dashboard/brands" },
       {
@@ -159,8 +159,12 @@ export const menus = [
     icon: MessagesIcon,
     path: "/dashboard/messages",
     subMenus: [
-      { subId: 0, title: "Sent", path: "/dashboard/sent-emails" },
-      { subId: 1, title: "Recieved", path: "/dashboard/received-emails" },
+      { subId: 0, title: "Sent", path: "/dashboard/messages/sent-messages" },
+      {
+        subId: 1,
+        title: "Recieved",
+        path: "/dashboard/messages/received-messages",
+      },
     ],
   },
   {
