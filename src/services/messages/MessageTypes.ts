@@ -22,6 +22,7 @@ export type ReceivedEmailReturnedPayload = {
 export type SentEmailTypes = {
   data: {
     data: SentEmailReturnedPayload[];
+    total: number;
   };
 };
 
@@ -54,6 +55,7 @@ export type initStateTypes = {
   sentMessages: MessagesPayloadResponse[];
   receivedMessages: MessagesPayloadResponse[];
   singleEmail: MessagesPayloadResponse | null;
+  total: number;
   emailSuccess: string;
   error: null | string;
 };

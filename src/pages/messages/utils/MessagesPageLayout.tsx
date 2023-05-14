@@ -14,6 +14,7 @@ import {
 } from "src/components/common/styles/PageContainerStyles";
 import PageHeadingActions from "src/components/common/PageHeadingActions";
 import { SelectChangeEvent } from "@mui/material";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
 
 type PageLayoutProps = {
   title: string;
@@ -43,6 +44,8 @@ const MessagePagesLayout = (props: PageLayoutProps) => {
 
   const [openDeleteEmail, setOpenDeleteEmail] = useState(false);
   const [openSendEmail, setOpenSendEmail] = useState(false);
+
+  const total = useTypedSelector((state) => state.messages.total);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -82,24 +85,22 @@ const MessagePagesLayout = (props: PageLayoutProps) => {
             setPage={setPage}
             rowsPerPage={rowsPerPage}
             setRowsPerPage={setRowsPerPage}
-            total={messages.length}
+            total={total}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
             loading={loading}
             notFoundText="No Message(s) found"
           >
             {!loading &&
-              messages
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((message) => {
-                  return (
-                    <MessageItem
-                      key={message._id}
-                      message={message}
-                      setOpenDeleteEmail={setOpenDeleteEmail}
-                      setOpenSendEmail={setOpenSendEmail}
-                    />
-                  );
-                })}
+              messages.map((message) => {
+                return (
+                  <MessageItem
+                    key={message._id}
+                    message={message}
+                    setOpenDeleteEmail={setOpenDeleteEmail}
+                    setOpenSendEmail={setOpenSendEmail}
+                  />
+                );
+              })}
           </Tables>
         </Grid>
       </ContainerWrapper>

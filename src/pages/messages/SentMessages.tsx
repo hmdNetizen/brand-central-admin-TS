@@ -34,8 +34,11 @@ const SentMessages = () => {
   };
 
   useEffect(() => {
-    getAllSentMessages();
-  }, []);
+    getAllSentMessages({
+      page: page + 1,
+      limit: rowsPerPage,
+    });
+  }, [page, rowsPerPage]);
 
   return (
     <MessagesPageLayout
