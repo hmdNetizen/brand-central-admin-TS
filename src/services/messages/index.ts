@@ -237,6 +237,7 @@ const messagesSlice = createSlice({
         state.sentMessages = state.sentMessages.filter(
           (email) => email._id !== action.payload
         );
+        state.total = state.total - 1;
         state.error = null;
 
         toast.success("Message deleted successfully", {
@@ -259,6 +260,7 @@ const messagesSlice = createSlice({
         state.receivedMessages = state.receivedMessages.filter(
           (email) => email._id !== action.payload
         );
+        state.total = state.total - 1;
         state.error = null;
 
         toast.success("Email deleted successfully", {

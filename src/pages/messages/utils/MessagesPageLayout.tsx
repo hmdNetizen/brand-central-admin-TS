@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import Tables from "src/components/table/Tables";
 import { messagesColumns } from "src/lib/dataset/tableData";
-// import DeleteEmail from "./modals/DeleteEmail";
+import DeleteMessage from "../modals/DeleteMessage";
 // import ReplyEmail from "./modals/ReplyEmail";
 import MessageItem from "src/components/messages/MessageItem";
 import {
@@ -27,11 +27,12 @@ const MessagePagesLayout = (props: PageLayoutProps) => {
     messages,
     onChange,
     loading,
+    isReceivedMessage,
   } = props;
   const theme = useTheme();
 
-  const [openDeleteEmail, setOpenDeleteEmail] = useState(false);
-  const [openSendEmail, setOpenSendEmail] = useState(false);
+  const [openDeleteMessage, setOpenDeleteMessage] = useState(false);
+  const [openSendMessage, setOpenSendMessage] = useState(false);
 
   const total = useTypedSelector((state) => state.messages.total);
 
@@ -84,17 +85,17 @@ const MessagePagesLayout = (props: PageLayoutProps) => {
                   <MessageItem
                     key={message._id}
                     message={message}
-                    setOpenDeleteEmail={setOpenDeleteEmail}
-                    setOpenSendEmail={setOpenSendEmail}
+                    setOpenDeleteEmail={setOpenDeleteMessage}
+                    setOpenSendEmail={setOpenSendMessage}
                   />
                 );
               })}
           </Tables>
         </Grid>
       </ContainerWrapper>
-      <DeleteEmail
-        openDeleteEmail={openDeleteEmail}
-        setOpenDeleteEmail={setOpenDeleteEmail}
+      <DeleteMessage
+        openDeleteMessage={openDeleteMessage}
+        setOpenDeleteMessage={setOpenDeleteMessage}
         isReceivedMessage={isReceivedMessage}
       />
       {/* <ReplyEmail
