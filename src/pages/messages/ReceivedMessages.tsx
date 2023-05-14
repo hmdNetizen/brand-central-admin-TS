@@ -47,6 +47,7 @@ const ReceivedMessages = () => {
       page={page}
       setPage={setPage}
       title="Received Messages"
+      isReceivedMessage={true}
     />
   );
 };

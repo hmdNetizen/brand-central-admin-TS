@@ -96,7 +96,7 @@ const MessagePagesLayout = (props: PageLayoutProps) => {
       <DeleteMessage
         openDeleteMessage={openDeleteMessage}
         setOpenDeleteMessage={setOpenDeleteMessage}
-        isReceivedMessage={isReceivedMessage}
+        isReceivedMessage={isReceivedMessage!}
       />
       {/* <ReplyEmail
         open={openSendEmail}

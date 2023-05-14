@@ -10,5 +10,5 @@ export type PageLayoutProps = {
   messages: MessagesPayloadResponse[];
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   loading: boolean;
-  isReceivedMessage: boolean;
+  isReceivedMessage?: boolean;
 };
