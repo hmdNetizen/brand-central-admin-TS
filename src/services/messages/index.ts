@@ -1,4 +1,7 @@
+import React from "react";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import axios from "../axios";
 import {
   initStateTypes,
   ReceivedEmailTypes,
@@ -6,14 +9,13 @@ import {
   SendEmailToCustomerType,
   MessagesPayloadResponse,
 } from "./MessageTypes";
-import axios from "../axios";
 
 const initialState: initStateTypes = {
   loading: false,
   loadingMessageAction: false,
   sentMessages: [],
   receivedMessages: [],
-  singleEmail: null,
+  singleMessage: null,
   total: 0,
   emailSuccess: "",
   error: null,
@@ -129,6 +131,54 @@ export const sendEmailToCustomer = createAsyncThunk(
   }
 );
 
+export const deleteSentMessage = createAsyncThunk(
+  "delete-sent-message",
+  async (
+    details: {
+      messageId: string;
+      setOpenDeleteMessage: React.Dispatch<React.SetStateAction<boolean>>;
+    },
+    thunkAPI
+  ) => {
+    const { messageId, setOpenDeleteMessage } = details;
+    try {
+      const { status } = await axios.delete(`/api/messages/${messageId}`);
+
+      if (status === 200) {
+        setOpenDeleteMessage(false);
+      }
+
+      return messageId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
+export const deleteReceivedMessage = createAsyncThunk(
+  "delete-received-message",
+  async (
+    details: {
+      messageId: string;
+      setOpenDeleteMessage: React.Dispatch<React.SetStateAction<boolean>>;
+    },
+    thunkAPI
+  ) => {
+    const { messageId, setOpenDeleteMessage } = details;
+    try {
+      const { status } = await axios.delete(`/api/contact/${messageId}`);
+
+      if (status === 200) {
+        setOpenDeleteMessage(false);
+      }
+
+      return messageId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
 const messagesSlice = createSlice({
   name: "messages",
   initialState,
@@ -137,7 +187,7 @@ const messagesSlice = createSlice({
       state,
       action: PayloadAction<MessagesPayloadResponse>
     ) => {
-      state.singleEmail = action.payload;
+      state.singleMessage = action.payload;
     },
   },
   extraReducers(builder) {
@@ -178,6 +228,50 @@ const messagesSlice = createSlice({
       state.total = action.payload.total;
       state.error = null;
     });
+    builder
+      .addCase(deleteSentMessage.pending, (state) => {
+        state.loadingMessageAction = true;
+      })
+      .addCase(deleteSentMessage.fulfilled, (state, action) => {
+        state.loadingMessageAction = false;
+        state.sentMessages = state.sentMessages.filter(
+          (email) => email._id !== action.payload
+        );
+        state.error = null;
+
+        toast.success("Message deleted successfully", {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(deleteSentMessage.rejected, (state, action) => {
+        state.loadingMessageAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(deleteReceivedMessage.pending, (state) => {
+        state.loadingMessageAction = true;
+      })
+      .addCase(deleteReceivedMessage.fulfilled, (state, action) => {
+        state.loadingMessageAction = false;
+        state.receivedMessages = state.receivedMessages.filter(
+          (email) => email._id !== action.payload
+        );
+        state.error = null;
+
+        toast.success("Email deleted successfully", {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(deleteReceivedMessage.rejected, (state, action) => {
+        state.loadingMessageAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
   },
 });
 

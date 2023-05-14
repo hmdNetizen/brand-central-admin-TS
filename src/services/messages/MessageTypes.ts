@@ -54,7 +54,7 @@ export type initStateTypes = {
   loadingMessageAction: boolean;
   sentMessages: MessagesPayloadResponse[];
   receivedMessages: MessagesPayloadResponse[];
-  singleEmail: MessagesPayloadResponse | null;
+  singleMessage: MessagesPayloadResponse | null;
   total: number;
   emailSuccess: string;
   error: null | string;

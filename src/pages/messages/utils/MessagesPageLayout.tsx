@@ -7,7 +7,6 @@ import { messagesColumns } from "src/lib/dataset/tableData";
 // import DeleteEmail from "./modals/DeleteEmail";
 // import ReplyEmail from "./modals/ReplyEmail";
 import MessageItem from "src/components/messages/MessageItem";
-import { MessagesPayloadResponse } from "src/services/messages/MessageTypes";
 import {
   Container,
   ContainerWrapper,
@@ -15,18 +14,7 @@ import {
 import PageHeadingActions from "src/components/common/PageHeadingActions";
 import { SelectChangeEvent } from "@mui/material";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-
-type PageLayoutProps = {
-  title: string;
-  filterText: string;
-  page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
-  rowsPerPage: number;
-  setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
-  messages: MessagesPayloadResponse[];
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  loading: boolean;
-};
+import { PageLayoutProps } from "./types";
 
 const MessagePagesLayout = (props: PageLayoutProps) => {
   const {
@@ -104,11 +92,11 @@ const MessagePagesLayout = (props: PageLayoutProps) => {
           </Tables>
         </Grid>
       </ContainerWrapper>
-      {/* <DeleteEmail
+      <DeleteEmail
         openDeleteEmail={openDeleteEmail}
         setOpenDeleteEmail={setOpenDeleteEmail}
         isReceivedMessage={isReceivedMessage}
-      /> */}
+      />
       {/* <ReplyEmail
         open={openSendEmail}
         setOpen={setOpenSendEmail}
