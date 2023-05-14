@@ -76,7 +76,7 @@ const MessagePagesLayout = (props: PageLayoutProps) => {
           onChange={onChange}
           rowsPerPage={rowsPerPage.toString()}
           handleSelectRowsPerPage={handleSelectRowsPerPage}
-          placeholderText="Search by email..."
+          placeholderText="Search by email, subject or content"
         />
         <Grid item container style={{ marginTop: "5rem" }}>
           <Tables

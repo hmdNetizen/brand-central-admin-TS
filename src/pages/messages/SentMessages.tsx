@@ -14,31 +14,40 @@ const SentMessages = () => {
   const loading = useTypedSelector((state) => state.messages.loading);
   const sendMessages = useTypedSelector((state) => state.messages.sentMessages);
 
-  const { getAllSentMessages } = useActions();
+  const { getAllSentMessages, getSearchedSentMessages } = useActions();
 
-  //   eslint-disable-next-line
-  // const debounceFilteredCompletedOrders = useCallback(
-  //   debounce(handleFilteredEmailData, 500),
-  //   []
-  // );
+  const debounceSearchedMessages = useCallback(
+    debounce(getSearchedSentMessages, 500),
+    []
+  );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPage(0);
     setFilterText(event.target.value);
 
-    //   debounceFilteredCompletedOrders({
-    //     emailData: sentEmails,
-    //     text: event.target.value,
-    //   });
-
-    setPage(0);
+    if (event.target.value.length) {
+      debounceSearchedMessages({
+        page: page + 1,
+        limit: rowsPerPage,
+        searchTerm: event.target.value,
+      });
+    }
   };
 
   useEffect(() => {
-    getAllSentMessages({
-      page: page + 1,
-      limit: rowsPerPage,
-    });
-  }, [page, rowsPerPage]);
+    if (!filterText.length) {
+      getAllSentMessages({
+        page: page + 1,
+        limit: rowsPerPage,
+      });
+    } else {
+      debounceSearchedMessages({
+        page: page + 1,
+        limit: rowsPerPage,
+        searchTerm: filterText,
+      });
+    }
+  }, [filterText, page, rowsPerPage]);
 
   return (
     <MessagesPageLayout

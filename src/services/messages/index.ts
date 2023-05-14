@@ -27,6 +27,10 @@ export const getAllSentMessages = createAsyncThunk(
       const { data } = await axios.get(
         `/api/messages/v1?page=${page}&limit=${limit}`
       );
+      console.log(
+        "Get Endpoint",
+        `/api/messages/v1?page=${page}&limit=${limit}`
+      );
       const result = data as SentEmailTypes;
       const transformResult = result.data.data.map((message) => ({
         _id: message._id,
@@ -49,9 +53,21 @@ export const getAllSentMessages = createAsyncThunk(
 
 export const getSearchedSentMessages = createAsyncThunk(
   "searched/sent",
-  async (_, thunkAPI) => {
+  async (
+    details: { page: number; limit: number; searchTerm: string },
+    thunkAPI
+  ) => {
+    const { page, limit, searchTerm } = details;
     try {
-      const { data } = await axios.get("/api/messages/v1");
+      const { data } = await axios.get(
+        `/api/messages/v1?page=${page}&limit=${limit}&searchTerm=${searchTerm}`
+      );
+
+      console.log(
+        "Search endpoint",
+        `/api/messages/v1?page=${page}&limit=${limit}${searchTerm}`
+      );
+
       const result = data as SentEmailTypes;
       const transformResult = result.data.data.map((message) => ({
         _id: message._id,
@@ -62,7 +78,10 @@ export const getSearchedSentMessages = createAsyncThunk(
         isRead: false,
       }));
 
-      return transformResult;
+      return {
+        sentMessages: transformResult,
+        total: result.data.total,
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue("Error occurred while fetching messages");
     }
@@ -153,6 +172,12 @@ const messagesSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder.addCase(getSearchedSentMessages.fulfilled, (state, action) => {
+      state.loading = false;
+      state.sentMessages = action.payload.sentMessages;
+      state.total = action.payload.total;
+      state.error = null;
+    });
   },
 });
 
