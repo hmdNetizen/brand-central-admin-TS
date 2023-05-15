@@ -1,89 +1,74 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
+import Box, { BoxProps } from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { styles, useTheme } from "@mui/material/styles";
-import CustomFormInput from "src/utils/CustomFormInput";
-import CustomTextArea from "src/utils/CustomTextArea";
+import { styled, useTheme } from "@mui/material/styles";
 import { validateEmail } from "src/lib/helpers";
-import CustomAutoComplete from "src/utils/CustomAutoComplete";
-import CircularProgress from "@mui/material/CircularProgress";
-import { useSelector } from "react-redux";
+import MessageForm from "./MessageForm";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import { EmailList, MailDataTypes } from "./types";
 
-const style = {
-  bgcolor: "background.paper",
-};
+const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
+  width: 500,
+  position: "absolute",
+  bottom: 5,
+  right: 5,
+  padding: "1rem",
 
-const useStyles = makeStyles((theme) => ({
-  box: {
-    width: 500,
-    position: "absolute",
-    bottom: 5,
-    right: 5,
-    boxShadow: 24,
-    padding: "1rem",
-
-    [theme.breakpoints.only("xs")]: {
-      width: "100%",
-      right: 0,
-      bottom: 0,
-    },
-  },
-  formContainer: {
-    "&.MuiGrid-root": {
-      padding: "2rem",
-      background: "#fff",
-    },
-  },
-  button: {
-    "&.MuiButton-root": {
-      fontSize: "1.5rem",
-      fontWeight: 400,
-      textTransform: "none",
-      width: "100%",
-      background: theme.palette.secondary.dark,
-
-      "&:hover": {
-        background: theme.palette.secondary.light,
-      },
-      "&:active": {
-        background: theme.palette.secondary.dark,
-      },
-    },
+  [theme.breakpoints.only("xs")]: {
+    width: "100%",
+    right: 0,
+    bottom: 0,
   },
 }));
 
-const MessageBox = ({
-  open,
-  setOpen,
-  mailData,
-  setMailData,
-  emailList,
-  companyEmailError,
-  setCompanyEmailError,
-  handleClose,
-  handleAddToEmailList,
-  onSubmit,
-}) => {
-  const theme = useTheme();
-  const classes = useStyles();
+type MessageBoxProps = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  mailData: MailDataTypes;
+  setMailData: React.Dispatch<React.SetStateAction<MailDataTypes>>;
+  emailList: EmailList[];
+  companyEmailError: string;
+  setCompanyEmailError: React.Dispatch<React.SetStateAction<string>>;
+  onClose: () => void;
+  onAddEmailToList: () => void;
+  onSubmit: (event: React.FormEvent<Element>) => void;
+};
 
-  const { loadingEmailAction } = useSelector((state) => state.utils);
+const MessageBox = (props: MessageBoxProps) => {
+  const {
+    open,
+    setOpen,
+    mailData,
+    setMailData,
+    emailList,
+    companyEmailError,
+    setCompanyEmailError,
+    onClose,
+    onAddEmailToList,
+    onSubmit,
+  } = props;
+  const theme = useTheme();
+
+  const loadingMessageAction = useTypedSelector(
+    (state) => state.messages.loadingMessageAction
+  );
 
   const { companyEmail, subject, message } = mailData;
 
   const [subjectError, setSubjectError] = useState("");
   const [messageError, setMessageError] = useState("");
 
-  const handleEmailChange = (event) => {
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMailData((prev) => ({ ...prev, companyEmail: event.target.value }));
   };
 
-  const handleChange = (event) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = event.target;
     setMailData({ ...mailData, [name]: value });
 
@@ -119,11 +104,11 @@ const MessageBox = ({
   return (
     <Modal
       open={open}
-      onClose={handleClose}
+      onClose={onClose}
       aria-labelledby="modal-Send-message"
       aria-describedby="modal-send-message-to-customer"
     >
-      <Box style={style} className={classes.box}>
+      <StyledBox>
         <Grid
           item
           container
@@ -145,60 +130,21 @@ const MessageBox = ({
             </IconButton>
           </Grid>
         </Grid>
-        <Grid
-          item
-          container
-          direction="column"
-          className={classes.formContainer}
-        >
-          <CustomAutoComplete
-            emailList={emailList}
-            onKeyDown={handleAddToEmailList}
-            error={companyEmailError}
-            companyEmail={companyEmail}
-            onInputChange={handleEmailChange}
-          />
-          <Grid item container style={{ margin: "2rem 0" }}>
-            <CustomFormInput
-              type="text"
-              name="subject"
-              placeholder="Subject"
-              label=""
-              value={subject}
-              onChange={handleChange}
-              error={subjectError}
-            />
-          </Grid>
-          <Grid item container style={{ marginBottom: "2rem" }}>
-            <CustomTextArea
-              label=""
-              name="message"
-              placeholder="Enter your message"
-              value={decodeURIComponent(message)}
-              onChange={handleChange}
-              error={messageError}
-            />
-          </Grid>
-          <Grid item container>
-            <Button
-              type="submit"
-              variant="contained"
-              color="secondary"
-              className={classes.button}
-              disableRipple
-              onClick={onSubmit}
-            >
-              {loadingEmailAction ? (
-                <CircularProgress
-                  style={{ height: 25, width: 25, color: "#fff" }}
-                />
-              ) : (
-                "Send Message"
-              )}
-            </Button>
-          </Grid>
-        </Grid>
-      </Box>
+        <MessageForm
+          companyEmail={companyEmail}
+          emailList={emailList}
+          message={message}
+          subject={subject}
+          onAddEmailToList={onAddEmailToList}
+          onChange={handleChange}
+          onSubmit={onSubmit}
+          loadingMessageAction={loadingMessageAction}
+          companyEmailError={companyEmailError}
+          messageError={messageError}
+          subjectError={subjectError}
+          onEmailChange={handleEmailChange}
+        />
+      </StyledBox>
     </Modal>
   );
 };

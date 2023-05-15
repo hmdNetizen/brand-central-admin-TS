@@ -26,6 +26,7 @@ const MessageForm = (props: MessageFormProps) => {
     companyEmail,
     companyEmailError,
     onChange,
+    onEmailChange,
     subject,
     message,
     messageError,
@@ -45,7 +46,7 @@ const MessageForm = (props: MessageFormProps) => {
         onKeyDown={onAddEmailToList}
         error={companyEmailError}
         companyEmail={companyEmail}
-        onChange={onChange}
+        onChange={onEmailChange}
       />
       <Grid item container style={{ margin: "2rem 0" }}>
         <CustomFormInput

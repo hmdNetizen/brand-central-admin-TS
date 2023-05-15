@@ -13,8 +13,15 @@ export type MessageFormProps = {
   onChange: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
+  onEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   subjectError: string;
   message: string;
   messageError: string;
   loadingMessageAction: boolean;
+};
+
+export type MailDataTypes = {
+  companyEmail: string;
+  subject: string;
+  message: string;
 };
