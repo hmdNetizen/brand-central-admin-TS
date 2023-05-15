@@ -4,6 +4,7 @@ import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { styled } from "@mui/material/styles";
 import { validateEmail } from "src/lib/helpers";
+import { EmailList } from "src/components/messages/types";
 
 const StyledAutoComplete = styled(
   Autocomplete as React.ComponentType<
@@ -24,21 +25,16 @@ const Error = styled("small")(({ theme }) => ({
   fontWeight: 500,
 }));
 
-type EmailList = {
-  key: string;
-  email: string;
-};
-
 type CustomAutoCompleteProps = {
   emailList: EmailList[];
   error: string;
   companyEmail: string;
   onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => void;
-  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const CustomAutoComplete = (props: CustomAutoCompleteProps) => {
-  const { emailList, error, companyEmail, onKeyDown, onInputChange } = props;
+  const { emailList, error, companyEmail, onKeyDown, onChange } = props;
   return (
     <Fragment>
       <StyledAutoComplete
@@ -65,7 +61,7 @@ const CustomAutoComplete = (props: CustomAutoCompleteProps) => {
             placeholder="Recipient(s)"
             style={{ width: "100%" }}
             onKeyDown={onKeyDown}
-            onChange={onInputChange}
+            onChange={onChange}
           />
         )}
       />
