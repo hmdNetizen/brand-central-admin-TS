@@ -183,7 +183,7 @@ const messagesSlice = createSlice({
   name: "messages",
   initialState,
   reducers: {
-    setCurrentEmail: (
+    setCurrentMessage: (
       state,
       action: PayloadAction<MessagesPayloadResponse>
     ) => {
@@ -277,5 +277,5 @@ const messagesSlice = createSlice({
   },
 });
 
-export const { setCurrentEmail } = messagesSlice.actions;
+export const { setCurrentMessage } = messagesSlice.actions;
 export default messagesSlice.reducer;

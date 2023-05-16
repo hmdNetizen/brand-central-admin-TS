@@ -15,6 +15,14 @@ import PageHeadingActions from "src/components/common/PageHeadingActions";
 import { SelectChangeEvent } from "@mui/material";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { PageLayoutProps } from "./types";
+import MessageBox from "src/components/messages/MessageBox";
+import { EmailList, MailDataTypes } from "src/components/messages/types";
+
+const initialState = {
+  companyEmail: "",
+  subject: "",
+  message: "",
+};
 
 const MessagePagesLayout = (props: PageLayoutProps) => {
   const {
@@ -33,6 +41,9 @@ const MessagePagesLayout = (props: PageLayoutProps) => {
 
   const [openDeleteMessage, setOpenDeleteMessage] = useState(false);
   const [openSendMessage, setOpenSendMessage] = useState(false);
+  const [companyEmailError, setCompanyEmailError] = useState("");
+  const [mailData, setMailData] = useState<MailDataTypes>(initialState);
+  const [emailList, setEmailList] = useState<EmailList[]>([]);
 
   const total = useTypedSelector((state) => state.messages.total);
 
@@ -51,6 +62,14 @@ const MessagePagesLayout = (props: PageLayoutProps) => {
     setRowsPerPage(+selectEvent.target.value);
     setPage(0);
   };
+
+  const handleClose = () => {
+    setCompanyEmailError("");
+  };
+
+  const handleAddEmailToList = () => {};
+
+  const handleSubmit = (event: React.FormEvent<Element>) => {};
 
   return (
     <Container container direction="column">
@@ -87,6 +106,8 @@ const MessagePagesLayout = (props: PageLayoutProps) => {
                     message={message}
                     setOpenDeleteEmail={setOpenDeleteMessage}
                     setOpenSendEmail={setOpenSendMessage}
+                    setEmailList={setEmailList}
+                    setMailData={setMailData}
                   />
                 );
               })}
@@ -97,6 +118,18 @@ const MessagePagesLayout = (props: PageLayoutProps) => {
         openDeleteMessage={openDeleteMessage}
         setOpenDeleteMessage={setOpenDeleteMessage}
         isReceivedMessage={isReceivedMessage!}
+      />
+      <MessageBox
+        open={openSendMessage}
+        setOpen={setOpenSendMessage}
+        companyEmailError={companyEmailError}
+        setCompanyEmailError={setCompanyEmailError}
+        emailList={emailList}
+        mailData={mailData}
+        setMailData={setMailData}
+        onClose={handleClose}
+        onAddEmailToList={handleAddEmailToList}
+        onSubmit={handleSubmit}
       />
       {/* <ReplyEmail
         open={openSendEmail}

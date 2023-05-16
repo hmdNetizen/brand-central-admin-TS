@@ -12,11 +12,15 @@ import {
   StyledIconButton,
 } from "src/components/common/styles/CommonPageStyles";
 import { useActions } from "src/hooks/useActions";
+import { v4 as uuidv4 } from "uuid";
+import { EmailList, MailDataTypes } from "./types";
 
 type MessageItemProps = {
   setOpenDeleteEmail: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenSendEmail: React.Dispatch<React.SetStateAction<boolean>>;
   message: MessagesPayloadResponse;
+  setEmailList: React.Dispatch<React.SetStateAction<EmailList[]>>;
+  setMailData: React.Dispatch<React.SetStateAction<MailDataTypes>>;
 };
 
 const constructContent = (content: string) => {
@@ -25,18 +29,50 @@ const constructContent = (content: string) => {
 
 const MessageItem = (props: MessageItemProps) => {
   const theme = useTheme();
-  const { message, setOpenDeleteEmail, setOpenSendEmail } = props;
+  const {
+    message,
+    setOpenDeleteEmail,
+    setOpenSendEmail,
+    setEmailList,
+    setMailData,
+  } = props;
 
-  const { setCurrentEmail } = useActions();
+  const { setCurrentMessage } = useActions();
 
   const handleDeleteEmail = () => {
     setOpenDeleteEmail(true);
-    setCurrentEmail(message);
+    setCurrentMessage(message);
   };
 
   const handleOpenEmailBox = () => {
     setOpenSendEmail(true);
-    setCurrentEmail(message);
+    setCurrentMessage(message);
+
+    if (Array.isArray(message.emails)) {
+      const emails = message.emails.map((mail) => ({
+        key: uuidv4(),
+        email: mail,
+      }));
+
+      setEmailList(emails);
+    } else {
+      const customerEmail = {
+        key: uuidv4(),
+        email: message.emails,
+      };
+
+      setEmailList([customerEmail]);
+    }
+
+    setMailData((prev) => ({
+      ...prev,
+      subject: `${
+        message.subject.startsWith("Re:")
+          ? message.subject
+          : `Re: ${message.subject}`
+      }`,
+      message: `Hello `,
+    }));
   };
 
   return (

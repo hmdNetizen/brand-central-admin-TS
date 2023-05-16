@@ -75,6 +75,7 @@ const MessageForm = (props: MessageFormProps) => {
           variant="contained"
           color="secondary"
           disableRipple
+          style={{ width: "100%" }}
         >
           {loadingMessageAction ? (
             <StyledCircularProgress
