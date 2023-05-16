@@ -1,3 +1,5 @@
+import { EmailList, MailDataTypes } from "src/components/messages/types";
+
 export const capitalizeFirstLetters = (sentence: string) => {
   const lowerCaseSentence = sentence.toLowerCase();
   let splitSentence = lowerCaseSentence.split(" ");
@@ -78,3 +80,7 @@ export const validateEmail = (value: string) => {
     return false;
   }
 };
+
+// Checks if an email already exist in the emailList array
+export const inMailList = (mailList: EmailList[], newEmail: string) =>
+  mailList.some((mail) => mail.email === newEmail);
