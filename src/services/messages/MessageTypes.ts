@@ -29,6 +29,7 @@ export type SentEmailTypes = {
 export type ReceivedEmailTypes = {
   data: {
     data: ReceivedEmailReturnedPayload[];
+    total: number;
   };
 };
 

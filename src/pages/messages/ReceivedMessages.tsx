@@ -33,8 +33,11 @@ const ReceivedMessages = () => {
   };
 
   useEffect(() => {
-    getAllReceivedMessages();
-  }, []);
+    getAllReceivedMessages({
+      page: page + 1,
+      limit: rowsPerPage,
+    });
+  }, [page, rowsPerPage]);
 
   return (
     <MessagesPageLayout

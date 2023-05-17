@@ -32,10 +32,7 @@ export const getAllSentMessages = createAsyncThunk(
       const { data } = await axios.get(
         `/api/messages/v1?page=${page}&limit=${limit}`
       );
-      console.log(
-        "Get Endpoint",
-        `/api/messages/v1?page=${page}&limit=${limit}`
-      );
+
       const result = data as SentEmailTypes;
       const transformResult = result.data.data.map((message) => ({
         _id: message._id,
@@ -95,9 +92,12 @@ export const getSearchedSentMessages = createAsyncThunk(
 
 export const getAllReceivedMessages = createAsyncThunk(
   "messages/received",
-  async (_, thunkAPI) => {
+  async (query: { page: number; limit: number }, thunkAPI) => {
+    const { page, limit } = query;
     try {
-      const { data } = await axios.get("/api/contact");
+      const { data } = await axios.get(
+        `/api/contact/v1?page=${page}&limit=${limit}`
+      );
       const result = data as ReceivedEmailTypes;
 
       const transformResult = result.data.data.map((message) => ({
@@ -110,7 +110,10 @@ export const getAllReceivedMessages = createAsyncThunk(
         isRead: false,
       }));
 
-      return transformResult;
+      return {
+        receivedMessages: transformResult,
+        total: result.data.total,
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue("Error occurred while fetching messages");
     }
@@ -207,7 +210,8 @@ const messagesSlice = createSlice({
       })
       .addCase(getAllReceivedMessages.fulfilled, (state, action) => {
         state.loading = false;
-        state.receivedMessages = action.payload;
+        state.receivedMessages = action.payload.receivedMessages;
+        state.total = action.payload.total;
         state.error = null;
       })
       .addCase(getAllReceivedMessages.rejected, (state, action) => {
