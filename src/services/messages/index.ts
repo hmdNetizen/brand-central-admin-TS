@@ -2,6 +2,7 @@ import React from "react";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import axios from "../axios";
+import { v4 as uuidv4 } from "uuid";
 import {
   initStateTypes,
   ReceivedEmailTypes,
@@ -9,10 +10,12 @@ import {
   SendEmailToCustomerType,
   MessagesPayloadResponse,
 } from "./MessageTypes";
+import { constructContent } from "src/lib/helpers";
 
 const initialState: initStateTypes = {
   loading: false,
   loadingMessageAction: false,
+  loadingSendMessage: false,
   sentMessages: [],
   receivedMessages: [],
   singleMessage: null,
@@ -114,23 +117,6 @@ export const getAllReceivedMessages = createAsyncThunk(
   }
 );
 
-export const sendEmailToCustomer = createAsyncThunk(
-  "send-email",
-  async (details: SendEmailToCustomerType, thunkAPI) => {
-    const { setOpen, ...fields } = details;
-
-    try {
-      const { status } = await axios.post(`/api/messages`, fields);
-
-      if (status === 200) setOpen(false);
-
-      return fields;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Email could not be sent");
-    }
-  }
-);
-
 export const deleteSentMessage = createAsyncThunk(
   "delete-sent-message",
   async (
@@ -175,6 +161,30 @@ export const deleteReceivedMessage = createAsyncThunk(
       return messageId;
     } catch (error) {
       return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
+export const sendEmailToCustomer = createAsyncThunk(
+  "send-email",
+  async (details: SendEmailToCustomerType, thunkAPI) => {
+    const { setOpen, ...fields } = details;
+
+    try {
+      const { status } = await axios.post(`/api/messages`, fields);
+
+      if (status === 200) setOpen(false);
+
+      return {
+        _id: uuidv4(),
+        emails: fields.to,
+        subject: fields.subject,
+        body: decodeURIComponent(constructContent(fields.content)),
+        createdAt: new Date().toISOString(),
+        isRead: false,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Email could not be sent");
     }
   }
 );
@@ -270,6 +280,27 @@ const messagesSlice = createSlice({
       })
       .addCase(deleteReceivedMessage.rejected, (state, action) => {
         state.loadingMessageAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(sendEmailToCustomer.pending, (state) => {
+        state.loadingSendMessage = true;
+      })
+      .addCase(sendEmailToCustomer.fulfilled, (state, action) => {
+        state.loadingSendMessage = false;
+        state.emailSuccess = "Email Sent";
+        state.sentMessages = [action.payload, ...state.sentMessages];
+        state.error = null;
+
+        toast.success("Email Sent Successfully", {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(sendEmailToCustomer.rejected, (state, action) => {
+        state.loadingSendMessage = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

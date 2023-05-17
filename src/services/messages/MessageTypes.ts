@@ -52,6 +52,7 @@ export type MessagesPayloadResponse = {
 export type initStateTypes = {
   loading: boolean;
   loadingMessageAction: boolean;
+  loadingSendMessage: boolean;
   sentMessages: MessagesPayloadResponse[];
   receivedMessages: MessagesPayloadResponse[];
   singleMessage: MessagesPayloadResponse | null;

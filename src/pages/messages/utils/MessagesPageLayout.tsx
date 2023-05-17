@@ -5,7 +5,6 @@ import { useTheme } from "@mui/material/styles";
 import Tables from "src/components/table/Tables";
 import { messagesColumns } from "src/lib/dataset/tableData";
 import DeleteMessage from "../modals/DeleteMessage";
-// import ReplyEmail from "./modals/ReplyEmail";
 import MessageItem from "src/components/messages/MessageItem";
 import {
   Container,
@@ -17,6 +16,9 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { PageLayoutProps } from "./types";
 import MessageBox from "src/components/messages/MessageBox";
 import { EmailList, MailDataTypes } from "src/components/messages/types";
+import { inMailList, validateEmail } from "src/lib/helpers";
+import { v4 as uuidv4 } from "uuid";
+import { useActions } from "src/hooks/useActions";
 
 const initialState = {
   companyEmail: "",
@@ -39,11 +41,17 @@ const MessagePagesLayout = (props: PageLayoutProps) => {
   } = props;
   const theme = useTheme();
 
+  const { sendEmailToCustomer } = useActions();
+
   const [openDeleteMessage, setOpenDeleteMessage] = useState(false);
   const [openSendMessage, setOpenSendMessage] = useState(false);
   const [companyEmailError, setCompanyEmailError] = useState("");
+  const [subjectError, setSubjectError] = useState("");
+  const [messageError, setMessageError] = useState("");
   const [mailData, setMailData] = useState<MailDataTypes>(initialState);
   const [emailList, setEmailList] = useState<EmailList[]>([]);
+
+  const { companyEmail, message, subject } = mailData;
 
   const total = useTypedSelector((state) => state.messages.total);
 
@@ -67,9 +75,48 @@ const MessagePagesLayout = (props: PageLayoutProps) => {
     setCompanyEmailError("");
   };
 
-  const handleAddEmailToList = () => {};
+  const handleAddToEmailList = (event: React.KeyboardEvent<Element>) => {
+    if (event.key === "Enter") {
+      if (!validateEmail(companyEmail)) {
+        setCompanyEmailError("Please enter a valid email");
+      } else if (inMailList(emailList, companyEmail)) {
+        setCompanyEmailError("Email already exist");
+      } else {
+        setEmailList([...emailList, { key: uuidv4(), email: companyEmail }]);
+        setCompanyEmailError("");
+      }
 
-  const handleSubmit = (event: React.FormEvent<Element>) => {};
+      setTimeout(() => setCompanyEmailError(""), 5000);
+    }
+  };
+
+  const handleSubmit = (event: React.FormEvent<Element>) => {
+    event.preventDefault();
+
+    if (emailList.length === 0) {
+      setCompanyEmailError("Email is required");
+      return;
+    }
+
+    if (!subject) {
+      setSubjectError("Subject is required");
+      return;
+    }
+
+    if (!message) {
+      setMessageError("Message is required");
+      return;
+    }
+
+    const emails = emailList.map((list) => list.email);
+
+    sendEmailToCustomer({
+      setOpen: setOpenSendMessage,
+      to: emails,
+      subject,
+      content: encodeURIComponent(message),
+    });
+  };
 
   return (
     <Container container direction="column">
@@ -128,14 +175,9 @@ const MessagePagesLayout = (props: PageLayoutProps) => {
         mailData={mailData}
         setMailData={setMailData}
         onClose={handleClose}
-        onAddEmailToList={handleAddEmailToList}
+        onAddEmailToList={handleAddToEmailList}
         onSubmit={handleSubmit}
       />
-      {/* <ReplyEmail
-        open={openSendEmail}
-        setOpen={setOpenSendEmail}
-        isReceivedMessage={isReceivedMessage}
-      /> */}
     </Container>
   );
 };

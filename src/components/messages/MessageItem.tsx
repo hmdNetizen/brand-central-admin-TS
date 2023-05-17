@@ -14,6 +14,7 @@ import {
 import { useActions } from "src/hooks/useActions";
 import { v4 as uuidv4 } from "uuid";
 import { EmailList, MailDataTypes } from "./types";
+import { constructContent } from "src/lib/helpers";
 
 type MessageItemProps = {
   setOpenDeleteEmail: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,10 +22,6 @@ type MessageItemProps = {
   message: MessagesPayloadResponse;
   setEmailList: React.Dispatch<React.SetStateAction<EmailList[]>>;
   setMailData: React.Dispatch<React.SetStateAction<MailDataTypes>>;
-};
-
-const constructContent = (content: string) => {
-  return content.replace(/%0A/g, "\n");
 };
 
 const MessageItem = (props: MessageItemProps) => {

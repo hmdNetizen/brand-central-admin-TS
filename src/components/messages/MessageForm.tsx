@@ -31,7 +31,7 @@ const MessageForm = (props: MessageFormProps) => {
     message,
     messageError,
     subjectError,
-    loadingMessageAction,
+    loadingSendMessage,
   } = props;
   return (
     <FormContainer
@@ -77,7 +77,7 @@ const MessageForm = (props: MessageFormProps) => {
           disableRipple
           style={{ width: "100%" }}
         >
-          {loadingMessageAction ? (
+          {loadingSendMessage ? (
             <StyledCircularProgress
               style={{ height: 25, width: 25, color: "#fff" }}
             />

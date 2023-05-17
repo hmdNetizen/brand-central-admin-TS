@@ -17,7 +17,7 @@ export type MessageFormProps = {
   subjectError: string;
   message: string;
   messageError: string;
-  loadingMessageAction: boolean;
+  loadingSendMessage: boolean;
 };
 
 export type MailDataTypes = {

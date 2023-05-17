@@ -84,3 +84,7 @@ export const validateEmail = (value: string) => {
 // Checks if an email already exist in the emailList array
 export const inMailList = (mailList: EmailList[], newEmail: string) =>
   mailList.some((mail) => mail.email === newEmail);
+
+export const constructContent = (content: string) => {
+  return content.replace(/%0A/g, "\n");
+};

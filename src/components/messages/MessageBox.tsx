@@ -34,7 +34,7 @@ type MessageBoxProps = {
   companyEmailError: string;
   setCompanyEmailError: React.Dispatch<React.SetStateAction<string>>;
   onClose: () => void;
-  onAddEmailToList: () => void;
+  onAddEmailToList: (event: React.KeyboardEvent<Element>) => void;
   onSubmit: (event: React.FormEvent<Element>) => void;
 };
 
@@ -53,8 +53,8 @@ const MessageBox = (props: MessageBoxProps) => {
   } = props;
   const theme = useTheme();
 
-  const loadingMessageAction = useTypedSelector(
-    (state) => state.messages.loadingMessageAction
+  const loadingSendMessage = useTypedSelector(
+    (state) => state.messages.loadingSendMessage
   );
 
   const { companyEmail, subject, message } = mailData;
@@ -138,7 +138,7 @@ const MessageBox = (props: MessageBoxProps) => {
           onAddEmailToList={onAddEmailToList}
           onChange={handleChange}
           onSubmit={onSubmit}
-          loadingMessageAction={loadingMessageAction}
+          loadingSendMessage={loadingSendMessage}
           companyEmailError={companyEmailError}
           messageError={messageError}
           subjectError={subjectError}
