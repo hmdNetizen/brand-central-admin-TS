@@ -177,6 +177,10 @@ const MessagePagesLayout = (props: PageLayoutProps) => {
         onClose={handleClose}
         onAddEmailToList={handleAddToEmailList}
         onSubmit={handleSubmit}
+        messageError={messageError}
+        subjectError={subjectError}
+        setMessageError={setMessageError}
+        setSubjectError={setSubjectError}
       />
     </Container>
   );

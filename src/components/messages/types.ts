@@ -25,3 +25,20 @@ export type MailDataTypes = {
   subject: string;
   message: string;
 };
+
+export type MessageBoxProps = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  mailData: MailDataTypes;
+  setMailData: React.Dispatch<React.SetStateAction<MailDataTypes>>;
+  emailList: EmailList[];
+  companyEmailError: string;
+  setCompanyEmailError: React.Dispatch<React.SetStateAction<string>>;
+  onClose: () => void;
+  onAddEmailToList: (event: React.KeyboardEvent<Element>) => void;
+  onSubmit: (event: React.FormEvent<Element>) => void;
+  subjectError: string;
+  setSubjectError: React.Dispatch<React.SetStateAction<string>>;
+  messageError: string;
+  setMessageError: React.Dispatch<React.SetStateAction<string>>;
+};

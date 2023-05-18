@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Box, { BoxProps } from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -9,7 +9,7 @@ import { styled, useTheme } from "@mui/material/styles";
 import { validateEmail } from "src/lib/helpers";
 import MessageForm from "./MessageForm";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-import { EmailList, MailDataTypes } from "./types";
+import { MessageBoxProps } from "./types";
 
 const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
   width: 500,
@@ -25,19 +25,6 @@ const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
   },
 }));
 
-type MessageBoxProps = {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  mailData: MailDataTypes;
-  setMailData: React.Dispatch<React.SetStateAction<MailDataTypes>>;
-  emailList: EmailList[];
-  companyEmailError: string;
-  setCompanyEmailError: React.Dispatch<React.SetStateAction<string>>;
-  onClose: () => void;
-  onAddEmailToList: (event: React.KeyboardEvent<Element>) => void;
-  onSubmit: (event: React.FormEvent<Element>) => void;
-};
-
 const MessageBox = (props: MessageBoxProps) => {
   const {
     open,
@@ -50,6 +37,10 @@ const MessageBox = (props: MessageBoxProps) => {
     onClose,
     onAddEmailToList,
     onSubmit,
+    messageError,
+    subjectError,
+    setMessageError,
+    setSubjectError,
   } = props;
   const theme = useTheme();
 
@@ -58,9 +49,6 @@ const MessageBox = (props: MessageBoxProps) => {
   );
 
   const { companyEmail, subject, message } = mailData;
-
-  const [subjectError, setSubjectError] = useState("");
-  const [messageError, setMessageError] = useState("");
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMailData((prev) => ({ ...prev, companyEmail: event.target.value }));
