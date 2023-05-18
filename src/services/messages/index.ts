@@ -119,6 +119,39 @@ export const getAllReceivedMessages = createAsyncThunk(
     }
   }
 );
+export const getSearchedReceivedMessages = createAsyncThunk(
+  "searched/received",
+  async (
+    query: { page: number; limit: number; searchTerm: string },
+    thunkAPI
+  ) => {
+    const { page, limit, searchTerm } = query;
+    // const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+    try {
+      const { data } = await axios.get(
+        `/api/contact/v1?page=${page}&limit=${limit}&searchTerm=${searchTerm}`
+      );
+      const result = data as ReceivedEmailTypes;
+
+      const transformResult = result.data.data.map((message) => ({
+        _id: message._id,
+        emails: message.emailAddress,
+        subject: message.messageSubject,
+        body: message.messageBody,
+        createdAt: message.createdAt,
+        fullName: message?.fullName,
+        isRead: false,
+      }));
+
+      return {
+        receivedMessages: transformResult,
+        total: result.data.total,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error occurred while fetching messages");
+    }
+  }
+);
 
 export const deleteSentMessage = createAsyncThunk(
   "delete-sent-message",
@@ -239,6 +272,12 @@ const messagesSlice = createSlice({
     builder.addCase(getSearchedSentMessages.fulfilled, (state, action) => {
       state.loading = false;
       state.sentMessages = action.payload.sentMessages;
+      state.total = action.payload.total;
+      state.error = null;
+    });
+    builder.addCase(getSearchedReceivedMessages.fulfilled, (state, action) => {
+      state.loading = false;
+      state.receivedMessages = action.payload.receivedMessages;
       state.total = action.payload.total;
       state.error = null;
     });

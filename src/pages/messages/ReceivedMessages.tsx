@@ -18,26 +18,38 @@ const ReceivedMessages = () => {
     (state) => state.messages.receivedMessages
   );
 
-  const { getAllReceivedMessages } = useActions();
+  const { getAllReceivedMessages, getSearchedReceivedMessages } = useActions();
 
-  // const debounceFilteredReceivedEmail = useCallback(
-  //   debounce(handleFilterReceivedEmail, 500),
-  //   []
-  // );
+  const debounceSearchedReceivedEmail = useCallback(
+    debounce(getSearchedReceivedMessages, 500),
+    []
+  );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPage(0);
     setFilterText(event.target.value);
 
-    //   debounceFilteredReceivedEmail(event.target.value);
+    debounceSearchedReceivedEmail({
+      page: page + 1,
+      limit: rowsPerPage,
+      searchTerm: event.target.value,
+    });
   };
 
   useEffect(() => {
-    getAllReceivedMessages({
-      page: page + 1,
-      limit: rowsPerPage,
-    });
-  }, [page, rowsPerPage]);
+    if (!filterText) {
+      getAllReceivedMessages({
+        page: page + 1,
+        limit: rowsPerPage,
+      });
+    } else {
+      debounceSearchedReceivedEmail({
+        page: page + 1,
+        limit: rowsPerPage,
+        searchTerm: filterText,
+      });
+    }
+  }, [page, rowsPerPage, filterText]);
 
   return (
     <MessagesPageLayout
