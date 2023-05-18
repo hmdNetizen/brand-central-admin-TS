@@ -9,7 +9,7 @@ import orderReducer from "./orders";
 import customersReducer from "./customers";
 import couponReducer from "./coupon";
 // import settingsReducer from "./settings";
-// import shippingReducer from "./shipping";
+import shippingReducer from "./shipping";
 import preOrderReducer from "./pre-orders";
 import categoriesReducer from "./categories";
 import brandsReducer from "./brands";
@@ -29,6 +29,7 @@ const rootReducer = combineReducers({
   brands: brandsReducer,
   coupon: couponReducer,
   messages: messagesReducer,
+  shipping: shippingReducer,
 });
 
 const store = configureStore({

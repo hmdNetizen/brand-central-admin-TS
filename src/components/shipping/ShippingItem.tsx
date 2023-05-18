@@ -1,18 +1,17 @@
 import React from "react";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import IconButton from "@mui/material/IconButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
-import CustomIconButton from "src/utils/CustomIconButton";
 import { ZipCodeReturnedPayload } from "src/services/shipping/ShoppingTypes";
 import {
   OptionsTableData,
   ActionButton,
   StyledIconButton,
 } from "src/components/common/styles/CommonPageStyles";
+import { useActions } from "src/hooks/useActions";
 
 type ShippingItemProps = {
   zipCode: ZipCodeReturnedPayload;
@@ -26,6 +25,7 @@ const ShippingItem = (props: ShippingItemProps) => {
   const { zipCode, index, setOpenDeleteZipCode, setOpenEditZipCode } = props;
 
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
+  const { setCurrentZipCode } = useActions();
 
   const handleEditZipCode = () => {
     setOpenEditZipCode(true);
