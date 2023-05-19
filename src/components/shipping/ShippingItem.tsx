@@ -2,16 +2,21 @@ import React from "react";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
+import { useTheme, styled } from "@mui/material/styles";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import { ZipCodeReturnedPayload } from "src/services/shipping/ShoppingTypes";
 import {
-  OptionsTableData,
   ActionButton,
   StyledIconButton,
 } from "src/components/common/styles/CommonPageStyles";
 import { useActions } from "src/hooks/useActions";
+
+const OptionsTableData = styled("div")({
+  minWidth: 150,
+  display: "flex",
+  gap: "2rem",
+});
 
 type ShippingItemProps = {
   zipCode: ZipCodeReturnedPayload;
@@ -51,8 +56,10 @@ const ShippingItem = (props: ShippingItemProps) => {
             title="Edit"
             onClick={handleEditZipCode}
           />
-
-          <StyledIconButton onClick={handleDeleteZipCode}>
+          <StyledIconButton
+            onClick={handleDeleteZipCode}
+            style={{ width: 40, height: 40 }}
+          >
             <DeleteSharpIcon />
           </StyledIconButton>
         </OptionsTableData>

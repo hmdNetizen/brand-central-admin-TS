@@ -18,7 +18,7 @@ export const getShippingZipCodes = createAsyncThunk(
   "shipping/get-shipping-zipCodes",
   async (_, thunkAPI) => {
     try {
-      const { data } = await axios.get(`/api/zip-code`);
+      const { data } = await axios.get(`/api/zip-code/v1`);
       const result = data as ZipCodeReturnedPayloadTypes;
       return {
         zipCodes: result.data.data,

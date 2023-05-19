@@ -23,6 +23,7 @@ import PendingOrders from "src/pages/orders/PendingOrders";
 import PrintOrderInvoice from "src/pages/orders/PrintOrderInvoice";
 import ProcessingOrders from "src/pages/orders/ProcessingOrders";
 import PreOrders from "src/pages/pre-orders/PreOrders";
+import ShippingZipCodes from "src/pages/shipping/ShippingZipCodes";
 import SubCategories from "src/pages/subcategories/SubCategories";
 
 const PagesRoutes = () => {
@@ -94,6 +95,9 @@ const PagesRoutes = () => {
                   path="received-messages"
                   element={<ReceivedMessages />}
                 />
+              </Route>
+              <Route path="shipping">
+                <Route index path="zip-codes" element={<ShippingZipCodes />} />
               </Route>
             </Route>
           </Route>

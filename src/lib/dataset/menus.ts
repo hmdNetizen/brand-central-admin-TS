@@ -171,12 +171,12 @@ export const menus = [
     id: 9,
     title: "Shipping",
     icon: ShippingIcon,
-    path: "/shipping/zip-codes",
+    path: "/dashboard/shipping/zip-codes",
     subMenus: [
       {
         subId: 0,
         title: "Zip Codes",
-        path: "/shipping/zip-codes",
+        path: "/dashboard/shipping/zip-codes",
       },
     ],
   },

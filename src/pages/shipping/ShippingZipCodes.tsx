@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
-import Tables from "components/table/Tables";
+import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 // import AddZipCode from "./modals/AddZipCode";
 // import EditZipCode from "./modals/EditZipCode";
@@ -31,6 +31,7 @@ const ShippingZipCodes = () => {
 
   const loading = useTypedSelector((state) => state.shipping.loading);
   const zipCodes = useTypedSelector((state) => state.shipping.zipCodes);
+  const total = useTypedSelector((state) => state.shipping.total);
 
   const { getShippingZipCodes } = useActions();
 
@@ -87,7 +88,7 @@ const ShippingZipCodes = () => {
             setPage={setPage}
             rowsPerPage={rowsPerPage}
             setRowsPerPage={setRowsPerPage}
-            total={zipCodes.length}
+            total={total}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
             loading={loading}
             notFoundText="No Zip Code Found"
@@ -98,6 +99,7 @@ const ShippingZipCodes = () => {
                 .map((zip, index) => {
                   return (
                     <ShippingItem
+                      key={zip._id}
                       zipCode={zip}
                       index={index}
                       setOpenDeleteZipCode={setOpenDeleteZipCode}
