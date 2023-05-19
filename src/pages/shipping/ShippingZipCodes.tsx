@@ -42,26 +42,36 @@ const ShippingZipCodes = () => {
     setPage(0);
   };
 
-  // const debounceSearchedZipCodes = useCallback(
-  //   debounce(getFilteredZipCodes, 500),
-  //   []
-  // );
+  const debounceSearchedZipCodes = useCallback(
+    debounce(getShippingZipCodes, 500),
+    []
+  );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPage(0);
     setFilterText(event.target.value);
 
-    // debounceFilteredZipCodes({
-    //   zipCodeData: zipCodes,
-    //   text: event.target.value,
-    // });
+    debounceSearchedZipCodes({
+      page: page + 1,
+      limit: rowsPerPage,
+      searchTerm: event.target.value,
+    });
   };
 
   useEffect(() => {
-    getShippingZipCodes();
-
-    // eslint-disable-next-line
-  }, []);
+    if (!filterText.length) {
+      getShippingZipCodes({
+        page: page + 1,
+        limit: rowsPerPage,
+      });
+    } else {
+      debounceSearchedZipCodes({
+        page: page + 1,
+        limit: rowsPerPage,
+        searchTerm: filterText,
+      });
+    }
+  }, [page, rowsPerPage]);
 
   return (
     <Container container direction="column">
@@ -94,19 +104,17 @@ const ShippingZipCodes = () => {
             notFoundText="No Zip Code Found"
           >
             {!loading &&
-              zipCodes
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((zip, index) => {
-                  return (
-                    <ShippingItem
-                      key={zip._id}
-                      zipCode={zip}
-                      index={index}
-                      setOpenDeleteZipCode={setOpenDeleteZipCode}
-                      setOpenEditZipCode={setOpenEditZipCode}
-                    />
-                  );
-                })}
+              zipCodes.map((zip, index) => {
+                return (
+                  <ShippingItem
+                    key={zip._id}
+                    zipCode={zip}
+                    index={index}
+                    setOpenDeleteZipCode={setOpenDeleteZipCode}
+                    setOpenEditZipCode={setOpenEditZipCode}
+                  />
+                );
+              })}
           </Tables>
         </Grid>
       </ContainerWrapper>

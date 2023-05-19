@@ -16,10 +16,18 @@ const initialState: initStateType = {
 
 export const getShippingZipCodes = createAsyncThunk(
   "shipping/get-shipping-zipCodes",
-  async (_, thunkAPI) => {
+  async (
+    query: { page: number; limit: number; searchTerm?: string },
+    thunkAPI
+  ) => {
+    const { page, limit, searchTerm } = query;
+    const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
     try {
-      const { data } = await axios.get(`/api/zip-code/v1`);
+      const { data } = await axios.get(
+        `/api/zip-code/v1?page=${page}&limit=${limit}${searchQuery}`
+      );
       const result = data as ZipCodeReturnedPayloadTypes;
+
       return {
         zipCodes: result.data.data,
         total: result.data.total,
