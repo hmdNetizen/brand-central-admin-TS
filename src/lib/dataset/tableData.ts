@@ -453,3 +453,21 @@ export const invoiceColumns: TableHeaderColumnTypes[] = [
     align: "center",
   },
 ];
+
+export const zipCodeColumns: TableHeaderColumnTypes[] = [
+  {
+    id: 0,
+    label: "Index",
+    align: "left",
+  },
+  {
+    id: 1,
+    label: "Area Code",
+    align: "left",
+  },
+  {
+    id: 4,
+    label: "Options",
+    align: "left",
+  },
+];
