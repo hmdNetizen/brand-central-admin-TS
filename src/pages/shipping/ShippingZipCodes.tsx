@@ -33,7 +33,7 @@ const ShippingZipCodes = () => {
   const zipCodes = useTypedSelector((state) => state.shipping.zipCodes);
   const total = useTypedSelector((state) => state.shipping.total);
 
-  const { getShippingZipCodes } = useActions();
+  const { getShippingZipCodes, getSearchedZipCodes } = useActions();
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -43,7 +43,7 @@ const ShippingZipCodes = () => {
   };
 
   const debounceSearchedZipCodes = useCallback(
-    debounce(getShippingZipCodes, 500),
+    debounce(getSearchedZipCodes, 500),
     []
   );
 
@@ -71,7 +71,7 @@ const ShippingZipCodes = () => {
         searchTerm: filterText,
       });
     }
-  }, [page, rowsPerPage]);
+  }, [page, rowsPerPage, filterText]);
 
   return (
     <Container container direction="column">

@@ -16,6 +16,26 @@ const initialState: initStateType = {
 
 export const getShippingZipCodes = createAsyncThunk(
   "shipping/get-shipping-zipCodes",
+  async (query: { page: number; limit: number }, thunkAPI) => {
+    const { page, limit } = query;
+    try {
+      const { data } = await axios.get(
+        `/api/zip-code/v1?page=${page}&limit=${limit}`
+      );
+      const result = data as ZipCodeReturnedPayloadTypes;
+
+      return {
+        zipCodes: result.data.data,
+        total: result.data.total,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error fetching zip codes");
+    }
+  }
+);
+
+export const getSearchedZipCodes = createAsyncThunk(
+  "searched/shipping-zipCodes",
   async (
     query: { page: number; limit: number; searchTerm?: string },
     thunkAPI
@@ -67,6 +87,12 @@ const shippingSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder.addCase(getSearchedZipCodes.fulfilled, (state, action) => {
+      state.loading = false;
+      state.zipCodes = action.payload.zipCodes;
+      state.total = action.payload.total;
+      state.error = null;
+    });
   },
 });
 
