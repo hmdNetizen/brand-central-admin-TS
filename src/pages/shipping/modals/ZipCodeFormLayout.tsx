@@ -11,10 +11,6 @@ import { useActions } from "src/hooks/useActions";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import {
   ContentContainer,
-  StyledFormContainer,
-  StyledCircularProgress,
-  CancelButton,
-  SubmitButton,
   ErrorsList,
   ErrorMsg,
 } from "src/utilityStyles/pagesUtilityStyles";
