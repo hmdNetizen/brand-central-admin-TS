@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import ShowDialog from "src/utils/ShowDialog";
-import CustomFormInput from "src/utils/CustomFormInput";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
@@ -15,14 +14,7 @@ import {
   ErrorMsg,
 } from "src/utilityStyles/pagesUtilityStyles";
 import ZipCodeForm from "./ZipCodeForm";
-
-type ZipCodeFormLayoutProps = {
-  openZipCode: boolean;
-  setOpenZipCode: React.Dispatch<React.SetStateAction<boolean>>;
-  zipCode: string;
-  setZipCode: React.Dispatch<React.SetStateAction<string>>;
-  isEdit?: boolean;
-};
+import { ZipCodeFormLayoutProps } from "../types";
 
 const ZipCodeFormLayout = (props: ZipCodeFormLayoutProps) => {
   const { openZipCode, setOpenZipCode, zipCode, setZipCode, isEdit } = props;

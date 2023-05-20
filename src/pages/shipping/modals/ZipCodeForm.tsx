@@ -9,16 +9,7 @@ import {
   CancelButton,
   SubmitButton,
 } from "src/utilityStyles/pagesUtilityStyles";
-
-type ZipCodeFormProps = {
-  onSubmit: (event: React.FormEvent<Element>) => void;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onClose: () => void;
-  zipCode: string;
-  isEdit?: boolean;
-  zipCodeError: string;
-  loadingZipCodeAction: boolean;
-};
+import { ZipCodeFormProps } from "../types";
 
 const ZipCodeForm = (props: ZipCodeFormProps) => {
   const {
