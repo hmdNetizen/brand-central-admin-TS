@@ -12,6 +12,7 @@ export type ZipCodeReturnedPayloadTypes = {
 
 export type initStateType = {
   loading: boolean;
+  loadingZipCodeAction: boolean;
   zipCodes: ZipCodeReturnedPayload[];
   total: number;
   singleZipCode: ZipCodeReturnedPayload | null;

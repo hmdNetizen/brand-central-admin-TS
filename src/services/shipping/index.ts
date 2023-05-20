@@ -5,9 +5,12 @@ import {
 } from "./ShoppingTypes";
 import { initStateType } from "./ShoppingTypes";
 import axios from "../axios";
+import { AxiosError } from "axios";
+import React from "react";
 
 const initialState: initStateType = {
   loading: false,
+  loadingZipCodeAction,
   zipCodes: [],
   total: 0,
   singleZipCode: null,
@@ -58,6 +61,75 @@ export const getSearchedZipCodes = createAsyncThunk(
   }
 );
 
+export const addShippingZipCodes = createAsyncThunk(
+  "shipping/addShippingZipCodes",
+  async (
+    details: {
+      zipCode: string;
+      setZipCode: React.Dispatch<React.SetStateAction<string>>;
+      setOpenZipCode: React.Dispatch<React.SetStateAction<boolean>>;
+    },
+    thunkAPI
+  ) => {
+    const { setOpenZipCode, setZipCode, zipCode } = details;
+    try {
+      const { data, status } = await axios.post(`/api/zip-code`, { zipCode });
+      const result = data as { data: ZipCodeReturnedPayload };
+
+      if (status === 200) {
+        setOpenZipCode(false);
+        setZipCode("");
+      }
+
+      return result.data;
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
+    }
+  }
+);
+
+export const updateShippingZipCodes = createAsyncThunk(
+  "shipping/updateShippingZipCodes",
+  async (
+    details: {
+      zipId: string;
+      zipCode: string;
+      setZipCode: React.Dispatch<React.SetStateAction<string>>;
+      setOpenZipCode: React.Dispatch<React.SetStateAction<boolean>>;
+    },
+    thunkAPI
+  ) => {
+    const { setOpenZipCode, setZipCode, zipId, zipCode } = details;
+    try {
+      const { data, status } = await axios.put(`/api/zip-code/${zipId}`, {
+        zipCode,
+      });
+      const result = data as { data: ZipCodeReturnedPayload };
+
+      if (status === 200) {
+        setOpenZipCode(false);
+        setZipCode("");
+      }
+
+      return result.data;
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
+    }
+  }
+);
+
 const shippingSlice = createSlice({
   name: "shipping",
   initialState,
@@ -93,6 +165,36 @@ const shippingSlice = createSlice({
       state.total = action.payload.total;
       state.error = null;
     });
+    builder
+      .addCase(addShippingZipCodes.pending, (state) => {
+        state.loadingZipCodeAction = true;
+      })
+      .addCase(addShippingZipCodes.fulfilled, (state, action) => {
+        state.loadingZipCodeAction = false;
+        state.zipCodes = [action.payload, ...state.zipCodes];
+        state.error = null;
+      })
+      .addCase(addShippingZipCodes.rejected, (state, action) => {
+        state.loadingZipCodeAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updateShippingZipCodes.pending, (state) => {
+        state.loadingZipCodeAction = true;
+      })
+      .addCase(updateShippingZipCodes.fulfilled, (state, action) => {
+        state.loadingZipCodeAction = false;
+        state.zipCodes = [action.payload, ...state.zipCodes];
+        state.error = null;
+      })
+      .addCase(updateShippingZipCodes.rejected, (state, action) => {
+        state.loadingZipCodeAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
   },
 });
 
