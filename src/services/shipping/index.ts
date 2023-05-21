@@ -1,3 +1,4 @@
+import React from "react";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   ZipCodeReturnedPayload,
@@ -6,7 +7,7 @@ import {
 import { initStateType } from "./ShoppingTypes";
 import axios from "../axios";
 import { AxiosError } from "axios";
-import React from "react";
+import { toast } from "react-toastify";
 
 const initialState: initStateType = {
   loading: false,
@@ -130,6 +131,30 @@ export const updateShippingZipCodes = createAsyncThunk(
   }
 );
 
+export const deleteShippingZipCodes = createAsyncThunk(
+  "shipping/deleteShippingZipCodes",
+  async (
+    details: {
+      zipCodeId: string;
+      setOpenDeleteZipCode: React.Dispatch<React.SetStateAction<boolean>>;
+    },
+    thunkAPI
+  ) => {
+    const { zipCodeId, setOpenDeleteZipCode } = details;
+    try {
+      const { data, status } = await axios.delete(`/api/zip-code/${zipCodeId}`);
+      const result = data as { data: ZipCodeReturnedPayload };
+
+      if (status === 200) {
+        setOpenDeleteZipCode(false);
+      }
+      return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
 const shippingSlice = createSlice({
   name: "shipping",
   initialState,
@@ -189,11 +214,43 @@ const shippingSlice = createSlice({
       })
       .addCase(updateShippingZipCodes.fulfilled, (state, action) => {
         state.loadingZipCodeAction = false;
-        state.zipCodes = [action.payload, ...state.zipCodes];
+        state.zipCodes = state.zipCodes.map((zip) =>
+          zip._id === action.payload._id
+            ? { ...zip, zipCode: action.payload.zipCode }
+            : zip
+        );
         state.error = null;
+
+        toast.success(`${action.payload.zipCode} updated successfully`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
       })
       .addCase(updateShippingZipCodes.rejected, (state, action) => {
         state.loadingZipCodeAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(deleteShippingZipCodes.pending, (state) => {
+        state.loadingZipCodeAction = true;
+      })
+      .addCase(deleteShippingZipCodes.fulfilled, (state, action) => {
+        state.loadingZipCodeAction = false;
+        state.zipCodes = state.zipCodes.filter(
+          (zip) => zip._id !== action.payload._id
+        );
+        state.error = null;
+
+        toast.error(`${action.payload.zipCode} has been deleted successfully`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(deleteShippingZipCodes.rejected, (state, action) => {
+        state.loadingZipCodeAction = false;
+
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }
