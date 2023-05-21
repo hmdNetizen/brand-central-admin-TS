@@ -21,7 +21,8 @@ const ZipCodeFormLayout = (props: ZipCodeFormLayoutProps) => {
 
   const theme = useTheme();
 
-  const { addShippingZipCodes, updateShippingZipCodes } = useActions();
+  const { addShippingZipCodes, updateShippingZipCodes, clearZipCodeError } =
+    useActions();
 
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
@@ -82,6 +83,9 @@ const ZipCodeFormLayout = (props: ZipCodeFormLayoutProps) => {
 
   const handleClose = () => {
     setZipCodeError("");
+    clearZipCodeError();
+    setZipCode("");
+    setOpenZipCode(false);
   };
 
   return (

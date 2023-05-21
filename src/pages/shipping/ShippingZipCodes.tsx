@@ -4,8 +4,8 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
-// import AddZipCode from "./modals/AddZipCode";
-// import EditZipCode from "./modals/EditZipCode";
+import AddZipCode from "./modals/AddZipCode";
+import EditZipCode from "./modals/EditZipCode";
 // import DeleteZipCode from "./modals/DeleteZipCode";
 import debounce from "lodash.debounce";
 import useTitle from "src/hooks/useTitle";
@@ -118,14 +118,14 @@ const ShippingZipCodes = () => {
           </Tables>
         </Grid>
       </ContainerWrapper>
-      {/* <AddZipCode
+      <AddZipCode
         openAddZipCode={openAddZipCode}
         setOpenAddZipCode={setOpenAddZipCode}
-      /> */}
-      {/* <EditZipCode
+      />
+      <EditZipCode
         openEditZipCode={openEditZipCode}
         setOpenEditZipCode={setOpenEditZipCode}
-      /> */}
+      />
       {/* <DeleteZipCode
         openDeleteZipCode={openDeleteZipCode}
         setOpenDeleteZipCode={setOpenDeleteZipCode}

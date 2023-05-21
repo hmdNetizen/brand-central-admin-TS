@@ -10,7 +10,7 @@ import React from "react";
 
 const initialState: initStateType = {
   loading: false,
-  loadingZipCodeAction,
+  loadingZipCodeAction: false,
   zipCodes: [],
   total: 0,
   singleZipCode: null,
@@ -140,6 +140,9 @@ const shippingSlice = createSlice({
     ) => {
       state.singleZipCode = action.payload;
     },
+    clearZipCodeError: (state) => {
+      state.error = null;
+    },
   },
   extraReducers(builder) {
     builder
@@ -198,5 +201,5 @@ const shippingSlice = createSlice({
   },
 });
 
-export const { setCurrentZipCode } = shippingSlice.actions;
+export const { setCurrentZipCode, clearZipCodeError } = shippingSlice.actions;
 export default shippingSlice.reducer;
