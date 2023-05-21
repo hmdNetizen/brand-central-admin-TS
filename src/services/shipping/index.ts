@@ -200,6 +200,7 @@ const shippingSlice = createSlice({
       .addCase(addShippingZipCodes.fulfilled, (state, action) => {
         state.loadingZipCodeAction = false;
         state.zipCodes = [action.payload, ...state.zipCodes];
+        state.total = state.total + 1;
         state.error = null;
       })
       .addCase(addShippingZipCodes.rejected, (state, action) => {
@@ -241,6 +242,7 @@ const shippingSlice = createSlice({
         state.zipCodes = state.zipCodes.filter(
           (zip) => zip._id !== action.payload._id
         );
+        state.total = state.total - 1;
         state.error = null;
 
         toast.error(`${action.payload.zipCode} has been deleted successfully`, {

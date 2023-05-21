@@ -6,7 +6,7 @@ import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import AddZipCode from "./modals/AddZipCode";
 import EditZipCode from "./modals/EditZipCode";
-// import DeleteZipCode from "./modals/DeleteZipCode";
+import DeleteZipCode from "./modals/DeleteZipCode";
 import debounce from "lodash.debounce";
 import useTitle from "src/hooks/useTitle";
 import ShippingItem from "src/components/shipping/ShippingItem";
@@ -126,10 +126,10 @@ const ShippingZipCodes = () => {
         openEditZipCode={openEditZipCode}
         setOpenEditZipCode={setOpenEditZipCode}
       />
-      {/* <DeleteZipCode
+      <DeleteZipCode
         openDeleteZipCode={openDeleteZipCode}
         setOpenDeleteZipCode={setOpenDeleteZipCode}
-      /> */}
+      />
     </Container>
   );
 };
