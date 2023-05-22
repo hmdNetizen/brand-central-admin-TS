@@ -1,9 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../axios";
 import { initStateTypes, GeneralSettingTypes } from "./SettingsTypes";
+import { UploadedFilePayload } from "../common/commonTypes";
+import { toast } from "react-toastify";
 
 const initialState: initStateTypes = {
   loading: false,
+  loadingSettingsAction: false,
   siteData: null,
   error: null,
 };
@@ -16,6 +19,90 @@ export const getAllSiteData = createAsyncThunk(
       const result = data as { data: GeneralSettingTypes };
 
       return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
+export const updateHeaderLogo = createAsyncThunk(
+  "update-header-logo",
+  async (details: { file: File | string }, thunkAPI) => {
+    const { file } = details;
+
+    const formData = new FormData();
+    formData.append("document", file);
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    try {
+      if (typeof file === "object") {
+        const { data: dataURL } = await axios.post(
+          `/api/uploads/file`,
+          formData,
+          config
+        );
+
+        const response = dataURL as UploadedFilePayload;
+
+        const { data } = await axios.patch(`/api/site/logo`, {
+          headerLogo: response.url,
+        });
+        const result = data as { data: GeneralSettingTypes };
+        return result.data;
+      } else {
+        const { data } = await axios.patch(`/api/site/logo`, {
+          headerLogo: file,
+        });
+        const result = data as { data: GeneralSettingTypes };
+        return result.data;
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
+export const updateInvoiceLogo = createAsyncThunk(
+  "update-invoice-logo",
+  async (details: { file: File | string }, thunkAPI) => {
+    const { file } = details;
+
+    const formData = new FormData();
+    formData.append("document", file);
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    try {
+      if (typeof file === "object") {
+        const { data: dataURL } = await axios.post(
+          `/api/uploads/file`,
+          formData,
+          config
+        );
+
+        const response = dataURL as UploadedFilePayload;
+
+        const { data } = await axios.patch(`/api/site/logo`, {
+          invoiceLogo: response.url,
+        });
+        const result = data as { data: GeneralSettingTypes };
+        return result.data;
+      } else {
+        const { data } = await axios.patch(`/api/site/logo`, {
+          invoiceLogo: file,
+        });
+        const result = data as { data: GeneralSettingTypes };
+        return result.data;
+      }
     } catch (error) {
       return thunkAPI.rejectWithValue("Something went wrong");
     }
@@ -39,6 +126,46 @@ const settingsSlice = createSlice({
       .addCase(getAllSiteData.rejected, (state, action) => {
         state.loading = false;
 
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updateHeaderLogo.pending, (state) => {
+        state.loadingSettingsAction = true;
+      })
+      .addCase(updateHeaderLogo.fulfilled, (state, action) => {
+        state.loadingSettingsAction = false;
+        state.siteData = { ...state.siteData, ...action.payload };
+        state.error = null;
+
+        toast.success(`Header Logo updated successfully`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(updateHeaderLogo.rejected, (state, action) => {
+        state.loadingSettingsAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updateInvoiceLogo.pending, (state) => {
+        state.loadingSettingsAction = true;
+      })
+      .addCase(updateInvoiceLogo.fulfilled, (state, action) => {
+        state.loadingSettingsAction = false;
+        state.siteData = { ...state.siteData, ...action.payload };
+        state.error = null;
+
+        toast.success(`Invoice Logo updated successfully`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(updateInvoiceLogo.rejected, (state, action) => {
+        state.loadingSettingsAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

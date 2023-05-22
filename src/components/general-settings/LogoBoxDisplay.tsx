@@ -45,8 +45,8 @@ type LogoBoxDisplayProps = {
   title: string;
   onSubmit: (event: React.FormEvent<Element>) => void;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectedFile: File | "";
-  preview: "" | undefined;
+  selectedFile: File | string;
+  preview: string | undefined;
   inputId: string;
   name: string;
 };

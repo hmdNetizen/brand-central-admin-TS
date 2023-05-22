@@ -16,6 +16,7 @@ export type GeneralSettingTypes = {
 
 export type initStateTypes = {
   loading: boolean;
+  loadingSettingsAction: boolean;
   siteData: GeneralSettingTypes | null;
   error: null | string;
 };
