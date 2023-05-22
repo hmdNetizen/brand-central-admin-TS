@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { styled, useTheme } from "@mui/material/styles";
-import LogoBoxDisplay from "components/general-settings/LogoBoxDisplay";
+import LogoBoxDisplay from "src/components/general-settings/LogoBoxDisplay";
 import { useActions } from "src/hooks/useActions";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
 import useTitle from "src/hooks/useTitle";

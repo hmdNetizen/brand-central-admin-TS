@@ -12,6 +12,7 @@ import BlockedCustomers from "src/pages/customers/BlockedCustomers";
 import CustomerProfileDetails from "src/pages/customers/CustomerProfileDetails";
 import Customers from "src/pages/customers/Customers";
 import Dashboard from "src/pages/dashboard/Dashboard";
+import Logo from "src/pages/general-settings/Logo";
 import ReceivedMessages from "src/pages/messages/ReceivedMessages";
 import SentMessages from "src/pages/messages/SentMessages";
 import AllOrders from "src/pages/orders/AllOrders";
@@ -98,6 +99,9 @@ const PagesRoutes = () => {
               </Route>
               <Route path="shipping">
                 <Route index path="zip-codes" element={<ShippingZipCodes />} />
+              </Route>
+              <Route path="general-settings">
+                <Route index path="logo" element={<Logo />} />
               </Route>
             </Route>
           </Route>

@@ -184,22 +184,22 @@ export const menus = [
     id: 10,
     title: "General Settings",
     icon: GeneralSettingsIcon,
-    path: "/general-settings",
+    path: "/dashboard/general-settings",
     subMenus: [
       {
         subId: 0,
         title: "Logo",
-        path: "/general-settings/logo",
+        path: "/dashboard/general-settings/logo",
       },
       {
         subId: 1,
         title: "Favicon",
-        path: "/general-settings/favicon",
+        path: "/dashboard/general-settings/favicon",
       },
       {
         subId: 2,
         title: "Social Media",
-        path: "/general-settings/socials",
+        path: "/dashboard/general-settings/socials",
       },
     ],
   },

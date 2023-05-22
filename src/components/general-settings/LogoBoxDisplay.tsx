@@ -86,7 +86,7 @@ const LogoBoxDisplay = (props: LogoBoxDisplayProps) => {
               name={name}
             />
             <Button variant="contained" component="span">
-              Upload
+              Change
             </Button>
           </label>
         </Grid>
