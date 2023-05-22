@@ -28,15 +28,6 @@ const Image = styled("img")({
   maxHeight: 90,
 });
 
-// const useStyles = makeStyles((theme) => ({
-//   loader: {
-//     marginRight: "1rem",
-//     "&.MuiCircularProgress-root": {
-//       color: "#f2f2f2",
-//     },
-//   },
-// }));
-
 const Input = styled("input")({
   display: "none",
 });
@@ -96,14 +87,7 @@ const LogoBoxDisplay = (props: LogoBoxDisplayProps) => {
             variant="contained"
             disableRipple
             color="secondary"
-            // disabled={loadingAction}
           >
-            {/* {loadingAction && (
-              <CircularProgress
-                style={{ height: 25, width: 25 }}
-                className={classes.loader}
-              />
-            )}{" "} */}
             Submit
           </SubmitButton>
         </Grid>
