@@ -12,3 +12,4 @@ export * as brandsActions from "../brands";
 export * as couponActions from "../coupon";
 export * as messagesActions from "../messages";
 export * as shippingActions from "../shipping";
+export * as settingsActions from "../settings";

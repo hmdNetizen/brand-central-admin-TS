@@ -30,6 +30,7 @@ const Prefetch = () => {
     getPreOrderNotifications,
     getMessagesNotifications,
     loadAdminProfile,
+    getAllSiteData,
   } = useActions();
 
   const {
@@ -101,8 +102,6 @@ const Prefetch = () => {
     if (localStorage.accessToken) {
       setAuthorizationToken(localStorage.accessToken);
     }
-
-    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -115,6 +114,7 @@ const Prefetch = () => {
     getLowStockNotifications();
     getPreOrderNotifications();
     getMessagesNotifications();
+    getAllSiteData();
   }, []);
 
   return <Outlet />;

@@ -8,7 +8,7 @@ import commonReducer from "./common";
 import orderReducer from "./orders";
 import customersReducer from "./customers";
 import couponReducer from "./coupon";
-// import settingsReducer from "./settings";
+import settingsReducer from "./settings";
 import shippingReducer from "./shipping";
 import preOrderReducer from "./pre-orders";
 import categoriesReducer from "./categories";
@@ -30,6 +30,7 @@ const rootReducer = combineReducers({
   coupon: couponReducer,
   messages: messagesReducer,
   shipping: shippingReducer,
+  settings: settingsReducer,
 });
 
 const store = configureStore({
