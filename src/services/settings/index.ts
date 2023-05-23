@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../axios";
-import { initStateTypes, GeneralSettingTypes } from "./SettingsTypes";
+import {
+  initStateTypes,
+  GeneralSettingTypes,
+  SocialLinksPropTypes,
+} from "./SettingsTypes";
 import { UploadedFilePayload } from "../common/commonTypes";
 import { toast } from "react-toastify";
 
@@ -150,6 +154,20 @@ export const updateFavicon = createAsyncThunk(
   }
 );
 
+export const updateSocialLinks = createAsyncThunk(
+  "update-social-links",
+  async (details: SocialLinksPropTypes, thunkAPI) => {
+    try {
+      const { data } = await axios.patch(`/api/site/social-links`, details);
+      const result = data as { data: GeneralSettingTypes };
+
+      return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
 const settingsSlice = createSlice({
   name: "settings",
   initialState,
@@ -226,6 +244,26 @@ const settingsSlice = createSlice({
         });
       })
       .addCase(updateFavicon.rejected, (state, action) => {
+        state.loadingSettingsAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updateSocialLinks.pending, (state) => {
+        state.loadingSettingsAction = true;
+      })
+      .addCase(updateSocialLinks.fulfilled, (state, action) => {
+        state.loadingSettingsAction = false;
+        state.siteData = { ...state.siteData, ...action.payload };
+        state.error = null;
+
+        toast.success(`Social Links updated successfully`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(updateSocialLinks.rejected, (state, action) => {
         state.loadingSettingsAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
