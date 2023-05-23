@@ -19,6 +19,8 @@ type SocialLinkItemProp = {
   switchName: string;
   title: string;
   isActive: boolean;
+  value: string;
+  checked: boolean;
 };
 
 const SocialLinkItem = (props: SocialLinkItemProp) => {
@@ -29,7 +31,8 @@ const SocialLinkItem = (props: SocialLinkItemProp) => {
     switchName,
     title,
     isActive,
-    ...rest
+    checked,
+    value,
   } = props;
 
   const theme = useTheme();
@@ -55,17 +58,18 @@ const SocialLinkItem = (props: SocialLinkItemProp) => {
               type="text"
               onChange={onInputChange}
               name={inputName}
+              value={value}
               placeholder={`Enter ${title} URL`}
-              {...rest}
             />
           </Grid>
           <Grid item>
             <CustomSwitch
-              color="success"
               {...props}
+              color="success"
               name={switchName}
               onChange={onSwitchChange}
               isActive={isActive}
+              checked={checked}
             />
           </Grid>
         </Grid>
