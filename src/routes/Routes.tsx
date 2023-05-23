@@ -12,6 +12,7 @@ import BlockedCustomers from "src/pages/customers/BlockedCustomers";
 import CustomerProfileDetails from "src/pages/customers/CustomerProfileDetails";
 import Customers from "src/pages/customers/Customers";
 import Dashboard from "src/pages/dashboard/Dashboard";
+import Favicon from "src/pages/general-settings/Favicon";
 import Logo from "src/pages/general-settings/Logo";
 import ReceivedMessages from "src/pages/messages/ReceivedMessages";
 import SentMessages from "src/pages/messages/SentMessages";
@@ -102,6 +103,7 @@ const PagesRoutes = () => {
               </Route>
               <Route path="general-settings">
                 <Route index path="logo" element={<Logo />} />
+                <Route path="favicon" element={<Favicon />} />
               </Route>
             </Route>
           </Route>

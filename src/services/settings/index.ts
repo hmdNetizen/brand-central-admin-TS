@@ -109,6 +109,47 @@ export const updateInvoiceLogo = createAsyncThunk(
   }
 );
 
+export const updateFavicon = createAsyncThunk(
+  "update-favicon",
+  async (details: { file: File | string }, thunkAPI) => {
+    const { file } = details;
+
+    const formData = new FormData();
+    formData.append("document", file);
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    try {
+      if (typeof file === "object") {
+        const { data: dataURL } = await axios.post(
+          `/api/uploads/file`,
+          formData,
+          config
+        );
+        const response = dataURL as UploadedFilePayload;
+
+        const { data } = await axios.patch(`/api/site/favicon`, {
+          favicon: response.url,
+        });
+        const result = data as { data: GeneralSettingTypes };
+        return result.data;
+      } else {
+        const { data } = await axios.patch(`/api/site/favicon`, {
+          favicon: file,
+        });
+        const result = data as { data: GeneralSettingTypes };
+        return result.data;
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
 const settingsSlice = createSlice({
   name: "settings",
   initialState,
@@ -165,6 +206,26 @@ const settingsSlice = createSlice({
         });
       })
       .addCase(updateInvoiceLogo.rejected, (state, action) => {
+        state.loadingSettingsAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updateFavicon.pending, (state) => {
+        state.loadingSettingsAction = true;
+      })
+      .addCase(updateFavicon.fulfilled, (state, action) => {
+        state.loadingSettingsAction = false;
+        state.siteData = { ...state.siteData, ...action.payload };
+        state.error = null;
+
+        toast.success(`Favicon updated successfully`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(updateFavicon.rejected, (state, action) => {
         state.loadingSettingsAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;

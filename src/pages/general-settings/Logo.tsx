@@ -7,6 +7,7 @@ import { useActions } from "src/hooks/useActions";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
 import useTitle from "src/hooks/useTitle";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
+import { Container } from "src/components/common/styles/PageContainerStyles";
 
 const ContentWrapper = styled(Grid)({
   boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
@@ -14,14 +15,6 @@ const ContentWrapper = styled(Grid)({
   background: "#fff",
   padding: "5rem 2rem",
 });
-
-const Container = styled(Grid)(({ theme }) => ({
-  padding: "1rem 2rem 5rem 2rem",
-
-  [theme.breakpoints.only("xs")]: {
-    padding: "5rem 1rem 5rem 1rem",
-  },
-}));
 
 type initStateTypes = {
   selectedFileHeader: File | string;
