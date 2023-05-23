@@ -3,7 +3,7 @@ import { FormInput, FormLabel, Error } from "./styles/CustomFormInputStyles";
 
 interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   labelId?: string;
-  label: string;
+  label?: string;
   type: string;
   placeholder: string;
   error?: string;
