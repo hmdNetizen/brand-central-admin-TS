@@ -14,6 +14,7 @@ import Customers from "src/pages/customers/Customers";
 import Dashboard from "src/pages/dashboard/Dashboard";
 import Favicon from "src/pages/general-settings/Favicon";
 import Logo from "src/pages/general-settings/Logo";
+import SocialLinks from "src/pages/general-settings/SocialLinks";
 import ReceivedMessages from "src/pages/messages/ReceivedMessages";
 import SentMessages from "src/pages/messages/SentMessages";
 import AllOrders from "src/pages/orders/AllOrders";
@@ -104,6 +105,7 @@ const PagesRoutes = () => {
               <Route path="general-settings">
                 <Route index path="logo" element={<Logo />} />
                 <Route path="favicon" element={<Favicon />} />
+                <Route path="socials" element={<SocialLinks />} />
               </Route>
             </Route>
           </Route>
