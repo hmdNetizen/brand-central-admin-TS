@@ -1,10 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { AxiosProgressEvent } from "axios";
 import axios from "../axios";
+import { setUploadPercentage } from "../common";
 import {
   PaginatedReturnedPayloadType,
   ProductsReturnedPayloadType,
   DashboardProductPayloadType,
   initStateType,
+  ProductUpdatePayloadTypes,
 } from "./ProductTypes";
 
 type ProductQueryType = {
@@ -20,6 +23,8 @@ const initialState: initStateType = {
   recentProducts: [],
   popularProducts: [],
   totalProducts: 0,
+  uploadedFiles: "",
+  updatedInventory: "",
   error: null,
 };
 
@@ -75,10 +80,63 @@ export const getDashboardPopularProducts = createAsyncThunk(
   }
 );
 
+export const updateInventoryProducts = createAsyncThunk(
+  "update-inventory-products",
+  async (details: { products: ProductUpdatePayloadTypes[] }, thunkAPI) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+        thunkAPI.dispatch(setUploadingFileText());
+        thunkAPI.dispatch(
+          setUploadPercentage(
+            Math.round((progressEvent.loaded * 100) / progressEvent.total!)
+          )
+        );
+      },
+      onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
+        thunkAPI.dispatch(setUpdatingInventory("Updating Inventory"));
+        thunkAPI.dispatch(
+          setUploadPercentage(
+            Math.round((progressEvent.loaded * 100) / progressEvent.total!)
+          )
+        );
+      },
+    };
+    try {
+      const { data, status } = await axios.patch(
+        `/api/products/product-update`,
+        details,
+        config
+      );
+
+      if (status === 200) {
+        thunkAPI.dispatch(setUpdatingInventory("Update Completed"));
+      }
+
+      return data;
+    } catch (error) {
+      thunkAPI.dispatch(setUploadPercentage(0));
+      thunkAPI.dispatch(setUpdatingInventory(""));
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
 const productsSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    setUploadingFileText: (state) => {
+      state.uploadedFiles = "Uploading Files";
+      state.updatedInventory = "";
+    },
+    setUpdatingInventory: (state, action) => {
+      state.updatedInventory = action.payload;
+      state.uploadedFiles = "";
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(getPaginatedProducts.pending, (state) => {
@@ -129,4 +187,6 @@ const productsSlice = createSlice({
   },
 });
 
+export const { setUpdatingInventory, setUploadingFileText } =
+  productsSlice.actions;
 export default productsSlice.reducer;

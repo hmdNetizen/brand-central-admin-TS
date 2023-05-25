@@ -1,4 +1,5 @@
 import { EmailList, MailDataTypes } from "src/components/messages/types";
+import { ProductsBulkUpdatePayload } from "src/services/products/ProductTypes";
 
 export const capitalizeFirstLetters = (sentence: string) => {
   const lowerCaseSentence = sentence.toLowerCase();
@@ -87,4 +88,27 @@ export const inMailList = (mailList: EmailList[], newEmail: string) =>
 
 export const constructContent = (content: string) => {
   return content.replace(/%0A/g, "\n");
+};
+
+export const constructSubCategory = (product: ProductsBulkUpdatePayload) => {
+  if (product["Sub Category"].toLowerCase() === "shamp/cond") {
+    return "Shampoo/conditioner";
+  } else if (product["Sub Category"].toLowerCase() === "pers hygene") {
+    return "Personal Hygiene";
+  } else {
+    return product["Sub Category"];
+  }
+};
+
+export const constructBrandName = (product: ProductsBulkUpdatePayload) => {
+  if (
+    product["Brand"].toLowerCase() === "head&shoulders" ||
+    product["Brand"].toLowerCase() === "head and should"
+  ) {
+    return "Head & Shoulders";
+  } else if (product["Brand"].toLowerCase() === "johnson & johns") {
+    return "Johnson & Johnson";
+  } else {
+    return product["Brand"];
+  }
 };

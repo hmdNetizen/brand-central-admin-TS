@@ -71,7 +71,26 @@ export type ProductTypes = {
   userWishList: UserWishListTypes[];
 };
 
-type ProductsBulkUpdatePayload = {
+export type ProductUpdatePayloadTypes = Pick<
+  ProductTypes,
+  | "brandName"
+  | "category"
+  | "itemCode"
+  | "priceCode1"
+  | "priceCode2"
+  | "priceCode3"
+  | "priceCode4"
+  | "productDescription"
+  | "productName"
+  | "productStock"
+  | "subCategory"
+  | "units"
+  | "SRP"
+  | "productType"
+  | "productUPC"
+>;
+
+export type ProductsBulkUpdatePayload = {
   Size: string;
   Category: string;
   Description: string;
@@ -81,12 +100,12 @@ type ProductsBulkUpdatePayload = {
   Physical: string;
   UPC: string;
   "Sub Category": string;
-  Stock: string;
-  "Price Code 1": string;
-  "Price Code 2": string;
-  "Price Code 3": string;
-  "Price Code 4": string;
-  MSRP: string;
+  Stock: number;
+  "Price Code 1": number;
+  "Price Code 2": number;
+  "Price Code 3": number;
+  "Price Code 4": number;
+  MSRP: number;
 };
 
 export type PaginatedReturnedPayloadType = {
@@ -129,5 +148,7 @@ export type initStateType = {
   recentProducts: DashboardProductType[];
   popularProducts: DashboardProductType[] | ProductTypes[];
   totalProducts: number;
+  uploadedFiles: string;
+  updatedInventory: string;
   error: null | string;
 };
