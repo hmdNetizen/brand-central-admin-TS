@@ -71,6 +71,24 @@ export type ProductTypes = {
   userWishList: UserWishListTypes[];
 };
 
+type ProductsBulkUpdatePayload = {
+  Size: string;
+  Category: string;
+  Description: string;
+  Brand: string;
+  "Item Code": string;
+  UM: string;
+  Physical: string;
+  UPC: string;
+  "Sub Category": string;
+  Stock: string;
+  "Price Code 1": string;
+  "Price Code 2": string;
+  "Price Code 3": string;
+  "Price Code 4": string;
+  MSRP: string;
+};
+
 export type PaginatedReturnedPayloadType = {
   data: {
     paginatedProducts: ProductTypes[];
