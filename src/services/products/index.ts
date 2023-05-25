@@ -25,6 +25,7 @@ const initialState: initStateType = {
   totalProducts: 0,
   uploadedFiles: "",
   updatedInventory: "",
+  loadingProductAction: false,
   error: null,
 };
 
@@ -180,6 +181,19 @@ const productsSlice = createSlice({
       })
       .addCase(getDashboardPopularProducts.rejected, (state, action) => {
         state.loadingPopularProducts = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updateInventoryProducts.pending, (state) => {
+        state.loadingProductAction = true;
+      })
+      .addCase(updateInventoryProducts.fulfilled, (state, action) => {
+        state.loadingProductAction = false;
+      })
+      .addCase(updateInventoryProducts.rejected, (state, action) => {
+        state.loadingProductAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

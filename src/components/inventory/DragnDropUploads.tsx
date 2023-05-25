@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDropzone, DropzoneRootProps } from "react-dropzone";
+import { useDropzone } from "react-dropzone";
 import IconButton from "@mui/material/IconButton";
 import { IoIosCloudUpload } from "react-icons/io";
 import Typography from "@mui/material/Typography";
@@ -13,12 +13,7 @@ import CustomLinearProgressBar from "src/utils/CustomLinearProgress";
 import { useActions } from "src/hooks/useActions";
 import { ProductsBulkUpdatePayload } from "src/services/products/ProductTypes";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-import {
-  Container,
-  Input,
-  ProgressTextWrapper,
-  getColor,
-} from "./styles.inventory";
+import { Container, Input, ProgressTextWrapper } from "./styles.inventory";
 
 function StyledDropzone() {
   // eslint-disable-next-line

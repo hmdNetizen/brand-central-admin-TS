@@ -144,6 +144,7 @@ export type initStateType = {
   loadingProducts: boolean;
   loadingRecentProducts: boolean;
   loadingPopularProducts: boolean;
+  loadingProductAction: boolean;
   products: ProductTypes[];
   recentProducts: DashboardProductType[];
   popularProducts: DashboardProductType[] | ProductTypes[];
