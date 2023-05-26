@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { AxiosProgressEvent } from "axios";
+import { AxiosError, AxiosProgressEvent } from "axios";
+import { toast } from "react-toastify";
 import axios from "../axios";
 import { setUploadPercentage } from "../common";
 import {
@@ -19,13 +20,14 @@ const initialState: initStateType = {
   loadingProducts: false,
   loadingPopularProducts: false,
   loadingRecentProducts: false,
+  loadingProductAction: false,
+  loadingProductActivation: false,
   products: [],
   recentProducts: [],
   popularProducts: [],
   totalProducts: 0,
   uploadedFiles: "",
   updatedInventory: "",
-  loadingProductAction: false,
   error: null,
 };
 
@@ -125,6 +127,20 @@ export const updateInventoryProducts = createAsyncThunk(
   }
 );
 
+export const toggleProductActivation = createAsyncThunk(
+  "activate-or-deactivate",
+  async (details: { productId: string; productStatus: boolean }, thunkAPI) => {
+    const { productId, productStatus } = details;
+    try {
+      await axios.patch(`/api/products/status/${productId}`, { productStatus });
+
+      return details;
+    } catch (error: AxiosError | any) {
+      return thunkAPI.rejectWithValue("Product activation failed");
+    }
+  }
+);
+
 const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -194,6 +210,40 @@ const productsSlice = createSlice({
       })
       .addCase(updateInventoryProducts.rejected, (state, action) => {
         state.loadingProductAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(toggleProductActivation.pending, (state) => {
+        state.loadingProductActivation = true;
+      })
+      .addCase(toggleProductActivation.fulfilled, (state, action) => {
+        state.loadingProductActivation = false;
+        state.products = state.products.map((product) =>
+          product._id === action.payload.productId
+            ? {
+                ...product,
+                productStatus: action.payload.productStatus,
+              }
+            : product
+        );
+        if (action.payload.productStatus) {
+          toast.success("Product activated successfully", {
+            position: "top-center",
+            hideProgressBar: true,
+          });
+        } else {
+          toast.error("Product has been Deactivated", {
+            position: "top-center",
+            hideProgressBar: true,
+          });
+        }
+
+        state.error = null;
+      })
+      .addCase(toggleProductActivation.rejected, (state, action) => {
+        state.loadingProductActivation = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }
