@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError, AxiosProgressEvent } from "axios";
 import { toast } from "react-toastify";
 import axios from "../axios";
@@ -9,6 +9,7 @@ import {
   DashboardProductPayloadType,
   initStateType,
   ProductUpdatePayloadTypes,
+  ProductTypes,
 } from "./ProductTypes";
 
 type ProductQueryType = {
@@ -22,9 +23,11 @@ const initialState: initStateType = {
   loadingRecentProducts: false,
   loadingProductAction: false,
   loadingProductActivation: false,
+  loadingSingleProduct: false,
   products: [],
   recentProducts: [],
   popularProducts: [],
+  singleProduct: null,
   totalProducts: 0,
   uploadedFiles: "",
   updatedInventory: "",
@@ -141,6 +144,25 @@ export const toggleProductActivation = createAsyncThunk(
   }
 );
 
+export const getSingleProduct = createAsyncThunk(
+  "product/admin/single-product",
+  async (productId: string, thunkAPI) => {
+    try {
+      const { data } = await axios.get(`/api/products/${productId}`);
+      const result = data as { data: ProductTypes };
+      return result.data;
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
+    }
+  }
+);
+
 const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -152,6 +174,9 @@ const productsSlice = createSlice({
     setUpdatingInventory: (state, action) => {
       state.updatedInventory = action.payload;
       state.uploadedFiles = "";
+    },
+    setCurrentProduct: (state, action: PayloadAction<ProductTypes>) => {
+      state.singleProduct = action.payload;
     },
   },
   extraReducers(builder) {
@@ -248,9 +273,24 @@ const productsSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder.addCase(getSingleProduct.pending, (state) => {
+      state.loadingSingleProduct = true;
+    });
+    builder
+      .addCase(getSingleProduct.fulfilled, (state, action) => {
+        state.loadingSingleProduct = false;
+        state.singleProduct = action.payload;
+        state.error = null;
+      })
+      .addCase(getSingleProduct.rejected, (state, action) => {
+        state.loadingSingleProduct = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
   },
 });
 
-export const { setUpdatingInventory, setUploadingFileText } =
+export const { setUpdatingInventory, setUploadingFileText, setCurrentProduct } =
   productsSlice.actions;
 export default productsSlice.reducer;

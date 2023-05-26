@@ -4,7 +4,7 @@ import CustomIconButton from "./CustomIconButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useTheme } from "@mui/material/styles";
 import { useActions } from "src/hooks/useActions";
-import { StyledMenu } from "./styles/CustomActivationMenuStyles";
+import { StyledMenu } from "./styles/StyledMenu";
 import { ProductTypes } from "src/services/products/ProductTypes";
 
 type ActivationMenuProps = {
