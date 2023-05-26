@@ -207,6 +207,6 @@ export const menus = [
     id: 11,
     title: "Update Inventory",
     icon: IoCloudUploadOutline,
-    path: "/update-inventory",
+    path: "/dashboard/update-inventory",
   },
 ];

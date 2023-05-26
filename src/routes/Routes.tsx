@@ -28,6 +28,7 @@ import ProcessingOrders from "src/pages/orders/ProcessingOrders";
 import PreOrders from "src/pages/pre-orders/PreOrders";
 import ShippingZipCodes from "src/pages/shipping/ShippingZipCodes";
 import SubCategories from "src/pages/subcategories/SubCategories";
+import UpdateInventory from "src/pages/UpdateInventory";
 
 const PagesRoutes = () => {
   const [menuSlideIn, setMenuSlideIn] = useState<boolean>(false);
@@ -106,6 +107,9 @@ const PagesRoutes = () => {
                 <Route index path="logo" element={<Logo />} />
                 <Route path="favicon" element={<Favicon />} />
                 <Route path="socials" element={<SocialLinks />} />
+              </Route>
+              <Route path="update-inventory">
+                <Route index element={<UpdateInventory />} />
               </Route>
             </Route>
           </Route>
