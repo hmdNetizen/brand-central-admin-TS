@@ -15,6 +15,7 @@ import {
   initStateType,
   ProductUpdatePayloadTypes,
   ProductTypes,
+  PhotoGalleryTypes,
 } from "./ProductTypes";
 
 type ProductQueryType = {
@@ -187,6 +188,19 @@ const productsSlice = createSlice({
     setCurrentProduct: (state, action: PayloadAction<ProductTypes>) => {
       state.singleProduct = action.payload;
     },
+    removePhotoFromGallery: (
+      state,
+      action: PayloadAction<PhotoGalleryTypes>
+    ) => {
+      const photoGallery = state.singleProduct?.productGalleryImages.filter(
+        (image) => image.id !== action.payload.id
+      );
+      const currentProduct = {
+        ...state.singleProduct,
+        productGalleryImages: photoGallery,
+      } as ProductTypes;
+      state.singleProduct = currentProduct;
+    },
   },
   extraReducers(builder) {
     builder
@@ -300,6 +314,10 @@ const productsSlice = createSlice({
   },
 });
 
-export const { setUpdatingInventory, setUploadingFileText, setCurrentProduct } =
-  productsSlice.actions;
+export const {
+  setUpdatingInventory,
+  setUploadingFileText,
+  setCurrentProduct,
+  removePhotoFromGallery,
+} = productsSlice.actions;
 export default productsSlice.reducer;
