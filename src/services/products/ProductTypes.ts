@@ -22,6 +22,11 @@ export type UserWishListTypes = {
   _id: string;
 };
 
+export type PhotoGalleryTypes = {
+  id: string;
+  url: string;
+};
+
 export type ProductTypes = {
   highlight: ProductHighlightTypes;
   threshold: {
@@ -53,7 +58,7 @@ export type ProductTypes = {
   productStock: number;
   featuredImage: string;
   hasImage: boolean;
-  productGalleryImages: string[];
+  productGalleryImages: PhotoGalleryTypes[];
   priceCode1: number;
   priceCode2: number;
   priceCode3: number;

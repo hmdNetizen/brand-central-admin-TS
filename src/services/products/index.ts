@@ -1,4 +1,9 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  PayloadAction,
+  nanoid,
+} from "@reduxjs/toolkit";
 import { AxiosError, AxiosProgressEvent } from "axios";
 import { toast } from "react-toastify";
 import axios from "../axios";
@@ -150,6 +155,10 @@ export const getSingleProduct = createAsyncThunk(
     try {
       const { data } = await axios.get(`/api/products/${productId}`);
       const result = data as { data: ProductTypes };
+      result.data.productGalleryImages.map((url) => ({
+        id: nanoid,
+        url: url,
+      }));
       return result.data;
     } catch (error: AxiosError | any) {
       if (error.response) {
