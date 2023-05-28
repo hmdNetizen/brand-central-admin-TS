@@ -158,7 +158,7 @@ export const getSingleProduct = createAsyncThunk(
       const result = data as { data: ProductTypes };
       result.data.productGalleryImages.map((url) => ({
         id: nanoid,
-        url: url,
+        url,
       }));
       return result.data;
     } catch (error: AxiosError | any) {
@@ -188,13 +188,11 @@ const productsSlice = createSlice({
     setCurrentProduct: (state, action: PayloadAction<ProductTypes>) => {
       state.singleProduct = action.payload;
     },
-    removePhotoFromGallery: (
-      state,
-      action: PayloadAction<PhotoGalleryTypes>
-    ) => {
+    removePhotoFromGallery: (state, action: PayloadAction<{ id: string }>) => {
       const photoGallery = state.singleProduct?.productGalleryImages.filter(
         (image) => image.id !== action.payload.id
-      );
+      ) as PhotoGalleryTypes[];
+
       const currentProduct = {
         ...state.singleProduct,
         productGalleryImages: photoGallery,
