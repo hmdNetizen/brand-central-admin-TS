@@ -30,6 +30,7 @@ const initialState: initStateType = {
   loadingProductAction: false,
   loadingProductActivation: false,
   loadingSingleProduct: false,
+  uploadingImage: false,
   products: [],
   recentProducts: [],
   popularProducts: [],
@@ -157,7 +158,7 @@ export const getSingleProduct = createAsyncThunk(
       const { data } = await axios.get(`/api/products/${productId}`);
       const result = data as { data: ProductTypes };
       result.data.productGalleryImages.map((url) => ({
-        id: nanoid,
+        id: nanoid(),
         url,
       }));
       return result.data;
@@ -169,6 +170,34 @@ export const getSingleProduct = createAsyncThunk(
       } else {
         return thunkAPI.rejectWithValue("Something went wrong");
       }
+    }
+  }
+);
+
+export const addPhotosToGallery = createAsyncThunk(
+  "galleryPhoto",
+  async (data: { file: File }, thunkAPI) => {
+    const { file } = data;
+
+    const formData = new FormData();
+    formData.append("document", file);
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    try {
+      const { data } = await axios.post(`/api/uploads/file`, formData, config);
+      const result = data as { id: string; url: string };
+
+      return {
+        id: nanoid(),
+        url: result.url,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong. Try again");
     }
   }
 );
@@ -305,6 +334,27 @@ const productsSlice = createSlice({
       })
       .addCase(getSingleProduct.rejected, (state, action) => {
         state.loadingSingleProduct = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(addPhotosToGallery.pending, (state) => {
+        state.uploadingImage = true;
+      })
+      .addCase(addPhotosToGallery.fulfilled, (state, action) => {
+        state.uploadingImage = false;
+        state.singleProduct?.productGalleryImages.push(action.payload);
+        state.singleProduct = state.singleProduct;
+        state.error = null;
+
+        toast.success("Image uploaded successfully", {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(addPhotosToGallery.rejected, (state, action) => {
+        state.uploadingImage = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

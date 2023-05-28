@@ -2,53 +2,32 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
-import CloseIcon from "@mui/icons-material/Close";
-import CancelSharpIcon from "@mui/icons-material/CancelSharp";
+// import CancelSharpIcon from "@mui/icons-material/CancelSharp";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import { styled } from "@mui/material/styles";
 import { useActions } from "src/hooks/useActions";
-import { useSelector } from "react-redux";
+import GalleryItem from "./GalleryItem";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import { StyledButton, StyledCloseIcon } from "./styles";
 
-const StyledCloseIcon = styled(CloseIcon)(({ theme }) => ({
-  fontSize: "3rem",
-  cursor: "pointer",
+type PhotoGalleryProps = {
+  setOpenProductGallery: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-  "&:hover": {
-    color: theme.palette.error.main,
-  },
-}));
+const PhotoGallery = ({ setOpenProductGallery }: PhotoGalleryProps) => {
+  const singleProduct = useTypedSelector(
+    (state) => state.products.singleProduct
+  );
 
-const UploadButton = styled(Button)(({ theme }) => ({
-  background: theme.palette.secondary.main,
-  textTransform: "none",
-  padding: "1rem 3rem",
-  borderRadius: "3rem",
-  fontSize: "1.6rem",
-  fontWeight: 400,
+  const { addPhotosToGallery } = useActions();
 
-  "&:hover": {
-    background: theme.palette.secondary.light,
-  },
+  const handlePhotoUploads = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
 
-  "&:active": {
-    background: theme.palette.secondary.dark,
-  },
-}));
-
-const PhotoGallery = ({ setOpenProductGallery }) => {
-  const { uploadedFiles } = useSelector((state) => state.common);
-
-  const { addPhotosToGallery, removePhotoFromGallery } = useActions();
-
-  const handlePhotoUploads = (event) => {
-    const files = event.target.files;
-
-    if (!files) return;
+    if (!file) return;
 
     addPhotosToGallery({
-      files,
+      file,
     });
   };
 
@@ -65,11 +44,7 @@ const PhotoGallery = ({ setOpenProductGallery }) => {
           <Typography variant="h4">Image Gallery</Typography>
         </Grid>
         <Grid item>
-          <CloseIcon
-            size="small"
-            className={classes.closeIcon}
-            onClick={() => setOpenProductGallery(false)}
-          />
+          <StyledCloseIcon onClick={() => setOpenProductGallery(false)} />
         </Grid>
       </Grid>
       <Divider />
@@ -91,27 +66,25 @@ const PhotoGallery = ({ setOpenProductGallery }) => {
               style={{ display: "none" }}
               onChange={handlePhotoUploads}
             />
-            <Button
+            <StyledButton
               startIcon={<FileUploadIcon />}
               disableRipple
-              className={classes.modalButton}
               variant="contained"
               component="span"
             >
               Upload File
-            </Button>
+            </StyledButton>
           </label>
         </Grid>
         <Grid item sx={{ mb: "1rem" }}>
-          <Button
+          <StyledButton
             variant="contained"
             startIcon={<DoneAllIcon />}
             disableRipple
-            className={classes.modalButton}
             onClick={() => setOpenProductGallery(false)}
           >
             Done
-          </Button>
+          </StyledButton>
         </Grid>
         <Grid item container justifyContent="center">
           <Typography variant="body2">
@@ -127,40 +100,9 @@ const PhotoGallery = ({ setOpenProductGallery }) => {
           justifyContent="space-around"
           rowGap={2}
         >
-          {uploadedFiles.length > 0 ? (
-            uploadedFiles.map((upload, index) => (
-              <Grid
-                item
-                key={index}
-                style={{
-                  width: 150,
-                  height: 150,
-                  position: "relative",
-                  border: "1px solid #f4f4f4",
-                  borderRadius: 5,
-                  padding: 5,
-                }}
-              >
-                <CancelSharpIcon
-                  color="error"
-                  size="large"
-                  style={{
-                    position: "absolute",
-                    right: -10,
-                    top: -10,
-                    cursor: "pointer",
-                  }}
-                  onClick={() => removePhotoFromGallery(index)}
-                />
-                <img
-                  src={upload.url || upload}
-                  alt="Gallery"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                  }}
-                />
-              </Grid>
+          {singleProduct?.productGalleryImages.length! > 0 ? (
+            singleProduct?.productGalleryImages.map((item) => (
+              <GalleryItem image={item} />
             ))
           ) : (
             <Grid item>

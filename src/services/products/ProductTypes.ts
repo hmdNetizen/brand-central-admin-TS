@@ -152,6 +152,7 @@ export type initStateType = {
   loadingProductAction: boolean;
   loadingProductActivation: boolean;
   loadingSingleProduct: boolean;
+  uploadingImage: boolean;
   products: ProductTypes[];
   recentProducts: DashboardProductType[];
   popularProducts: DashboardProductType[] | ProductTypes[];
