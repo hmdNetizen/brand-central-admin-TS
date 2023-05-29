@@ -26,6 +26,7 @@ import PendingOrders from "src/pages/orders/PendingOrders";
 import PrintOrderInvoice from "src/pages/orders/PrintOrderInvoice";
 import ProcessingOrders from "src/pages/orders/ProcessingOrders";
 import PreOrders from "src/pages/pre-orders/PreOrders";
+import AllProducts from "src/pages/products/AllProducts";
 import ShippingZipCodes from "src/pages/shipping/ShippingZipCodes";
 import SubCategories from "src/pages/subcategories/SubCategories";
 import UpdateInventory from "src/pages/UpdateInventory";
@@ -68,6 +69,9 @@ const PagesRoutes = () => {
               </Route>
               <Route path="pre-orders">
                 <Route index element={<PreOrders />} />
+              </Route>
+              <Route path="products">
+                <Route index element={<AllProducts />} />
               </Route>
               <Route path="customers">
                 <Route index element={<Customers />} />

@@ -19,28 +19,8 @@ import {
 import ProductHeadingLayout from "./ProductHeadingLayout";
 import { ProductTypes } from "src/services/products/ProductTypes";
 import ProductItem from "./ProductItem";
-import { SelectChangeEvent } from "@mui/material";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-
-type ProductPageLayoutProps = {
-  title: string;
-  page: number;
-  filterText: string;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
-  rowsPerPage: number;
-  setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
-  openDeleteProduct: boolean;
-  setOpenDeleteProduct: React.Dispatch<React.SetStateAction<boolean>>;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  openEditProduct: boolean;
-  setOpenEditProduct: React.Dispatch<React.SetStateAction<boolean>>;
-  openHighlight: boolean;
-  setOpenHighlight: React.Dispatch<React.SetStateAction<boolean>>;
-  openProductGallery: boolean;
-  setOpenProductGallery: React.Dispatch<React.SetStateAction<boolean>>;
-  hasAddProductButton?: boolean;
-  productDataset: ProductTypes[];
-};
+import { ProductPageLayoutProps } from "./types";
 
 const ProductPageLayout = (props: ProductPageLayoutProps) => {
   const {
@@ -102,12 +82,6 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
     fetchAllBrands();
   }, []);
 
-  const handleSelectRowsPerPage = (event: SelectChangeEvent) => {
-    const selectEvent = event as React.ChangeEvent<HTMLInputElement>;
-    setRowsPerPage(+selectEvent.target.value);
-    setPage(0);
-  };
-
   return (
     <Container container direction="column">
       <Grid item container pb={2}>
@@ -122,7 +96,7 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
           rowsPerPage={rowsPerPage}
           hasAddProductButton={hasAddProductButton}
           setPage={setPage}
-          setRowsPerPage={setPage}
+          setRowsPerPage={setRowsPerPage}
         />
         <Grid item container style={{ marginTop: "5rem" }}>
           <Tables
