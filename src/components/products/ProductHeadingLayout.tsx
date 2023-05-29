@@ -23,13 +23,11 @@ const Input = styled("input")(({ theme }) => ({
 
 type ProductHeadingProps = {
   rowsPerPage: number;
-  handleChangeRowsPerPage: (
-    event: SelectChangeEvent<unknown>,
-    child: React.ReactNode
-  ) => void;
   filterText: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   hasAddProductButton?: boolean;
+  setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const ProductHeadingLayout = (props: ProductHeadingProps) => {
@@ -37,14 +35,24 @@ const ProductHeadingLayout = (props: ProductHeadingProps) => {
   const {
     filterText,
     onChange,
-    handleChangeRowsPerPage,
     rowsPerPage,
+    setPage,
+    setRowsPerPage,
     hasAddProductButton,
   } = props;
 
   const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
+
+  const handleSelectRowsPerPage = (
+    event: SelectChangeEvent<unknown>,
+    child: React.ReactNode
+  ): void => {
+    const selectEvent = event as SelectChangeEvent<HTMLInputElement>;
+    setRowsPerPage(+selectEvent.target.value);
+    setPage(0);
+  };
 
   return (
     <Grid
@@ -64,7 +72,7 @@ const ProductHeadingLayout = (props: ProductHeadingProps) => {
               style={{ width: "100%" }}
               options={[10, 25, 50, 100]}
               value={rowsPerPage.toString()}
-              onChange={handleChangeRowsPerPage}
+              onChange={handleSelectRowsPerPage}
               hasLabel={false}
             />
           </Grid>

@@ -1,19 +1,10 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { styled, useTheme } from "@mui/material/styles";
-import CustomIconButton from "src/utils/CustomIconButton";
-import AddIcon from "@mui/icons-material/Add";
-import CustomSelect from "src/utils/CustomSelect";
+import { useTheme } from "@mui/material/styles";
 import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import { productColumns } from "src/lib/dataset/tableData";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import { useSelector } from "react-redux";
-import CustomMenus from "src/utils/CustomActivationMenus";
-import CustomOptionsMenu from "src/utils/CustomOptionsMenu";
 import useMediaQuery from "@mui/material/useMediaQuery";
 // import ProductHighlights from "./modals/ProductHighlights";
 // import EditProduct from "./modals/EditProduct";
@@ -26,29 +17,32 @@ import {
   ContainerWrapper,
 } from "src/components/common/styles/PageContainerStyles";
 import ProductHeadingLayout from "./ProductHeadingLayout";
+import { ProductTypes } from "src/services/products/ProductTypes";
+import ProductItem from "./ProductItem";
+import { SelectChangeEvent } from "@mui/material";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    "&.MuiGrid-root": {
-      padding: "1rem 2rem 5rem 2rem",
+type ProductPageLayoutProps = {
+  title: string;
+  page: number;
+  filterText: string;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  rowsPerPage: number;
+  setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
+  openDeleteProduct: boolean;
+  setOpenDeleteProduct: React.Dispatch<React.SetStateAction<boolean>>;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  openEditProduct: boolean;
+  setOpenEditProduct: React.Dispatch<React.SetStateAction<boolean>>;
+  openHighlight: boolean;
+  setOpenHighlight: React.Dispatch<React.SetStateAction<boolean>>;
+  openProductGallery: boolean;
+  setOpenProductGallery: React.Dispatch<React.SetStateAction<boolean>>;
+  hasAddProductButton?: boolean;
+  productDataset: ProductTypes[];
+};
 
-      [theme.breakpoints.only("xs")]: {
-        padding: "5rem 1rem 5rem 1rem",
-      },
-    },
-  },
-  containerWrapper: {
-    background: "#fff",
-    padding: "2rem 3rem",
-    borderRadius: 5,
-
-    [theme.breakpoints.only("xs")]: {
-      padding: "2rem 1rem",
-    },
-  },
-}));
-
-const ProductPageLayout = (props) => {
+const ProductPageLayout = (props: ProductPageLayoutProps) => {
   const {
     title,
     page,
@@ -69,31 +63,33 @@ const ProductPageLayout = (props) => {
     productDataset,
   } = props;
 
-  const classes = useStyles();
   const theme = useTheme();
 
-  const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
 
-  const { loadingActivation, total, loadingProducts } = useSelector(
-    (state) => state.products
+  const loadingProducts = useTypedSelector(
+    (state) => state.products.loadingProducts
+  );
+  const totalProducts = useTypedSelector(
+    (state) => state.products.totalProducts
+  );
+  const loadingProductActivation = useTypedSelector(
+    (state) => state.products.loadingProductActivation
   );
 
-  const {
-    setCurrentProduct,
-    getAllCategories,
-    getAllSubcategories,
-    fetchAllBrands,
-  } = useActions();
+  const { getAllCategories, getAllSubcategories, fetchAllBrands } =
+    useActions();
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
 
   const handleLoadingActivation = () => {
-    return !loadingActivation;
+    return !loadingProductActivation;
   };
 
   const handleClose = () => {
@@ -101,13 +97,16 @@ const ProductPageLayout = (props) => {
   };
 
   useEffect(() => {
-    setCurrentProduct({});
     getAllCategories();
     getAllSubcategories();
     fetchAllBrands();
-
-    // eslint-disable-next-line
   }, []);
+
+  const handleSelectRowsPerPage = (event: SelectChangeEvent) => {
+    const selectEvent = event as React.ChangeEvent<HTMLInputElement>;
+    setRowsPerPage(+selectEvent.target.value);
+    setPage(0);
+  };
 
   return (
     <Container container direction="column">
@@ -121,8 +120,9 @@ const ProductPageLayout = (props) => {
           filterText={filterText}
           onChange={onChange}
           rowsPerPage={rowsPerPage}
-          hasAddProductButton={true}
-          handleChangeRowsPerPage={handleChangeRowsPerPage}
+          hasAddProductButton={hasAddProductButton}
+          setPage={setPage}
+          setRowsPerPage={setPage}
         />
         <Grid item container style={{ marginTop: "5rem" }}>
           <Tables
@@ -130,7 +130,7 @@ const ProductPageLayout = (props) => {
             page={page}
             setPage={setPage}
             rowsPerPage={rowsPerPage}
-            total={total}
+            total={totalProducts}
             setRowsPerPage={setRowsPerPage}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
             loading={loadingProducts}
@@ -139,36 +139,13 @@ const ProductPageLayout = (props) => {
             {!loadingProducts &&
               productDataset.map((product) => {
                 return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={product._id}
-                  >
-                    <TableCell>
-                      <img
-                        src={product.featuredImage}
-                        alt={`${product.productName}`}
-                        style={{ width: 80 }}
-                      />
-                    </TableCell>
-                    <TableCell>{product.productName}</TableCell>
-                    <TableCell>{product.productType || "Physical"}</TableCell>
-                    <TableCell>{product.productStock}</TableCell>
-                    <TableCell>${product.priceCode1.toFixed(2)}</TableCell>
-                    <TableCell>
-                      <CustomMenus product={product} />
-                    </TableCell>
-                    <TableCell>
-                      <CustomOptionsMenu
-                        product={product}
-                        setOpenDeleteProduct={setOpenDeleteProduct}
-                        setOpenEditProduct={setOpenEditProduct}
-                        setOpenHighlight={setOpenHighlight}
-                        setOpenProductGallery={setOpenProductGallery}
-                      />
-                    </TableCell>
-                  </TableRow>
+                  <ProductItem
+                    product={product}
+                    setOpenDeleteProduct={setOpenDeleteProduct}
+                    setOpenEditProduct={setOpenEditProduct}
+                    setOpenHighlight={setOpenHighlight}
+                    setOpenProductGallery={setOpenProductGallery}
+                  />
                 );
               })}
           </Tables>
@@ -194,7 +171,7 @@ const ProductPageLayout = (props) => {
         <PhotoGallery setOpenProductGallery={setOpenProductGallery} />
       </ShowDialog>
       <CustomLoadingDialog
-        loading={loadingActivation}
+        loading={loadingProductActivation}
         handleLoading={handleLoadingActivation}
       />
     </Container>

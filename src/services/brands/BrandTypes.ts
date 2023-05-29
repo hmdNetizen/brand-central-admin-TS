@@ -44,6 +44,7 @@ export type initStateType = {
   loadingBrandActivation: boolean;
   loadingBrandAction: boolean;
   brands: BrandReturnedPayload[];
+  brandsList: BrandReturnedPayload[];
   total: number;
   error: string | null;
   singleBrand: BrandReturnedPayload | null;

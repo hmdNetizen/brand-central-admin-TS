@@ -11,12 +11,12 @@ import {
 import { fileUploadConfig } from "src/config/fileUpload";
 import { UploadedFilePayload } from "../common/commonTypes";
 import { AxiosError } from "axios";
-import { VideoFileRounded } from "@mui/icons-material";
 
 const initialState: initStateType = {
   loadingBrands: false,
   loadingBrandActivation: false,
   loadingBrandAction: false,
+  brandsList: [],
   brands: [],
   total: 0,
   singleBrand: null,
@@ -39,6 +39,28 @@ export const getAllBrands = createAsyncThunk(
       };
     } catch (error) {
       return thunkAPI.rejectWithValue("Error occurred while fetching brands");
+    }
+  }
+);
+
+export const fetchAllBrands = createAsyncThunk(
+  "fetch-all-brands",
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await axios.get(`/api/brand`);
+      const result = data as { data: BrandReturnedPayload[] };
+
+      return result.data
+        .filter((brand) => brand.isActivated)
+        .sort((a, b) =>
+          a.name.toLowerCase() > b.name.toLowerCase()
+            ? 1
+            : b.name.toLowerCase() > a.name.toLowerCase()
+            ? -1
+            : 0
+        );
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
     }
   }
 );
@@ -444,6 +466,11 @@ const brandsSlice = createSlice({
       state.loadingBrands = false;
       state.brands = action.payload.brands;
       state.total = action.payload.total;
+      state.error = null;
+    });
+    builder.addCase(fetchAllBrands.fulfilled, (state, action) => {
+      state.loadingBrands = false;
+      state.brandsList = action.payload;
       state.error = null;
     });
   },
