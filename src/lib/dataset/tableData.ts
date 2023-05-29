@@ -1,9 +1,9 @@
 import { TableHeaderColumnTypes } from "./tableDataTypes";
 
-export const productColumns = [
-  { id: 0, label: "Photo", minWidth: 100 },
-  { id: 1, label: "Name", minWidth: 250 },
-  { id: 2, label: "Type", minWidth: 100 },
+export const productColumns: TableHeaderColumnTypes[] = [
+  { id: 0, label: "Photo", minWidth: 100, align: "left" },
+  { id: 1, label: "Name", minWidth: 250, align: "left" },
+  { id: 2, label: "Type", minWidth: 100, align: "left" },
   {
     id: 3,
     label: "Stock",
