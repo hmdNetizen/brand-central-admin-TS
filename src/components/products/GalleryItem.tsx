@@ -6,10 +6,11 @@ import { useActions } from "src/hooks/useActions";
 
 type GalleryItemProps = {
   image: PhotoGalleryTypes;
+  preview: string | undefined;
 };
 
 const GalleryItem = (props: GalleryItemProps) => {
-  const { image } = props;
+  const { image, preview } = props;
 
   const { removePhotoFromGallery } = useActions();
 
@@ -39,14 +40,14 @@ const GalleryItem = (props: GalleryItemProps) => {
         }}
         onClick={handleRemoveFromGallery}
       />
-      {/* <img
-        src={upload.url || upload}
+      <img
+        src={preview}
         alt="Gallery"
         style={{
           width: "100%",
           height: "100%",
         }}
-      /> */}
+      />
     </Grid>
   );
 };

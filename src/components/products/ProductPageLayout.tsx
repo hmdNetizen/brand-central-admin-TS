@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
@@ -17,7 +17,6 @@ import {
   ContainerWrapper,
 } from "src/components/common/styles/PageContainerStyles";
 import ProductHeadingLayout from "./ProductHeadingLayout";
-import { ProductTypes } from "src/services/products/ProductTypes";
 import ProductItem from "./ProductItem";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { ProductPageLayoutProps } from "./types";
@@ -47,6 +46,9 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
 
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
+
+  const [preview, setPreview] = useState<string | undefined>(undefined);
+  const [selectedFile, setSelectedFile] = useState<File | string>("");
 
   const loadingProducts = useTypedSelector(
     (state) => state.products.loadingProducts
@@ -82,6 +84,19 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
     fetchAllBrands();
   }, []);
 
+  useEffect(() => {
+    if (!selectedFile || typeof selectedFile === "string") {
+      // setPreview(undefined);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(selectedFile);
+    setPreview(objectUrl);
+
+    // free memory when ever this component is unmounted
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedFile]);
+
   return (
     <Container container direction="column">
       <Grid item container pb={2}>
@@ -114,6 +129,7 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
               productDataset.map((product) => {
                 return (
                   <ProductItem
+                    key={product._id}
                     product={product}
                     setOpenDeleteProduct={setOpenDeleteProduct}
                     setOpenEditProduct={setOpenEditProduct}
@@ -142,7 +158,12 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
         handleClose={handleClose}
         width={matchesXS ? "95%" : matchesSM ? "80%" : 700}
       >
-        <PhotoGallery setOpenProductGallery={setOpenProductGallery} />
+        <PhotoGallery
+          setOpenProductGallery={setOpenProductGallery}
+          preview={preview}
+          selectedFile={selectedFile}
+          setSelectedFile={setSelectedFile}
+        />
       </ShowDialog>
       <CustomLoadingDialog
         loading={loadingProductActivation}

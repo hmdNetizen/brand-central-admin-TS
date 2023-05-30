@@ -12,23 +12,38 @@ import { StyledButton, StyledCloseIcon } from "./styles";
 
 type PhotoGalleryProps = {
   setOpenProductGallery: React.Dispatch<React.SetStateAction<boolean>>;
+  preview: string | undefined;
+  selectedFile: File | string;
+  setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
 };
 
-const PhotoGallery = ({ setOpenProductGallery }: PhotoGalleryProps) => {
+const PhotoGallery = (props: PhotoGalleryProps) => {
+  const { setOpenProductGallery, preview, selectedFile, setSelectedFile } =
+    props;
   const singleProduct = useTypedSelector(
     (state) => state.products.singleProduct
   );
 
   const { addPhotosToGallery } = useActions();
 
-  const handlePhotoUploads = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  // const handlePhotoUploads = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
 
-    if (!file) return;
+  //   if (!file) return;
 
-    addPhotosToGallery({
-      file,
-    });
+  //   addPhotosToGallery({
+  //     file,
+  //   });
+  // };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target?.files?.[0];
+
+    if (!file && !selectedFile) {
+      return;
+    }
+
+    setSelectedFile(file!);
   };
 
   return (
@@ -64,7 +79,7 @@ const PhotoGallery = ({ setOpenProductGallery }: PhotoGalleryProps) => {
               multiple
               type="file"
               style={{ display: "none" }}
-              onChange={handlePhotoUploads}
+              onChange={handleFileUpload}
             />
             <StyledButton
               startIcon={<FileUploadIcon />}
@@ -102,7 +117,7 @@ const PhotoGallery = ({ setOpenProductGallery }: PhotoGalleryProps) => {
         >
           {singleProduct?.productGalleryImages.length! > 0 ? (
             singleProduct?.productGalleryImages.map((item) => (
-              <GalleryItem image={item} />
+              <GalleryItem image={item} preview={preview} />
             ))
           ) : (
             <Grid item>
