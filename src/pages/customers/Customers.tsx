@@ -48,8 +48,6 @@ const Customers = () => {
         limit: rowsPerPage,
       });
     }
-
-    // eslint-disable-next-line
   }, [page, rowsPerPage]);
 
   return (
