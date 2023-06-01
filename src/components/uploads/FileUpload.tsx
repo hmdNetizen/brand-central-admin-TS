@@ -2,8 +2,6 @@ import React from "react";
 import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { styled } from "@mui/material/styles";
-import { useActions } from "src/hooks/useActions";
-import { useTypedSelector } from "src/hooks/useTypedSelector";
 
 const Input = styled("input")({
   display: "none",
