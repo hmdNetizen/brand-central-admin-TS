@@ -134,6 +134,8 @@ const preorderSlice = createSlice({
             (currentProduct.units !== "EA" && currentProduct.productStock >= 2))
         ) {
           return preOrder;
+        } else {
+          return null;
         }
       });
 
@@ -142,11 +144,11 @@ const preorderSlice = createSlice({
       // isNotified is used to track the notification that has been either ignored or fulfilled via
       // email sent to customer.
       const productsInStock = sanitzePreOrders
-        .filter((item) => item !== null)
+        .filter((item) => item)
         // eslint-disable-next-line
         .filter((newPreOrder) => {
           const itemCopy = { ...newPreOrder };
-          itemCopy.userWishList = itemCopy.userWishList?.filter(
+          itemCopy.userWishList = itemCopy.userWishList.filter(
             (wishlist) => !wishlist.isNotified
           );
           if (itemCopy?.userWishList?.length! > 0) {
@@ -167,14 +169,13 @@ const preorderSlice = createSlice({
       );
 
       type ProductListType = {
-        customerData:
-          | {
+        customerData: {
               id: string;
               companyEmail: string;
               companyName: string;
             }[]
           | undefined;
-        productData: ProductTypes[];
+        productData: ProductTypes[]
       };
 
       const productList: ProductListType[] = [];
