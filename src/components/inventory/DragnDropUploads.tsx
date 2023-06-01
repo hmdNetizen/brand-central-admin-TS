@@ -9,6 +9,7 @@ import {
   constructBrandName,
   constructSubCategory,
 } from "src/lib/helpers";
+import { useTheme } from "@mui/material/styles";
 import CustomLinearProgressBar from "src/utils/CustomLinearProgress";
 import { useActions } from "src/hooks/useActions";
 import { ProductsBulkUpdatePayload } from "src/services/products/ProductTypes";
@@ -16,6 +17,7 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { Container, Input, ProgressTextWrapper } from "./styles.inventory";
 
 function StyledDropzone() {
+  const theme = useTheme();
   // eslint-disable-next-line
   const [fileName, setFileName] = useState<File | string>("");
 
@@ -99,7 +101,10 @@ function StyledDropzone() {
             variant="body1"
             sx={{
               textTransform: "uppercase",
-              color: "#1a90ff",
+              color:
+                updatedInventory === "Update Completed"
+                  ? theme.palette.success.main
+                  : "#1a90ff",
             }}
           >
             {uploadedFiles ? uploadedFiles : updatedInventory}

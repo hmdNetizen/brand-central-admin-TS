@@ -3,10 +3,17 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import LinearProgress, {
   linearProgressClasses,
+  LinearProgressProps,
 } from "@mui/material/LinearProgress";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 
-const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+interface LinearProgressPropTypes extends LinearProgressProps {
+  updatedInventory: string;
+}
+
+const BorderLinearProgress = styled(LinearProgress, {
+  shouldForwardProp: (prop) => prop !== "updatedInventory",
+})<LinearProgressPropTypes>(({ theme, updatedInventory }) => ({
   height: 10,
   borderRadius: 5,
   [`&.${linearProgressClasses.colorPrimary}`]: {
@@ -15,13 +22,20 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
   [`& .${linearProgressClasses.bar}`]: {
     borderRadius: 5,
-    backgroundColor: theme.palette.mode === "light" ? "#1a90ff" : "#308fe8",
+    // backgroundColor: theme.palette.mode === "light" ? "#1a90ff" : "#308fe8",
+    backgroundColor:
+      updatedInventory === "Update Completed"
+        ? theme.palette.success.main
+        : "#308fe8",
   },
 }));
 
 const CustomLinearProgressBar = () => {
   const uploadPercentage = useTypedSelector(
     (state) => state.common.uploadPercentage
+  );
+  const updatedInventory = useTypedSelector(
+    (state) => state.products.updatedInventory
   );
 
   return (
@@ -32,7 +46,11 @@ const CustomLinearProgressBar = () => {
       }}
     >
       <Box sx={{ width: "100%", mr: 1 }}>
-        <BorderLinearProgress variant="determinate" value={uploadPercentage} />
+        <BorderLinearProgress
+          variant="determinate"
+          value={uploadPercentage}
+          updatedInventory={updatedInventory}
+        />
       </Box>
       <Box sx={{ minWidth: 35 }}>
         <Typography
