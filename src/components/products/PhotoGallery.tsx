@@ -9,16 +9,17 @@ import { useActions } from "src/hooks/useActions";
 import GalleryItem from "./GalleryItem";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { StyledButton, StyledCloseIcon } from "./styles";
+import { PhotoGalleryTypes } from "src/services/products/ProductTypes";
 
 type PhotoGalleryProps = {
   setOpenProductGallery: React.Dispatch<React.SetStateAction<boolean>>;
-  preview: string | undefined;
+  previews: PhotoGalleryTypes[];
   selectedFile: File | string;
   setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
 };
 
 const PhotoGallery = (props: PhotoGalleryProps) => {
-  const { setOpenProductGallery, preview, selectedFile, setSelectedFile } =
+  const { setOpenProductGallery, previews, selectedFile, setSelectedFile } =
     props;
   const singleProduct = useTypedSelector(
     (state) => state.products.singleProduct
@@ -53,7 +54,7 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
         container
         alignItems="center"
         justifyContent="space-between"
-        sx={{ p: 2, pb: 1 }}
+        sx={{ p: 1 }}
       >
         <Grid item>
           <Typography variant="h4">Image Gallery</Typography>
@@ -108,14 +109,17 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
         </Grid>
       </Grid>
       <Divider />
-      <Grid item sx={{ p: 2 }}>
+      <Grid item sx={{ p: 2 }} style={{ paddingBottom: "5rem" }}>
         <Grid
           container
           sx={{ flexWrap: "wrap" }}
           justifyContent="space-around"
           rowGap={2}
         >
-          {singleProduct?.productGalleryImages.length! > 0 ? (
+          {previews.map((item) => (
+            <GalleryItem key={item.id} image={item} />
+          ))}
+          {/* {singleProduct?.productGalleryImages.length! > 0 ? (
             singleProduct?.productGalleryImages.map((item) => (
               <GalleryItem image={item} preview={preview} />
             ))
@@ -129,7 +133,7 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
                 There are no photos in the gallery
               </Typography>
             </Grid>
-          )}
+          )} */}
         </Grid>
       </Grid>
     </Grid>

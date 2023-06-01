@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { nanoid } from "@reduxjs/toolkit";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
@@ -20,6 +21,7 @@ import ProductHeadingLayout from "./ProductHeadingLayout";
 import ProductItem from "./ProductItem";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { ProductPageLayoutProps } from "./types";
+import { PhotoGalleryTypes } from "src/services/products/ProductTypes";
 
 const ProductPageLayout = (props: ProductPageLayoutProps) => {
   const {
@@ -47,7 +49,7 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
 
-  const [preview, setPreview] = useState<string | undefined>(undefined);
+  const [previews, setPreviews] = useState<PhotoGalleryTypes[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | string>("");
 
   const loadingProducts = useTypedSelector(
@@ -86,12 +88,11 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
 
   useEffect(() => {
     if (!selectedFile || typeof selectedFile === "string") {
-      // setPreview(undefined);
       return;
     }
 
     const objectUrl = URL.createObjectURL(selectedFile);
-    setPreview(objectUrl);
+    setPreviews((prev) => [{ id: nanoid(), url: objectUrl }, ...prev]);
 
     // free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(objectUrl);
@@ -160,7 +161,7 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
       >
         <PhotoGallery
           setOpenProductGallery={setOpenProductGallery}
-          preview={preview}
+          previews={previews}
           selectedFile={selectedFile}
           setSelectedFile={setSelectedFile}
         />
