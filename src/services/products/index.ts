@@ -217,17 +217,6 @@ const productsSlice = createSlice({
     setCurrentProduct: (state, action: PayloadAction<ProductTypes>) => {
       state.singleProduct = action.payload;
     },
-    removePhotoFromGallery: (state, action: PayloadAction<{ id: string }>) => {
-      const photoGallery = state.singleProduct?.productGalleryImages.filter(
-        (image) => image.id !== action.payload.id
-      ) as PhotoGalleryTypes[];
-
-      const currentProduct = {
-        ...state.singleProduct,
-        productGalleryImages: photoGallery,
-      } as ProductTypes;
-      state.singleProduct = currentProduct;
-    },
   },
   extraReducers(builder) {
     builder
@@ -344,8 +333,8 @@ const productsSlice = createSlice({
       })
       .addCase(addPhotosToGallery.fulfilled, (state, action) => {
         state.uploadingImage = false;
-        state.singleProduct?.productGalleryImages.push(action.payload);
-        state.singleProduct = state.singleProduct;
+        // state.singleProduct?.productGalleryImages.push(action.payload);
+        // state.singleProduct = state.singleProduct;
         state.error = null;
 
         toast.success("Image uploaded successfully", {
@@ -362,10 +351,6 @@ const productsSlice = createSlice({
   },
 });
 
-export const {
-  setUpdatingInventory,
-  setUploadingFileText,
-  setCurrentProduct,
-  removePhotoFromGallery,
-} = productsSlice.actions;
+export const { setUpdatingInventory, setUploadingFileText, setCurrentProduct } =
+  productsSlice.actions;
 export default productsSlice.reducer;

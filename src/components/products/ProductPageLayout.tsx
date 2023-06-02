@@ -51,6 +51,7 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
 
   const [previews, setPreviews] = useState<PhotoGalleryTypes[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | string>("");
+  const [galleryItemId, setGalleryItemId] = useState("");
 
   const loadingProducts = useTypedSelector(
     (state) => state.products.loadingProducts
@@ -94,7 +95,6 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
     const objectUrl = URL.createObjectURL(selectedFile);
     setPreviews((prev) => [{ id: nanoid(), url: objectUrl }, ...prev]);
 
-    // free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
@@ -164,6 +164,9 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
           previews={previews}
           selectedFile={selectedFile}
           setSelectedFile={setSelectedFile}
+          setPreviews={setPreviews}
+          setGalleryItemId={setGalleryItemId}
+          galleryItemId={galleryItemId}
         />
       </ShowDialog>
       <CustomLoadingDialog

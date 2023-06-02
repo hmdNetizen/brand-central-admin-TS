@@ -14,13 +14,23 @@ import { PhotoGalleryTypes } from "src/services/products/ProductTypes";
 type PhotoGalleryProps = {
   setOpenProductGallery: React.Dispatch<React.SetStateAction<boolean>>;
   previews: PhotoGalleryTypes[];
+  setPreviews: React.Dispatch<React.SetStateAction<PhotoGalleryTypes[]>>;
   selectedFile: File | string;
   setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
+  setGalleryItemId: React.Dispatch<React.SetStateAction<string>>;
+  galleryItemId: string;
 };
 
 const PhotoGallery = (props: PhotoGalleryProps) => {
-  const { setOpenProductGallery, previews, selectedFile, setSelectedFile } =
-    props;
+  const {
+    setOpenProductGallery,
+    previews,
+    selectedFile,
+    setSelectedFile,
+    setPreviews,
+    setGalleryItemId,
+    galleryItemId,
+  } = props;
   const singleProduct = useTypedSelector(
     (state) => state.products.singleProduct
   );
@@ -45,6 +55,11 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
     }
 
     setSelectedFile(file!);
+  };
+
+  const handleRemove = (id: string) => {
+    const newPreviews = previews.filter((preview) => preview.id !== id);
+    setPreviews(newPreviews);
   };
 
   return (
@@ -113,11 +128,19 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
         <Grid
           container
           sx={{ flexWrap: "wrap" }}
-          justifyContent="space-around"
+          justifyContent="center"
+          columnGap={2}
           rowGap={2}
         >
           {previews.map((item) => (
-            <GalleryItem key={item.id} image={item} />
+            <GalleryItem
+              key={item.id}
+              item={item}
+              onRemove={() => handleRemove(item.id)}
+              id={item.id}
+              setGalleryItemId={setGalleryItemId}
+              galleryItemId={galleryItemId}
+            />
           ))}
           {/* {singleProduct?.productGalleryImages.length! > 0 ? (
             singleProduct?.productGalleryImages.map((item) => (
