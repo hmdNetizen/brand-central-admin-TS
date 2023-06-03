@@ -25,6 +25,7 @@ export type UserWishListTypes = {
 export type PhotoGalleryTypes = {
   id: string;
   url: string;
+  file?: File;
 };
 
 export type ProductTypes = {

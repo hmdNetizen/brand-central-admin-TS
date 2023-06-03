@@ -31,8 +31,12 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
     setGalleryItemId,
     galleryItemId,
   } = props;
+
   const singleProduct = useTypedSelector(
     (state) => state.products.singleProduct
+  );
+  const uploadingImage = useTypedSelector(
+    (state) => state.products.uploadingImage
   );
 
   const { addPhotosToGallery } = useActions();
@@ -114,7 +118,7 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
             disableRipple
             onClick={() => setOpenProductGallery(false)}
           >
-            Done
+            Save
           </StyledButton>
         </Grid>
         <Grid item container justifyContent="center">
@@ -140,6 +144,7 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
               id={item.id}
               setGalleryItemId={setGalleryItemId}
               galleryItemId={galleryItemId}
+              loading={uploadingImage}
             />
           ))}
           {/* {singleProduct?.productGalleryImages.length! > 0 ? (

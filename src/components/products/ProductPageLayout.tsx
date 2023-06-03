@@ -93,7 +93,10 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
     }
 
     const objectUrl = URL.createObjectURL(selectedFile);
-    setPreviews((prev) => [{ id: nanoid(), url: objectUrl }, ...prev]);
+    setPreviews((prev) => [
+      { id: nanoid(), url: objectUrl, file: selectedFile },
+      ...prev,
+    ]);
 
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);

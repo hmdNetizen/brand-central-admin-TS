@@ -4,6 +4,8 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { PhotoGalleryTypes } from "src/services/products/ProductTypes";
 import CancelSharpIcon from "@mui/icons-material/CancelSharp";
+import { StyledCircularProgress } from "src/utilityStyles/pagesUtilityStyles";
+import { useActions } from "src/hooks/useActions";
 
 type GalleryItemProps = {
   item: PhotoGalleryTypes;
@@ -11,13 +13,19 @@ type GalleryItemProps = {
   id: string;
   setGalleryItemId: React.Dispatch<React.SetStateAction<string>>;
   galleryItemId: string;
+  loading: boolean;
 };
 
 const GalleryItem = (props: GalleryItemProps) => {
-  const { item, onRemove, id, setGalleryItemId, galleryItemId } = props;
+  const { item, onRemove, id, setGalleryItemId, galleryItemId, loading } =
+    props;
 
-  const handleMouseOver = () => {
+  const loadingUpload = true;
+  const { addPhotosToGallery } = useActions();
+
+  const handleClick = () => {
     setGalleryItemId(id);
+    addPhotosToGallery({ file: item.file! });
   };
 
   return (
@@ -30,7 +38,6 @@ const GalleryItem = (props: GalleryItemProps) => {
         border: "1px solid #f4f4f4",
         borderRadius: 5,
       }}
-      onMouseOver={handleMouseOver}
     >
       <Grid
         item
@@ -59,8 +66,19 @@ const GalleryItem = (props: GalleryItemProps) => {
             marginBottom: "1rem",
           }}
         />
-        <Button variant="contained" color="secondary">
-          Click to upload
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleClick}
+          style={{ minWidth: 100 }}
+        >
+          {loading && galleryItemId === item.id ? (
+            <StyledCircularProgress
+              style={{ width: 15, height: 15, margin: "0 auto" }}
+            />
+          ) : (
+            "Click to upload"
+          )}
         </Button>
       </Grid>
     </Grid>
