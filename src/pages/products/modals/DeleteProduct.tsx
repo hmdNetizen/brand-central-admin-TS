@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useActions } from "src/hooks/useActions";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
 import ActionModal from "src/utils/ActionModal";
 
 type DeleteProductProps = {
@@ -11,14 +12,18 @@ type DeleteProductProps = {
 const DeleteProduct = (props: DeleteProductProps) => {
   const { openDeleteProduct, setOpenDeleteProduct } = props;
 
-  const { singleProduct, loadingAction } = useSelector(
-    (state) => state.products
+  const singleProduct = useTypedSelector(
+    (state) => state.products.singleProduct
   );
+  const loadingProductAction = useTypedSelector(
+    (state) => state.products.loadingProductAction
+  );
+
   const { deleteProduct } = useActions();
 
   const handleDeleteProduct = () => {
     deleteProduct({
-      productId: singleProduct._id,
+      productId: singleProduct?._id!,
       setOpenDeleteProduct,
     });
   };
@@ -26,13 +31,11 @@ const DeleteProduct = (props: DeleteProductProps) => {
   return (
     <ActionModal
       actionType="Delete"
-      loading={loadingAction}
+      loading={loadingProductAction}
       openAction={openDeleteProduct}
       setOpenAction={setOpenDeleteProduct}
       handleAction={handleDeleteProduct}
-      data={
-        Object.keys(singleProduct).length > 0 ? singleProduct.productName : null
-      }
+      data={singleProduct?.productName!}
     />
   );
 };
