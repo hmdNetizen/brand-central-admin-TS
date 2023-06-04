@@ -9,7 +9,7 @@ import { productColumns } from "src/lib/dataset/tableData";
 import useMediaQuery from "@mui/material/useMediaQuery";
 // import ProductHighlights from "./modals/ProductHighlights";
 // import EditProduct from "./modals/EditProduct";
-// import DeleteProduct from "./modals/DeleteProduct";
+import DeleteProduct from "src/pages/products/modals/DeleteProduct";
 import ShowDialog from "src/utils/ShowDialog";
 import PhotoGallery from "src/components/products/PhotoGallery";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
@@ -148,15 +148,15 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
       {/* <ProductHighlights
         openHighlight={openHighlight}
         setOpenHighlight={setOpenHighlight}
-      />
-      <EditProduct
+      /> */}
+      {/* <EditProduct
         openEditProduct={openEditProduct}
         setOpenEditProduct={setOpenEditProduct}
-      />
+      /> */}
       <DeleteProduct
         openDeleteProduct={openDeleteProduct}
         setOpenDeleteProduct={setOpenDeleteProduct}
-      /> */}
+      />
       <ShowDialog
         openModal={openProductGallery}
         handleClose={handleClose}
