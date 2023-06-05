@@ -26,6 +26,7 @@ export type PhotoGalleryTypes = {
   id: string;
   url: string;
   file?: File;
+  isUploaded: boolean;
 };
 
 export type ProductTypes = {

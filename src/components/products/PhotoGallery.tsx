@@ -39,18 +39,6 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
     (state) => state.products.uploadingImage
   );
 
-  const { addPhotosToGallery } = useActions();
-
-  // const handlePhotoUploads = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-
-  //   if (!file) return;
-
-  //   addPhotosToGallery({
-  //     file,
-  //   });
-  // };
-
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target?.files?.[0];
 
@@ -136,20 +124,19 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
           columnGap={2}
           rowGap={2}
         >
-          {previews.map((item) => (
-            <GalleryItem
-              key={item.id}
-              item={item}
-              onRemove={() => handleRemove(item.id)}
-              id={item.id}
-              setGalleryItemId={setGalleryItemId}
-              galleryItemId={galleryItemId}
-              loading={uploadingImage}
-            />
-          ))}
-          {/* {singleProduct?.productGalleryImages.length! > 0 ? (
-            singleProduct?.productGalleryImages.map((item) => (
-              <GalleryItem image={item} preview={preview} />
+          {previews.length > 0 ? (
+            previews.map((item) => (
+              <GalleryItem
+                key={item.id}
+                item={item}
+                onRemove={() => handleRemove(item.id)}
+                id={item.id}
+                setGalleryItemId={setGalleryItemId}
+                galleryItemId={galleryItemId}
+                loading={uploadingImage}
+                previews={previews}
+                setPreviews={setPreviews}
+              />
             ))
           ) : (
             <Grid item>
@@ -161,7 +148,7 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
                 There are no photos in the gallery
               </Typography>
             </Grid>
-          )} */}
+          )}
         </Grid>
       </Grid>
     </Grid>

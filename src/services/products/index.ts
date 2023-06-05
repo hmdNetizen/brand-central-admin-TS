@@ -177,8 +177,15 @@ export const getSingleProduct = createAsyncThunk(
 
 export const addPhotosToGallery = createAsyncThunk(
   "galleryPhoto",
-  async (data: { file: File }, thunkAPI) => {
-    const { file } = data;
+  async (
+    data: {
+      file: File;
+      previews: PhotoGalleryTypes[];
+      setPreviews: React.Dispatch<React.SetStateAction<PhotoGalleryTypes[]>>;
+    },
+    thunkAPI
+  ) => {
+    const { file, previews, setPreviews } = data;
 
     const formData = new FormData();
     formData.append("document", file);
@@ -190,8 +197,30 @@ export const addPhotosToGallery = createAsyncThunk(
     };
 
     try {
-      const { data } = await axios.post(`/api/uploads/file`, formData, config);
-      const result = data as { id: string; url: string };
+      const { data, status } = await axios.post(
+        `/api/uploads/file`,
+        formData,
+        config
+      );
+      const result = data as { id: string; url: string; fileName: string };
+
+      if (status === 200) {
+        const currentIndex = previews.findIndex(
+          (preview) => preview.file?.name === result.fileName
+        );
+        const currentPreview = previews[currentIndex];
+
+        const newPreview = {
+          ...currentPreview,
+          url: result.url,
+          isUploaded: true,
+        };
+
+        const filteredPreviews = previews.filter(
+          (previewItem) => previewItem.id !== newPreview.id
+        );
+        setPreviews([...filteredPreviews, newPreview]);
+      }
 
       return {
         id: nanoid(),

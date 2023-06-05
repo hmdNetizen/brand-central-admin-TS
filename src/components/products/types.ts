@@ -1,4 +1,7 @@
-import { ProductTypes } from "src/services/products/ProductTypes";
+import {
+  PhotoGalleryTypes,
+  ProductTypes,
+} from "src/services/products/ProductTypes";
 
 export type ProductPageLayoutProps = {
   title: string;
@@ -18,4 +21,15 @@ export type ProductPageLayoutProps = {
   setOpenProductGallery: React.Dispatch<React.SetStateAction<boolean>>;
   hasAddProductButton?: boolean;
   productDataset: ProductTypes[];
+};
+
+export type GalleryItemProps = {
+  item: PhotoGalleryTypes;
+  onRemove: (e: React.MouseEvent<HTMLButtonElement>, id: string) => void;
+  id: string;
+  setGalleryItemId: React.Dispatch<React.SetStateAction<string>>;
+  galleryItemId: string;
+  loading: boolean;
+  previews: PhotoGalleryTypes[];
+  setPreviews: React.Dispatch<React.SetStateAction<PhotoGalleryTypes[]>>;
 };
