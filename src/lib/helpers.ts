@@ -112,3 +112,13 @@ export const constructBrandName = (product: ProductsBulkUpdatePayload) => {
     return product["Brand"];
   }
 };
+
+export const productMeasurements = [
+  "Gram",
+  "Kilogram",
+  "Litre",
+  "Pound",
+  "Custom",
+];
+
+export const shippingCategoryList = ["light", "medium", "heavy", "extra heavy"];
