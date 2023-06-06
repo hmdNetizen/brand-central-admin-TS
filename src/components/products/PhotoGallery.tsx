@@ -18,6 +18,7 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
     setPreviews,
     setGalleryItemId,
     galleryItemId,
+    onClose,
   } = props;
 
   const uploadingImage = useTypedSelector(
@@ -52,7 +53,7 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
           <Typography variant="h4">Image Gallery</Typography>
         </Grid>
         <Grid item>
-          <StyledCloseIcon onClick={() => setOpenProductGallery(false)} />
+          <StyledCloseIcon onClick={onClose} />
         </Grid>
       </Grid>
       <Divider />

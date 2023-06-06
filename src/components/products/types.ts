@@ -42,4 +42,5 @@ export type PhotoGalleryProps = {
   setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
   setGalleryItemId: React.Dispatch<React.SetStateAction<string>>;
   galleryItemId: string;
+  onClose: () => void;
 };

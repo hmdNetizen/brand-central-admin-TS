@@ -79,6 +79,7 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
 
   const handleClose = () => {
     setOpenProductGallery(false);
+    setPreviews([]);
   };
 
   useEffect(() => {
@@ -170,6 +171,7 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
           setPreviews={setPreviews}
           setGalleryItemId={setGalleryItemId}
           galleryItemId={galleryItemId}
+          onClose={handleClose}
         />
       </ShowDialog>
       <CustomLoadingDialog
