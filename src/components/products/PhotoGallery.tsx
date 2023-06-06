@@ -2,24 +2,12 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-// import CancelSharpIcon from "@mui/icons-material/CancelSharp";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import { useActions } from "src/hooks/useActions";
 import GalleryItem from "./GalleryItem";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { StyledButton, StyledCloseIcon } from "./styles";
-import { PhotoGalleryTypes } from "src/services/products/ProductTypes";
-
-type PhotoGalleryProps = {
-  setOpenProductGallery: React.Dispatch<React.SetStateAction<boolean>>;
-  previews: PhotoGalleryTypes[];
-  setPreviews: React.Dispatch<React.SetStateAction<PhotoGalleryTypes[]>>;
-  selectedFile: File | string;
-  setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
-  setGalleryItemId: React.Dispatch<React.SetStateAction<string>>;
-  galleryItemId: string;
-};
+import { PhotoGalleryProps } from "./types";
 
 const PhotoGallery = (props: PhotoGalleryProps) => {
   const {
@@ -32,9 +20,6 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
     galleryItemId,
   } = props;
 
-  const singleProduct = useTypedSelector(
-    (state) => state.products.singleProduct
-  );
   const uploadingImage = useTypedSelector(
     (state) => state.products.uploadingImage
   );

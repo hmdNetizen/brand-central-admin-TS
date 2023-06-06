@@ -33,3 +33,13 @@ export type GalleryItemProps = {
   previews: PhotoGalleryTypes[];
   setPreviews: React.Dispatch<React.SetStateAction<PhotoGalleryTypes[]>>;
 };
+
+export type PhotoGalleryProps = {
+  setOpenProductGallery: React.Dispatch<React.SetStateAction<boolean>>;
+  previews: PhotoGalleryTypes[];
+  setPreviews: React.Dispatch<React.SetStateAction<PhotoGalleryTypes[]>>;
+  selectedFile: File | string;
+  setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
+  setGalleryItemId: React.Dispatch<React.SetStateAction<string>>;
+  galleryItemId: string;
+};
