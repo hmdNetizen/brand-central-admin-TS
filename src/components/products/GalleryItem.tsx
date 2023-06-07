@@ -27,8 +27,6 @@ const GalleryItem = (props: GalleryItemProps) => {
     addPhotosToGallery({ file: item.file!, previews, setPreviews });
   };
 
-  console.log(item);
-
   return (
     <Grid
       item

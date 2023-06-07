@@ -1,14 +1,16 @@
 import React, { ChangeEvent, FormEvent } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { styled, useTheme } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
-import CancelSharpIcon from "@mui/icons-material/CancelSharp";
 import CustomFormInput from "src/utils/CustomFormInput";
 import CustomSelect from "src/utils/CustomSelect";
-import { capitalizeFirstLetters, productMeasurements } from "src/lib/helpers";
+import {
+  capitalizeFirstLetters,
+  productMeasurements,
+  shippingCategoryList,
+} from "src/lib/helpers";
 import CustomCheckbox from "src/utils/CustomCheckbox";
 import CustomTextArea from "src/utils/CustomTextArea";
 import {
@@ -19,6 +21,9 @@ import {
 import { SelectChangeEvent } from "@mui/material";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { SubCategoryReturnedPayload } from "src/services/categories/CategoryTypes";
+import FileUploadLayout from "src/components/uploads/FileUploadLayout";
+import { PhotoGalleryTypes } from "src/services/products/ProductTypes";
+import GalleryItem from "src/components/products/GalleryItem";
 
 const AddMoreButton = styled(SubmitButton)({
   borderRadius: 5,
@@ -49,7 +54,6 @@ type ProductFormProps = {
   brandName: string;
   brandNameError: string;
   customBrandName: string;
-  customBrandNameError: string;
   priceCode1: number;
   priceCode1Error: string;
   priceCode2: number;
@@ -84,9 +88,22 @@ type ProductFormProps = {
   customMeasurementError: string;
   wholesaleDiscountPercentage: number;
   productDescription: string;
+  filteredSubCategory: SubCategoryReturnedPayload[];
   setFilteredSubCategory: React.Dispatch<
     React.SetStateAction<SubCategoryReturnedPayload[]>
   >;
+  previews: PhotoGalleryTypes[];
+  setPreviews: React.Dispatch<React.SetStateAction<PhotoGalleryTypes[]>>;
+  imagePreview: string | undefined;
+  setImagePreview: React.Dispatch<React.SetStateAction<string | undefined>>;
+  selectedFile: File | string;
+  setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
+  productImageError: string;
+  setProductImageError: React.Dispatch<React.SetStateAction<string>>;
+  uploadingImage: boolean;
+  updatingProduct: boolean;
+  setGalleryItemId: React.Dispatch<React.SetStateAction<string>>;
+  galleryItemId: string;
 };
 
 const EditProductForm = (props: ProductFormProps) => {
@@ -148,7 +165,20 @@ const EditProductForm = (props: ProductFormProps) => {
     customMeasurementError,
     wholesaleDiscountPercentage,
     productDescription,
+    filteredSubCategory,
     setFilteredSubCategory,
+    imagePreview,
+    setImagePreview,
+    selectedFile,
+    setSelectedFile,
+    productImageError,
+    setProductImageError,
+    previews,
+    setPreviews,
+    updatingProduct,
+    uploadingImage,
+    galleryItemId,
+    setGalleryItemId,
   } = props;
 
   //   MEDIA QUERIES
@@ -159,6 +189,7 @@ const EditProductForm = (props: ProductFormProps) => {
   const subCategories = useTypedSelector(
     (state) => state.categories.subCategories
   );
+  const brands = useTypedSelector((state) => state.brands.brands);
 
   const handleFilter = (value: string) => {
     const newSubCategories = [...subCategories].filter((subCategory) =>
@@ -173,6 +204,26 @@ const EditProductForm = (props: ProductFormProps) => {
 
     onSelectChange(event);
     handleFilter(selectEvent.target.value);
+  };
+
+  const handleChangeProductImage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    setSelectedFile(file);
+  };
+
+  const handleRemoveProductImage = () => {
+    setSelectedFile("");
+    setImagePreview(undefined);
+  };
+
+  const handleRemove = (id: string) => {
+    const newPreviews = previews.filter((preview) => preview.id !== id);
+    setPreviews(newPreviews);
   };
 
   return (
@@ -486,12 +537,18 @@ const EditProductForm = (props: ProductFormProps) => {
           marginRight: "auto",
         }}
       >
-        <FileUploadBox setProductImageError={setProductImageError} />
-        {productImageError && (
-          <small className={classes.uploadError}>{productImageError}</small>
-        )}
+        <FileUploadLayout
+          onImageChange={handleChangeProductImage}
+          onRemoveImage={handleRemoveProductImage}
+          selectedFile={selectedFile}
+          setImageError={setProductImageError}
+          setSelectedFile={setSelectedFile}
+          preview={imagePreview}
+          setPreview={setImagePreview}
+        />
+        {productImageError && <small>{productImageError}</small>}
       </Grid>
-      {uploadedFile && (
+      {/* {uploadedFile && (
         <Grid item container justifyContent="center">
           <label htmlFor="add-product-photo">
             <input
@@ -512,7 +569,7 @@ const EditProductForm = (props: ProductFormProps) => {
             </Button>
           </label>
         </Grid>
-      )}
+      )} */}
       <Grid
         item
         style={{
@@ -539,44 +596,56 @@ const EditProductForm = (props: ProductFormProps) => {
           Add More Photos
         </AddMoreButton>
       </Grid>
-      {uploadedFiles.length > 0 && (
+      {previews.length > 0 && (
         <Grid
           item
           container
           flexWrap="wrap"
           sx={{ mb: 2 }}
           columnGap={2}
+          rowGap={2}
           justifyContent="center"
         >
-          {uploadedFiles.map((upload, index) => (
-            <Grid
-              item
-              style={{
-                height: 100,
-                width: 100,
-                border: "1px solid #f4f4f4",
-                borderRadius: 5,
-                padding: 5,
-              }}
-              sx={{ p: 1, position: "relative" }}
-              key={index}
-            >
-              <CancelSharpIcon
-                color="error"
-                style={{
-                  position: "absolute",
-                  right: -10,
-                  top: -10,
-                  cursor: "pointer",
-                }}
-                onClick={() => removePhotoFromGallery(index)}
-              />
-              <img
-                src={upload.url || upload}
-                alt="Thumbnail"
-                style={{ width: "100%", height: "100%" }}
-              />
-            </Grid>
+          {previews.map((previewItem) => (
+            <GalleryItem
+              key={previewItem.id}
+              item={previewItem}
+              onRemove={() => handleRemove(previewItem.id)}
+              id={previewItem.id}
+              setGalleryItemId={setGalleryItemId}
+              galleryItemId={galleryItemId}
+              loading={uploadingImage}
+              previews={previews}
+              setPreviews={setPreviews}
+            />
+            // <Grid
+            //   item
+            //   style={{
+            //     height: 100,
+            //     width: 100,
+            //     border: "1px solid #f4f4f4",
+            //     borderRadius: 5,
+            //     padding: 5,
+            //   }}
+            //   sx={{ p: 1, position: "relative" }}
+            //   key={preview.id}
+            // >
+            //   <CancelSharpIcon
+            //     color="error"
+            //     style={{
+            //       position: "absolute",
+            //       right: -10,
+            //       top: -10,
+            //       cursor: "pointer",
+            //     }}
+            //     onClick={() => removePhotoFromGallery(index)}
+            //   />
+            //   <img
+            //     src={upload.url || upload}
+            //     alt="Thumbnail"
+            //     style={{ width: "100%", height: "100%" }}
+            //   />
+            // </Grid>
           ))}
         </Grid>
       )}
