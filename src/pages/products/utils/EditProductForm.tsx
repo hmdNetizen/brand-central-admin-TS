@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent } from "react";
+import React, { ChangeEvent } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -20,166 +20,16 @@ import {
 } from "src/utilityStyles/pagesUtilityStyles";
 import { SelectChangeEvent } from "@mui/material";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-import { SubCategoryReturnedPayload } from "src/services/categories/CategoryTypes";
 import FileUploadLayout from "src/components/uploads/FileUploadLayout";
-import { PhotoGalleryTypes } from "src/services/products/ProductTypes";
 import GalleryItem from "src/components/products/GalleryItem";
+import { ProductFormProps } from "./types";
 
 const AddMoreButton = styled(SubmitButton)({
   borderRadius: 5,
 });
 
-type ProductFormProps = {
-  onSubmit: (event: FormEvent<Element>) => void;
-  onInputChange: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
-  onSelectChange: (event: SelectChangeEvent<unknown>) => void;
-  onCheck: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onClose: () => void;
-  productName: string;
-  productNameError: string;
-  units: string;
-  unitError: string;
-  productUPC: string;
-  productUPCError: string;
-  itemCode: string;
-  itemCodeError: string;
-  productStock: number;
-  productStockError: string;
-  category: string;
-  categoryError: string;
-  subCategory: string;
-  subCategoryError: string;
-  brandName: string;
-  brandNameError: string;
-  customBrandName: string;
-  priceCode1: number;
-  priceCode1Error: string;
-  priceCode2: number;
-  priceCode2Error: string;
-  priceCode3: number;
-  priceCode3Error: string;
-  priceCode4: number;
-  priceCode4Error: string;
-  SRP: number;
-  SRPError: string;
-  shippingCategory: string;
-  shippingCategoryError: string;
-  isThresholdActive: boolean;
-  maximumQuantity: number;
-  maximumQuantityError: string;
-  setMaximumQuantityError: React.Dispatch<React.SetStateAction<string>>;
-  setOpenProductGallery: React.Dispatch<React.SetStateAction<boolean>>;
-  wholesaleQuantity: number;
-  allowProductWholesale: boolean;
-  allowProductSizes: boolean;
-  productMeasurement: string;
-  productMeasurementError: string;
-  name: string;
-  quantity: number;
-  price: number;
-  sizeQuantityError: string;
-  sizeNameError: string;
-  sizePriceError: string;
-  wholesaleQuantityError: string;
-  allowMeasurement: boolean;
-  customMeasurement: string;
-  customMeasurementError: string;
-  wholesaleDiscountPercentage: number;
-  productDescription: string;
-  filteredSubCategory: SubCategoryReturnedPayload[];
-  setFilteredSubCategory: React.Dispatch<
-    React.SetStateAction<SubCategoryReturnedPayload[]>
-  >;
-  previews: PhotoGalleryTypes[];
-  setPreviews: React.Dispatch<React.SetStateAction<PhotoGalleryTypes[]>>;
-  imagePreview: string | undefined;
-  setImagePreview: React.Dispatch<React.SetStateAction<string | undefined>>;
-  selectedFile: File | string;
-  setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
-  productImageError: string;
-  setProductImageError: React.Dispatch<React.SetStateAction<string>>;
-  uploadingImage: boolean;
-  updatingProduct: boolean;
-  setGalleryItemId: React.Dispatch<React.SetStateAction<string>>;
-  galleryItemId: string;
-};
-
 const EditProductForm = (props: ProductFormProps) => {
   const theme = useTheme();
-  const {
-    onSubmit,
-    onInputChange,
-    onSelectChange,
-    onCheck,
-    onClose,
-    setOpenProductGallery,
-    setMaximumQuantityError,
-    itemCode,
-    itemCodeError,
-    productName,
-    productNameError,
-    productStock,
-    productStockError,
-    productUPC,
-    productUPCError,
-    units,
-    unitError,
-    brandName,
-    brandNameError,
-    category,
-    categoryError,
-    subCategory,
-    subCategoryError,
-    customBrandName,
-    priceCode1,
-    priceCode2,
-    priceCode3,
-    priceCode4,
-    SRP,
-    SRPError,
-    priceCode1Error,
-    priceCode2Error,
-    priceCode3Error,
-    priceCode4Error,
-    shippingCategory,
-    shippingCategoryError,
-    isThresholdActive,
-    maximumQuantity,
-    maximumQuantityError,
-    wholesaleQuantity,
-    allowProductWholesale,
-    allowProductSizes,
-    productMeasurement,
-    productMeasurementError,
-    name,
-    quantity,
-    price,
-    sizeQuantityError,
-    sizeNameError,
-    sizePriceError,
-    wholesaleQuantityError,
-    allowMeasurement,
-    customMeasurement,
-    customMeasurementError,
-    wholesaleDiscountPercentage,
-    productDescription,
-    filteredSubCategory,
-    setFilteredSubCategory,
-    imagePreview,
-    setImagePreview,
-    selectedFile,
-    setSelectedFile,
-    productImageError,
-    setProductImageError,
-    previews,
-    setPreviews,
-    updatingProduct,
-    uploadingImage,
-    galleryItemId,
-    setGalleryItemId,
-  } = props;
 
   //   MEDIA QUERIES
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
@@ -196,13 +46,13 @@ const EditProductForm = (props: ProductFormProps) => {
       subCategory.category.toLowerCase().includes(value.toLowerCase())
     );
 
-    setFilteredSubCategory(newSubCategories);
+    props.setFilteredSubCategory(newSubCategories);
   };
 
   const handleSelectChange = (event: SelectChangeEvent<unknown>) => {
     const selectEvent = event as ChangeEvent<HTMLInputElement>;
 
-    onSelectChange(event);
+    props.onSelectChange(event);
     handleFilter(selectEvent.target.value);
   };
 
@@ -213,17 +63,17 @@ const EditProductForm = (props: ProductFormProps) => {
 
     if (!file) return;
 
-    setSelectedFile(file);
+    props.setSelectedFile(file);
   };
 
   const handleRemoveProductImage = () => {
-    setSelectedFile("");
-    setImagePreview(undefined);
+    props.setSelectedFile("");
+    props.setImagePreview(undefined);
   };
 
   const handleRemove = (id: string) => {
-    const newPreviews = previews.filter((preview) => preview.id !== id);
-    setPreviews(newPreviews);
+    const newPreviews = props.previews.filter((preview) => preview.id !== id);
+    props.setPreviews(newPreviews);
   };
 
   return (
@@ -233,7 +83,7 @@ const EditProductForm = (props: ProductFormProps) => {
       direction="column"
       component="form"
       style={{ paddingBottom: "3rem" }}
-      onSubmit={onSubmit}
+      onSubmit={props.onSubmit}
     >
       <Grid
         item
@@ -249,10 +99,10 @@ const EditProductForm = (props: ProductFormProps) => {
             label="Product Name"
             labelId="productName"
             name="productName"
-            value={productName}
+            value={props.productName}
             placeholder="Enter Product Name"
             onChange={props.onInputChange}
-            error={productNameError}
+            error={props.productNameError}
           />
         </Grid>
         <Grid item sx={{ flex: 1 }}>
@@ -261,10 +111,10 @@ const EditProductForm = (props: ProductFormProps) => {
             label="Product UPC"
             labelId="productUPC"
             name="productUPC"
-            value={productUPC}
+            value={props.productUPC}
             placeholder="Enter Unique Product Code"
-            onChange={onInputChange}
-            error={productUPCError}
+            onChange={props.onInputChange}
+            error={props.productUPCError}
           />
         </Grid>
       </Grid>
@@ -282,10 +132,10 @@ const EditProductForm = (props: ProductFormProps) => {
             label="Units of Measurement"
             labelId="units"
             name="units"
-            value={units}
+            value={props.units}
             placeholder="CS, EA, BX, DZ, PK etc..."
-            onChange={onInputChange}
-            error={unitError}
+            onChange={props.onInputChange}
+            error={props.unitsError}
           />
         </Grid>
         <Grid item sx={{ flex: 1 }}>
@@ -294,10 +144,10 @@ const EditProductForm = (props: ProductFormProps) => {
             label="Item Code"
             labelId="itemCode"
             name="itemCode"
-            value={itemCode}
+            value={props.itemCode}
             placeholder="AIRCO16"
-            onChange={onInputChange}
-            error={itemCodeError}
+            onChange={props.onInputChange}
+            error={props.itemCodeError}
           />
         </Grid>
       </Grid>
@@ -315,22 +165,24 @@ const EditProductForm = (props: ProductFormProps) => {
               categoryName.toLowerCase()
             )}
             name="category"
-            value={category}
             onChange={handleSelectChange}
             label="Category"
             placeholder="Select Category"
-            errorMessage={categoryError}
+            value={props.category}
+            errorMessage={props.categoryError}
           />
         </Grid>
         <Grid item sx={{ flex: 1 }}>
           <CustomSelect
-            options={filteredSubCategory.map(({ name }) => name.toLowerCase())}
+            options={props.filteredSubCategory.map(({ name }) =>
+              name.toLowerCase()
+            )}
             name="subCategory"
-            value={subCategory}
-            onChange={onSelectChange}
+            value={props.subCategory}
+            onChange={props.onSelectChange}
             label="Sub Category"
             placeholder="Select Sub Category"
-            errorMessage={subCategoryError}
+            errorMessage={props.subCategoryError}
           />
         </Grid>
       </Grid>
@@ -346,25 +198,24 @@ const EditProductForm = (props: ProductFormProps) => {
           <CustomSelect
             options={brands.map((brand) => capitalizeFirstLetters(brand.name))}
             name="brandName"
-            value={brandName}
-            onChange={onSelectChange}
+            value={props.brandName}
+            onChange={props.onSelectChange}
             label="Brand"
             placeholder="Select Brand"
-            errorMessage={brandNameError}
+            errorMessage={props.brandNameError}
           />
         </Grid>
-        {brandName === "Others" && (
+        {props.brandName === "Others" && (
           <Grid item sx={{ flex: 1, mt: matchesXS ? 0 : "2rem" }}>
             <CustomFormInput
               type="text"
               label=""
               labelId=""
               name="customBrandName"
-              value={customBrandName}
+              value={props.customBrandName}
               placeholder="Enter Brand Name"
-              onChange={onInputChange}
-              // error={customBrandNameError}
-              autoFocus={brandName === "Others"}
+              onChange={props.onInputChange}
+              autoFocus={props.brandName === "Others"}
             />
           </Grid>
         )}
@@ -383,10 +234,10 @@ const EditProductForm = (props: ProductFormProps) => {
             label="Price Code 1"
             labelId="priceCode1"
             name="priceCode1"
-            value={priceCode1}
+            value={props.priceCode1}
             placeholder="e.g 20"
-            onChange={onInputChange}
-            error={priceCode1Error}
+            onChange={props.onInputChange}
+            error={props.priceCode1Error}
           />
         </Grid>
         <Grid item sx={{ flex: 1 }}>
@@ -395,10 +246,10 @@ const EditProductForm = (props: ProductFormProps) => {
             label="Price Code 2"
             labelId="priceCode2"
             name="priceCode2"
-            value={priceCode2}
+            value={props.priceCode2}
             placeholder="e.g 20"
-            onChange={onInputChange}
-            error={priceCode2Error}
+            onChange={props.onInputChange}
+            error={props.priceCode2Error}
           />
         </Grid>
       </Grid>
@@ -416,10 +267,10 @@ const EditProductForm = (props: ProductFormProps) => {
             label="Price Code 3"
             labelId="priceCode3"
             name="priceCode3"
-            value={priceCode3}
+            value={props.priceCode3}
             placeholder="e.g 20"
-            onChange={onInputChange}
-            error={priceCode3Error}
+            onChange={props.onInputChange}
+            error={props.priceCode3Error}
           />
         </Grid>
         <Grid item sx={{ flex: 1 }}>
@@ -428,10 +279,10 @@ const EditProductForm = (props: ProductFormProps) => {
             label="Price Code 4"
             labelId="priceCode4"
             name="priceCode4"
-            value={priceCode4}
+            value={props.priceCode4}
             placeholder="e.g 20"
-            onChange={onInputChange}
-            error={priceCode4Error}
+            onChange={props.onInputChange}
+            error={props.priceCode4Error}
           />
         </Grid>
       </Grid>
@@ -449,10 +300,10 @@ const EditProductForm = (props: ProductFormProps) => {
             label="Product Stock"
             labelId="productStock"
             name="productStock"
-            value={productStock}
+            value={props.productStock}
             placeholder="e.g 20"
-            onChange={onInputChange}
-            error={productStockError}
+            onChange={props.onInputChange}
+            error={props.productStockError}
           />
         </Grid>
         <Grid item sx={{ flex: 1 }}>
@@ -461,18 +312,18 @@ const EditProductForm = (props: ProductFormProps) => {
             label="SRP"
             labelId="SRP"
             name="SRP"
-            value={SRP}
+            value={props.SRP}
             placeholder="e.g 20"
-            onChange={onInputChange}
-            error={SRPError}
+            onChange={props.onInputChange}
+            error={props.SRPError}
           />
         </Grid>
         <Grid item container style={{ marginTop: "1rem" }}>
           <CustomSelect
             options={shippingCategoryList}
             name="shippingCategory"
-            value={shippingCategory}
-            onChange={onSelectChange}
+            value={props.shippingCategory}
+            onChange={props.onSelectChange}
             label="Shipping Category"
             placeholder="Select Shipping Category"
           />
@@ -484,23 +335,23 @@ const EditProductForm = (props: ProductFormProps) => {
               label="isThresholdActive"
               id="isThresholdActive"
               description="Set Max Quantity Threshold"
-              checked={isThresholdActive}
+              checked={props.isThresholdActive}
               onChange={(event) => {
-                onCheck(event);
-                setMaximumQuantityError("");
+                props.onCheck(event);
+                props.setMaximumQuantityError("");
               }}
             />
-            {isThresholdActive && (
+            {props.isThresholdActive && (
               <Grid item style={{ marginTop: "1rem" }}>
                 <CustomFormInput
                   type="number"
                   label="Maximum Quantity"
                   labelId="maximumQuantity"
                   name="maximumQuantity"
-                  value={maximumQuantity}
+                  value={props.maximumQuantity}
                   placeholder="E.g 20"
-                  onChange={onInputChange}
-                  error={maximumQuantityError}
+                  onChange={props.onInputChange}
+                  error={props.maximumQuantityError}
                 />
               </Grid>
             )}
@@ -511,8 +362,8 @@ const EditProductForm = (props: ProductFormProps) => {
             label="Product Description"
             id="productDescription"
             name="productDescription"
-            onChange={onInputChange}
-            value={productDescription}
+            onChange={props.onInputChange}
+            value={props.productDescription}
           />
         </Grid>
       </Grid>
@@ -540,13 +391,13 @@ const EditProductForm = (props: ProductFormProps) => {
         <FileUploadLayout
           onImageChange={handleChangeProductImage}
           onRemoveImage={handleRemoveProductImage}
-          selectedFile={selectedFile}
-          setImageError={setProductImageError}
-          setSelectedFile={setSelectedFile}
-          preview={imagePreview}
-          setPreview={setImagePreview}
+          selectedFile={props.selectedFile}
+          setImageError={props.setProductImageError}
+          setSelectedFile={props.setSelectedFile}
+          preview={props.imagePreview}
+          setPreview={props.setImagePreview}
         />
-        {productImageError && <small>{productImageError}</small>}
+        {props.productImageError && <small>{props.productImageError}</small>}
       </Grid>
       {/* {uploadedFile && (
         <Grid item container justifyContent="center">
@@ -591,12 +442,12 @@ const EditProductForm = (props: ProductFormProps) => {
           startIcon={<AddIcon />}
           variant="contained"
           disableRipple
-          onClick={() => setOpenProductGallery(true)}
+          onClick={() => props.setOpenProductGallery(true)}
         >
           Add More Photos
         </AddMoreButton>
       </Grid>
-      {previews.length > 0 && (
+      {props.previews.length > 0 && (
         <Grid
           item
           container
@@ -606,17 +457,17 @@ const EditProductForm = (props: ProductFormProps) => {
           rowGap={2}
           justifyContent="center"
         >
-          {previews.map((previewItem) => (
+          {props.previews.map((previewItem) => (
             <GalleryItem
               key={previewItem.id}
               item={previewItem}
               onRemove={() => handleRemove(previewItem.id)}
               id={previewItem.id}
-              setGalleryItemId={setGalleryItemId}
-              galleryItemId={galleryItemId}
-              loading={uploadingImage}
-              previews={previews}
-              setPreviews={setPreviews}
+              setGalleryItemId={props.setGalleryItemId}
+              galleryItemId={props.galleryItemId}
+              loading={props.uploadingImage}
+              previews={props.previews}
+              setPreviews={props.setPreviews}
             />
             // <Grid
             //   item
@@ -656,10 +507,10 @@ const EditProductForm = (props: ProductFormProps) => {
           label="Allow Product Sizes"
           id="allowProductSizes"
           description="Allow Product Sizes"
-          checked={allowProductSizes}
-          onChange={onCheck}
+          checked={props.allowProductSizes}
+          onChange={props.onCheck}
         />
-        {allowProductSizes && (
+        {props.allowProductSizes && (
           <Grid
             item
             container
@@ -676,10 +527,10 @@ const EditProductForm = (props: ProductFormProps) => {
                 label="Size Name"
                 labelId="sizeName"
                 name="name"
-                value={name}
+                value={props.name}
                 placeholder="eg. S,M,L,XL,XXL,3XL,4XL"
-                onChange={onInputChange}
-                error={sizeNameError}
+                onChange={props.onInputChange}
+                error={props.sizeNameError}
               />
             </Grid>
             <Grid
@@ -692,10 +543,10 @@ const EditProductForm = (props: ProductFormProps) => {
                 label="Size Qty:"
                 labelId="sizeQuantity"
                 name="quantity"
-                value={quantity}
+                value={props.quantity}
                 placeholder="Number of quantity of this size"
-                onChange={onInputChange}
-                error={sizeQuantityError}
+                onChange={props.onInputChange}
+                error={props.sizeQuantityError}
               />
             </Grid>
             <Grid
@@ -708,10 +559,10 @@ const EditProductForm = (props: ProductFormProps) => {
                 label="Size Price"
                 labelId="sizePrice"
                 name="price"
-                value={price}
+                value={props.price}
                 placeholder="Added to the base price"
-                onChange={onInputChange}
-                error={sizePriceError}
+                onChange={props.onInputChange}
+                error={props.sizePriceError}
               />
             </Grid>
           </Grid>
@@ -723,10 +574,10 @@ const EditProductForm = (props: ProductFormProps) => {
           label="Allow Product Wholesale"
           id="allowProductWholesale"
           description="Allow Product Wholesale"
-          checked={allowProductWholesale}
-          onChange={onCheck}
+          checked={props.allowProductWholesale}
+          onChange={props.onCheck}
         />
-        {allowProductWholesale && (
+        {props.allowProductWholesale && (
           <Grid
             item
             container
@@ -742,10 +593,10 @@ const EditProductForm = (props: ProductFormProps) => {
                 label=""
                 labelId=""
                 name="wholesaleQuantity"
-                value={wholesaleQuantity}
+                value={props.wholesaleQuantity}
                 placeholder="Enter Quantity"
-                onChange={onInputChange}
-                error={wholesaleQuantityError}
+                onChange={props.onInputChange}
+                error={props.wholesaleQuantityError}
               />
             </Grid>
             <Grid item sm container={matchesXS}>
@@ -754,9 +605,9 @@ const EditProductForm = (props: ProductFormProps) => {
                 label=""
                 labelId=""
                 name="wholesaleDiscountPercentage"
-                value={wholesaleDiscountPercentage}
+                value={props.wholesaleDiscountPercentage}
                 placeholder="Enter Discount Percentage"
-                onChange={onInputChange}
+                onChange={props.onInputChange}
                 // error={wholesaleDiscountPercentageError}
               />
             </Grid>
@@ -769,10 +620,10 @@ const EditProductForm = (props: ProductFormProps) => {
           label="Allow Product Measurement"
           id="allowMeasurement"
           description="Allow Product Measurement"
-          checked={allowMeasurement}
-          onChange={onCheck}
+          checked={props.allowMeasurement}
+          onChange={props.onCheck}
         />
-        {allowMeasurement && (
+        {props.allowMeasurement && (
           <Grid item container direction="column" style={{ marginTop: "1rem" }}>
             <Grid
               item
@@ -787,15 +638,15 @@ const EditProductForm = (props: ProductFormProps) => {
                 <CustomSelect
                   options={productMeasurements}
                   name="productMeasurement"
-                  value={productMeasurement}
-                  onChange={onSelectChange}
+                  value={props.productMeasurement}
+                  onChange={props.onSelectChange}
                   label=""
                   placeholder="Choose Measurement"
-                  errorMessage={productMeasurementError}
+                  errorMessage={props.productMeasurementError}
                 />
               </Grid>
             </Grid>
-            {productMeasurement === "Custom" && (
+            {props.productMeasurement === "Custom" && (
               <Grid
                 item
                 style={{
@@ -808,10 +659,10 @@ const EditProductForm = (props: ProductFormProps) => {
                   label=""
                   labelId=""
                   name="customMeasurement"
-                  value={customMeasurement}
+                  value={props.customMeasurement}
                   placeholder="Enter Unit"
-                  onChange={onInputChange}
-                  error={customMeasurementError}
+                  onChange={props.onInputChange}
+                  error={props.customMeasurementError}
                 />
               </Grid>
             )}
@@ -826,7 +677,7 @@ const EditProductForm = (props: ProductFormProps) => {
           style={{ marginTop: "5rem" }}
         >
           <Grid item>
-            <CancelButton onClick={onClose}>Cancel</CancelButton>
+            <CancelButton onClick={props.onClose}>Cancel</CancelButton>
           </Grid>
           <Grid item>
             <SubmitButton
@@ -834,9 +685,10 @@ const EditProductForm = (props: ProductFormProps) => {
               variant="contained"
               disableRipple
               color="secondary"
-              disabled={updatingProduct}
+              disabled={props.updatingProduct}
             >
-              {updatingProduct && <StyledCircularProgress />} Update Product
+              {props.updatingProduct && <StyledCircularProgress />} Update
+              Product
             </SubmitButton>
           </Grid>
         </Grid>

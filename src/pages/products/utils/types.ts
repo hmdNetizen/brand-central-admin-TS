@@ -14,7 +14,7 @@ export type ProductFormProps = {
   productName: string;
   productNameError: string;
   units: string;
-  unitError: string;
+  unitsError: string;
   productUPC: string;
   productUPCError: string;
   itemCode: string;
