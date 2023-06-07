@@ -8,7 +8,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CancelSharpIcon from "@mui/icons-material/CancelSharp";
 import CustomFormInput from "src/utils/CustomFormInput";
 import CustomSelect from "src/utils/CustomSelect";
-import { capitalizeFirstLetters } from "src/lib/helpers";
+import { capitalizeFirstLetters, productMeasurements } from "src/lib/helpers";
 import CustomCheckbox from "src/utils/CustomCheckbox";
 import CustomTextArea from "src/utils/CustomTextArea";
 import {
@@ -17,6 +17,8 @@ import {
   SubmitButton,
 } from "src/utilityStyles/pagesUtilityStyles";
 import { SelectChangeEvent } from "@mui/material";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import { SubCategoryReturnedPayload } from "src/services/categories/CategoryTypes";
 
 const AddMoreButton = styled(SubmitButton)({
   borderRadius: 5,
@@ -24,18 +26,67 @@ const AddMoreButton = styled(SubmitButton)({
 
 type ProductFormProps = {
   onSubmit: (event: FormEvent<Element>) => void;
-  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onInputChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   onSelectChange: (event: SelectChangeEvent<unknown>) => void;
   onCheck: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onClose: () => void;
   productName: string;
+  productNameError: string;
   units: string;
+  unitError: string;
   productUPC: string;
+  productUPCError: string;
   itemCode: string;
+  itemCodeError: string;
   productStock: number;
+  productStockError: string;
   category: string;
+  categoryError: string;
   subCategory: string;
+  subCategoryError: string;
   brandName: string;
+  brandNameError: string;
   customBrandName: string;
+  customBrandNameError: string;
+  priceCode1: number;
+  priceCode1Error: string;
+  priceCode2: number;
+  priceCode2Error: string;
+  priceCode3: number;
+  priceCode3Error: string;
+  priceCode4: number;
+  priceCode4Error: string;
+  SRP: number;
+  SRPError: string;
+  shippingCategory: string;
+  shippingCategoryError: string;
+  isThresholdActive: boolean;
+  maximumQuantity: number;
+  maximumQuantityError: string;
+  setMaximumQuantityError: React.Dispatch<React.SetStateAction<string>>;
+  setOpenProductGallery: React.Dispatch<React.SetStateAction<boolean>>;
+  wholesaleQuantity: number;
+  allowProductWholesale: boolean;
+  allowProductSizes: boolean;
+  productMeasurement: string;
+  productMeasurementError: string;
+  name: string;
+  quantity: number;
+  price: number;
+  sizeQuantityError: string;
+  sizeNameError: string;
+  sizePriceError: string;
+  wholesaleQuantityError: string;
+  allowMeasurement: boolean;
+  customMeasurement: string;
+  customMeasurementError: string;
+  wholesaleDiscountPercentage: number;
+  productDescription: string;
+  setFilteredSubCategory: React.Dispatch<
+    React.SetStateAction<SubCategoryReturnedPayload[]>
+  >;
 };
 
 const EditProductForm = (props: ProductFormProps) => {
@@ -45,19 +96,77 @@ const EditProductForm = (props: ProductFormProps) => {
     onInputChange,
     onSelectChange,
     onCheck,
+    onClose,
+    setOpenProductGallery,
+    setMaximumQuantityError,
     itemCode,
+    itemCodeError,
     productName,
+    productNameError,
     productStock,
+    productStockError,
     productUPC,
+    productUPCError,
     units,
+    unitError,
     brandName,
+    brandNameError,
     category,
+    categoryError,
     subCategory,
-    string,
+    subCategoryError,
+    customBrandName,
+    priceCode1,
+    priceCode2,
+    priceCode3,
+    priceCode4,
+    SRP,
+    SRPError,
+    priceCode1Error,
+    priceCode2Error,
+    priceCode3Error,
+    priceCode4Error,
+    shippingCategory,
+    shippingCategoryError,
+    isThresholdActive,
+    maximumQuantity,
+    maximumQuantityError,
+    wholesaleQuantity,
+    allowProductWholesale,
+    allowProductSizes,
+    productMeasurement,
+    productMeasurementError,
+    name,
+    quantity,
+    price,
+    sizeQuantityError,
+    sizeNameError,
+    sizePriceError,
+    wholesaleQuantityError,
+    allowMeasurement,
+    customMeasurement,
+    customMeasurementError,
+    wholesaleDiscountPercentage,
+    productDescription,
+    setFilteredSubCategory,
   } = props;
+
   //   MEDIA QUERIES
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
+
+  const categories = useTypedSelector((state) => state.categories.categories);
+  const subCategories = useTypedSelector(
+    (state) => state.categories.subCategories
+  );
+
+  const handleFilter = (value: string) => {
+    const newSubCategories = [...subCategories].filter((subCategory) =>
+      subCategory.category.toLowerCase().includes(value.toLowerCase())
+    );
+
+    setFilteredSubCategory(newSubCategories);
+  };
 
   const handleSelectChange = (event: SelectChangeEvent<unknown>) => {
     const selectEvent = event as ChangeEvent<HTMLInputElement>;
@@ -91,7 +200,7 @@ const EditProductForm = (props: ProductFormProps) => {
             name="productName"
             value={productName}
             placeholder="Enter Product Name"
-            onChange={onInputChange}
+            onChange={props.onInputChange}
             error={productNameError}
           />
         </Grid>
@@ -159,7 +268,7 @@ const EditProductForm = (props: ProductFormProps) => {
             onChange={handleSelectChange}
             label="Category"
             placeholder="Select Category"
-            error={categoryError}
+            errorMessage={categoryError}
           />
         </Grid>
         <Grid item sx={{ flex: 1 }}>
@@ -170,7 +279,7 @@ const EditProductForm = (props: ProductFormProps) => {
             onChange={onSelectChange}
             label="Sub Category"
             placeholder="Select Sub Category"
-            error={subCategoryError}
+            errorMessage={subCategoryError}
           />
         </Grid>
       </Grid>
@@ -190,7 +299,7 @@ const EditProductForm = (props: ProductFormProps) => {
             onChange={onSelectChange}
             label="Brand"
             placeholder="Select Brand"
-            error={brandNameError}
+            errorMessage={brandNameError}
           />
         </Grid>
         {brandName === "Others" && (
@@ -339,7 +448,7 @@ const EditProductForm = (props: ProductFormProps) => {
                   name="maximumQuantity"
                   value={maximumQuantity}
                   placeholder="E.g 20"
-                  onChange={handleChange}
+                  onChange={onInputChange}
                   error={maximumQuantityError}
                 />
               </Grid>
@@ -351,7 +460,7 @@ const EditProductForm = (props: ProductFormProps) => {
             label="Product Description"
             id="productDescription"
             name="productDescription"
-            onChange={handleChange}
+            onChange={onInputChange}
             value={productDescription}
           />
         </Grid>
@@ -613,7 +722,7 @@ const EditProductForm = (props: ProductFormProps) => {
                   onChange={onSelectChange}
                   label=""
                   placeholder="Choose Measurement"
-                  error={productMeasurementError}
+                  errorMessage={productMeasurementError}
                 />
               </Grid>
             </Grid>
@@ -648,9 +757,7 @@ const EditProductForm = (props: ProductFormProps) => {
           style={{ marginTop: "5rem" }}
         >
           <Grid item>
-            <CancelButton onClick={() => setOpenEditProduct(false)}>
-              Cancel
-            </CancelButton>
+            <CancelButton onClick={onClose}>Cancel</CancelButton>
           </Grid>
           <Grid item>
             <SubmitButton

@@ -35,6 +35,7 @@ export type GalleryItemProps = {
 };
 
 export type PhotoGalleryProps = {
+  openProductGallery: boolean;
   setOpenProductGallery: React.Dispatch<React.SetStateAction<boolean>>;
   previews: PhotoGalleryTypes[];
   setPreviews: React.Dispatch<React.SetStateAction<PhotoGalleryTypes[]>>;

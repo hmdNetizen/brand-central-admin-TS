@@ -46,9 +46,6 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
 
   const theme = useTheme();
 
-  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
-  const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
-
   const [previews, setPreviews] = useState<PhotoGalleryTypes[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | string>("");
   const [galleryItemId, setGalleryItemId] = useState("");
@@ -62,6 +59,11 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
   const loadingProductActivation = useTypedSelector(
     (state) => state.products.loadingProductActivation
   );
+  const subCategories = useTypedSelector(
+    (state) => state.categories.subCategories
+  );
+
+  const [filteredSubCategory, setFilteredSubCategory] = useState(subCategories);
 
   const { getAllCategories, getAllSubcategories, fetchAllBrands } =
     useActions();
@@ -158,22 +160,18 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
         openDeleteProduct={openDeleteProduct}
         setOpenDeleteProduct={setOpenDeleteProduct}
       />
-      <ShowDialog
-        openModal={openProductGallery}
-        handleClose={handleClose}
-        width={matchesXS ? "95%" : matchesSM ? "80%" : 700}
-      >
-        <PhotoGallery
-          setOpenProductGallery={setOpenProductGallery}
-          previews={previews}
-          selectedFile={selectedFile}
-          setSelectedFile={setSelectedFile}
-          setPreviews={setPreviews}
-          setGalleryItemId={setGalleryItemId}
-          galleryItemId={galleryItemId}
-          onClose={handleClose}
-        />
-      </ShowDialog>
+
+      <PhotoGallery
+        openProductGallery={openProductGallery}
+        setOpenProductGallery={setOpenProductGallery}
+        previews={previews}
+        selectedFile={selectedFile}
+        setSelectedFile={setSelectedFile}
+        setPreviews={setPreviews}
+        setGalleryItemId={setGalleryItemId}
+        galleryItemId={galleryItemId}
+        onClose={handleClose}
+      />
       <CustomLoadingDialog
         loading={loadingProductActivation}
         handleLoading={handleLoadingActivation}
