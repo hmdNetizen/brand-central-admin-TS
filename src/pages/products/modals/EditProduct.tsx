@@ -9,14 +9,27 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSelector } from "react-redux";
 import { useActions } from "src/hooks/useActions";
 import { capitalizeFirstLetters } from "src/lib/helpers";
-import PhotoGallery from "components/products/PhotoGallery";
-import { PhotoGalleryTypes } from "src/services/products/ProductTypes";
+import PhotoGallery from "src/components/products/PhotoGallery";
+import {
+  PhotoGalleryTypes,
+  ProductCheckedTypes,
+} from "src/services/products/ProductTypes";
 import EditProductForm from "../utils/EditProductForm";
 import { initialState, initialStateChecked } from "./data";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
+import { ContentContainer } from "src/utilityStyles/pagesUtilityStyles";
+import { InitialStateCheckedTypes } from "./data/types";
+import { SelectChangeEvent } from "@mui/material";
 
-const EditProduct = ({ openEditProduct, setOpenEditProduct }) => {
+type EditProductProps = {
+  openEditProduct: boolean;
+  setOpenEditProduct: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const EditProduct = (props: EditProductProps) => {
   const theme = useTheme();
+
+  const { openEditProduct, setOpenEditProduct } = props;
 
   const singleProduct = useTypedSelector(
     (state) => state.products.singleProduct
@@ -24,15 +37,18 @@ const EditProduct = ({ openEditProduct, setOpenEditProduct }) => {
   const loadingProductAction = useTypedSelector(
     (state) => state.products.loadingProductAction
   );
+  const uploadingImage = useTypedSelector(
+    (state) => state.products.uploadingImage
+  );
 
   const subCategories = useTypedSelector(
     (state) => state.categories.subCategories
   );
   const brands = useTypedSelector((state) => state.brands.brands);
 
-  const { uploadedFile } = useSelector((state) => state.common);
+  //   const { uploadedFile } = useSelector((state) => state.common);
 
-  const { uploadFile, updateProduct } = useActions();
+  const { uploadFile } = useActions();
 
   //   MEDIA QUERIES
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
@@ -41,7 +57,8 @@ const EditProduct = ({ openEditProduct, setOpenEditProduct }) => {
   const [productDetails, setProductDetails] = useState(initialState);
 
   //   CHECKBOXES STATES
-  const [optionChecked, setOptionChecked] = useState(initialStateChecked);
+  const [optionChecked, setOptionChecked] =
+    useState<InitialStateCheckedTypes>(initialStateChecked);
 
   const [openProductGallery, setOpenProductGallery] = useState(false);
   const [previews, setPreviews] = useState<PhotoGalleryTypes[]>([]);
@@ -108,7 +125,7 @@ const EditProduct = ({ openEditProduct, setOpenEditProduct }) => {
     isThresholdActive,
   } = optionChecked;
 
-  const handleFilter = (value) => {
+  const handleFilter = (value: string) => {
     const newSubCategories = [...subCategories].filter((subCategory) =>
       subCategory.category.toLowerCase().includes(value.toLowerCase())
     );
@@ -116,7 +133,9 @@ const EditProduct = ({ openEditProduct, setOpenEditProduct }) => {
     setFilteredSubCategory(newSubCategories);
   };
 
-  const handleChange = (event) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = event.target;
 
     switch (name) {
@@ -148,20 +167,7 @@ const EditProduct = ({ openEditProduct, setOpenEditProduct }) => {
           setItemCodeError("");
         }
         break;
-      case "category":
-        if (!value.trim()) {
-          setCategoryError("Please select a category");
-        } else {
-          setCategoryError("");
-        }
-        break;
-      case "subCategory":
-        if (!value.trim()) {
-          setSubCategoryError("Please select a subcategory");
-        } else {
-          setSubCategoryError("");
-        }
-        break;
+
       case "brandName":
         if (!value.trim()) {
           setBrandNameError("Please select a brand name");
@@ -219,7 +225,6 @@ const EditProduct = ({ openEditProduct, setOpenEditProduct }) => {
         } else {
           setMaximumQuantityError("");
         }
-
         break;
       default:
         setProductNameError("");
@@ -240,23 +245,44 @@ const EditProduct = ({ openEditProduct, setOpenEditProduct }) => {
     setProductDetails({ ...productDetails, [name]: value });
   };
 
+  const handleSelectChange = (event: SelectChangeEvent<unknown>) => {
+    const selectEvent = event as React.ChangeEvent<HTMLInputElement>;
+    const { name, value } = selectEvent.target;
+
+    switch (name) {
+      case "category":
+        if (!value.trim()) {
+          setCategoryError("Please select a category");
+        } else {
+          setCategoryError("");
+        }
+        break;
+      case "subCategory":
+        if (!value.trim()) {
+          setSubCategoryError("Please select a subcategory");
+        } else {
+          setSubCategoryError("");
+        }
+        break;
+      default:
+        setCategoryError("");
+        setSubCategoryError("");
+    }
+
+    setProductDetails({ ...productDetails, [name]: value });
+  };
+
   const handleChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, name } = event.target;
+
+    switch (name) {
+      case "category":
+    }
 
     setOptionChecked({ ...optionChecked, [name]: checked });
   };
 
-  const handleChangeProductImage = (event) => {
-    const file = event.target.files[0];
-
-    if (!file) return;
-
-    uploadFile({
-      file,
-    });
-  };
-
-  const handleUpdateProduct = (event) => {
+  const handleUpdateProduct = (event: React.FormEvent<Element>) => {
     event.preventDefault();
 
     if (
@@ -268,7 +294,6 @@ const EditProduct = ({ openEditProduct, setOpenEditProduct }) => {
       !subCategory.trim() &&
       !brandName.trim() &&
       !productStock.toString().trim() &&
-      !uploadedFile &&
       (!priceCode1 || !priceCode1.toString().trim()) &&
       (!priceCode2 || !priceCode2.toString().trim()) &&
       (!priceCode3 || !priceCode3.toString().trim()) &&
@@ -404,7 +429,7 @@ const EditProduct = ({ openEditProduct, setOpenEditProduct }) => {
 
     updateProduct({
       setOpenEditProduct,
-      productId: singleProduct._id,
+      productId: singleProduct?._id,
       productName,
       productType: "Physical",
       productUPC,
@@ -457,86 +482,86 @@ const EditProduct = ({ openEditProduct, setOpenEditProduct }) => {
     });
   };
 
-  useEffect(() => {
-    if (Object.keys(singleProduct).length > 0) {
-      let newProductDetails = { ...initialState };
-      let newOptionChecked = { ...initialStateChecked };
-      const { units, UM, productName } = singleProduct;
-      for (const key in singleProduct) {
-        if (key in productDetails) {
-          newProductDetails[key] = singleProduct[key];
+  //   useEffect(() => {
+  //     if (singleProduct) {
+  //       let newProductDetails = { ...initialState };
+  //       let newOptionChecked = { ...initialStateChecked };
+  //       for (const key in singleProduct) {
+  //         if (key in productDetails) {
+  //           newProductDetails[key] = singleProduct[key];
 
-          if (key === "category") {
-            newProductDetails[key] = singleProduct.category.toLowerCase();
-          }
+  //           if (key === "category") {
+  //             newProductDetails[key] = singleProduct.category.toLowerCase();
+  //           }
 
-          if (key === "subCategory") {
-            newProductDetails[key] = singleProduct.subCategory.toLowerCase();
-          }
+  //           if (key === "subCategory") {
+  //             newProductDetails[key] = singleProduct.subCategory.toLowerCase();
+  //           }
 
-          if (
-            key === "brandName" &&
-            brands
-              .map((brand) => capitalizeFirstLetters(brand.name))
-              .indexOf(capitalizeFirstLetters(singleProduct.brandName)) === -1
-          ) {
-            newProductDetails[key] = "Others";
-            newProductDetails["customBrandName"] = singleProduct.brandName;
-          }
+  //           if (
+  //             key === "brandName" &&
+  //             brands
+  //               .map((brand) => capitalizeFirstLetters(brand.name))
+  //               .indexOf(capitalizeFirstLetters(singleProduct.brandName)) === -1
+  //           ) {
+  //             newProductDetails[key] = "Others";
+  //             newProductDetails["customBrandName"] = singleProduct.brandName;
+  //           }
 
-          setProductDetails(newProductDetails);
-        } else {
-          setProductDetails({
-            ...newProductDetails,
-            units: units ? units : UM ? UM : "",
-            productName: productName,
-          });
-        }
-        if (key in optionChecked) {
-          newOptionChecked[key] = singleProduct[key];
-          setOptionChecked(newOptionChecked);
-        }
+  //           setProductDetails(newProductDetails);
+  //         } else {
+  //           setProductDetails(newProductDetails);
+  //         }
+  //         if (key in optionChecked) {
+  //           // @ts-ignore
+  //           newOptionChecked[key as keyof ProductCheckedTypes] =
+  //             singleProduct[key as keyof ProductCheckedTypes];
+  //           setOptionChecked(newOptionChecked);
+  //         }
 
-        // setProductDetails({
-        //   ...newProductDetails,
-        //   maximumQuantity: singleProduct["threshold"].maximumQuantity,
-        // });
+  //         // setProductDetails({
+  //         //   ...newProductDetails,
+  //         //   maximumQuantity: singleProduct["threshold"].maximumQuantity,
+  //         // });
 
-        optionChecked.isThresholdActive =
-          singleProduct["threshold"].isThresholdActive;
-        newProductDetails.maximumQuantity =
-          singleProduct["threshold"].maximumQuantity;
+  //         optionChecked.isThresholdActive =
+  //           singleProduct["threshold"].isThresholdActive;
+  //         newProductDetails.maximumQuantity =
+  //           singleProduct["threshold"].maximumQuantity;
 
-        setOptionChecked(optionChecked);
-        setProductDetails(newProductDetails);
-      }
+  //         setOptionChecked(optionChecked);
+  //         setProductDetails(newProductDetails);
+  //       }
 
-      setFeaturedImage(singleProduct.featuredImage);
-      setGalleryImages(singleProduct.productGalleryImages);
+  //       setFeaturedImage(singleProduct.featuredImage);
+  //       setGalleryImages(singleProduct.productGalleryImages);
 
-      //   This is for populating the sub category when the component mounts.
-      handleFilter(singleProduct.category);
-    }
+  //       //   This is for populating the sub category when the component mounts.
+  //       handleFilter(singleProduct.category);
+  //     }
 
-    // CLEAR ALL ERRORS WHEN COMPONENT MOUNTS
-    setProductNameError("");
-    setProductUPCError("");
-    setUnitError("");
-    setCategoryError("");
-    setSubCategoryError("");
-    setBrandNameError("");
-    setProductStockError("");
-    setPriceCode1Error("");
-    setPriceCode2Error("");
-    setPriceCode3Error("");
-    setPriceCode4Error("");
-    setSRPError("");
+  //     // CLEAR ALL ERRORS WHEN COMPONENT MOUNTS
+  //     setProductNameError("");
+  //     setProductUPCError("");
+  //     setUnitError("");
+  //     setCategoryError("");
+  //     setSubCategoryError("");
+  //     setBrandNameError("");
+  //     setProductStockError("");
+  //     setPriceCode1Error("");
+  //     setPriceCode2Error("");
+  //     setPriceCode3Error("");
+  //     setPriceCode4Error("");
+  //     setSRPError("");
 
-    // eslint-disable-next-line
-  }, [singleProduct]);
+  //     // eslint-disable-next-line
+  //   }, [singleProduct]);
 
   const handleClose = () => {
     setOpenEditProduct((prev) => !prev);
+    setPreviews([]);
+    setImagePreview(undefined);
+    setSelectedFile("");
   };
 
   return (
@@ -545,12 +570,7 @@ const EditProduct = ({ openEditProduct, setOpenEditProduct }) => {
       handleClose={handleClose}
       width={matchesXS ? "100%" : matchesSM ? "85%" : 800}
     >
-      <Grid
-        container
-        direction="column"
-        alignItems="center"
-        className={classes.contentContainer}
-      >
+      <ContentContainer container direction="column" alignItems="center">
         <Grid
           item
           container
@@ -638,6 +658,9 @@ const EditProduct = ({ openEditProduct, setOpenEditProduct }) => {
           wholesaleDiscountPercentage={wholesaleDiscountPercentage}
           wholesaleQuantity={wholesaleQuantity}
           wholesaleQuantityError={wholesaleQuantityError}
+          loadingProductAction={loadingProductAction}
+          onSelectChange={handleSelectChange}
+          uploadingImage={uploadingImage}
         />
 
         <PhotoGallery
@@ -651,7 +674,7 @@ const EditProduct = ({ openEditProduct, setOpenEditProduct }) => {
           galleryItemId={galleryItemId}
           onClose={handleClose}
         />
-      </Grid>
+      </ContentContainer>
     </ShowDialog>
   );
 };

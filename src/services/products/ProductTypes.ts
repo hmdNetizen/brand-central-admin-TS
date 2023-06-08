@@ -29,12 +29,27 @@ export type PhotoGalleryTypes = {
   isUploaded: boolean;
 };
 
+type ThresholdTypes = {
+  isThresholdActive: boolean;
+  maximumQuantity: number;
+};
+
+type WholesaleTypes = {
+  quantity: number | string;
+  percentage: number | string;
+  _id?: string;
+};
+
+export type ProductSizeTypes = {
+  name: string;
+  quantity: number | string;
+  price: number | string;
+  _id?: string;
+};
+
 export type ProductTypes = {
   highlight: ProductHighlightTypes;
-  threshold: {
-    isThresholdActive: boolean;
-    maximumQuantity: number;
-  };
+  threshold: ThresholdTypes;
   _id: string;
   productName: string;
   productDescription: string;
@@ -46,26 +61,20 @@ export type ProductTypes = {
   subCategory: string;
   allowEstimatedShippingTime: boolean;
   allowProductSizes: boolean;
-  productSize: [
-    {
-      name: string;
-      quantity: number;
-      price: number;
-      _id: string;
-    }
-  ];
+  productSize: ProductSizeTypes[];
   allowProductWholesale: boolean;
+  productWholesale: WholesaleTypes[];
   allowMeasurement: boolean;
   productMeasurement: string;
-  productStock: number;
+  productStock: number | string;
   featuredImage: string;
   hasImage: boolean;
   productGalleryImages: PhotoGalleryTypes[];
-  priceCode1: number;
-  priceCode2: number;
-  priceCode3: number;
-  priceCode4: number;
-  SRP: number;
+  priceCode1: number | string;
+  priceCode2: number | string;
+  priceCode3: number | string;
+  priceCode4: number | string;
+  SRP: number | string;
   brandName: string;
   productStatus: boolean;
   productInCatalog: boolean;
@@ -78,10 +87,14 @@ export type ProductTypes = {
   userWishList: UserWishListTypes[];
 };
 
-export type ProductTypesChecks = Pick<
+type PickedProductTypes = Pick<
   ProductTypes,
   "allowProductWholesale" | "allowMeasurement" | "allowProductSizes"
 >;
+
+type PickedThreshold = Pick<ThresholdTypes, "isThresholdActive">;
+
+export type ProductCheckedTypes = PickedProductTypes & PickedThreshold;
 
 export type ProductUpdatePayloadTypes = Pick<
   ProductTypes,

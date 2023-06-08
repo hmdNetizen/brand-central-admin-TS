@@ -82,7 +82,7 @@ const EditProductForm = (props: ProductFormProps) => {
       container
       direction="column"
       component="form"
-      style={{ paddingBottom: "3rem" }}
+      style={{ padding: "2rem", paddingBottom: "3rem" }}
       onSubmit={props.onSubmit}
     >
       <Grid

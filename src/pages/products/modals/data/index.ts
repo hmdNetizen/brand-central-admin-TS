@@ -15,7 +15,7 @@ export const initialState = {
   productStock: "",
   productDescription: "",
   productMeasurement: "",
-  customMeasureMent: "",
+  customMeasurement: "",
   priceCode1: "",
   priceCode2: "",
   priceCode3: "",
