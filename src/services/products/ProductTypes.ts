@@ -44,7 +44,7 @@ export type ProductSizeTypes = {
   name: string;
   quantity: number | string;
   price: number | string;
-  _id?: string;
+  _id: string;
 };
 
 export type ProductTypes = {

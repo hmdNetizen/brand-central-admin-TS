@@ -8,11 +8,23 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   placeholder: string;
   error?: string;
   labelColor?: string;
+  onChange?: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index?: number
+  ) => void;
 }
 
 const CustomFormInput = (props: FormInputProps) => {
-  const { labelId, label, type, placeholder, error, labelColor, ...rest } =
-    props;
+  const {
+    labelId,
+    label,
+    type,
+    placeholder,
+    error,
+    labelColor,
+    onChange,
+    ...rest
+  } = props;
   return (
     <Fragment>
       <FormLabel htmlFor={labelId} labelColor={labelColor}>
@@ -23,6 +35,7 @@ const CustomFormInput = (props: FormInputProps) => {
         id={labelId}
         placeholder={placeholder}
         autoComplete="off"
+        onChange={onChange}
         {...rest}
       />
       {error && <Error>{error}</Error>}

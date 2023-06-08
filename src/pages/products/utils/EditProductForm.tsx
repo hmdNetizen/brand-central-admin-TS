@@ -23,6 +23,7 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import FileUploadLayout from "src/components/uploads/FileUploadLayout";
 import GalleryItem from "src/components/products/GalleryItem";
 import { ProductFormProps } from "./types";
+import ProductSizeForm from "./ProductSizeForm";
 
 const AddMoreButton = styled(SubmitButton)({
   borderRadius: 5,
@@ -511,61 +512,11 @@ const EditProductForm = (props: ProductFormProps) => {
           onChange={props.onCheck}
         />
         {props.allowProductSizes && (
-          <Grid
-            item
-            container
-            style={{ marginTop: "2rem" }}
-            alignItems="center"
-            justifyContent="center"
-            columnGap={3}
-            rowGap={2}
-            direction={matchesXS ? "column" : "row"}
-          >
-            <Grid item container={matchesXS}>
-              <CustomFormInput
-                type="text"
-                label="Size Name"
-                labelId="sizeName"
-                name="name"
-                value={props.name}
-                placeholder="eg. S,M,L,XL,XXL,3XL,4XL"
-                onChange={props.onInputChange}
-                error={props.sizeNameError}
-              />
-            </Grid>
-            <Grid
-              item
-              container={matchesXS}
-              style={{ maxWidth: matchesXS ? "none" : 200 }}
-            >
-              <CustomFormInput
-                type="number"
-                label="Size Qty:"
-                labelId="sizeQuantity"
-                name="quantity"
-                value={props.quantity}
-                placeholder="Number of quantity of this size"
-                onChange={props.onInputChange}
-                error={props.sizeQuantityError}
-              />
-            </Grid>
-            <Grid
-              item
-              container={matchesXS}
-              style={{ maxWidth: matchesXS ? "none" : 200 }}
-            >
-              <CustomFormInput
-                type="number"
-                label="Size Price"
-                labelId="sizePrice"
-                name="price"
-                value={props.price}
-                placeholder="Added to the base price"
-                onChange={props.onInputChange}
-                error={props.sizePriceError}
-              />
-            </Grid>
-          </Grid>
+          <ProductSizeForm
+            sizeNameError={props.sizeNameError}
+            sizePriceError={props.sizePriceError}
+            sizeQuantityError={props.sizeQuantityError}
+          />
         )}
       </Grid>
       <Grid item container direction="column" sx={{ mb: 2 }}>
