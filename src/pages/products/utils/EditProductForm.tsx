@@ -685,9 +685,9 @@ const EditProductForm = (props: ProductFormProps) => {
               variant="contained"
               disableRipple
               color="secondary"
-              disabled={props.updatingProduct}
+              disabled={props.loadingProductAction}
             >
-              {props.updatingProduct && <StyledCircularProgress />} Update
+              {props.loadingProductAction && <StyledCircularProgress />} Update
               Product
             </SubmitButton>
           </Grid>

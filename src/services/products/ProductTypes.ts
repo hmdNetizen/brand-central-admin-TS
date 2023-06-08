@@ -78,6 +78,11 @@ export type ProductTypes = {
   userWishList: UserWishListTypes[];
 };
 
+export type ProductTypesChecks = Pick<
+  ProductTypes,
+  "allowProductWholesale" | "allowMeasurement" | "allowProductSizes"
+>;
+
 export type ProductUpdatePayloadTypes = Pick<
   ProductTypes,
   | "brandName"

@@ -1,0 +1,33 @@
+export const initialState = {
+  productName: "",
+  productUPC: "",
+  units: "",
+  itemCode: "",
+  category: "",
+  subCategory: "",
+  brandName: "",
+  customBrandName: "",
+  name: "",
+  quantity: "",
+  price: "",
+  wholesaleQuantity: "",
+  wholesaleDiscountPercentage: "",
+  productStock: "",
+  productDescription: "",
+  productMeasurement: "",
+  customMeasureMent: "",
+  priceCode1: "",
+  priceCode2: "",
+  priceCode3: "",
+  priceCode4: "",
+  SRP: "",
+  shippingCategory: "",
+  maximumQuantity: "",
+};
+
+export const initialStateChecked = {
+  allowProductSizes: false,
+  allowProductWholesale: false,
+  allowMeasurement: false,
+  isThresholdActive: false,
+};
