@@ -4,6 +4,7 @@ import { SubCategoryReturnedPayload } from "src/services/categories/CategoryType
 import {
   PhotoGalleryTypes,
   ProductSizeTypes,
+  WholesaleTypes,
 } from "src/services/products/ProductTypes";
 
 export type ProductFormProps = {
@@ -47,7 +48,6 @@ export type ProductFormProps = {
   maximumQuantityError: string;
   setMaximumQuantityError: React.Dispatch<React.SetStateAction<string>>;
   setOpenProductGallery: React.Dispatch<React.SetStateAction<boolean>>;
-  wholesaleQuantity: string;
   allowProductWholesale: boolean;
   allowProductSizes: boolean;
   productMeasurement: string;
@@ -58,10 +58,14 @@ export type ProductFormProps = {
   sizeNameError: string;
   sizePriceError: string;
   wholesaleQuantityError: string;
+  setWholesaleQuantityError: React.Dispatch<React.SetStateAction<string>>;
   allowMeasurement: boolean;
   customMeasurement: string;
   customMeasurementError: string;
-  wholesaleDiscountPercentage: string;
+  wholesalePercentageDiscountError: string;
+  setWholesalePercentageDiscountError: React.Dispatch<
+    React.SetStateAction<string>
+  >;
   productDescription: string;
   filteredSubCategory: SubCategoryReturnedPayload[];
   setFilteredSubCategory: React.Dispatch<
@@ -79,6 +83,8 @@ export type ProductFormProps = {
   loadingProductAction: boolean;
   setGalleryItemId: React.Dispatch<React.SetStateAction<string>>;
   galleryItemId: string;
+  wholesaleForm: WholesaleTypes[];
+  setWholesaleForm: React.Dispatch<React.SetStateAction<WholesaleTypes[]>>;
 };
 
 export type ProductSizeFormProps = {
