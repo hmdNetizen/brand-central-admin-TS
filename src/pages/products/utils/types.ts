@@ -1,7 +1,10 @@
 import { SelectChangeEvent } from "@mui/material";
-import { FormEvent } from "react";
+import React, { FormEvent } from "react";
 import { SubCategoryReturnedPayload } from "src/services/categories/CategoryTypes";
-import { PhotoGalleryTypes } from "src/services/products/ProductTypes";
+import {
+  PhotoGalleryTypes,
+  ProductSizeTypes,
+} from "src/services/products/ProductTypes";
 
 export type ProductFormProps = {
   onSubmit: (event: FormEvent<Element>) => void;
@@ -49,9 +52,8 @@ export type ProductFormProps = {
   allowProductSizes: boolean;
   productMeasurement: string;
   productMeasurementError: string;
-  name: string;
-  quantity: string;
-  price: string;
+  productSizeForm: ProductSizeTypes[];
+  setProductSizeForm: React.Dispatch<React.SetStateAction<ProductSizeTypes[]>>;
   sizeQuantityError: string;
   sizeNameError: string;
   sizePriceError: string;
@@ -77,4 +79,12 @@ export type ProductFormProps = {
   loadingProductAction: boolean;
   setGalleryItemId: React.Dispatch<React.SetStateAction<string>>;
   galleryItemId: string;
+};
+
+export type ProductSizeFormProps = {
+  productSizeForm: ProductSizeTypes[];
+  sizeNameError: string;
+  sizeQuantityError: string;
+  sizePriceError: string;
+  setProductSizeForm: React.Dispatch<React.SetStateAction<ProductSizeTypes[]>>;
 };

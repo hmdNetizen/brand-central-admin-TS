@@ -10,7 +10,7 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   labelColor?: string;
   onChange?: (
     event: React.ChangeEvent<HTMLInputElement>,
-    index?: number
+    index?: number | string
   ) => void;
 }
 

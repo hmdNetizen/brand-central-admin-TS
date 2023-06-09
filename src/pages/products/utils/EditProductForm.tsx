@@ -516,6 +516,8 @@ const EditProductForm = (props: ProductFormProps) => {
             sizeNameError={props.sizeNameError}
             sizePriceError={props.sizePriceError}
             sizeQuantityError={props.sizeQuantityError}
+            productSizeForm={props.productSizeForm}
+            setProductSizeForm={props.setProductSizeForm}
           />
         )}
       </Grid>

@@ -6,20 +6,21 @@ import ShowDialog from "src/utils/ShowDialog";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useSelector } from "react-redux";
 import { useActions } from "src/hooks/useActions";
 import { capitalizeFirstLetters } from "src/lib/helpers";
 import PhotoGallery from "src/components/products/PhotoGallery";
 import {
   PhotoGalleryTypes,
   ProductCheckedTypes,
+  ProductSizeTypes,
 } from "src/services/products/ProductTypes";
 import EditProductForm from "../utils/EditProductForm";
-import { initialState, initialStateChecked } from "./data";
+import { initialProductSize, initialState, initialStateChecked } from "./data";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { ContentContainer } from "src/utilityStyles/pagesUtilityStyles";
 import { InitialStateCheckedTypes } from "./data/types";
 import { SelectChangeEvent } from "@mui/material";
+import { nanoid } from "@reduxjs/toolkit";
 
 type EditProductProps = {
   openEditProduct: boolean;
@@ -65,6 +66,8 @@ const EditProduct = (props: EditProductProps) => {
   const [selectedFile, setSelectedFile] = useState<File | string>("");
   const [galleryItemId, setGalleryItemId] = useState("");
   const [imagePreview, setImagePreview] = useState<string | undefined>();
+  const [productSizeForm, setProductSizeForm] =
+    useState<ProductSizeTypes[]>(initialProductSize);
 
   // ERROR HANDLING STATES
   const [productNameError, setProductNameError] = useState("");
@@ -612,13 +615,11 @@ const EditProduct = (props: EditProductProps) => {
           itemCodeError={itemCodeError}
           maximumQuantity={maximumQuantity}
           maximumQuantityError={maximumQuantityError}
-          name={name}
           onClose={handleClose}
           onInputChange={handleChange}
           onSubmit={handleUpdateProduct}
           onCheck={handleChecked}
           previews={previews}
-          price={price}
           priceCode1={priceCode1}
           priceCode2={priceCode2}
           priceCode3={priceCode3}
@@ -637,7 +638,6 @@ const EditProduct = (props: EditProductProps) => {
           productStockError={productStockError}
           productUPC={productUPC}
           productUPCError={productUPCError}
-          quantity={quantity}
           selectedFile={selectedFile}
           setFilteredSubCategory={setFilteredSubCategory}
           setGalleryItemId={setGalleryItemId}
@@ -661,6 +661,8 @@ const EditProduct = (props: EditProductProps) => {
           loadingProductAction={loadingProductAction}
           onSelectChange={handleSelectChange}
           uploadingImage={uploadingImage}
+          productSizeForm={productSizeForm}
+          setProductSizeForm={setProductSizeForm}
         />
 
         <PhotoGallery

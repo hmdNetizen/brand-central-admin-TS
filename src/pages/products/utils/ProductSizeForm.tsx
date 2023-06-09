@@ -1,18 +1,14 @@
-import React from "react";
+import React, { useCallback } from "react";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
-import { ProductSizeTypes } from "src/services/products/ProductTypes";
-import CustomFormInput from "src/utils/CustomFormInput";
+import { nanoid } from "@reduxjs/toolkit";
 
-type ProductSizeFormProps = {
-  productSizeForm: ProductSizeTypes[];
-  sizeNameError: string;
-  sizeQuantityError: string;
-  sizePriceError: string;
-  setProductSizeForm: React.Dispatch<React.SetStateAction<ProductSizeTypes[]>>;
-};
+import CustomFormInput from "src/utils/CustomFormInput";
+import { ProductSizeFormProps } from "./types";
 
 const ProductSizeForm = (props: ProductSizeFormProps) => {
   const theme = useTheme();
@@ -41,16 +37,24 @@ const ProductSizeForm = (props: ProductSizeFormProps) => {
     });
   };
 
+  const handleAddNewProductSize = () => {
+    setProductSizeForm((prevForms) => [
+      ...prevForms,
+      { quantity: "", price: "", name: "", _id: nanoid() },
+    ]);
+  };
+
   return (
     <Grid item container justifyContent="center" style={{ marginTop: "2rem" }}>
-      {productSizeForm.map((productSize) => (
+      {productSizeForm.map((productSize, index) => (
         <Grid
           item
           container
-          alignItems="center"
+          //   alignItems="center"
           justifyContent="center"
           columnGap={3}
           rowGap={2}
+          sx={{ mb: 2 }}
           direction={matchesXS ? "column" : "row"}
           key={productSize._id}
         >
@@ -62,7 +66,7 @@ const ProductSizeForm = (props: ProductSizeFormProps) => {
               name="name"
               value={productSize.name}
               placeholder="eg. S,M,L,XL,XXL,3XL,4XL"
-              onChange={handleChange}
+              onChange={(event) => handleChange(event, index)}
               error={sizeNameError}
             />
           </Grid>
@@ -78,7 +82,7 @@ const ProductSizeForm = (props: ProductSizeFormProps) => {
               name="quantity"
               value={productSize.quantity}
               placeholder="Number of quantity of this size"
-              onChange={handleChange}
+              onChange={(event) => handleChange(event, index)}
               error={sizeQuantityError}
             />
           </Grid>
@@ -94,15 +98,26 @@ const ProductSizeForm = (props: ProductSizeFormProps) => {
               name="price"
               value={productSize.price}
               placeholder="Added to the base price"
-              onChange={handleChange}
+              onChange={(event) => handleChange(event, index)}
               error={sizePriceError}
             />
+          </Grid>
+          <Grid item alignSelf="end">
+            <IconButton>
+              <CloseIcon color="error" />
+            </IconButton>
           </Grid>
         </Grid>
       ))}
 
       <Grid item>
-        <Button>Add a new size</Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleAddNewProductSize}
+        >
+          Add a new size
+        </Button>
       </Grid>
     </Grid>
   );

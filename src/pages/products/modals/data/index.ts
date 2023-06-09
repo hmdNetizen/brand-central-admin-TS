@@ -1,3 +1,5 @@
+import { nanoid } from "@reduxjs/toolkit";
+
 export const initialState = {
   productName: "",
   productUPC: "",
@@ -31,3 +33,12 @@ export const initialStateChecked = {
   allowMeasurement: false,
   isThresholdActive: false,
 };
+
+export const initialProductSize = [
+  {
+    _id: nanoid(),
+    name: "",
+    price: "",
+    quantity: "",
+  },
+];
