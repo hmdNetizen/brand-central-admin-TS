@@ -34,10 +34,10 @@ type ThresholdTypes = {
   maximumQuantity: number;
 };
 
-type WholesaleTypes = {
+export type WholesaleTypes = {
   quantity: number | string;
   percentage: number | string;
-  _id?: string;
+  _id: string;
 };
 
 export type ProductSizeTypes = {

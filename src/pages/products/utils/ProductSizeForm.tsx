@@ -12,6 +12,8 @@ import { ProductSizeFormProps } from "./types";
 
 const ProductSizeForm = (props: ProductSizeFormProps) => {
   const theme = useTheme();
+  const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
+
   const {
     setProductSizeForm,
     sizeNameError,
@@ -19,8 +21,6 @@ const ProductSizeForm = (props: ProductSizeFormProps) => {
     sizePriceError,
     sizeQuantityError,
   } = props;
-
-  const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -42,6 +42,15 @@ const ProductSizeForm = (props: ProductSizeFormProps) => {
       ...prevForms,
       { quantity: "", price: "", name: "", _id: nanoid() },
     ]);
+  };
+
+  const handleRemoveForm = (id: string) => {
+    if (productSizeForm.length === 1) return;
+    const newProductSize = productSizeForm.filter(
+      (productSize) => productSize._id !== id
+    );
+
+    setProductSizeForm(newProductSize);
   };
 
   return (
@@ -103,7 +112,7 @@ const ProductSizeForm = (props: ProductSizeFormProps) => {
             />
           </Grid>
           <Grid item alignSelf="end">
-            <IconButton>
+            <IconButton onClick={() => handleRemoveForm(productSize._id)}>
               <CloseIcon color="error" />
             </IconButton>
           </Grid>
