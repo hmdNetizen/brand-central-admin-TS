@@ -24,6 +24,7 @@ import FileUploadLayout from "src/components/uploads/FileUploadLayout";
 import GalleryItem from "src/components/products/GalleryItem";
 import { ProductFormProps } from "./types";
 import ProductSizeForm from "./ProductSizeForm";
+import ProductWholesaleForm from "./ProductWholesaleForm";
 
 const AddMoreButton = styled(SubmitButton)({
   borderRadius: 5,
@@ -531,40 +532,18 @@ const EditProductForm = (props: ProductFormProps) => {
           onChange={props.onCheck}
         />
         {props.allowProductWholesale && (
-          <Grid
-            item
-            container
-            style={{ marginTop: "2rem" }}
-            alignItems="center"
-            justifyContent="center"
-            columnGap={3}
-            rowGap={2}
-          >
-            <Grid item sm container={matchesXS}>
-              <CustomFormInput
-                type="number"
-                label=""
-                labelId=""
-                name="wholesaleQuantity"
-                value={props.wholesaleQuantity}
-                placeholder="Enter Quantity"
-                onChange={props.onInputChange}
-                error={props.wholesaleQuantityError}
-              />
-            </Grid>
-            <Grid item sm container={matchesXS}>
-              <CustomFormInput
-                type="number"
-                label=""
-                labelId=""
-                name="wholesaleDiscountPercentage"
-                value={props.wholesaleDiscountPercentage}
-                placeholder="Enter Discount Percentage"
-                onChange={props.onInputChange}
-                // error={wholesaleDiscountPercentageError}
-              />
-            </Grid>
-          </Grid>
+          <ProductWholesaleForm
+            wholesaleForm={props.wholesaleForm}
+            setWholesaleForm={props.setWholesaleForm}
+            wholesaleQuantityError={props.wholesaleQuantityError}
+            setWholesaleQuantityError={props.setWholesaleQuantityError}
+            wholesalePercentageDiscountError={
+              props.wholesalePercentageDiscountError
+            }
+            setWholesalePercentageDiscountError={
+              props.setWholesalePercentageDiscountError
+            }
+          />
         )}
       </Grid>
       <Grid item container direction="column">

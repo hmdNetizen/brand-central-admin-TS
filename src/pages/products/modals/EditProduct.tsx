@@ -13,9 +13,15 @@ import {
   PhotoGalleryTypes,
   ProductCheckedTypes,
   ProductSizeTypes,
+  WholesaleTypes,
 } from "src/services/products/ProductTypes";
 import EditProductForm from "../utils/EditProductForm";
-import { initialProductSize, initialState, initialStateChecked } from "./data";
+import {
+  initialProductSize,
+  initialProductWholesale,
+  initialState,
+  initialStateChecked,
+} from "./data";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { ContentContainer } from "src/utilityStyles/pagesUtilityStyles";
 import { InitialStateCheckedTypes } from "./data/types";
@@ -68,6 +74,9 @@ const EditProduct = (props: EditProductProps) => {
   const [imagePreview, setImagePreview] = useState<string | undefined>();
   const [productSizeForm, setProductSizeForm] =
     useState<ProductSizeTypes[]>(initialProductSize);
+  const [wholesaleForm, setWholesaleForm] = useState<WholesaleTypes[]>(
+    initialProductWholesale
+  );
 
   // ERROR HANDLING STATES
   const [productNameError, setProductNameError] = useState("");
@@ -82,6 +91,10 @@ const EditProduct = (props: EditProductProps) => {
   const [sizeQuantityError, setSizeQuantityError] = useState("");
   const [sizePriceError, setSizePriceError] = useState("");
   const [wholesaleQuantityError, setWholesaleQuantityError] = useState("");
+  const [
+    wholesalePercentageDiscountError,
+    setWholesalePercentageDiscountError,
+  ] = useState("");
   const [productMeasurementError, setProductMeasurementError] = useState("");
   const [customMeasurementError, setCustomMeasurementError] = useState("");
   const [productImageError, setProductImageError] = useState("");
@@ -655,14 +668,19 @@ const EditProduct = (props: EditProductProps) => {
           subCategoryError={subCategoryError}
           units={units}
           unitsError={unitError}
-          wholesaleDiscountPercentage={wholesaleDiscountPercentage}
-          wholesaleQuantity={wholesaleQuantity}
-          wholesaleQuantityError={wholesaleQuantityError}
           loadingProductAction={loadingProductAction}
           onSelectChange={handleSelectChange}
           uploadingImage={uploadingImage}
           productSizeForm={productSizeForm}
           setProductSizeForm={setProductSizeForm}
+          wholesaleForm={wholesaleForm}
+          setWholesaleForm={setWholesaleForm}
+          wholesalePercentageDiscountError={wholesalePercentageDiscountError}
+          setWholesalePercentageDiscountError={
+            setWholesalePercentageDiscountError
+          }
+          wholesaleQuantityError={wholesaleQuantityError}
+          setWholesaleQuantityError={setWholesaleQuantityError}
         />
 
         <PhotoGallery

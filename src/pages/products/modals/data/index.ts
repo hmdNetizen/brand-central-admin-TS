@@ -42,3 +42,11 @@ export const initialProductSize = [
     quantity: "",
   },
 ];
+
+export const initialProductWholesale = [
+  {
+    _id: nanoid(),
+    quantity: "",
+    percentage: "",
+  },
+];

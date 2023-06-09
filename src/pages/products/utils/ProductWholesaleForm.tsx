@@ -1,7 +1,11 @@
 import React from "react";
+import { nanoid } from "@reduxjs/toolkit";
+import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
+import CloseIcon from "@mui/icons-material/Close";
 
 import CustomFormInput from "src/utils/CustomFormInput";
 import { WholesaleTypes } from "src/services/products/ProductTypes";
@@ -36,17 +40,38 @@ const ProductWholesaleForm = (props: ProductWholesaleFormProps) => {
   ) => {
     const { name, value } = event.target;
 
-    if (!wholesaleForm[index!].quantity) {
-      setWholesaleQuantityError("Pleanse enter wholesale quantity");
-      return;
-    }
+    // if (!wholesaleForm[index!].quantity) {
+    //   setWholesaleQuantityError("Pleanse enter wholesale quantity");
+    //   return;
+    // }
 
-    if (!wholesaleForm[index!].percentage) {
-      setWholesalePercentageDiscountError(
-        "Please enter percentage off for wholesale"
-      );
-      return;
-    }
+    // if (!wholesaleForm[index!].percentage) {
+    //   setWholesalePercentageDiscountError(
+    //     "Please enter percentage off for wholesale"
+    //   );
+    //   return;
+    // }
+
+    // switch (name) {
+    //   case "quantity":
+    //     if (!value) {
+    //       setWholesaleQuantityError("Pleanse enter wholesale quantity");
+    //     } else {
+    //       setWholesaleQuantityError("");
+    //     }
+
+    //   case "percentage":
+    //     if (!value) {
+    //       setWholesalePercentageDiscountError(
+    //         "Please enter percentage off for wholesale"
+    //       );
+    //     } else {
+    //       setWholesalePercentageDiscountError("");
+    //     }
+    //   default:
+    //     setWholesaleQuantityError("");
+    //     setWholesalePercentageDiscountError("");
+    // }
 
     setWholesaleForm((prevForms) => {
       const updatedForms = [...prevForms];
@@ -61,6 +86,39 @@ const ProductWholesaleForm = (props: ProductWholesaleFormProps) => {
     setWholesalePercentageDiscountError("");
   };
 
+  const handleRemoveForm = (id: string) => {
+    if (wholesaleForm.length === 1) return;
+
+    const newWholesaleForm = wholesaleForm.filter(
+      (wholesale) => wholesale._id !== id
+    );
+
+    setWholesaleForm(newWholesaleForm);
+  };
+
+  const handleAddNewProductSize = () => {
+    const lastWholesaleForm = wholesaleForm[wholesaleForm.length - 1];
+
+    if (!lastWholesaleForm.quantity) {
+      setWholesaleQuantityError("Pleanse enter wholesale quantity");
+      return;
+    }
+    setWholesaleQuantityError("");
+
+    if (!lastWholesaleForm.percentage) {
+      setWholesalePercentageDiscountError(
+        "Please enter percentage off for wholesale"
+      );
+      return;
+    }
+    setWholesalePercentageDiscountError("");
+
+    setWholesaleForm((prevForms) => [
+      ...prevForms,
+      { percentage: "", quantity: "", _id: nanoid() },
+    ]);
+  };
+
   return (
     <Grid item container justifyContent="center" style={{ marginTop: "2rem" }}>
       {wholesaleForm.map((wholesale, index) => (
@@ -72,6 +130,7 @@ const ProductWholesaleForm = (props: ProductWholesaleFormProps) => {
           columnGap={3}
           rowGap={2}
           key={wholesale._id}
+          mb={2}
         >
           <Grid item sm container={matchesXS}>
             <CustomFormInput
@@ -97,8 +156,22 @@ const ProductWholesaleForm = (props: ProductWholesaleFormProps) => {
               error={wholesalePercentageDiscountError}
             />
           </Grid>
+          <Grid item>
+            <IconButton onClick={() => handleRemoveForm(wholesale._id)}>
+              <CloseIcon color="error" />
+            </IconButton>
+          </Grid>
         </Grid>
       ))}
+      <Grid item>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleAddNewProductSize}
+        >
+          Add new wholesale data
+        </Button>
+      </Grid>
     </Grid>
   );
 };
