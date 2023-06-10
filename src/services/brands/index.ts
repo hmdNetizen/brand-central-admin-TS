@@ -23,8 +23,8 @@ const initialState: initStateType = {
   error: null,
 };
 
-export const getAllBrands = createAsyncThunk(
-  "get-all-brands",
+export const getAllPaginatedBrands = createAsyncThunk(
+  "get-all-paginated-brands",
   async (query: { page: number; limit: number }, thunkAPI) => {
     const { page, limit } = query;
     try {
@@ -334,16 +334,16 @@ const brandsSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(getAllBrands.pending, (state) => {
+      .addCase(getAllPaginatedBrands.pending, (state) => {
         state.loadingBrands = true;
       })
-      .addCase(getAllBrands.fulfilled, (state, action) => {
+      .addCase(getAllPaginatedBrands.fulfilled, (state, action) => {
         state.loadingBrands = false;
         state.brands = action.payload.brands;
         state.total = action.payload.total;
         state.error = null;
       })
-      .addCase(getAllBrands.rejected, (state, action) => {
+      .addCase(getAllPaginatedBrands.rejected, (state, action) => {
         state.loadingBrands = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;

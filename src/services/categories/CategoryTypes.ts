@@ -6,6 +6,7 @@ export type CategoryReturnedPayload = {
   categorySlug: string;
   setIcon: string;
   isActivate: boolean;
+  createdAt: string;
 };
 
 export type ReturnedPayloadType<T> = {

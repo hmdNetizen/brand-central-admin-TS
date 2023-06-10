@@ -17,7 +17,7 @@ const Brands = () => {
 
   const brands = useTypedSelector((state) => state.brands.brands);
 
-  const { getAllBrands, getSearchedBrands } = useActions();
+  const { getAllPaginatedBrands, getSearchedBrands } = useActions();
 
   const debounceFilteredBrands = useCallback(
     debounce(getSearchedBrands, 500),
@@ -37,7 +37,7 @@ const Brands = () => {
 
   useEffect(() => {
     if (!filterText) {
-      getAllBrands({
+      getAllPaginatedBrands({
         page: page + 1,
         limit: rowsPerPage,
       });

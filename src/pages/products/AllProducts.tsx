@@ -8,7 +8,12 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 
 const Products = () => {
   useTitle("Admin : Find all products");
-  const { getPaginatedProducts } = useActions();
+  const {
+    getPaginatedProducts,
+    getAllCategories,
+    getAllSubcategories,
+    fetchAllBrands,
+  } = useActions();
 
   const products = useTypedSelector((state) => state.products.products);
   // const { currentPage } = useSelector((state) => state.utils);
@@ -56,6 +61,12 @@ const Products = () => {
 
   //   // eslint-disable-next-line
   // }, [filterText, page, rowsPerPage]);
+
+  useEffect(() => {
+    getAllCategories();
+    getAllSubcategories();
+    fetchAllBrands();
+  }, []);
 
   return (
     <ProductPageLayout

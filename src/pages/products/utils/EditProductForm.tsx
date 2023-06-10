@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useMemo } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -41,7 +41,7 @@ const EditProductForm = (props: ProductFormProps) => {
   const subCategories = useTypedSelector(
     (state) => state.categories.subCategories
   );
-  const brands = useTypedSelector((state) => state.brands.brands);
+  const brandsList = useTypedSelector((state) => state.brands.brandsList);
 
   const handleFilter = (value: string) => {
     const newSubCategories = [...subCategories].filter((subCategory) =>
@@ -198,7 +198,9 @@ const EditProductForm = (props: ProductFormProps) => {
       >
         <Grid item sx={{ flex: 1 }}>
           <CustomSelect
-            options={brands.map((brand) => capitalizeFirstLetters(brand.name))}
+            options={brandsList.map((brand) =>
+              capitalizeFirstLetters(brand.name)
+            )}
             name="brandName"
             value={props.brandName}
             onChange={props.onSelectChange}
