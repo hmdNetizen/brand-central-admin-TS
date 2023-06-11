@@ -403,28 +403,6 @@ const EditProductForm = (props: ProductFormProps) => {
         />
         {props.productImageError && <small>{props.productImageError}</small>}
       </Grid>
-      {/* {uploadedFile && (
-        <Grid item container justifyContent="center">
-          <label htmlFor="add-product-photo">
-            <input
-              accept="image/*"
-              id="add-product-photo"
-              multiple
-              type="file"
-              style={{ display: "none" }}
-              onChange={handleChangeProductImage}
-            />
-            <Button
-              variant="contained"
-              component="span"
-              style={{ width: 120 }}
-              color="secondary"
-            >
-              Change
-            </Button>
-          </label>
-        </Grid>
-      )} */}
       <Grid
         item
         style={{
@@ -473,34 +451,6 @@ const EditProductForm = (props: ProductFormProps) => {
               previews={props.previews}
               setPreviews={props.setPreviews}
             />
-            // <Grid
-            //   item
-            //   style={{
-            //     height: 100,
-            //     width: 100,
-            //     border: "1px solid #f4f4f4",
-            //     borderRadius: 5,
-            //     padding: 5,
-            //   }}
-            //   sx={{ p: 1, position: "relative" }}
-            //   key={preview.id}
-            // >
-            //   <CancelSharpIcon
-            //     color="error"
-            //     style={{
-            //       position: "absolute",
-            //       right: -10,
-            //       top: -10,
-            //       cursor: "pointer",
-            //     }}
-            //     onClick={() => removePhotoFromGallery(index)}
-            //   />
-            //   <img
-            //     src={upload.url || upload}
-            //     alt="Thumbnail"
-            //     style={{ width: "100%", height: "100%" }}
-            //   />
-            // </Grid>
           ))}
         </Grid>
       )}
