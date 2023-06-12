@@ -7,16 +7,20 @@ import {
 import { AxiosError, AxiosProgressEvent } from "axios";
 import React from "react";
 import { toast } from "react-toastify";
+import { fileUploadConfig } from "src/config/fileUpload";
 import axios from "../axios";
 import { setUploadPercentage } from "../common";
+import { UploadedFilePayload } from "../common/commonTypes";
 import {
   PaginatedReturnedPayloadType,
   ProductsReturnedPayloadType,
   DashboardProductPayloadType,
   initStateType,
-  ProductUpdatePayloadTypes,
+  ProductBulkUpdateRequestPayload,
   ProductTypes,
   PhotoGalleryTypes,
+  ProductRequestPayloadTypes,
+  ProductEditRequestPayload,
 } from "./ProductTypes";
 
 type ProductQueryType = {
@@ -96,7 +100,10 @@ export const getDashboardPopularProducts = createAsyncThunk(
 
 export const updateInventoryProducts = createAsyncThunk(
   "update-inventory-products",
-  async (details: { products: ProductUpdatePayloadTypes[] }, thunkAPI) => {
+  async (
+    details: { products: ProductBulkUpdateRequestPayload[] },
+    thunkAPI
+  ) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -228,6 +235,60 @@ export const addPhotosToGallery = createAsyncThunk(
       };
     } catch (error) {
       return thunkAPI.rejectWithValue("Something went wrong. Try again");
+    }
+  }
+);
+
+export const updateProduct = createAsyncThunk(
+  "update-product",
+  async (
+    details: ProductRequestPayloadTypes<ProductEditRequestPayload>,
+    thunkAPI
+  ) => {
+    const { setOpen, dataset, productId, file } = details;
+    const { config, formData } = fileUploadConfig(file);
+
+    try {
+      // Checks whether the image being uploaded is a new or or existing one
+      // NB: The new one has an object type while the existing one is a string.
+
+      if (typeof file === "object") {
+        const { data: uploadedFile } = await axios.post(
+          `/api/uploads/file`,
+          formData,
+          config
+        );
+        const uploadedResult = uploadedFile as UploadedFilePayload;
+
+        const { data, status } = await axios.put(`/api/products/${productId}`, {
+          ...dataset,
+          featuredImage: uploadedResult.url,
+          hasImage: true,
+        });
+
+        if (status === 200) setOpen(false);
+        const result = data as { data: ProductTypes };
+
+        return result.data;
+      } else {
+        const { data, status } = await axios.put(
+          `/api/products/${productId}`,
+          dataset
+        );
+
+        if (status === 200) setOpen(false);
+        const result = data as { data: ProductTypes };
+
+        return result.data;
+      }
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
     }
   }
 );
@@ -400,6 +461,29 @@ const productsSlice = createSlice({
       })
       .addCase(addPhotosToGallery.rejected, (state, action) => {
         state.uploadingImage = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updateProduct.pending, (state) => {
+        state.loadingProductAction = true;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.loadingProductAction = false;
+        state.products = state.products.map((product) =>
+          product._id === action.payload._id
+            ? { ...product, ...action.payload }
+            : product
+        );
+
+        toast.success("Product successfully updated", {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.loadingProductAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

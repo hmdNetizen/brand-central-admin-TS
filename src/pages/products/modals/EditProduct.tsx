@@ -11,7 +11,6 @@ import { capitalizeFirstLetters } from "src/lib/helpers";
 import PhotoGallery from "src/components/products/PhotoGallery";
 import {
   PhotoGalleryTypes,
-  ProductCheckedTypes,
   ProductSizeTypes,
   WholesaleTypes,
 } from "src/services/products/ProductTypes";
@@ -55,7 +54,7 @@ const EditProduct = (props: EditProductProps) => {
 
   //   const { uploadedFile } = useSelector((state) => state.common);
 
-  const { uploadFile } = useActions();
+  const { updateProduct } = useActions();
 
   //   MEDIA QUERIES
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
@@ -444,57 +443,56 @@ const EditProduct = (props: EditProductProps) => {
     }
 
     updateProduct({
-      setOpenEditProduct,
-      productId: singleProduct?._id,
-      productName,
-      productType: "Physical",
-      productUPC,
-      itemCode,
-      units,
-      category: category ? category : "N/A",
-      subCategory: subCategory ? subCategory : "N/A",
-      brandName: brandName === "Others" ? customBrandName : brandName,
-      allowProductSizes,
-      productSize: [
-        { name },
-        { quantity: quantity ? parseInt(quantity) : "" },
-        { price: price ? parseFloat(price) : "" },
-      ],
-      allowMeasurement,
-      productMeasurement:
-        productMeasurement === "Custom"
-          ? customMeasurement
-          : productMeasurement,
-      allowProductWholesale,
-      productWholesale: [
-        { quantity: wholesaleQuantity ? parseInt(wholesaleQuantity) : "" },
-        {
-          percentage: wholesaleDiscountPercentage
-            ? parseFloat(wholesaleDiscountPercentage)
-            : "",
+      setOpen: setOpenEditProduct,
+      productId: singleProduct?._id!,
+      file: selectedFile,
+      dataset: {
+        productName,
+        productType: "Physical",
+        productUPC,
+        itemCode,
+        units,
+        category: category ? category : "N/A",
+        subCategory: subCategory ? subCategory : "N/A",
+        brandName: brandName === "Others" ? customBrandName : brandName,
+        allowProductSizes,
+        productSize: productSizeForm.map((size) => ({
+          name: size.name,
+          price: Number(size.price),
+          quantity: Number(size.quantity),
+        })),
+        allowMeasurement,
+        productMeasurement:
+          productMeasurement === "Custom"
+            ? customMeasurement
+            : productMeasurement,
+        allowProductWholesale,
+        productWholesale: wholesaleForm.map((wholesale) => ({
+          percentage: Number(wholesale.percentage),
+          quantity: Number(wholesale.quantity),
+        })),
+        productStock: Number(productStock),
+        productDescription,
+        shippingCategory: shippingCategory
+          ? shippingCategory.toLowerCase()
+          : "",
+        threshold: {
+          isThresholdActive,
+          maximumQuantity:
+            isThresholdActive && maximumQuantity ? Number(maximumQuantity) : 0,
         },
-      ],
-      productStock: parseInt(productStock),
-      productDescription,
-      shippingCategory: shippingCategory ? shippingCategory.toLowerCase() : "",
-      threshold: {
-        isThresholdActive,
-        maximumQuantity:
-          isThresholdActive && maximumQuantity ? Number(maximumQuantity) : 0,
+        productGalleryImages: previews
+          .filter((preview) => preview?.isUploaded)
+          .map((previewItem) => ({
+            id: previewItem.id, //doesn't make any different (For TS purpose)
+            url: previewItem.url,
+          })),
+        priceCode1: !isNaN(Number(priceCode1)) ? Number(priceCode1) : 0,
+        priceCode2: !isNaN(Number(priceCode2)) ? Number(priceCode2) : 0,
+        priceCode3: !isNaN(Number(priceCode3)) ? Number(priceCode3) : 0,
+        priceCode4: !isNaN(Number(priceCode4)) ? Number(priceCode4) : 0,
+        SRP: !isNaN(Number(SRP)) ? Number(SRP) : 0,
       },
-      featuredImage: uploadedFile.url,
-      productGalleryImages:
-        previews.length > 0
-          ? previews
-              .filter((preview) => preview.isUploaded)
-              .map((previewItem) => previewItem.url)
-          : [],
-      priceCode1: priceCode1 ? parseFloat(priceCode1).toFixed(2) : 0,
-      priceCode2: priceCode2 ? parseFloat(priceCode2).toFixed(2) : 0,
-      priceCode3: priceCode3 ? parseFloat(priceCode3).toFixed(2) : 0,
-      priceCode4: priceCode4 ? parseFloat(priceCode4).toFixed(2) : 0,
-      SRP: SRP ? parseFloat(SRP).toFixed(2) : 0,
-      hasImage: uploadedFile?.url ? true : false,
     });
   };
 

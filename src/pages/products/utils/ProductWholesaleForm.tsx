@@ -157,7 +157,7 @@ const ProductWholesaleForm = (props: ProductWholesaleFormProps) => {
             />
           </Grid>
           <Grid item>
-            <IconButton onClick={() => handleRemoveForm(wholesale._id)}>
+            <IconButton onClick={() => handleRemoveForm(wholesale?._id!)}>
               <CloseIcon color="error" />
             </IconButton>
           </Grid>

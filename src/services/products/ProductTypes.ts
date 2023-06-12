@@ -1,3 +1,5 @@
+import React from "react";
+
 type ProductHighlightTypes = {
   inFeatured: boolean;
   inBestSellers: boolean;
@@ -26,7 +28,7 @@ export type PhotoGalleryTypes = {
   id: string;
   url: string;
   file?: File;
-  isUploaded: boolean;
+  isUploaded?: boolean;
 };
 
 type ThresholdTypes = {
@@ -37,14 +39,14 @@ type ThresholdTypes = {
 export type WholesaleTypes = {
   quantity: number | string;
   percentage: number | string;
-  _id: string;
+  _id?: string;
 };
 
 export type ProductSizeTypes = {
   name: string;
   quantity: number | string;
   price: number | string;
-  _id: string;
+  _id?: string;
 };
 
 export type ProductTypes = {
@@ -87,16 +89,7 @@ export type ProductTypes = {
   userWishList: UserWishListTypes[];
 };
 
-type PickedProductTypes = Pick<
-  ProductTypes,
-  "allowProductWholesale" | "allowMeasurement" | "allowProductSizes"
->;
-
-type PickedThreshold = Pick<ThresholdTypes, "isThresholdActive">;
-
-export type ProductCheckedTypes = PickedProductTypes & PickedThreshold;
-
-export type ProductUpdatePayloadTypes = Pick<
+export type ProductBulkUpdateRequestPayload = Pick<
   ProductTypes,
   | "brandName"
   | "category"
@@ -114,6 +107,42 @@ export type ProductUpdatePayloadTypes = Pick<
   | "productType"
   | "productUPC"
 >;
+
+export type ProductRequestPayloadTypes<T> = {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  productId: string;
+  file: string | File;
+  dataset: T;
+};
+
+export type ProductEditRequestPayload = {
+  productName: string;
+  productType: string;
+  productUPC: string;
+  itemCode: string;
+  units: string;
+  category: string;
+  subCategory: string;
+  brandName: string;
+  allowProductSizes: boolean;
+  productSize: ProductSizeTypes[];
+  allowMeasurement: boolean;
+  productMeasurement: string;
+  allowProductWholesale: boolean;
+  productWholesale: WholesaleTypes[];
+  productStock: number;
+  productDescription: string;
+  shippingCategory: string;
+  threshold: ThresholdTypes;
+  featuredImage?: string;
+  productGalleryImages: PhotoGalleryTypes[];
+  priceCode1: number;
+  priceCode2: number;
+  priceCode3: number;
+  priceCode4: number;
+  SRP: number;
+  hasImage?: boolean;
+};
 
 export type ProductsBulkUpdatePayload = {
   Size: string;

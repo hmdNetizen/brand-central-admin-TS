@@ -112,7 +112,7 @@ const ProductSizeForm = (props: ProductSizeFormProps) => {
             />
           </Grid>
           <Grid item alignSelf="end">
-            <IconButton onClick={() => handleRemoveForm(productSize._id)}>
+            <IconButton onClick={() => handleRemoveForm(productSize?._id!)}>
               <CloseIcon color="error" />
             </IconButton>
           </Grid>
