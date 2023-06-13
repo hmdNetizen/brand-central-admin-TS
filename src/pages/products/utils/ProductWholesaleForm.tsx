@@ -40,39 +40,6 @@ const ProductWholesaleForm = (props: ProductWholesaleFormProps) => {
   ) => {
     const { name, value } = event.target;
 
-    // if (!wholesaleForm[index!].quantity) {
-    //   setWholesaleQuantityError("Pleanse enter wholesale quantity");
-    //   return;
-    // }
-
-    // if (!wholesaleForm[index!].percentage) {
-    //   setWholesalePercentageDiscountError(
-    //     "Please enter percentage off for wholesale"
-    //   );
-    //   return;
-    // }
-
-    // switch (name) {
-    //   case "quantity":
-    //     if (!value) {
-    //       setWholesaleQuantityError("Pleanse enter wholesale quantity");
-    //     } else {
-    //       setWholesaleQuantityError("");
-    //     }
-
-    //   case "percentage":
-    //     if (!value) {
-    //       setWholesalePercentageDiscountError(
-    //         "Please enter percentage off for wholesale"
-    //       );
-    //     } else {
-    //       setWholesalePercentageDiscountError("");
-    //     }
-    //   default:
-    //     setWholesaleQuantityError("");
-    //     setWholesalePercentageDiscountError("");
-    // }
-
     setWholesaleForm((prevForms) => {
       const updatedForms = [...prevForms];
       updatedForms[index!] = {
