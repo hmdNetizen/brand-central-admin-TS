@@ -56,6 +56,12 @@ const OrderInvoicePageDisplay = () => {
     // eslint-disable-next-line
   }, [orderId]);
 
+  useEffect(() => {
+    if (singleOrder) {
+      setRowsPerPage(singleOrder.ordersProducts.length);
+    }
+  }, [singleOrder]);
+
   return (
     <Container container direction="column" pathname={pathname}>
       {!pathname.includes("/invoice/print") && (
@@ -148,6 +154,7 @@ const OrderInvoicePageDisplay = () => {
                   component={Link}
                   to={`/dashboard/orders/${orderId}/invoice/print`}
                   target="_blank"
+                  style={{ maxHeight: 40 }}
                 />
               </Grid>
             </Grid>
