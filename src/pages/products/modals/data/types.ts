@@ -47,3 +47,5 @@ export type ProductStateTypes = Pick<
   | "productUPC"
   | "units"
 >;
+
+export type ThresholdStateTypes = Pick<ProductTypes, "threshold">;

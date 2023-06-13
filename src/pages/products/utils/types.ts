@@ -95,3 +95,7 @@ export type ProductSizeFormProps = {
   sizePriceError: string;
   setProductSizeForm: React.Dispatch<React.SetStateAction<ProductSizeTypes[]>>;
 };
+
+export type ThresholdDataType = {
+  threshold: ThresholdTypes;
+};
