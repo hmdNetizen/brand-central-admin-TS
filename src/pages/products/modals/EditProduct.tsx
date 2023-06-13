@@ -12,7 +12,6 @@ import PhotoGallery from "src/components/products/PhotoGallery";
 import {
   PhotoGalleryTypes,
   ProductSizeTypes,
-  ThresholdTypes,
   WholesaleTypes,
 } from "src/services/products/ProductTypes";
 import EditProductForm from "../utils/EditProductForm";
@@ -25,9 +24,10 @@ import {
 } from "./data";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { ContentContainer } from "src/utilityStyles/pagesUtilityStyles";
-import { InitialStateCheckedTypes } from "./data/types";
+import { InitialStateCheckedTypes, ThresholdStateTypes } from "./data/types";
 import { SelectChangeEvent } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
+import { ThresholdDataType } from "../utils/types";
 
 type EditProductProps = {
   openEditProduct: boolean;
@@ -78,9 +78,13 @@ const EditProduct = (props: EditProductProps) => {
   const [wholesaleForm, setWholesaleForm] = useState<WholesaleTypes[]>(
     initialProductWholesale
   );
-  const [threshold, setThreshold] = useState<ThresholdTypes>(
+  const [thresholdData, setThresholdData] = useState<ThresholdDataType>(
     initialThresholdState
   );
+
+  const {
+    threshold: { isThresholdActive, maximumQuantity },
+  } = thresholdData;
 
   // ERROR HANDLING STATES
   const [productNameError, setProductNameError] = useState("");
@@ -124,7 +128,6 @@ const EditProduct = (props: EditProductProps) => {
     quantity,
     price,
     wholesaleQuantity,
-    wholesaleDiscountPercentage,
     productStock,
     productDescription,
     productMeasurement,
@@ -135,15 +138,10 @@ const EditProduct = (props: EditProductProps) => {
     priceCode4,
     SRP,
     shippingCategory,
-    maximumQuantity,
   } = productDetails;
 
-  const {
-    allowProductSizes,
-    allowProductWholesale,
-    allowMeasurement,
-    isThresholdActive,
-  } = optionChecked;
+  const { allowProductSizes, allowProductWholesale, allowMeasurement } =
+    optionChecked;
 
   const handleFilter = (value: string) => {
     const newSubCategories = [...subCategories].filter((subCategory) =>
@@ -501,17 +499,28 @@ const EditProduct = (props: EditProductProps) => {
     });
   };
 
-  // useEffect(()=> {
-  //   if(singleProduct) {
-  //     let newProductDetails = { ...initialState };
+  useEffect(() => {
+    if (singleProduct) {
+      let newProductDetails = { ...initialState };
+      let newThresholdState = { ...initialThresholdState };
+      let newWholesaleForm = { ...wholesaleForm };
 
-  //     for (const key in singleProduct) {
-  //       if(key in productDetails) {
-  //         newProductDetails[key] = singleProduct[key]
-  //       }
-  //     }
-  //   }
-  // }, [singleProduct])
+      for (const key in singleProduct) {
+        if (key in productDetails) {
+          // newProductDetails[key] = singleProduct[key]
+        }
+
+        if (key in thresholdData) {
+          newThresholdState[key as keyof ThresholdDataType] =
+            singleProduct[key as keyof ThresholdDataType];
+        }
+
+        // if(key in wholesaleForm) {
+        //   newWholesaleForm[key] = singleProduct[key]
+        // }
+      }
+    }
+  }, [singleProduct]);
 
   //   useEffect(() => {
   //     if (singleProduct) {
@@ -694,8 +703,8 @@ const EditProduct = (props: EditProductProps) => {
           }
           wholesaleQuantityError={wholesaleQuantityError}
           setWholesaleQuantityError={setWholesaleQuantityError}
-          threshold={threshold}
-          setThreshold={setThreshold}
+          thresholdData={thresholdData}
+          setThresholdData={setThresholdData}
         />
 
         <PhotoGallery

@@ -2,14 +2,11 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import CustomCheckbox from "src/utils/CustomCheckbox";
 import CustomFormInput from "src/utils/CustomFormInput";
-import { ThresholdTypes } from "src/services/products/ProductTypes";
 import { ThresholdDataType } from "./types";
 
 type ProductThresholdProps = {
   thresholdData: ThresholdDataType;
   setThresholdData: React.Dispatch<React.SetStateAction<ThresholdDataType>>;
-  threshold: ThresholdTypes;
-  setThreshold: React.Dispatch<React.SetStateAction<ThresholdTypes>>;
   maximumQuantityError: string;
   setMaximumQuantityError: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -41,7 +38,7 @@ const ProductThresholdForm = (props: ProductThresholdProps) => {
       ...prev,
       threshold: {
         ...prev.threshold,
-        maximumQuantity: event.target.value,
+        maximumQuantity: Number(event.target.value),
       },
     }));
   };
@@ -64,7 +61,7 @@ const ProductThresholdForm = (props: ProductThresholdProps) => {
               label="Maximum Quantity"
               labelId="maximumQuantity"
               name="maximumQuantity"
-              value={maximumQuantity}
+              value={maximumQuantity.toString()}
               placeholder="E.g 20"
               onChange={handleChange}
               error={maximumQuantityError}

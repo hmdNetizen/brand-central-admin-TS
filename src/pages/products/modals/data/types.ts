@@ -26,7 +26,6 @@ export type InitialStateTypes = {
   priceCode4: "";
   SRP: "";
   shippingCategory: "";
-  maximumQuantity: "";
 };
 
 export type ProductStateTypes = Pick<

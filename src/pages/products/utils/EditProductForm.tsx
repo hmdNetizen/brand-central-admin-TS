@@ -334,8 +334,8 @@ const EditProductForm = (props: ProductFormProps) => {
           />
         </Grid>
         <ProductThresholdForm
-          threshold={props.threshold}
-          setThreshold={props.setThreshold}
+          thresholdData={props.thresholdData}
+          setThresholdData={props.setThresholdData}
           maximumQuantityError={props.maximumQuantityError}
           setMaximumQuantityError={props.setMaximumQuantityError}
         />

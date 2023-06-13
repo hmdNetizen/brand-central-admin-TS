@@ -24,7 +24,6 @@ export const initialState = {
   priceCode4: "",
   SRP: "",
   shippingCategory: "",
-  maximumQuantity: "",
 };
 
 export const initialStateChecked = {
@@ -52,6 +51,8 @@ export const initialProductWholesale = [
 ];
 
 export const initialThresholdState = {
-  isThresholdActive: false,
-  maximumQuantity: "",
+  threshold: {
+    isThresholdActive: false,
+    maximumQuantity: 0,
+  },
 };
