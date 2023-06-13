@@ -1,3 +1,5 @@
+import { ProductTypes } from "src/services/products/ProductTypes";
+
 export type InitialStateCheckedTypes = {
   allowProductSizes: boolean;
   allowProductWholesale: boolean;
@@ -14,11 +16,6 @@ export type InitialStateTypes = {
   subCategory: string;
   brandName: string;
   customBrandName: string;
-  name: string;
-  quantity: string | number;
-  price: string | number;
-  wholesaleQuantity: string | number;
-  wholesaleDiscountPercentage: "";
   productStock: "";
   productDescription: "";
   productMeasurement: "";
@@ -31,3 +28,22 @@ export type InitialStateTypes = {
   shippingCategory: "";
   maximumQuantity: "";
 };
+
+export type ProductStateTypes = Pick<
+  ProductTypes,
+  | "productName"
+  | "SRP"
+  | "brandName"
+  | "category"
+  | "itemCode"
+  | "priceCode1"
+  | "priceCode2"
+  | "priceCode3"
+  | "priceCode4"
+  | "productDescription"
+  | "productMeasurement"
+  | "shippingCategory"
+  | "productStock"
+  | "productUPC"
+  | "units"
+>;
