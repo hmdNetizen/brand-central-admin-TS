@@ -12,6 +12,7 @@ import PhotoGallery from "src/components/products/PhotoGallery";
 import {
   PhotoGalleryTypes,
   ProductSizeTypes,
+  ThresholdTypes,
   WholesaleTypes,
 } from "src/services/products/ProductTypes";
 import EditProductForm from "../utils/EditProductForm";
@@ -20,6 +21,7 @@ import {
   initialProductWholesale,
   initialState,
   initialStateChecked,
+  initialThresholdState,
 } from "./data";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { ContentContainer } from "src/utilityStyles/pagesUtilityStyles";
@@ -75,6 +77,9 @@ const EditProduct = (props: EditProductProps) => {
     useState<ProductSizeTypes[]>(initialProductSize);
   const [wholesaleForm, setWholesaleForm] = useState<WholesaleTypes[]>(
     initialProductWholesale
+  );
+  const [threshold, setThreshold] = useState<ThresholdTypes>(
+    initialThresholdState
   );
 
   // ERROR HANDLING STATES
@@ -496,6 +501,18 @@ const EditProduct = (props: EditProductProps) => {
     });
   };
 
+  // useEffect(()=> {
+  //   if(singleProduct) {
+  //     let newProductDetails = { ...initialState };
+
+  //     for (const key in singleProduct) {
+  //       if(key in productDetails) {
+  //         newProductDetails[key] = singleProduct[key]
+  //       }
+  //     }
+  //   }
+  // }, [singleProduct])
+
   //   useEffect(() => {
   //     if (singleProduct) {
   //       let newProductDetails = { ...initialState };
@@ -621,10 +638,8 @@ const EditProduct = (props: EditProductProps) => {
           filteredSubCategory={filteredSubCategory}
           galleryItemId={galleryItemId}
           imagePreview={imagePreview}
-          isThresholdActive={isThresholdActive}
           itemCode={itemCode}
           itemCodeError={itemCodeError}
-          maximumQuantity={maximumQuantity}
           maximumQuantityError={maximumQuantityError}
           onClose={handleClose}
           onInputChange={handleChange}
@@ -679,6 +694,8 @@ const EditProduct = (props: EditProductProps) => {
           }
           wholesaleQuantityError={wholesaleQuantityError}
           setWholesaleQuantityError={setWholesaleQuantityError}
+          threshold={threshold}
+          setThreshold={setThreshold}
         />
 
         <PhotoGallery

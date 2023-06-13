@@ -31,9 +31,9 @@ export type PhotoGalleryTypes = {
   isUploaded?: boolean;
 };
 
-type ThresholdTypes = {
+export type ThresholdTypes = {
   isThresholdActive: boolean;
-  maximumQuantity: number;
+  maximumQuantity: number | string;
 };
 
 export type WholesaleTypes = {

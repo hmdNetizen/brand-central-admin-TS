@@ -50,3 +50,8 @@ export const initialProductWholesale = [
     percentage: "",
   },
 ];
+
+export const initialThresholdState = {
+  isThresholdActive: false,
+  maximumQuantity: "",
+};

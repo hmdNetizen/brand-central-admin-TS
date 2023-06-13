@@ -25,6 +25,7 @@ import GalleryItem from "src/components/products/GalleryItem";
 import { ProductFormProps } from "./types";
 import ProductSizeForm from "./ProductSizeForm";
 import ProductWholesaleForm from "./ProductWholesaleForm";
+import ProductThresholdForm from "./ProductThresholdForm";
 
 const AddMoreButton = styled(SubmitButton)({
   borderRadius: 5,
@@ -332,35 +333,13 @@ const EditProductForm = (props: ProductFormProps) => {
             placeholder="Select Shipping Category"
           />
         </Grid>
-        <Grid item container direction="column" style={{ marginTop: "1rem" }}>
-          <Grid item>
-            <CustomCheckbox
-              name="isThresholdActive"
-              label="isThresholdActive"
-              id="isThresholdActive"
-              description="Set Max Quantity Threshold"
-              checked={props.isThresholdActive}
-              onChange={(event) => {
-                props.onCheck(event);
-                props.setMaximumQuantityError("");
-              }}
-            />
-            {props.isThresholdActive && (
-              <Grid item style={{ marginTop: "1rem" }}>
-                <CustomFormInput
-                  type="number"
-                  label="Maximum Quantity"
-                  labelId="maximumQuantity"
-                  name="maximumQuantity"
-                  value={props.maximumQuantity}
-                  placeholder="E.g 20"
-                  onChange={props.onInputChange}
-                  error={props.maximumQuantityError}
-                />
-              </Grid>
-            )}
-          </Grid>
-        </Grid>
+        <ProductThresholdForm
+          threshold={props.threshold}
+          setThreshold={props.setThreshold}
+          maximumQuantityError={props.maximumQuantityError}
+          setMaximumQuantityError={props.setMaximumQuantityError}
+        />
+
         <Grid item container style={{ marginTop: "1rem" }}>
           <CustomTextArea
             label="Product Description"

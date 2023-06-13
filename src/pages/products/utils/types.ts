@@ -4,6 +4,7 @@ import { SubCategoryReturnedPayload } from "src/services/categories/CategoryType
 import {
   PhotoGalleryTypes,
   ProductSizeTypes,
+  ThresholdTypes,
   WholesaleTypes,
 } from "src/services/products/ProductTypes";
 
@@ -43,8 +44,6 @@ export type ProductFormProps = {
   SRP: string;
   SRPError: string;
   shippingCategory: string;
-  isThresholdActive: boolean;
-  maximumQuantity: string;
   maximumQuantityError: string;
   setMaximumQuantityError: React.Dispatch<React.SetStateAction<string>>;
   setOpenProductGallery: React.Dispatch<React.SetStateAction<boolean>>;
@@ -85,6 +84,8 @@ export type ProductFormProps = {
   galleryItemId: string;
   wholesaleForm: WholesaleTypes[];
   setWholesaleForm: React.Dispatch<React.SetStateAction<WholesaleTypes[]>>;
+  threshold: ThresholdTypes;
+  setThreshold: React.Dispatch<React.SetStateAction<ThresholdTypes>>;
 };
 
 export type ProductSizeFormProps = {
