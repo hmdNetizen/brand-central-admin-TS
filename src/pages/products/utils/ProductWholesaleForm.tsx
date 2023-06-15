@@ -8,11 +8,11 @@ import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 
 import CustomFormInput from "src/utils/CustomFormInput";
-import { WholesaleTypes } from "src/services/products/ProductTypes";
+import { WholesaleDataType } from "./types";
 
 type ProductWholesaleFormProps = {
-  wholesaleForm: WholesaleTypes[];
-  setWholesaleForm: React.Dispatch<React.SetStateAction<WholesaleTypes[]>>;
+  wholesaleForm: WholesaleDataType;
+  setWholesaleForm: React.Dispatch<React.SetStateAction<WholesaleDataType>>;
   wholesaleQuantityError: string;
   setWholesaleQuantityError: React.Dispatch<React.SetStateAction<string>>;
   wholesalePercentageDiscountError: string;
@@ -40,31 +40,42 @@ const ProductWholesaleForm = (props: ProductWholesaleFormProps) => {
   ) => {
     const { name, value } = event.target;
 
-    setWholesaleForm((prevForms) => {
-      const updatedForms = [...prevForms];
+    setWholesaleForm((prevForm) => {
+      const updatedForms = [...prevForm.productWholesale];
       updatedForms[index!] = {
         ...updatedForms[index!],
         [name]: value,
       };
-      return updatedForms;
+      return { productWholesale: updatedForms };
     });
+
+    // setWholesaleForm((prevForms) => {
+    //   const updatedForms = [...prevForms.productWholesale];
+
+    //   updatedForms[index!] = {
+    //     ...updatedForms[index!],
+    //     [name]: value,
+    //   };
+    //   return updatedForms;
+    // });
 
     setWholesaleQuantityError("");
     setWholesalePercentageDiscountError("");
   };
 
   const handleRemoveForm = (id: string) => {
-    if (wholesaleForm.length === 1) return;
+    if (wholesaleForm.productWholesale.length === 1) return;
 
-    const newWholesaleForm = wholesaleForm.filter(
+    const newWholesaleForm = wholesaleForm.productWholesale.filter(
       (wholesale) => wholesale._id !== id
     );
 
-    setWholesaleForm(newWholesaleForm);
+    setWholesaleForm({ productWholesale: newWholesaleForm });
   };
 
   const handleAddNewProductSize = () => {
-    const lastWholesaleForm = wholesaleForm[wholesaleForm.length - 1];
+    const lastWholesaleForm =
+      wholesaleForm.productWholesale[wholesaleForm.productWholesale.length - 1];
 
     if (!lastWholesaleForm.quantity) {
       setWholesaleQuantityError("Pleanse enter wholesale quantity");
@@ -80,15 +91,22 @@ const ProductWholesaleForm = (props: ProductWholesaleFormProps) => {
     }
     setWholesalePercentageDiscountError("");
 
-    setWholesaleForm((prevForms) => [
-      ...prevForms,
-      { percentage: "", quantity: "", _id: nanoid() },
-    ]);
+    setWholesaleForm((prevForms) => ({
+      productWholesale: [
+        ...prevForms.productWholesale,
+        { percentage: 0, quantity: 0, _id: nanoid() },
+      ],
+    }));
+
+    // setWholesaleForm((prevForms) => [
+    //   ...prevForms,
+    //   { percentage: "", quantity: "", _id: nanoid() },
+    // ]);
   };
 
   return (
     <Grid item container justifyContent="center" style={{ marginTop: "2rem" }}>
-      {wholesaleForm.map((wholesale, index) => (
+      {wholesaleForm.productWholesale.map((wholesale, index) => (
         <Grid
           item
           container

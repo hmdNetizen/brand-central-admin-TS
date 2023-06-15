@@ -99,3 +99,7 @@ export type ProductSizeFormProps = {
 export type ThresholdDataType = {
   threshold: ThresholdTypes;
 };
+
+export type WholesaleDataType = {
+  productWholesale: WholesaleTypes[];
+};
