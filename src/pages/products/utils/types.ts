@@ -82,8 +82,8 @@ export type ProductFormProps = {
   loadingProductAction: boolean;
   setGalleryItemId: React.Dispatch<React.SetStateAction<string>>;
   galleryItemId: string;
-  wholesaleForm: WholesaleTypes[];
-  setWholesaleForm: React.Dispatch<React.SetStateAction<WholesaleTypes[]>>;
+  wholesaleForm: WholesaleDataType;
+  setWholesaleForm: React.Dispatch<React.SetStateAction<WholesaleDataType>>;
   thresholdData: ThresholdDataType;
   setThresholdData: React.Dispatch<React.SetStateAction<ThresholdDataType>>;
 };

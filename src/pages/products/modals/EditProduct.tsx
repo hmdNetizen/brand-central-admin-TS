@@ -27,7 +27,7 @@ import { ContentContainer } from "src/utilityStyles/pagesUtilityStyles";
 import { InitialStateCheckedTypes, ThresholdStateTypes } from "./data/types";
 import { SelectChangeEvent } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
-import { ThresholdDataType } from "../utils/types";
+import { ThresholdDataType, WholesaleDataType } from "../utils/types";
 
 type EditProductProps = {
   openEditProduct: boolean;
@@ -75,7 +75,7 @@ const EditProduct = (props: EditProductProps) => {
   const [imagePreview, setImagePreview] = useState<string | undefined>();
   const [productSizeForm, setProductSizeForm] =
     useState<ProductSizeTypes[]>(initialProductSize);
-  const [wholesaleForm, setWholesaleForm] = useState<WholesaleTypes[]>(
+  const [wholesaleForm, setWholesaleForm] = useState<WholesaleDataType>(
     initialProductWholesale
   );
   const [thresholdData, setThresholdData] = useState<ThresholdDataType>(
@@ -470,7 +470,7 @@ const EditProduct = (props: EditProductProps) => {
             ? customMeasurement
             : productMeasurement,
         allowProductWholesale,
-        productWholesale: wholesaleForm.map((wholesale) => ({
+        productWholesale: wholesaleForm.productWholesale.map((wholesale) => ({
           percentage: Number(wholesale.percentage),
           quantity: Number(wholesale.quantity),
         })),
@@ -515,9 +515,10 @@ const EditProduct = (props: EditProductProps) => {
             singleProduct[key as keyof ThresholdDataType];
         }
 
-        // if(key in wholesaleForm) {
-        //   newWholesaleForm[key] = singleProduct[key]
-        // }
+        if (key in wholesaleForm) {
+          newWholesaleForm[key as keyof WholesaleDataType] =
+            singleProduct[key as keyof WholesaleDataType];
+        }
       }
     }
   }, [singleProduct]);

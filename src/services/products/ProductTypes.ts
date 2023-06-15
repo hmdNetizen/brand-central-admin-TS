@@ -37,8 +37,8 @@ export type ThresholdTypes = {
 };
 
 export type WholesaleTypes = {
-  quantity: number;
-  percentage: number;
+  quantity: number | string;
+  percentage: number | string;
   _id?: string;
 };
 

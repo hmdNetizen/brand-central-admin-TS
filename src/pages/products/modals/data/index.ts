@@ -42,13 +42,15 @@ export const initialProductSize = [
   },
 ];
 
-export const initialProductWholesale = [
-  {
-    _id: nanoid(),
-    quantity: "",
-    percentage: "",
-  },
-];
+export const initialProductWholesale = {
+  productWholesale: [
+    {
+      _id: nanoid(),
+      quantity: "",
+      percentage: "",
+    },
+  ],
+};
 
 export const initialThresholdState = {
   threshold: {
