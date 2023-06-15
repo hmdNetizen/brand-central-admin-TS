@@ -37,16 +37,16 @@ export type ThresholdTypes = {
 };
 
 export type WholesaleTypes = {
-  quantity: number | string;
-  percentage: number | string;
-  _id?: string;
+  quantity: number;
+  percentage: number;
+  _id: string;
 };
 
 export type ProductSizeTypes = {
   name: string;
-  quantity: number | string;
-  price: number | string;
-  _id?: string;
+  quantity: number;
+  price: number;
+  _id: string;
 };
 
 export type ProductTypes = {
@@ -115,6 +115,9 @@ export type ProductRequestPayloadTypes<T> = {
   dataset: T;
 };
 
+type WholesaleExcerpt = Pick<WholesaleTypes, "percentage" | "quantity">;
+type ProductSizeExcerpt = Pick<ProductSizeTypes, "name" | "price" | "quantity">;
+
 export type ProductEditRequestPayload = {
   productName: string;
   productType: string;
@@ -125,11 +128,11 @@ export type ProductEditRequestPayload = {
   subCategory: string;
   brandName: string;
   allowProductSizes: boolean;
-  productSize: ProductSizeTypes[];
+  productSize: ProductSizeExcerpt[];
   allowMeasurement: boolean;
   productMeasurement: string;
   allowProductWholesale: boolean;
-  productWholesale: WholesaleTypes[];
+  productWholesale: WholesaleExcerpt[];
   productStock: number;
   productDescription: string;
   shippingCategory: string;

@@ -51,8 +51,8 @@ export type ProductFormProps = {
   allowProductSizes: boolean;
   productMeasurement: string;
   productMeasurementError: string;
-  productSizeForm: ProductSizeTypes[];
-  setProductSizeForm: React.Dispatch<React.SetStateAction<ProductSizeTypes[]>>;
+  productSizeForm: ProductSizeDataType;
+  setProductSizeForm: React.Dispatch<React.SetStateAction<ProductSizeDataType>>;
   sizeQuantityError: string;
   sizeNameError: string;
   sizePriceError: string;
@@ -89,11 +89,11 @@ export type ProductFormProps = {
 };
 
 export type ProductSizeFormProps = {
-  productSizeForm: ProductSizeTypes[];
+  productSizeForm: ProductSizeDataType;
   sizeNameError: string;
   sizeQuantityError: string;
   sizePriceError: string;
-  setProductSizeForm: React.Dispatch<React.SetStateAction<ProductSizeTypes[]>>;
+  setProductSizeForm: React.Dispatch<React.SetStateAction<ProductSizeDataType>>;
 };
 
 export type ThresholdDataType = {
@@ -102,4 +102,8 @@ export type ThresholdDataType = {
 
 export type WholesaleDataType = {
   productWholesale: WholesaleTypes[];
+};
+
+export type ProductSizeDataType = {
+  productSize: ProductSizeTypes[];
 };

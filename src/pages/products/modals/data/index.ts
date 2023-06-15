@@ -33,21 +33,23 @@ export const initialStateChecked = {
   isThresholdActive: false,
 };
 
-export const initialProductSize = [
-  {
-    _id: nanoid(),
-    name: "",
-    price: "",
-    quantity: "",
-  },
-];
+export const initialProductSize = {
+  productSize: [
+    {
+      _id: nanoid(),
+      name: "",
+      price: Number(""),
+      quantity: Number(""),
+    },
+  ],
+};
 
 export const initialProductWholesale = {
   productWholesale: [
     {
       _id: nanoid(),
-      quantity: "",
-      percentage: "",
+      quantity: Number(""),
+      percentage: Number(""),
     },
   ],
 };

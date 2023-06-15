@@ -27,7 +27,11 @@ import { ContentContainer } from "src/utilityStyles/pagesUtilityStyles";
 import { InitialStateCheckedTypes, ThresholdStateTypes } from "./data/types";
 import { SelectChangeEvent } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
-import { ThresholdDataType, WholesaleDataType } from "../utils/types";
+import {
+  ProductSizeDataType,
+  ThresholdDataType,
+  WholesaleDataType,
+} from "../utils/types";
 
 type EditProductProps = {
   openEditProduct: boolean;
@@ -74,7 +78,7 @@ const EditProduct = (props: EditProductProps) => {
   const [galleryItemId, setGalleryItemId] = useState("");
   const [imagePreview, setImagePreview] = useState<string | undefined>();
   const [productSizeForm, setProductSizeForm] =
-    useState<ProductSizeTypes[]>(initialProductSize);
+    useState<ProductSizeDataType>(initialProductSize);
   const [wholesaleForm, setWholesaleForm] = useState<WholesaleDataType>(
     initialProductWholesale
   );
@@ -459,7 +463,7 @@ const EditProduct = (props: EditProductProps) => {
         subCategory: subCategory ? subCategory : "N/A",
         brandName: brandName === "Others" ? customBrandName : brandName,
         allowProductSizes,
-        productSize: productSizeForm.map((size) => ({
+        productSize: productSizeForm.productSize.map((size) => ({
           name: size.name,
           price: Number(size.price),
           quantity: Number(size.quantity),
@@ -503,7 +507,8 @@ const EditProduct = (props: EditProductProps) => {
     if (singleProduct) {
       let newProductDetails = { ...initialState };
       let newThresholdState = { ...initialThresholdState };
-      let newWholesaleForm = { ...wholesaleForm };
+      let newWholesaleForm = { ...initialProductWholesale };
+      let newProductSize = { ...initialProductSize };
 
       for (const key in singleProduct) {
         if (key in productDetails) {

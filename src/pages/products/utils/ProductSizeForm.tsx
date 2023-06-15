@@ -28,34 +28,36 @@ const ProductSizeForm = (props: ProductSizeFormProps) => {
   ): void => {
     const { name, value } = event.target;
     setProductSizeForm((prevForms) => {
-      const updatedForms = [...prevForms];
+      const updatedForms = [...prevForms.productSize];
       updatedForms[index!] = {
         ...updatedForms[index!],
         [name]: value,
       };
-      return updatedForms;
+      return { productSize: updatedForms };
     });
   };
 
   const handleAddNewProductSize = () => {
-    setProductSizeForm((prevForms) => [
-      ...prevForms,
-      { quantity: "", price: "", name: "", _id: nanoid() },
-    ]);
+    setProductSizeForm((prevForms) => ({
+      productSize: [
+        ...prevForms.productSize,
+        { quantity: Number(""), price: Number(""), name: "", _id: nanoid() },
+      ],
+    }));
   };
 
   const handleRemoveForm = (id: string) => {
-    if (productSizeForm.length === 1) return;
-    const newProductSize = productSizeForm.filter(
+    if (productSizeForm.productSize.length === 1) return;
+    const newProductSize = productSizeForm.productSize.filter(
       (productSize) => productSize._id !== id
     );
 
-    setProductSizeForm(newProductSize);
+    setProductSizeForm({ productSize: newProductSize });
   };
 
   return (
     <Grid item container justifyContent="center" style={{ marginTop: "2rem" }}>
-      {productSizeForm.map((productSize, index) => (
+      {productSizeForm.productSize.map((productSize, index) => (
         <Grid
           item
           container

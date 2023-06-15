@@ -94,7 +94,7 @@ const ProductWholesaleForm = (props: ProductWholesaleFormProps) => {
     setWholesaleForm((prevForms) => ({
       productWholesale: [
         ...prevForms.productWholesale,
-        { percentage: 0, quantity: 0, _id: nanoid() },
+        { percentage: Number(""), quantity: Number(""), _id: nanoid() },
       ],
     }));
 
