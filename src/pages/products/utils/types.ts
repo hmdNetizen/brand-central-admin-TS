@@ -33,6 +33,7 @@ export type ProductFormProps = {
   brandName: string;
   brandNameError: string;
   customBrandName: string;
+  setCustomBrandName: React.Dispatch<React.SetStateAction<string>>;
   priceCode1: string;
   priceCode1Error: string;
   priceCode2: string;
@@ -60,6 +61,7 @@ export type ProductFormProps = {
   setWholesaleQuantityError: React.Dispatch<React.SetStateAction<string>>;
   allowMeasurement: boolean;
   customMeasurement: string;
+  setCustomMeasurement: React.Dispatch<React.SetStateAction<string>>;
   customMeasurementError: string;
   wholesalePercentageDiscountError: string;
   setWholesalePercentageDiscountError: React.Dispatch<

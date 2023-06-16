@@ -219,7 +219,7 @@ const EditProductForm = (props: ProductFormProps) => {
               name="customBrandName"
               value={props.customBrandName}
               placeholder="Enter Brand Name"
-              onChange={props.onInputChange}
+              onChange={(event) => props.setCustomBrandName(event.target.value)}
               autoFocus={props.brandName === "Others"}
             />
           </Grid>
@@ -524,7 +524,9 @@ const EditProductForm = (props: ProductFormProps) => {
                   name="customMeasurement"
                   value={props.customMeasurement}
                   placeholder="Enter Unit"
-                  onChange={props.onInputChange}
+                  onChange={(event) =>
+                    props.setCustomMeasurement(event.target.value)
+                  }
                   error={props.customMeasurementError}
                 />
               </Grid>

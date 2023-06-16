@@ -24,7 +24,11 @@ import {
 } from "./data";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { ContentContainer } from "src/utilityStyles/pagesUtilityStyles";
-import { InitialStateCheckedTypes, ThresholdStateTypes } from "./data/types";
+import {
+  InitialStateCheckedTypes,
+  ProductStateTypes,
+  ThresholdStateTypes,
+} from "./data/types";
 import { SelectChangeEvent } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
 import {
@@ -58,15 +62,14 @@ const EditProduct = (props: EditProductProps) => {
   );
   const brands = useTypedSelector((state) => state.brands.brands);
 
-  //   const { uploadedFile } = useSelector((state) => state.common);
-
   const { updateProduct } = useActions();
 
   //   MEDIA QUERIES
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
 
-  const [productDetails, setProductDetails] = useState(initialState);
+  const [productDetails, setProductDetails] =
+    useState<ProductStateTypes>(initialState);
 
   //   CHECKBOXES STATES
   const [optionChecked, setOptionChecked] =
@@ -85,6 +88,8 @@ const EditProduct = (props: EditProductProps) => {
   const [thresholdData, setThresholdData] = useState<ThresholdDataType>(
     initialThresholdState
   );
+  const [customBrandName, setCustomBrandName] = useState("");
+  const [customMeasurement, setCustomMeasurement] = useState("");
 
   const {
     threshold: { isThresholdActive, maximumQuantity },
@@ -119,6 +124,14 @@ const EditProduct = (props: EditProductProps) => {
 
   const [filteredSubCategory, setFilteredSubCategory] = useState(subCategories);
 
+  const handleFilter = (value: string) => {
+    const newSubCategories = [...subCategories].filter((subCategory) =>
+      subCategory.category.toLowerCase().includes(value.toLowerCase())
+    );
+
+    setFilteredSubCategory(newSubCategories);
+  };
+
   const {
     productName,
     productUPC,
@@ -127,15 +140,9 @@ const EditProduct = (props: EditProductProps) => {
     category,
     subCategory,
     brandName,
-    customBrandName,
-    name,
-    quantity,
-    price,
-    wholesaleQuantity,
     productStock,
     productDescription,
     productMeasurement,
-    customMeasurement,
     priceCode1,
     priceCode2,
     priceCode3,
@@ -146,14 +153,6 @@ const EditProduct = (props: EditProductProps) => {
 
   const { allowProductSizes, allowProductWholesale, allowMeasurement } =
     optionChecked;
-
-  const handleFilter = (value: string) => {
-    const newSubCategories = [...subCategories].filter((subCategory) =>
-      subCategory.category.toLowerCase().includes(value.toLowerCase())
-    );
-
-    setFilteredSubCategory(newSubCategories);
-  };
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -413,30 +412,6 @@ const EditProduct = (props: EditProductProps) => {
       }
     }
 
-    if (allowProductSizes) {
-      if (!name.trim()) {
-        setSizeNameError("Enter size name for product");
-        return;
-      }
-
-      if (quantity.trim() === "") {
-        setSizeQuantityError("Enter size quantity for product");
-        return;
-      }
-
-      if (price.trim() === "") {
-        setSizePriceError("Enter size price for product");
-        return;
-      }
-    }
-
-    if (allowProductWholesale) {
-      if (wholesaleQuantity.trim() === "") {
-        setWholesaleQuantityError("Enter wholesale quantity for product");
-        return;
-      }
-    }
-
     if (allowMeasurement) {
       if (!productMeasurement) {
         setProductMeasurementError("Select a measurement for product");
@@ -508,22 +483,56 @@ const EditProduct = (props: EditProductProps) => {
       let newProductDetails = { ...initialState };
       let newThresholdState = { ...initialThresholdState };
       let newWholesaleForm = { ...initialProductWholesale };
-      let newProductSize = { ...initialProductSize };
+      let newProductSizeForm = { ...initialProductSize };
 
       for (const key in singleProduct) {
         if (key in productDetails) {
-          // newProductDetails[key] = singleProduct[key]
+          // @ts-ignore
+          newProductDetails[key as keyof ProductStateTypes] =
+            singleProduct[key as keyof ProductStateTypes];
+
+          if (key === "category") {
+            newProductDetails[key] = singleProduct.category.toLowerCase();
+          }
+
+          setProductDetails(newProductDetails);
+        }
+
+        if (
+          key === "brandName" &&
+          brands
+            .map((brand) => capitalizeFirstLetters(brand.name))
+            .indexOf(capitalizeFirstLetters(singleProduct.brandName)) === -1
+        ) {
+          setCustomBrandName(singleProduct.brandName);
         }
 
         if (key in thresholdData) {
           newThresholdState[key as keyof ThresholdDataType] =
             singleProduct[key as keyof ThresholdDataType];
+
+          setThresholdData(newThresholdState);
         }
 
         if (key in wholesaleForm) {
           newWholesaleForm[key as keyof WholesaleDataType] =
             singleProduct[key as keyof WholesaleDataType];
+
+          setWholesaleForm(newWholesaleForm);
         }
+
+        if (key in productSizeForm) {
+          newProductSizeForm[key as keyof ProductSizeDataType] =
+            singleProduct[key as keyof ProductSizeDataType];
+
+          setProductSizeForm(newProductSizeForm);
+        }
+
+        setImagePreview(singleProduct.featuredImage);
+        setPreviews(singleProduct.productGalleryImages);
+
+        //   This is for populating the sub category when the component mounts.
+        handleFilter(singleProduct.category);
       }
     }
   }, [singleProduct]);
@@ -610,6 +619,12 @@ const EditProduct = (props: EditProductProps) => {
     setSelectedFile("");
   };
 
+  const handleCloseGallery = () => {
+    setOpenProductGallery(false);
+    setPreviews([]);
+    setSelectedFile("");
+  };
+
   return (
     <ShowDialog
       openModal={openEditProduct}
@@ -648,7 +663,9 @@ const EditProduct = (props: EditProductProps) => {
           category={category}
           categoryError={categoryError}
           customBrandName={customBrandName}
+          setCustomBrandName={setCustomBrandName}
           customMeasurement={customMeasurement}
+          setCustomMeasurement={setCustomMeasurement}
           customMeasurementError={customMeasurementError}
           filteredSubCategory={filteredSubCategory}
           galleryItemId={galleryItemId}
@@ -722,7 +739,7 @@ const EditProduct = (props: EditProductProps) => {
           setPreviews={setPreviews}
           setGalleryItemId={setGalleryItemId}
           galleryItemId={galleryItemId}
-          onClose={handleClose}
+          onClose={handleCloseGallery}
         />
       </ContentContainer>
     </ShowDialog>
