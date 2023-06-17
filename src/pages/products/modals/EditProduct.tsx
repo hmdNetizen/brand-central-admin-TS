@@ -499,6 +499,16 @@ const EditProduct = (props: EditProductProps) => {
             newProductDetails[key] = singleProduct.subCategory.toLowerCase();
           }
 
+          if (
+            key === "brandName" &&
+            brands
+              .map((brand) => capitalizeFirstLetters(brand.name))
+              .indexOf(capitalizeFirstLetters(singleProduct.brandName)) === -1
+          ) {
+            newProductDetails[key] = "Others";
+            setCustomBrandName(singleProduct.brandName);
+          }
+
           setProductDetails(newProductDetails);
         }
 

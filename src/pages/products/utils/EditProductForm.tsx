@@ -182,7 +182,7 @@ const EditProductForm = (props: ProductFormProps) => {
             )}
             name="subCategory"
             value={props.subCategory}
-            onChange={props.onSelectChange}
+            onChange={handleSelectChange}
             label="Sub Category"
             placeholder="Select Sub Category"
             errorMessage={props.subCategoryError}
