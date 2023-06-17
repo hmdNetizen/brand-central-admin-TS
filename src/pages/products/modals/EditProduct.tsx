@@ -495,6 +495,10 @@ const EditProduct = (props: EditProductProps) => {
             newProductDetails[key] = singleProduct.category.toLowerCase();
           }
 
+          if (key === "subCategory") {
+            newProductDetails[key] = singleProduct.subCategory.toLowerCase();
+          }
+
           setProductDetails(newProductDetails);
         }
 
