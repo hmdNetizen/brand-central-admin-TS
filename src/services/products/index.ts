@@ -306,7 +306,7 @@ export const updateProductGallery = createAsyncThunk(
   ) => {
     const { productId, setOpenProductGallery, fields } = details;
     try {
-      const { data, status } = await axios.put(
+      const { data, status } = await axios.patch(
         `/api/products/${productId}/product-gallery`,
         {
           productGalleryImages: fields,
