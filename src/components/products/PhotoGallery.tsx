@@ -13,6 +13,7 @@ import { StyledButton, StyledCloseIcon } from "./styles";
 import { PhotoGalleryProps } from "./types";
 import ShowDialog from "src/utils/ShowDialog";
 import { useActions } from "src/hooks/useActions";
+import { StyledCircularProgress } from "src/utilityStyles/pagesUtilityStyles";
 
 const PhotoGallery = (props: PhotoGalleryProps) => {
   const theme = useTheme();
@@ -135,7 +136,7 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
               disableRipple
               onClick={handleSaveProductImages}
             >
-              Save
+              {uploadingImage ? <StyledCircularProgress /> : "Save"}
             </StyledButton>
           </Grid>
           <Grid item container justifyContent="center">
