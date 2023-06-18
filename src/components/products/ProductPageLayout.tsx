@@ -54,6 +54,9 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
   const totalProducts = useTypedSelector(
     (state) => state.products.totalProducts
   );
+  const singleProduct = useTypedSelector(
+    (state) => state.products.singleProduct
+  );
   const loadingProductActivation = useTypedSelector(
     (state) => state.products.loadingProductActivation
   );
@@ -155,6 +158,7 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
         setGalleryItemId={setGalleryItemId}
         galleryItemId={galleryItemId}
         onClose={handleClose}
+        productId={singleProduct?._id!}
       />
       <CustomLoadingDialog
         loading={loadingProductActivation}

@@ -757,6 +757,7 @@ const EditProduct = (props: EditProductProps) => {
           setGalleryItemId={setGalleryItemId}
           galleryItemId={galleryItemId}
           onClose={handleCloseGallery}
+          productId={singleProduct?._id!}
         />
       </ContentContainer>
     </ShowDialog>

@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import { nanoid } from "@reduxjs/toolkit";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import GalleryItem from "./GalleryItem";
@@ -11,12 +12,14 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { StyledButton, StyledCloseIcon } from "./styles";
 import { PhotoGalleryProps } from "./types";
 import ShowDialog from "src/utils/ShowDialog";
-import { nanoid } from "@reduxjs/toolkit";
+import { useActions } from "src/hooks/useActions";
 
 const PhotoGallery = (props: PhotoGalleryProps) => {
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
+
+  const { updateProductGallery } = useActions();
 
   const {
     openProductGallery,
@@ -28,6 +31,7 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
     setGalleryItemId,
     galleryItemId,
     onClose,
+    productId,
   } = props;
 
   const uploadingImage = useTypedSelector(
@@ -47,6 +51,17 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
   const handleRemove = (id: string) => {
     const newPreviews = previews.filter((preview) => preview.id !== id);
     setPreviews(newPreviews);
+  };
+
+  const handleSaveProductImages = () => {
+    const photoGallery = previews
+      .filter((preview) => preview.isUploaded)
+      .map((item) => item.url);
+    updateProductGallery({
+      fields: photoGallery,
+      productId,
+      setOpenProductGallery,
+    });
   };
 
   useEffect(() => {
@@ -118,7 +133,7 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
               variant="contained"
               startIcon={<DoneAllIcon />}
               disableRipple
-              onClick={() => setOpenProductGallery(false)}
+              onClick={handleSaveProductImages}
             >
               Save
             </StyledButton>
