@@ -78,6 +78,9 @@ const EditProduct = (props: EditProductProps) => {
   const [openProductGallery, setOpenProductGallery] = useState(false);
   const [previews, setPreviews] = useState<PhotoGalleryTypes[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | string>("");
+  const [selectedGalleryFile, setSelectedGalleryFile] = useState<File | string>(
+    ""
+  );
   const [galleryItemId, setGalleryItemId] = useState("");
   const [imagePreview, setImagePreview] = useState<string | undefined>();
   const [productSizeForm, setProductSizeForm] =
@@ -748,8 +751,8 @@ const EditProduct = (props: EditProductProps) => {
           openProductGallery={openProductGallery}
           setOpenProductGallery={setOpenProductGallery}
           previews={previews}
-          selectedFile={selectedFile}
-          setSelectedFile={setSelectedFile}
+          selectedFile={selectedGalleryFile}
+          setSelectedFile={setSelectedGalleryFile}
           setPreviews={setPreviews}
           setGalleryItemId={setGalleryItemId}
           galleryItemId={galleryItemId}

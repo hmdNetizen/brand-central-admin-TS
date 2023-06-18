@@ -88,20 +88,6 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
     fetchAllBrands();
   }, []);
 
-  useEffect(() => {
-    if (!selectedFile || typeof selectedFile === "string") {
-      return;
-    }
-
-    const objectUrl = URL.createObjectURL(selectedFile);
-    setPreviews((prev) => [
-      { id: nanoid(), url: objectUrl, file: selectedFile, isUploaded: false },
-      ...prev,
-    ]);
-
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [selectedFile]);
-
   return (
     <Container container direction="column">
       <Grid item container pb={2}>

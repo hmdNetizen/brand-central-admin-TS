@@ -252,35 +252,82 @@ export const updateProduct = createAsyncThunk(
       // Checks whether the image being uploaded is a new or or existing one
       // NB: The new one has an object type while the existing one is a string.
 
-      if (typeof file === "object") {
-        const { data: uploadedFile } = await axios.post(
-          `/api/uploads/file`,
-          formData,
-          config
-        );
-        const uploadedResult = uploadedFile as UploadedFilePayload;
+      // if (typeof file === "object") {
+      //   const { data: uploadedFile } = await axios.post(
+      //     `/api/uploads/file`,
+      //     formData,
+      //     config
+      //   );
+      //   const uploadedResult = uploadedFile as UploadedFilePayload;
 
-        const { data, status } = await axios.put(`/api/products/${productId}`, {
-          ...dataset,
-          featuredImage: uploadedResult.url,
-          hasImage: true,
-        });
+      //   const { data, status } = await axios.put(`/api/products/${productId}`, {
+      //     ...dataset,
+      //     featuredImage: uploadedResult.url,
+      //     hasImage: true,
+      //   });
 
-        if (status === 200) setOpen(false);
-        const result = data as { data: ProductTypes };
+      //   if (status === 200) setOpen(false);
+      //   const result = data as { data: ProductTypes };
 
-        return result.data;
+      //   return result.data;
+      // } else {
+      //   const { data, status } = await axios.put(
+      //     `/api/products/${productId}`,
+      //     dataset
+      //   );
+
+      //   if (status === 200) setOpen(false);
+      //   const result = data as { data: ProductTypes };
+
+      //   return result.data;
+      // }
+      console.log(details);
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        const { data, status } = await axios.put(
-          `/api/products/${productId}`,
-          dataset
-        );
-
-        if (status === 200) setOpen(false);
-        const result = data as { data: ProductTypes };
-
-        return result.data;
+        return thunkAPI.rejectWithValue("Something went wrong");
       }
+    }
+  }
+);
+
+export const updateProductGallery = createAsyncThunk(
+  "update-gallery",
+  async (
+    details: {
+      productId: string;
+      setOpenProductGallery: React.Dispatch<React.SetStateAction<boolean>>;
+      fields: string[];
+    },
+    thunkAPI
+  ) => {
+    const { productId, setOpenProductGallery, fields } = details;
+    try {
+      const { data, status } = await axios.put(
+        `/api/products/${productId}/product-gallery`,
+        {
+          productGalleryImages: fields,
+        }
+      );
+      const result = data as {
+        data: { productGalleryImages: string[]; productId: string };
+      };
+
+      if (status === 200) {
+        setOpenProductGallery(false);
+      }
+
+      return {
+        productGalleryImages: result.data.productGalleryImages.map((item) => ({
+          id: result.data.productId,
+          url: item,
+          isUploaded: true,
+        })),
+        productId: result.data.productId,
+      };
     } catch (error: AxiosError | any) {
       if (error.response) {
         return thunkAPI.rejectWithValue(error.response.data.error);
@@ -465,25 +512,48 @@ const productsSlice = createSlice({
           state.error = action.payload;
         }
       });
+    // builder
+    //   .addCase(updateProduct.pending, (state) => {
+    //     state.loadingProductAction = true;
+    //   })
+    //   .addCase(updateProduct.fulfilled, (state, action) => {
+    //     state.loadingProductAction = false;
+    //     state.products = state.products.map((product) =>
+    //       product._id === action.payload._id
+    //         ? { ...product, ...action.payload }
+    //         : product
+    //     );
+
+    //     toast.success("Product successfully updated", {
+    //       position: "top-center",
+    //       hideProgressBar: true,
+    //     });
+    //   })
+    //   .addCase(updateProduct.rejected, (state, action) => {
+    //     state.loadingProductAction = false;
+    //     if (typeof action.payload === "string" || action.payload === null) {
+    //       state.error = action.payload;
+    //     }
+    //   });
     builder
-      .addCase(updateProduct.pending, (state) => {
-        state.loadingProductAction = true;
+      .addCase(updateProductGallery.pending, (state) => {
+        state.uploadingImage = true;
       })
-      .addCase(updateProduct.fulfilled, (state, action) => {
-        state.loadingProductAction = false;
+      .addCase(updateProductGallery.fulfilled, (state, action) => {
+        state.uploadingImage = false;
         state.products = state.products.map((product) =>
-          product._id === action.payload._id
-            ? { ...product, ...action.payload }
+          product._id === action.payload.productId
+            ? {
+                ...product,
+                productGalleryImages: action.payload.productGalleryImages,
+              }
             : product
         );
 
-        toast.success("Product successfully updated", {
-          position: "top-center",
-          hideProgressBar: true,
-        });
+        state.error = null;
       })
-      .addCase(updateProduct.rejected, (state, action) => {
-        state.loadingProductAction = false;
+      .addCase(updateProductGallery.rejected, (state, action) => {
+        state.uploadingImage = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -11,6 +11,7 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { StyledButton, StyledCloseIcon } from "./styles";
 import { PhotoGalleryProps } from "./types";
 import ShowDialog from "src/utils/ShowDialog";
+import { nanoid } from "@reduxjs/toolkit";
 
 const PhotoGallery = (props: PhotoGalleryProps) => {
   const theme = useTheme();
@@ -47,6 +48,20 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
     const newPreviews = previews.filter((preview) => preview.id !== id);
     setPreviews(newPreviews);
   };
+
+  useEffect(() => {
+    if (!selectedFile || typeof selectedFile === "string") {
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(selectedFile);
+    setPreviews((prev) => [
+      { id: nanoid(), url: objectUrl, file: selectedFile, isUploaded: false },
+      ...prev,
+    ]);
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedFile]);
 
   return (
     <ShowDialog
