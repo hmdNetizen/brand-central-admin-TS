@@ -551,6 +551,11 @@ const productsSlice = createSlice({
         );
 
         state.error = null;
+
+        toast.success("Product gallery updated successfully", {
+          position: "top-center",
+          hideProgressBar: true,
+        });
       })
       .addCase(updateProductGallery.rejected, (state, action) => {
         state.uploadingImage = false;

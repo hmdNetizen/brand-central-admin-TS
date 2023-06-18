@@ -88,20 +88,22 @@ const GalleryItem = (props: GalleryItemProps) => {
             </span>
           )}
         </Grid>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={handleClick}
-          style={{ minWidth: 100 }}
-        >
-          {loading && galleryItemId === item.id ? (
-            <StyledCircularProgress
-              style={{ width: 15, height: 15, margin: "0 auto" }}
-            />
-          ) : (
-            "Click to upload"
-          )}
-        </Button>
+        {!item.isUploaded && (
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleClick}
+            style={{ minWidth: 100 }}
+          >
+            {loading && galleryItemId === item.id ? (
+              <StyledCircularProgress
+                style={{ width: 15, height: 15, margin: "0 auto" }}
+              />
+            ) : (
+              "Click to upload"
+            )}
+          </Button>
+        )}
       </Grid>
     </Grid>
   );
