@@ -468,10 +468,7 @@ const EditProduct = (props: EditProductProps) => {
         },
         productGalleryImages: previews
           .filter((preview) => preview?.isUploaded)
-          .map((previewItem) => ({
-            id: previewItem.id, //doesn't make any different (For TS purpose)
-            url: previewItem.url,
-          })),
+          .map((previewItem) => previewItem.url),
         priceCode1: !isNaN(Number(priceCode1)) ? Number(priceCode1) : 0,
         priceCode2: !isNaN(Number(priceCode2)) ? Number(priceCode2) : 0,
         priceCode3: !isNaN(Number(priceCode3)) ? Number(priceCode3) : 0,
@@ -546,7 +543,13 @@ const EditProduct = (props: EditProductProps) => {
         }
 
         setImagePreview(singleProduct.featuredImage);
-        setPreviews(singleProduct.productGalleryImages);
+        setPreviews(
+          singleProduct.productGalleryImages.map((item) => ({
+            id: nanoid(),
+            url: item,
+            isUploaded: true,
+          }))
+        );
 
         //   This is for populating the sub category when the component mounts.
         handleFilter(singleProduct.category);
