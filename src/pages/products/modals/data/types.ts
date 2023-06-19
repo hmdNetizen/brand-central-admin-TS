@@ -28,25 +28,6 @@ export type InitialStateTypes = {
   shippingCategory: "";
 };
 
-// export type ProductStateTypes = Pick<
-//   ProductTypes,
-//   | "productName"
-//   | "SRP"
-//   | "brandName"
-//   | "category"
-//   | "itemCode"
-//   | "priceCode1"
-//   | "priceCode2"
-//   | "priceCode3"
-//   | "priceCode4"
-//   | "productDescription"
-//   | "productMeasurement"
-//   | "shippingCategory"
-//   | "productStock"
-//   | "productUPC"
-//   | "units"
-// >;
-
 export type ProductStateTypes = {
   productName: string;
   SRP: string;
