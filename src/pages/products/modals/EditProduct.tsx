@@ -9,11 +9,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useActions } from "src/hooks/useActions";
 import { capitalizeFirstLetters } from "src/lib/helpers";
 import PhotoGallery from "src/components/products/PhotoGallery";
-import {
-  PhotoGalleryTypes,
-  ProductSizeTypes,
-  WholesaleTypes,
-} from "src/services/products/ProductTypes";
+import { PhotoGalleryTypes } from "src/services/products/ProductTypes";
 import EditProductForm from "../utils/EditProductForm";
 import {
   initialProductSize,
@@ -24,11 +20,7 @@ import {
 } from "./data";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { ContentContainer } from "src/utilityStyles/pagesUtilityStyles";
-import {
-  InitialStateCheckedTypes,
-  ProductStateTypes,
-  ThresholdStateTypes,
-} from "./data/types";
+import { InitialStateCheckedTypes, ProductStateTypes } from "./data/types";
 import { SelectChangeEvent } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
 import {
@@ -556,81 +548,6 @@ const EditProduct = (props: EditProductProps) => {
       }
     }
   }, [singleProduct]);
-
-  //   useEffect(() => {
-  //     if (singleProduct) {
-  //       let newProductDetails = { ...initialState };
-  //       let newOptionChecked = { ...initialStateChecked };
-  //       for (const key in singleProduct) {
-  //         if (key in productDetails) {
-  //           newProductDetails[key] = singleProduct[key];
-
-  //           if (key === "category") {
-  //             newProductDetails[key] = singleProduct.category.toLowerCase();
-  //           }
-
-  //           if (key === "subCategory") {
-  //             newProductDetails[key] = singleProduct.subCategory.toLowerCase();
-  //           }
-
-  //           if (
-  //             key === "brandName" &&
-  //             brands
-  //               .map((brand) => capitalizeFirstLetters(brand.name))
-  //               .indexOf(capitalizeFirstLetters(singleProduct.brandName)) === -1
-  //           ) {
-  //             newProductDetails[key] = "Others";
-  //             newProductDetails["customBrandName"] = singleProduct.brandName;
-  //           }
-
-  //           setProductDetails(newProductDetails);
-  //         } else {
-  //           setProductDetails(newProductDetails);
-  //         }
-  //         if (key in optionChecked) {
-  //           // @ts-ignore
-  //           newOptionChecked[key as keyof ProductCheckedTypes] =
-  //             singleProduct[key as keyof ProductCheckedTypes];
-  //           setOptionChecked(newOptionChecked);
-  //         }
-
-  //         // setProductDetails({
-  //         //   ...newProductDetails,
-  //         //   maximumQuantity: singleProduct["threshold"].maximumQuantity,
-  //         // });
-
-  //         optionChecked.isThresholdActive =
-  //           singleProduct["threshold"].isThresholdActive;
-  //         newProductDetails.maximumQuantity =
-  //           singleProduct["threshold"].maximumQuantity;
-
-  //         setOptionChecked(optionChecked);
-  //         setProductDetails(newProductDetails);
-  //       }
-
-  //       setFeaturedImage(singleProduct.featuredImage);
-  //       setGalleryImages(singleProduct.productGalleryImages);
-
-  //       //   This is for populating the sub category when the component mounts.
-  //       handleFilter(singleProduct.category);
-  //     }
-
-  //     // CLEAR ALL ERRORS WHEN COMPONENT MOUNTS
-  //     setProductNameError("");
-  //     setProductUPCError("");
-  //     setUnitError("");
-  //     setCategoryError("");
-  //     setSubCategoryError("");
-  //     setBrandNameError("");
-  //     setProductStockError("");
-  //     setPriceCode1Error("");
-  //     setPriceCode2Error("");
-  //     setPriceCode3Error("");
-  //     setPriceCode4Error("");
-  //     setSRPError("");
-
-  //     // eslint-disable-next-line
-  //   }, [singleProduct]);
 
   const handleClose = () => {
     setOpenEditProduct((prev) => !prev);
