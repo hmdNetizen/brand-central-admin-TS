@@ -59,7 +59,6 @@ export type ProductStateTypes = {
   priceCode3: string;
   priceCode4: string;
   productMeasurement: string;
-  customMeasurement: string;
   shippingCategory: string;
   productDescription: string;
   productStock: string;
