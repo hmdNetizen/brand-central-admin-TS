@@ -321,11 +321,7 @@ export const updateProductGallery = createAsyncThunk(
       }
 
       return {
-        productGalleryImages: result.data.productGalleryImages.map((item) => ({
-          id: result.data.productId,
-          url: item,
-          isUploaded: true,
-        })),
+        productGalleryImages: result.data.productGalleryImages,
         productId: result.data.productId,
       };
     } catch (error: AxiosError | any) {

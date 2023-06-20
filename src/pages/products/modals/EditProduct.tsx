@@ -520,28 +520,44 @@ const EditProduct = (props: EditProductProps) => {
           setThresholdData(newThresholdState);
         }
 
+        if (
+          key === "productGalleryImages" &&
+          singleProduct.productGalleryImages.length > 0
+        ) {
+          setPreviews(
+            singleProduct.productGalleryImages.map((item) => ({
+              id: nanoid(),
+              url: item,
+              isUploaded: true,
+            }))
+          );
+        }
+
         if (key in wholesaleForm) {
-          newWholesaleForm[key as keyof WholesaleDataType] =
-            singleProduct[key as keyof WholesaleDataType];
+          if (singleProduct.productWholesale.length === 0) {
+            setWholesaleForm(initialProductWholesale);
+          } else {
+            newWholesaleForm[key as keyof WholesaleDataType] =
+              singleProduct[key as keyof WholesaleDataType];
 
-          setWholesaleForm(newWholesaleForm);
+            setWholesaleForm(newWholesaleForm);
+          }
         }
 
-        if (key in productSizeForm) {
-          newProductSizeForm[key as keyof ProductSizeDataType] =
-            singleProduct[key as keyof ProductSizeDataType];
+        if (key === "productSize") {
+          if (singleProduct.productSize.length === 0) {
+            setProductSizeForm(initialProductSize);
+          } else {
+            newProductSizeForm[key as keyof ProductSizeDataType] =
+              singleProduct[key as keyof ProductSizeDataType];
 
-          setProductSizeForm(newProductSizeForm);
+            setProductSizeForm(newProductSizeForm);
+          }
         }
 
-        setImagePreview(singleProduct.featuredImage);
-        setPreviews(
-          singleProduct.productGalleryImages.map((item) => ({
-            id: nanoid(),
-            url: item,
-            isUploaded: true,
-          }))
-        );
+        if (key === "featuredImage") {
+          setImagePreview(singleProduct.featuredImage);
+        }
 
         //   This is for populating the sub category when the component mounts.
         handleFilter(singleProduct.category);
