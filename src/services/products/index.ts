@@ -252,35 +252,35 @@ export const updateProduct = createAsyncThunk(
       // Checks whether the image being uploaded is a new or or existing one
       // NB: The new one has an object type while the existing one is a string.
 
-      // if (typeof file === "object") {
-      //   const { data: uploadedFile } = await axios.post(
-      //     `/api/uploads/file`,
-      //     formData,
-      //     config
-      //   );
-      //   const uploadedResult = uploadedFile as UploadedFilePayload;
+      if (typeof file === "object") {
+        const { data: uploadedFile } = await axios.post(
+          `/api/uploads/file`,
+          formData,
+          config
+        );
+        const uploadedResult = uploadedFile as UploadedFilePayload;
 
-      //   const { data, status } = await axios.put(`/api/products/${productId}`, {
-      //     ...dataset,
-      //     featuredImage: uploadedResult.url,
-      //     hasImage: true,
-      //   });
+        const { data, status } = await axios.put(`/api/products/${productId}`, {
+          ...dataset,
+          featuredImage: uploadedResult.url,
+          hasImage: true,
+        });
 
-      //   if (status === 200) setOpen(false);
-      //   const result = data as { data: ProductTypes };
+        if (status === 200) setOpen(false);
+        const result = data as { data: ProductTypes };
 
-      //   return result.data;
-      // } else {
-      //   const { data, status } = await axios.put(
-      //     `/api/products/${productId}`,
-      //     dataset
-      //   );
+        return result.data;
+      } else {
+        const { data, status } = await axios.put(
+          `/api/products/${productId}`,
+          dataset
+        );
 
-      //   if (status === 200) setOpen(false);
-      //   const result = data as { data: ProductTypes };
+        if (status === 200) setOpen(false);
+        const result = data as { data: ProductTypes };
 
-      //   return result.data;
-      // }
+        return result.data;
+      }
       console.log(details);
     } catch (error: AxiosError | any) {
       if (error.response) {
