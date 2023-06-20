@@ -430,6 +430,7 @@ const EditProduct = (props: EditProductProps) => {
         itemCode,
         units,
         featuredImage: imagePreview ? imagePreview : "",
+        hasImage: imagePreview ? true : false,
         category: category ? category : "N/A",
         subCategory: subCategory ? subCategory : "N/A",
         brandName: brandName === "Others" ? customBrandName : brandName,
