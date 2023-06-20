@@ -71,7 +71,7 @@ export type ProductTypes = {
   productStock: number | string;
   featuredImage: string;
   hasImage: boolean;
-  productGalleryImages: PhotoGalleryTypes[];
+  productGalleryImages: string[];
   priceCode1: number | string;
   priceCode2: number | string;
   priceCode3: number | string;
@@ -137,8 +137,8 @@ export type ProductEditRequestPayload = {
   productDescription: string;
   shippingCategory: string;
   threshold: ThresholdTypes;
-  featuredImage?: string;
-  productGalleryImages: PhotoGalleryTypes[];
+  featuredImage: string;
+  productGalleryImages: string[];
   priceCode1: number;
   priceCode2: number;
   priceCode3: number;
