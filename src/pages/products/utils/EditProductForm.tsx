@@ -552,8 +552,10 @@ const EditProductForm = (props: ProductFormProps) => {
               color="secondary"
               disabled={props.loadingProductAction}
             >
-              {props.loadingProductAction && <StyledCircularProgress />} Update
-              Product
+              {props.loadingProductAction && (
+                <StyledCircularProgress style={{ width: 25, height: 25 }} />
+              )}{" "}
+              Update Product
             </SubmitButton>
           </Grid>
         </Grid>

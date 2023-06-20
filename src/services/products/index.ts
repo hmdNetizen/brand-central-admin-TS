@@ -508,29 +508,29 @@ const productsSlice = createSlice({
           state.error = action.payload;
         }
       });
-    // builder
-    //   .addCase(updateProduct.pending, (state) => {
-    //     state.loadingProductAction = true;
-    //   })
-    //   .addCase(updateProduct.fulfilled, (state, action) => {
-    //     state.loadingProductAction = false;
-    //     state.products = state.products.map((product) =>
-    //       product._id === action.payload._id
-    //         ? { ...product, ...action.payload }
-    //         : product
-    //     );
+    builder
+      .addCase(updateProduct.pending, (state) => {
+        state.loadingProductAction = true;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.loadingProductAction = false;
+        state.products = state.products.map((product) =>
+          product._id === action.payload._id
+            ? { ...product, ...action.payload }
+            : product
+        );
 
-    //     toast.success("Product successfully updated", {
-    //       position: "top-center",
-    //       hideProgressBar: true,
-    //     });
-    //   })
-    //   .addCase(updateProduct.rejected, (state, action) => {
-    //     state.loadingProductAction = false;
-    //     if (typeof action.payload === "string" || action.payload === null) {
-    //       state.error = action.payload;
-    //     }
-    //   });
+        toast.success("Product successfully updated", {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.loadingProductAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
     builder
       .addCase(updateProductGallery.pending, (state) => {
         state.uploadingImage = true;
