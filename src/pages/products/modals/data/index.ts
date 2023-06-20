@@ -30,7 +30,6 @@ export const initialStateChecked = {
   allowProductSizes: false,
   allowProductWholesale: false,
   allowMeasurement: false,
-  isThresholdActive: false,
 };
 
 export const initialProductSize = {

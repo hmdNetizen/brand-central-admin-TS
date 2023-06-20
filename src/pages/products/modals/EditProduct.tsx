@@ -433,21 +433,25 @@ const EditProduct = (props: EditProductProps) => {
         subCategory: subCategory ? subCategory : "N/A",
         brandName: brandName === "Others" ? customBrandName : brandName,
         allowProductSizes,
-        productSize: productSizeForm.productSize.map((size) => ({
-          name: size.name,
-          price: Number(size.price),
-          quantity: Number(size.quantity),
-        })),
+        productSize: allowProductSizes
+          ? productSizeForm.productSize.map((size) => ({
+              name: size.name,
+              price: Number(size.price),
+              quantity: Number(size.quantity),
+            }))
+          : [],
         allowMeasurement,
         productMeasurement:
           productMeasurement === "Custom"
             ? customMeasurement
             : productMeasurement,
         allowProductWholesale,
-        productWholesale: wholesaleForm.productWholesale.map((wholesale) => ({
-          percentage: Number(wholesale.percentage),
-          quantity: Number(wholesale.quantity),
-        })),
+        productWholesale: allowProductWholesale
+          ? wholesaleForm.productWholesale.map((wholesale) => ({
+              percentage: Number(wholesale.percentage),
+              quantity: Number(wholesale.quantity),
+            }))
+          : [],
         productStock: Number(productStock),
         productDescription,
         shippingCategory: shippingCategory
@@ -476,6 +480,7 @@ const EditProduct = (props: EditProductProps) => {
       let newThresholdState = { ...initialThresholdState };
       let newWholesaleForm = { ...initialProductWholesale };
       let newProductSizeForm = { ...initialProductSize };
+      let newOptionsChecked = { ...initialStateChecked };
 
       for (const key in singleProduct) {
         if (key in productDetails) {
@@ -520,6 +525,11 @@ const EditProduct = (props: EditProductProps) => {
           setThresholdData(newThresholdState);
         }
 
+        if (key in optionChecked) {
+          newOptionsChecked[key as keyof InitialStateCheckedTypes] =
+            singleProduct[key as keyof InitialStateCheckedTypes];
+        }
+
         if (
           key === "productGalleryImages" &&
           singleProduct.productGalleryImages.length > 0
@@ -555,9 +565,7 @@ const EditProduct = (props: EditProductProps) => {
           }
         }
 
-        if (key === "featuredImage") {
-          setImagePreview(singleProduct.featuredImage);
-        }
+        setImagePreview(singleProduct.featuredImage);
 
         //   This is for populating the sub category when the component mounts.
         handleFilter(singleProduct.category);
