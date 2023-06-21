@@ -518,6 +518,11 @@ const EditProduct = (props: EditProductProps) => {
             .indexOf(capitalizeFirstLetters(singleProduct.brandName)) === -1
         ) {
           setCustomBrandName(singleProduct.brandName);
+        } else {
+          setProductDetails((prev) => ({
+            ...prev,
+            brandName: singleProduct.brandName,
+          }));
         }
 
         if (key in thresholdData) {
@@ -530,6 +535,8 @@ const EditProduct = (props: EditProductProps) => {
         if (key in optionChecked) {
           newOptionsChecked[key as keyof InitialStateCheckedTypes] =
             singleProduct[key as keyof InitialStateCheckedTypes];
+
+          setOptionChecked(newOptionsChecked);
         }
 
         if (
