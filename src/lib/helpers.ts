@@ -122,3 +122,11 @@ export const productMeasurements = [
 ];
 
 export const shippingCategoryList = ["light", "medium", "heavy", "extra heavy"];
+
+export const isQuantityInMultiples = (customQuantity: string) => {
+  if (parseInt(customQuantity) !== 0 && parseInt(customQuantity) % 6 === 0) {
+    return true;
+  } else {
+    return false;
+  }
+};
