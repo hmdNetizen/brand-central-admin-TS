@@ -584,14 +584,14 @@ const EditProduct = (props: EditProductProps) => {
 
   const handleClose = () => {
     setOpenEditProduct((prev) => !prev);
-    setPreviews([]);
-    setImagePreview(undefined);
+    // setPreviews([]);
+    // setImagePreview(undefined);
     setSelectedFile("");
   };
 
   const handleCloseGallery = () => {
     setOpenProductGallery(false);
-    setPreviews([]);
+    // setPreviews([]);
     setSelectedFile("");
   };
 
@@ -710,7 +710,7 @@ const EditProduct = (props: EditProductProps) => {
           setGalleryItemId={setGalleryItemId}
           galleryItemId={galleryItemId}
           onClose={handleCloseGallery}
-          productId={singleProduct?._id!}
+          singleProduct={singleProduct!}
         />
       </ContentContainer>
     </ShowDialog>

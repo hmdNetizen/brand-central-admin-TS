@@ -44,5 +44,5 @@ export type PhotoGalleryProps = {
   setGalleryItemId: React.Dispatch<React.SetStateAction<string>>;
   galleryItemId: string;
   onClose: () => void;
-  productId: string;
+  singleProduct: ProductTypes;
 };

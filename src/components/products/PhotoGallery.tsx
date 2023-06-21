@@ -32,7 +32,7 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
     setGalleryItemId,
     galleryItemId,
     onClose,
-    productId,
+    singleProduct,
   } = props;
 
   const uploadingImage = useTypedSelector(
@@ -60,7 +60,7 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
       .map((item) => item.url);
     updateProductGallery({
       fields: photoGallery,
-      productId,
+      productId: singleProduct._id,
       setOpenProductGallery,
     });
   };
@@ -78,6 +78,18 @@ const PhotoGallery = (props: PhotoGalleryProps) => {
 
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
+
+  useEffect(() => {
+    if (singleProduct?.productGalleryImages.length > 0) {
+      const newPreviews = singleProduct.productGalleryImages.map((item) => ({
+        id: nanoid(),
+        url: item,
+        isUploaded: true,
+      }));
+
+      setPreviews(newPreviews);
+    }
+  }, [singleProduct]);
 
   return (
     <ShowDialog
