@@ -59,3 +59,18 @@ export const initialThresholdState = {
     maximumQuantity: 0,
   },
 };
+
+export const initialHighlightState = {
+  inFeatured: false,
+  inBestSellers: false,
+  inPopular: false,
+  inWeeklyOffer: false,
+};
+
+export const initialHighlightPriceCodes = {
+  priceCode1: "",
+  priceCode2: "",
+  priceCode3: "",
+  priceCode4: "",
+  minimumQuantity: 0,
+};
