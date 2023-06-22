@@ -21,6 +21,7 @@ import {
   PhotoGalleryTypes,
   ProductRequestPayloadTypes,
   ProductEditRequestPayload,
+  ProductHighlightRequestPayload,
 } from "./ProductTypes";
 
 type ProductQueryType = {
@@ -362,6 +363,30 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
+export const toggleProductHighlight = createAsyncThunk(
+  "toggle-highlights",
+  async (details: ProductHighlightRequestPayload, thunkAPI) => {
+    const { setOpenHighlight, productId, fields } = details;
+    try {
+      const { status, data } = await axios.put(
+        `/api/products/highlight/${productId}`,
+        fields
+      );
+
+      const result = data as { data: { data: ProductTypes } };
+
+      if (status === 200) {
+        setOpenHighlight(false);
+        // thunkAPI.dispatch(getSingleProduct(productId));
+      }
+
+      return result.data.data;
+    } catch (error) {
+      thunkAPI.rejectWithValue("Something went wrong. Try again");
+    }
+  }
+);
+
 const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -575,6 +600,29 @@ const productsSlice = createSlice({
         });
       })
       .addCase(deleteProduct.rejected, (state, action) => {
+        state.loadingProductAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+
+    builder
+      .addCase(toggleProductHighlight.pending, (state) => {
+        state.loadingProductAction = true;
+      })
+      .addCase(toggleProductHighlight.fulfilled, (state, action) => {
+        state.loadingProductAction = false;
+        state.products = state.products.map((product) =>
+          product._id === action.payload?._id
+            ? {
+                ...product,
+                highlight: action.payload.highlight,
+              }
+            : product
+        );
+        state.error = null;
+      })
+      .addCase(toggleProductHighlight.rejected, (state, action) => {
         state.loadingProductAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
