@@ -179,6 +179,22 @@ export type ProductsReturnedPayloadType = {
   };
 };
 
+export type ProductHighlightRequestPayload = {
+  productId: string;
+  setOpenHighlight: React.Dispatch<React.SetStateAction<boolean>>;
+  fields: {
+    inBestSellers: boolean;
+    inFeatured: boolean;
+    inWeeklyOffer: boolean;
+    inPopular: boolean;
+    newPriceCodeOne: number;
+    newPriceCodeTwo: number;
+    newPriceCodeThree: number;
+    newPriceCodeFour: number;
+    minimumQuantity: number;
+  };
+};
+
 export type DashboardProductType = Pick<
   ProductTypes,
   | "_id"
