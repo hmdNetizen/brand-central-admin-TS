@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ElementType } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -14,69 +14,29 @@ import CustomFormInput from "src/utils/CustomFormInput";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { toast } from "react-toastify";
 import { isQuantityInMultiples } from "src/lib/helpers";
+import {
+  SubmitButton,
+  CancelButton,
+  StyledCircularProgress,
+} from "src/utilityStyles/pagesUtilityStyles";
 
-const HighlightContainer = styled(Grid)(({ theme }) => ({
-  padding: "1rem 5rem 2rem",
+const HighlightContainer = styled(Grid)<{ component: ElementType }>(
+  ({ theme }) => ({
+    padding: "1rem 5rem 2rem",
 
-  [theme.breakpoints.down("md")]: {
-    padding: "1rem 2rem 2rem",
-  },
-  [theme.breakpoints.only("xs")]: {
-    padding: "1rem 1rem 2rem",
-  },
-}));
+    [theme.breakpoints.down("md")]: {
+      padding: "1rem 2rem 2rem",
+    },
+    [theme.breakpoints.only("xs")]: {
+      padding: "1rem 1rem 2rem",
+    },
+  })
+);
 
 const CloseIconButton = styled(IconButton)(({ theme }) => ({
   "&:hover": {
     "& .MuiSvgIcon-root": {
       color: theme.palette.error.main,
-    },
-  },
-}));
-
-const useStyles = makeStyles((theme) => ({
-  iconButton: {
-    "&.MuiIconButton-root": {},
-  },
-  submitButton: {
-    "&.MuiButton-root": {
-      width: 180,
-      fontSize: "1.6rem",
-      fontWeight: 400,
-      textTransform: "none",
-      borderRadius: 0,
-
-      "&:hover": {
-        background: theme.palette.secondary.light,
-      },
-
-      "&:active": {
-        background: theme.palette.secondary.dark,
-      },
-
-      "&:disabled": {
-        cursor: "not-allowed",
-        pointerEvents: "all !important",
-        background: theme.palette.secondary.light,
-        color: "#fff",
-        // color: (props) => (props.loading ? "#fff" : "inherit"),
-      },
-    },
-  },
-  cancelButton: {
-    "&.MuiButton-root": {
-      fontSize: "1.5rem",
-      textTransform: "none",
-      padding: ".5rem 2rem",
-      borderRadius: 0,
-      color: theme.palette.error.main,
-      background: theme.palette.common.lightRed,
-    },
-  },
-  loader: {
-    marginRight: "1rem",
-    "&.MuiCircularProgress-root": {
-      color: "#f2f2f2",
     },
   },
 }));
@@ -96,9 +56,14 @@ const initialPriceCodes = {
   minimumQuantity: 0,
 };
 
-const ProductHighlights = ({ openHighlight, setOpenHighlight }) => {
-  const classes = useStyles();
+type HighlightProps = {
+  openHighlight: boolean;
+  setOpenHighlight: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const ProductHighlights = (props: HighlightProps) => {
   const theme = useTheme();
+  const { openHighlight, setOpenHighlight } = props;
 
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
@@ -125,14 +90,16 @@ const ProductHighlights = ({ openHighlight, setOpenHighlight }) => {
   const { priceCode1, priceCode2, priceCode3, priceCode4, minimumQuantity } =
     priceCodesData;
 
-  const handleHighlightChecked = (event) => {
+  const handleHighlightChecked = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setHighlightChecked({
       ...highlightChecked,
       [event.target.name]: event.target.checked,
     });
   };
 
-  const handleProductHighlight = (event) => {
+  const handleProductHighlight = (event: React.FormEvent<Element>) => {
     event.preventDefault();
 
     const productName = singleProduct.productName;
@@ -215,7 +182,7 @@ const ProductHighlights = ({ openHighlight, setOpenHighlight }) => {
     setMinQuantityError("");
   };
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
     setPriceCodesData((prev) => ({ ...prev, [name]: value }));
@@ -272,6 +239,11 @@ const ProductHighlights = ({ openHighlight, setOpenHighlight }) => {
     }
   };
 
+  const handleClose = () => {
+    setOpenHighlight(false);
+    setCurrentProduct(null);
+  };
+
   useEffect(() => {
     if (Object.keys(singleProduct).length > 0) {
       const productHighlight = { ...initialState };
@@ -309,9 +281,9 @@ const ProductHighlights = ({ openHighlight, setOpenHighlight }) => {
   }, [singleProduct]);
 
   return (
-    <ShowModal
+    <ShowDialog
       openModal={openHighlight}
-      setOpenModal={setOpenHighlight}
+      handleClose={handleClose}
       height="65vh"
       width={matchesXS ? "95%" : matchesSM ? 500 : 600}
     >
@@ -319,7 +291,6 @@ const ProductHighlights = ({ openHighlight, setOpenHighlight }) => {
         container
         direction="column"
         alignItems="center"
-        className={classes.contentContainer}
         style={{ paddingBottom: "3rem" }}
       >
         <Grid
@@ -334,19 +305,15 @@ const ProductHighlights = ({ openHighlight, setOpenHighlight }) => {
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton
-              onClick={() => setOpenHighlight(false)}
-              className={classes.iconButton}
-            >
+            <CloseIconButton onClick={handleClose}>
               <CloseIcon />
-            </IconButton>
+            </CloseIconButton>
           </Grid>
         </Grid>
-        <Grid
+        <HighlightContainer
           item
           container
           direction="column"
-          className={classes.highlightContainer}
           component="form"
           onSubmit={handleProductHighlight}
         >
@@ -356,6 +323,7 @@ const ProductHighlights = ({ openHighlight, setOpenHighlight }) => {
               name="inFeatured"
               onChange={handleHighlightChecked}
               checked={inFeatured}
+              isActive={inFeatured}
             />
           </Grid>
           <Grid item style={{ marginBottom: "2rem" }}>
@@ -363,6 +331,7 @@ const ProductHighlights = ({ openHighlight, setOpenHighlight }) => {
               label="Highlight in Best Sellers"
               name="inBestSellers"
               checked={inBestSellers}
+              isActive={inBestSellers}
               onChange={handleHighlightChecked}
             />
           </Grid>
@@ -371,6 +340,7 @@ const ProductHighlights = ({ openHighlight, setOpenHighlight }) => {
               label="Highlight in Popular"
               name="inPopular"
               checked={inPopular}
+              isActive={inPopular}
               onChange={handleHighlightChecked}
             />
           </Grid>
@@ -380,6 +350,7 @@ const ProductHighlights = ({ openHighlight, setOpenHighlight }) => {
                 label="Highlight in Weekly Offers"
                 name="inWeeklyOffer"
                 checked={inWeeklyOffer}
+                isActive={inWeeklyOffer}
                 onChange={handleHighlightChecked}
               />
             </Grid>
@@ -470,38 +441,26 @@ const ProductHighlights = ({ openHighlight, setOpenHighlight }) => {
             style={{ marginTop: "5rem" }}
           >
             <Grid item>
-              <Button
-                className={classes.cancelButton}
-                onClick={() => {
-                  setOpenHighlight(false);
-                  setCurrentProduct({});
-                }}
-              >
-                Cancel
-              </Button>
+              <CancelButton onClick={handleClose}>Cancel</CancelButton>
             </Grid>
             <Grid item>
-              <Button
+              <SubmitButton
                 type="submit"
                 variant="contained"
                 disableRipple
                 color="secondary"
-                className={classes.submitButton}
                 disabled={loadingProductHighlight}
               >
                 {loadingProductHighlight && (
-                  <CircularProgress
-                    style={{ height: 25, width: 25 }}
-                    className={classes.loader}
-                  />
+                  <StyledCircularProgress style={{ height: 25, width: 25 }} />
                 )}{" "}
                 Submit
-              </Button>
+              </SubmitButton>
             </Grid>
           </Grid>
-        </Grid>
+        </HighlightContainer>
       </Grid>
-    </ShowModal>
+    </ShowDialog>
   );
 };
 

@@ -374,7 +374,7 @@ const productsSlice = createSlice({
       state.updatedInventory = action.payload;
       state.uploadedFiles = "";
     },
-    setCurrentProduct: (state, action: PayloadAction<ProductTypes>) => {
+    setCurrentProduct: (state, action: PayloadAction<ProductTypes | null>) => {
       state.singleProduct = action.payload;
     },
   },
