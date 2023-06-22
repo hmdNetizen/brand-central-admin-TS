@@ -47,3 +47,18 @@ export type ProductStateTypes = {
 };
 
 export type ThresholdStateTypes = Pick<ProductTypes, "threshold">;
+
+export type initialHighlightTypes = {
+  inFeatured: boolean;
+  inBestSellers: boolean;
+  inPopular: boolean;
+  inWeeklyOffer: boolean;
+};
+
+export type initialHighlightPriceCodesTypes = {
+  priceCode1: string;
+  priceCode2: string;
+  priceCode3: string;
+  priceCode4: string;
+  minimumQuantity: number;
+};
