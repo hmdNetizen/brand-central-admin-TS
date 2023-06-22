@@ -1,15 +1,12 @@
 import React, { useState, useEffect, ElementType } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import { useTheme, styled } from "@mui/material/styles";
 import ShowDialog from "src/utils/ShowDialog";
 import CloseIcon from "@mui/icons-material/Close";
 import CustomLabelSwitch from "src/utils/CustomLabelSwitch";
 import IconButton from "@mui/material/IconButton";
-import { useSelector } from "react-redux";
 import { useActions } from "src/hooks/useActions";
-import CircularProgress from "@mui/material/CircularProgress";
 import CustomFormInput from "src/utils/CustomFormInput";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { toast } from "react-toastify";
@@ -19,6 +16,15 @@ import {
   CancelButton,
   StyledCircularProgress,
 } from "src/utilityStyles/pagesUtilityStyles";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import {
+  initialHighlightCheckedState,
+  initialHighlightPriceCodes,
+} from "./data";
+import {
+  InitialHighlightCheckedTypes,
+  InitialHighlightPriceCodesTypes,
+} from "./data/types";
 
 const HighlightContainer = styled(Grid)<{ component: ElementType }>(
   ({ theme }) => ({
@@ -41,21 +47,6 @@ const CloseIconButton = styled(IconButton)(({ theme }) => ({
   },
 }));
 
-const initialState = {
-  inFeatured: false,
-  inBestSellers: false,
-  inPopular: false,
-  inWeeklyOffer: false,
-};
-
-const initialPriceCodes = {
-  priceCode1: "",
-  priceCode2: "",
-  priceCode3: "",
-  priceCode4: "",
-  minimumQuantity: 0,
-};
-
 type HighlightProps = {
   openHighlight: boolean;
   setOpenHighlight: React.Dispatch<React.SetStateAction<boolean>>;
@@ -69,15 +60,20 @@ const ProductHighlights = (props: HighlightProps) => {
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
   const matchesXXS = useMediaQuery("(max-width: 340px)");
 
-  const { singleProduct, loadingProductHighlight } = useSelector(
-    (state) => state.products
+  const singleProduct = useTypedSelector(
+    (state) => state.products.singleProduct
+  );
+  const loadingProductAction = useTypedSelector(
+    (state) => state.products.loadingProductAction
   );
 
-  const { setProductHighlight, setCurrentProduct } = useActions();
+  const { toggleProductHighlight, setCurrentProduct } = useActions();
 
-  const [highlightChecked, setHighlightChecked] = useState(initialState);
+  const [highlightChecked, setHighlightChecked] =
+    useState<InitialHighlightCheckedTypes>(initialHighlightCheckedState);
 
-  const [priceCodesData, setPriceCodesData] = useState(initialPriceCodes);
+  const [priceCodesData, setPriceCodesData] =
+    useState<InitialHighlightPriceCodesTypes>(initialHighlightPriceCodes);
   const [priceCode1Error, setPriceCode1Error] = useState("");
   const [priceCode2Error, setPriceCode2Error] = useState("");
   const [priceCode3Error, setPriceCode3Error] = useState("");
@@ -102,9 +98,9 @@ const ProductHighlights = (props: HighlightProps) => {
   const handleProductHighlight = (event: React.FormEvent<Element>) => {
     event.preventDefault();
 
-    const productName = singleProduct.productName;
+    const productName = singleProduct?.productName;
 
-    if (!singleProduct.productStatus) {
+    if (!singleProduct?.productStatus) {
       toast.error(
         `You need to activate ${productName} to perform this action`,
         {
@@ -161,18 +157,20 @@ const ProductHighlights = (props: HighlightProps) => {
       }
     }
 
-    setProductHighlight({
+    toggleProductHighlight({
       setOpenHighlight,
       productId: singleProduct._id,
-      inBestSellers,
-      inFeatured,
-      inWeeklyOffer,
-      inPopular,
-      newPriceCodeOne: inWeeklyOffer ? parseFloat(priceCode1) : 0,
-      newPriceCodeTwo: inWeeklyOffer ? parseFloat(priceCode2) : 0,
-      newPriceCodeThree: inWeeklyOffer ? parseFloat(priceCode3) : 0,
-      newPriceCodeFour: inWeeklyOffer ? parseFloat(priceCode4) : 0,
-      minimumQuantity: inWeeklyOffer ? parseInt(minimumQuantity) : 0,
+      fields: {
+        inBestSellers,
+        inFeatured,
+        inWeeklyOffer,
+        inPopular,
+        newPriceCodeOne: inWeeklyOffer ? parseFloat(priceCode1) : 0,
+        newPriceCodeTwo: inWeeklyOffer ? parseFloat(priceCode2) : 0,
+        newPriceCodeThree: inWeeklyOffer ? parseFloat(priceCode3) : 0,
+        newPriceCodeFour: inWeeklyOffer ? parseFloat(priceCode4) : 0,
+        minimumQuantity: inWeeklyOffer ? Number(minimumQuantity) : 0,
+      },
     });
 
     setPriceCode1Error("");
@@ -220,7 +218,7 @@ const ProductHighlights = (props: HighlightProps) => {
         if (!value.trim()) {
           setMinQuantityError("Enter Minmum Quantity or set quantity to 0");
         } else if (
-          singleProduct.units === "EA" &&
+          singleProduct?.units === "EA" &&
           !isQuantityInMultiples(value)
         ) {
           setMinQuantityError(
@@ -449,9 +447,9 @@ const ProductHighlights = (props: HighlightProps) => {
                 variant="contained"
                 disableRipple
                 color="secondary"
-                disabled={loadingProductHighlight}
+                disabled={loadingProductAction}
               >
-                {loadingProductHighlight && (
+                {loadingProductAction && (
                   <StyledCircularProgress style={{ height: 25, width: 25 }} />
                 )}{" "}
                 Submit

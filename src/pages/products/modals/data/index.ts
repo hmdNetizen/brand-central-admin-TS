@@ -60,7 +60,7 @@ export const initialThresholdState = {
   },
 };
 
-export const initialHighlightState = {
+export const initialHighlightCheckedState = {
   inFeatured: false,
   inBestSellers: false,
   inPopular: false,

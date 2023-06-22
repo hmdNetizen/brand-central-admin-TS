@@ -48,14 +48,14 @@ export type ProductStateTypes = {
 
 export type ThresholdStateTypes = Pick<ProductTypes, "threshold">;
 
-export type initialHighlightTypes = {
+export type InitialHighlightCheckedTypes = {
   inFeatured: boolean;
   inBestSellers: boolean;
   inPopular: boolean;
   inWeeklyOffer: boolean;
 };
 
-export type initialHighlightPriceCodesTypes = {
+export type InitialHighlightPriceCodesTypes = {
   priceCode1: string;
   priceCode2: string;
   priceCode3: string;
