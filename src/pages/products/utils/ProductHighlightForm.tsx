@@ -24,10 +24,48 @@ const HighlightContainer = styled(Grid)<{ component: ElementType }>(
 
 type HighlightFormProps = {
   onSubmit: (event: React.FormEvent<Element>) => void;
+  onChecked: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onClose: () => void;
+  inFeatured: boolean;
+  inPopular: boolean;
+  inBestSellers: boolean;
+  inWeeklyOffer: boolean;
+  loading: boolean;
+  priceCode1: number;
+  priceCode2: number;
+  priceCode3: number;
+  priceCode4: number;
+  priceCode1Error: string;
+  minimumQuantity: number;
+  priceCode2Error: string;
+  priceCode3Error: string;
+  priceCode4Error: string;
+  minQuantityError: string;
 };
 
 const ProductHighlightForm = (props: HighlightFormProps) => {
-  const { onSubmit } = props;
+  const {
+    onSubmit,
+    onChecked,
+    onInputChange,
+    onClose,
+    inFeatured,
+    inBestSellers,
+    inPopular,
+    inWeeklyOffer,
+    priceCode1,
+    priceCode2,
+    priceCode3,
+    priceCode4,
+    minQuantityError,
+    priceCode1Error,
+    priceCode2Error,
+    priceCode3Error,
+    priceCode4Error,
+    loading,
+    minimumQuantity,
+  } = props;
   return (
     <HighlightContainer
       item
@@ -40,7 +78,7 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
         <CustomLabelSwitch
           label="Highlight in Featured"
           name="inFeatured"
-          onChange={handleHighlightChecked}
+          onChange={onChecked}
           checked={inFeatured}
           isActive={inFeatured}
         />
@@ -51,7 +89,7 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
           name="inBestSellers"
           checked={inBestSellers}
           isActive={inBestSellers}
-          onChange={handleHighlightChecked}
+          onChange={onChecked}
         />
       </Grid>
       <Grid item style={{ marginBottom: "2rem" }}>
@@ -60,7 +98,7 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
           name="inPopular"
           checked={inPopular}
           isActive={inPopular}
-          onChange={handleHighlightChecked}
+          onChange={onChecked}
         />
       </Grid>
       <Grid item container direction="column">
@@ -70,7 +108,7 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
             name="inWeeklyOffer"
             checked={inWeeklyOffer}
             isActive={inWeeklyOffer}
-            onChange={handleHighlightChecked}
+            onChange={onChecked}
           />
         </Grid>
         {inWeeklyOffer && (
@@ -84,7 +122,7 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
                   name="priceCode1"
                   value={priceCode1}
                   placeholder="Enter Price Code 1"
-                  onChange={handleInputChange}
+                  onChange={onInputChange}
                   error={priceCode1Error}
                 />
               </Grid>
@@ -96,7 +134,7 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
                   name="priceCode2"
                   value={priceCode2}
                   placeholder="Enter Price Code 2"
-                  onChange={handleInputChange}
+                  onChange={onInputChange}
                   error={priceCode2Error}
                 />
               </Grid>
@@ -110,7 +148,7 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
                   name="priceCode3"
                   value={priceCode3}
                   placeholder="Enter Price Code 3"
-                  onChange={handleInputChange}
+                  onChange={onInputChange}
                   error={priceCode3Error}
                 />
               </Grid>
@@ -122,7 +160,7 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
                   name="priceCode4"
                   value={priceCode4}
                   placeholder="Enter Price Code 4"
-                  onChange={handleInputChange}
+                  onChange={onInputChange}
                   error={priceCode4Error}
                 />
               </Grid>
@@ -136,7 +174,7 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
                   name="minimumQuantity"
                   value={minimumQuantity}
                   placeholder="Enter Minmimum Quantity"
-                  onChange={handleInputChange}
+                  onChange={onInputChange}
                   error={minQuantityError}
                 />
               </Grid>
@@ -154,7 +192,7 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
         style={{ marginTop: "5rem" }}
       >
         <Grid item>
-          <CancelButton onClick={handleClose}>Cancel</CancelButton>
+          <CancelButton onClick={onClose}>Cancel</CancelButton>
         </Grid>
         <Grid item>
           <SubmitButton
@@ -162,9 +200,9 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
             variant="contained"
             disableRipple
             color="secondary"
-            disabled={loadingProductAction}
+            disabled={loading}
           >
-            {loadingProductAction && (
+            {loading && (
               <StyledCircularProgress style={{ height: 25, width: 25 }} />
             )}{" "}
             Submit
