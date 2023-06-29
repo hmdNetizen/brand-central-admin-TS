@@ -584,14 +584,14 @@ const EditProduct = (props: EditProductProps) => {
 
   const handleClose = () => {
     setOpenEditProduct((prev) => !prev);
-    // setPreviews([]);
+    setPreviews([]);
     // setImagePreview(undefined);
     setSelectedFile("");
   };
 
   const handleCloseGallery = () => {
     setOpenProductGallery(false);
-    // setPreviews([]);
+    setPreviews([]);
     setSelectedFile("");
   };
 
