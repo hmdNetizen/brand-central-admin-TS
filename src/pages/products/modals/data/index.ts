@@ -60,6 +60,18 @@ export const initialThresholdState = {
   },
 };
 
+export const initialHighlightState = {
+  priceCode1: "",
+  priceCode2: "",
+  priceCode3: "",
+  priceCode4: "",
+  minimumQuantity: 0,
+  inFeatured: false,
+  inBestSellers: false,
+  inPopular: false,
+  inWeeklyOffer: false,
+};
+
 export const initialHighlightCheckedState = {
   inFeatured: false,
   inBestSellers: false,
