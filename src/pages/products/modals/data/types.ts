@@ -55,6 +55,18 @@ export type InitialHighlightCheckedTypes = {
   inWeeklyOffer: boolean;
 };
 
+export type InitialHighlightStateTypes = {
+  priceCode1: string;
+  priceCode2: string;
+  priceCode3: string;
+  priceCode4: string;
+  minimumQuantity: number;
+  inFeatured: boolean;
+  inBestSellers: boolean;
+  inPopular: boolean;
+  inWeeklyOffer: boolean;
+};
+
 export type InitialHighlightPriceCodesTypes = {
   priceCode1: string;
   priceCode2: string;
