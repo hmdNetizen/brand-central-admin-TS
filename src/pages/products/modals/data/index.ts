@@ -61,10 +61,10 @@ export const initialThresholdState = {
 };
 
 export const initialHighlightState = {
-  newPriceCodeOne: "",
-  newPriceCodeTwo: "",
-  newPriceCodeThree: "",
-  newPriceCodeFour: "",
+  newPriceCodeOne: 0,
+  newPriceCodeTwo: 0,
+  newPriceCodeThree: 0,
+  newPriceCodeFour: 0,
   minimumQuantity: 0,
   inFeatured: false,
   inBestSellers: false,
