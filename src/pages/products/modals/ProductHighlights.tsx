@@ -13,10 +13,12 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import {
   initialHighlightCheckedState,
   initialHighlightPriceCodes,
+  initialHighlightState,
 } from "./data";
 import {
   InitialHighlightCheckedTypes,
   InitialHighlightPriceCodesTypes,
+  InitialHighlightStateTypes,
 } from "./data/types";
 import ProductHighlightForm from "../utils/ProductHighlightForm";
 
@@ -50,6 +52,9 @@ const ProductHighlights = (props: HighlightProps) => {
 
   const { toggleProductHighlight, setCurrentProduct } = useActions();
 
+  const [highlightData, setHighlightData] =
+    useState<InitialHighlightStateTypes>(initialHighlightState);
+
   const [highlightChecked, setHighlightChecked] =
     useState<InitialHighlightCheckedTypes>(initialHighlightCheckedState);
 
@@ -61,22 +66,25 @@ const ProductHighlights = (props: HighlightProps) => {
   const [priceCode4Error, setPriceCode4Error] = useState("");
   const [minQuantityError, setMinQuantityError] = useState("");
 
-  const { inFeatured, inBestSellers, inWeeklyOffer, inPopular } =
-    highlightChecked;
+  const { inFeatured, inBestSellers, inWeeklyOffer, inPopular } = highlightData;
 
   const { priceCode1, priceCode2, priceCode3, priceCode4, minimumQuantity } =
-    priceCodesData;
+    highlightData;
 
   const handleHighlightChecked = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setHighlightChecked({
-      ...highlightChecked,
-      [event.target.name]: event.target.checked,
-    });
+    setHighlightData((prev) => ({
+      ...prev,
+      [event.target.name]: event.target.value,
+    }));
+    // setHighlightChecked({
+    //   ...highlightChecked,
+    //   [event.target.name]: event.target.checked,
+    // });
   };
 
-  const handleProductHighlight = (event: React.FormEvent<Element>) => {
+  const handleSubmit = (event: React.FormEvent<Element>) => {
     event.preventDefault();
 
     const productName = singleProduct?.productName;
@@ -164,7 +172,8 @@ const ProductHighlights = (props: HighlightProps) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
-    setPriceCodesData((prev) => ({ ...prev, [name]: value }));
+    // setPriceCodesData((prev) => ({ ...prev, [name]: value }));
+    setHighlightData((prev) => ({ ...prev, [name]: value }));
 
     switch (name) {
       case "priceCode1":
@@ -224,7 +233,7 @@ const ProductHighlights = (props: HighlightProps) => {
   };
 
   useEffect(() => {
-    if (Object.keys(singleProduct).length > 0) {
+    if (singleProduct) {
       const productHighlight = { ...initialState };
       const newPriceCodes = { ...initialPriceCodes };
 
@@ -289,7 +298,27 @@ const ProductHighlights = (props: HighlightProps) => {
             </CloseIconButton>
           </Grid>
         </Grid>
-        <ProductHighlightForm />
+        <ProductHighlightForm
+          inBestSellers={inBestSellers}
+          inFeatured={inFeatured}
+          inPopular={inPopular}
+          inWeeklyOffer={inWeeklyOffer}
+          loading={loadingProductAction}
+          minQuantityError={minQuantityError}
+          minimumQuantity={minimumQuantity}
+          onClose={handleClose}
+          priceCode1={Number(priceCode1)}
+          priceCode2={Number(priceCode2)}
+          priceCode3={Number(priceCode3)}
+          priceCode4={Number(priceCode4)}
+          priceCode1Error={priceCode1Error}
+          priceCode2Error={priceCode2Error}
+          priceCode3Error={priceCode3Error}
+          priceCode4Error={priceCode4Error}
+          onChecked={handleHighlightChecked}
+          onInputChange={handleInputChange}
+          onSubmit={handleSubmit}
+        />
       </Grid>
     </ShowDialog>
   );

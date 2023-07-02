@@ -56,10 +56,10 @@ export type InitialHighlightCheckedTypes = {
 };
 
 export type InitialHighlightStateTypes = {
-  priceCode1: string;
-  priceCode2: string;
-  priceCode3: string;
-  priceCode4: string;
+  newPriceCodeOne: number;
+  newPriceCodeTwo: number;
+  newPriceCodeThree: number;
+  newPriceCodeFour: number;
   minimumQuantity: number;
   inFeatured: boolean;
   inBestSellers: boolean;

@@ -32,10 +32,10 @@ type HighlightFormProps = {
   inBestSellers: boolean;
   inWeeklyOffer: boolean;
   loading: boolean;
-  priceCode1: number;
-  priceCode2: number;
-  priceCode3: number;
-  priceCode4: number;
+  newPriceCodeOne: number;
+  newPriceCodeTwo: number;
+  newPriceCodeThree: number;
+  newPriceCodeFour: number;
   priceCode1Error: string;
   minimumQuantity: number;
   priceCode2Error: string;
@@ -54,10 +54,10 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
     inBestSellers,
     inPopular,
     inWeeklyOffer,
-    priceCode1,
-    priceCode2,
-    priceCode3,
-    priceCode4,
+    newPriceCodeOne,
+    newPriceCodeTwo,
+    newPriceCodeThree,
+    newPriceCodeFour,
     minQuantityError,
     priceCode1Error,
     priceCode2Error,
@@ -120,7 +120,7 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
                   label="Price Code 1"
                   labelId="priceCode1"
                   name="priceCode1"
-                  value={priceCode1}
+                  value={newPriceCodeOne}
                   placeholder="Enter Price Code 1"
                   onChange={onInputChange}
                   error={priceCode1Error}
@@ -132,7 +132,7 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
                   label="Price Code 2"
                   labelId="priceCode2"
                   name="priceCode2"
-                  value={priceCode2}
+                  value={newPriceCodeTwo}
                   placeholder="Enter Price Code 2"
                   onChange={onInputChange}
                   error={priceCode2Error}
@@ -146,7 +146,7 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
                   label="Price Code 3"
                   labelId="priceCode3"
                   name="priceCode3"
-                  value={priceCode3}
+                  value={newPriceCodeThree}
                   placeholder="Enter Price Code 3"
                   onChange={onInputChange}
                   error={priceCode3Error}
@@ -158,7 +158,7 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
                   label="Price Code 4"
                   labelId="priceCode4"
                   name="priceCode4"
-                  value={priceCode4}
+                  value={newPriceCodeFour}
                   placeholder="Enter Price Code 4"
                   onChange={onInputChange}
                   error={priceCode4Error}
