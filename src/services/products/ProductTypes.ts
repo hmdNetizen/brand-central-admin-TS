@@ -1,6 +1,6 @@
 import React from "react";
 
-type ProductHighlightTypes = {
+export type ProductHighlightTypes = {
   inFeatured: boolean;
   inBestSellers: boolean;
   inPopular: boolean;

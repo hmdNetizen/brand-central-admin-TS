@@ -3,16 +3,23 @@ import Switch, { SwitchProps } from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
 
 const StyledSwitch = styled(Switch, {
-  shouldForwardProp: (prop) => prop !== "isActive",
-})<SwitchProps & { isActive: boolean }>(({ theme, isActive }) => ({
+  shouldForwardProp: (prop) =>
+    prop !== "isActive" &&
+    prop !== "lightThemeColor" &&
+    prop !== "mainThemeColor",
+})<
+  SwitchProps & {
+    isActive: boolean;
+    mainThemeColor?: string;
+    lightThemeColor?: string;
+  }
+>(({ theme, isActive, lightThemeColor, mainThemeColor }) => ({
   "& .MuiSwitch-track": {
-    background: isActive
-      ? theme.palette.success.light
-      : theme.palette.error.light,
+    background: isActive ? theme.palette.success.light : lightThemeColor,
   },
 
   "& .MuiSwitch-switchBase": {
-    color: isActive ? theme.palette.success.light : theme.palette.error.light,
+    color: isActive ? theme.palette.success.light : mainThemeColor,
   },
 }));
 
@@ -37,6 +44,8 @@ const CustomSwitch = (props: CustomSwitchProps) => {
 
 CustomSwitch.defaultProps = {
   color: "success",
+  lightThemeColor: "#ff385d",
+  mainThemeColor: "#FF385C",
 };
 
 export default CustomSwitch;

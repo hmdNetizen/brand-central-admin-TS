@@ -21,6 +21,7 @@ import {
   InitialHighlightStateTypes,
 } from "./data/types";
 import ProductHighlightForm from "../utils/ProductHighlightForm";
+import { ProductHighlightTypes } from "src/services/products/ProductTypes";
 
 const CloseIconButton = styled(IconButton)(({ theme }) => ({
   "&:hover": {
@@ -52,24 +53,27 @@ const ProductHighlights = (props: HighlightProps) => {
 
   const { toggleProductHighlight, setCurrentProduct } = useActions();
 
-  const [highlightData, setHighlightData] =
-    useState<InitialHighlightStateTypes>(initialHighlightState);
+  const [highlightData, setHighlightData] = useState<ProductHighlightTypes>(
+    initialHighlightState
+  );
 
-  const [highlightChecked, setHighlightChecked] =
-    useState<InitialHighlightCheckedTypes>(initialHighlightCheckedState);
-
-  const [priceCodesData, setPriceCodesData] =
-    useState<InitialHighlightPriceCodesTypes>(initialHighlightPriceCodes);
   const [priceCode1Error, setPriceCode1Error] = useState("");
   const [priceCode2Error, setPriceCode2Error] = useState("");
   const [priceCode3Error, setPriceCode3Error] = useState("");
   const [priceCode4Error, setPriceCode4Error] = useState("");
   const [minQuantityError, setMinQuantityError] = useState("");
 
-  const { inFeatured, inBestSellers, inWeeklyOffer, inPopular } = highlightData;
-
-  const { priceCode1, priceCode2, priceCode3, priceCode4, minimumQuantity } =
-    highlightData;
+  const {
+    newPriceCodeOne,
+    newPriceCodeTwo,
+    newPriceCodeThree,
+    newPriceCodeFour,
+    minimumQuantity,
+    inFeatured,
+    inBestSellers,
+    inWeeklyOffer,
+    inPopular,
+  } = highlightData;
 
   const handleHighlightChecked = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -103,10 +107,10 @@ const ProductHighlights = (props: HighlightProps) => {
 
     if (inWeeklyOffer) {
       if (
-        priceCode1 === "" &&
-        priceCode2 === "" &&
-        priceCode3 === "" &&
-        priceCode4 === ""
+        Number(newPriceCodeOne) === 0 &&
+        Number(newPriceCodeTwo) === 0 &&
+        Number(newPriceCodeThree) === 0 &&
+        Number(newPriceCodeFour) === 0
       ) {
         setPriceCode1Error("Enter price code 1 offer");
         setPriceCode2Error("Enter price code 2 offer");
@@ -115,22 +119,22 @@ const ProductHighlights = (props: HighlightProps) => {
         return;
       }
 
-      if (priceCode1 === "") {
+      if (Number(newPriceCodeOne) === 0) {
         setPriceCode1Error("Enter price code 1 offer");
         return;
       }
 
-      if (priceCode2 === "") {
+      if (Number(newPriceCodeTwo) === 0) {
         setPriceCode2Error("Enter price code 2 offer");
         return;
       }
 
-      if (priceCode3 === "") {
+      if (Number(newPriceCodeThree) === 0) {
         setPriceCode3Error("Enter price code 3 offer");
         return;
       }
 
-      if (priceCode4 === "") {
+      if (Number(newPriceCodeFour) === 0) {
         setPriceCode4Error("Enter price code 4 offer");
         return;
       }
@@ -154,10 +158,10 @@ const ProductHighlights = (props: HighlightProps) => {
         inFeatured,
         inWeeklyOffer,
         inPopular,
-        newPriceCodeOne: inWeeklyOffer ? parseFloat(priceCode1) : 0,
-        newPriceCodeTwo: inWeeklyOffer ? parseFloat(priceCode2) : 0,
-        newPriceCodeThree: inWeeklyOffer ? parseFloat(priceCode3) : 0,
-        newPriceCodeFour: inWeeklyOffer ? parseFloat(priceCode4) : 0,
+        newPriceCodeOne: newPriceCodeOne,
+        newPriceCodeTwo: newPriceCodeTwo,
+        newPriceCodeThree: newPriceCodeThree,
+        newPriceCodeFour: newPriceCodeFour,
         minimumQuantity: inWeeklyOffer ? Number(minimumQuantity) : 0,
       },
     });
@@ -234,39 +238,53 @@ const ProductHighlights = (props: HighlightProps) => {
 
   useEffect(() => {
     if (singleProduct) {
-      const productHighlight = { ...initialState };
-      const newPriceCodes = { ...initialPriceCodes };
+      const newHighlightData = { ...initialHighlightState };
 
       for (const key in singleProduct.highlight) {
-        if (key in productHighlight)
-          productHighlight[key] = singleProduct.highlight[key];
-        if (key in newPriceCodes) {
-          newPriceCodes[key] = singleProduct[key];
-          setHighlightChecked(productHighlight);
+        if (key in newHighlightData) {
+          newHighlightData[key as keyof ProductHighlightTypes] =
+            singleProduct.highlight[key as keyof ProductHighlightTypes];
         }
 
-        if (singleProduct.highlight.inWeeklyOffer) {
-          newPriceCodes["priceCode1"] = singleProduct.highlight.newPriceCodeOne;
-          newPriceCodes["priceCode2"] = singleProduct.highlight.newPriceCodeTwo;
-          newPriceCodes["priceCode3"] =
-            singleProduct.highlight.newPriceCodeThree;
-          newPriceCodes["priceCode4"] =
-            singleProduct.highlight.newPriceCodeFour;
-          newPriceCodes["minimumQuantity"] =
-            singleProduct.highlight.minimumQuantity;
-
-          setPriceCodesData(newPriceCodes);
-        }
-      }
-
-      if (!singleProduct.highlight.inWeeklyOffer) {
-        for (const key in singleProduct) {
-          if (key in newPriceCodes) newPriceCodes[key] = singleProduct[key];
-        }
-        setPriceCodesData(newPriceCodes);
+        setHighlightData(newHighlightData);
       }
     }
   }, [singleProduct]);
+
+  // useEffect(() => {
+  //   if (singleProduct) {
+  //     const newHighlightData = { ...initialHighlightState };
+
+  //     for (const key in singleProduct.highlight) {
+  //       if (key in newHighlightData)
+  //         productHighlight[key] = singleProduct.highlight[key];
+  //       // if (key in newPriceCodes) {
+  //       //   newPriceCodes[key] = singleProduct[key];
+  //       //   setHighlightChecked(productHighlight);
+  //       // }
+
+  //       if (singleProduct.highlight.inWeeklyOffer) {
+  //         newPriceCodes["priceCode1"] = singleProduct.highlight.newPriceCodeOne;
+  //         newPriceCodes["priceCode2"] = singleProduct.highlight.newPriceCodeTwo;
+  //         newPriceCodes["priceCode3"] =
+  //           singleProduct.highlight.newPriceCodeThree;
+  //         newPriceCodes["priceCode4"] =
+  //           singleProduct.highlight.newPriceCodeFour;
+  //         newPriceCodes["minimumQuantity"] =
+  //           singleProduct.highlight.minimumQuantity;
+
+  //         setPriceCodesData(newPriceCodes);
+  //       }
+  //     }
+
+  //     if (!singleProduct.highlight.inWeeklyOffer) {
+  //       for (const key in singleProduct) {
+  //         if (key in newPriceCodes) newPriceCodes[key] = singleProduct[key];
+  //       }
+  //       setPriceCodesData(newPriceCodes);
+  //     }
+  //   }
+  // }, [singleProduct]);
 
   return (
     <ShowDialog
@@ -307,10 +325,10 @@ const ProductHighlights = (props: HighlightProps) => {
           minQuantityError={minQuantityError}
           minimumQuantity={minimumQuantity}
           onClose={handleClose}
-          priceCode1={Number(priceCode1)}
-          priceCode2={Number(priceCode2)}
-          priceCode3={Number(priceCode3)}
-          priceCode4={Number(priceCode4)}
+          newPriceCodeOne={newPriceCodeOne}
+          newPriceCodeTwo={newPriceCodeTwo}
+          newPriceCodeThree={newPriceCodeThree}
+          newPriceCodeFour={newPriceCodeFour}
           priceCode1Error={priceCode1Error}
           priceCode2Error={priceCode2Error}
           priceCode3Error={priceCode3Error}

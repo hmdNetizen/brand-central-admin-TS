@@ -6,7 +6,7 @@ import { useTheme } from "@mui/material/styles";
 import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import { productColumns } from "src/lib/dataset/tableData";
-// import ProductHighlights from "./modals/ProductHighlights";
+import ProductHighlights from "src/pages/products/modals/ProductHighlights";
 import EditProduct from "src/pages/products/modals/EditProduct";
 import DeleteProduct from "src/pages/products/modals/DeleteProduct";
 import PhotoGallery from "src/components/products/PhotoGallery";
@@ -135,10 +135,10 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
           </Tables>
         </Grid>
       </ContainerWrapper>
-      {/* <ProductHighlights
+      <ProductHighlights
         openHighlight={openHighlight}
         setOpenHighlight={setOpenHighlight}
-      /> */}
+      />
       <EditProduct
         openEditProduct={openEditProduct}
         setOpenEditProduct={setOpenEditProduct}
