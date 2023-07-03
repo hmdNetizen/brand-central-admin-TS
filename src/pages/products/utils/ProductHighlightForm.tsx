@@ -8,6 +8,7 @@ import {
 } from "src/utilityStyles/pagesUtilityStyles";
 import CustomLabelSwitch from "src/utils/CustomLabelSwitch";
 import CustomFormInput from "src/utils/CustomFormInput";
+import { HighlightFormProps } from "./types";
 
 const HighlightContainer = styled(Grid)<{ component: ElementType }>(
   ({ theme }) => ({
@@ -22,66 +23,23 @@ const HighlightContainer = styled(Grid)<{ component: ElementType }>(
   })
 );
 
-type HighlightFormProps = {
-  onSubmit: (event: React.FormEvent<Element>) => void;
-  onChecked: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onClose: () => void;
-  inFeatured: boolean;
-  inPopular: boolean;
-  inBestSellers: boolean;
-  inWeeklyOffer: boolean;
-  loading: boolean;
-  newPriceCodeOne: number;
-  newPriceCodeTwo: number;
-  newPriceCodeThree: number;
-  newPriceCodeFour: number;
-  priceCode1Error: string;
-  minimumQuantity: number;
-  priceCode2Error: string;
-  priceCode3Error: string;
-  priceCode4Error: string;
-  minQuantityError: string;
-};
-
 const ProductHighlightForm = (props: HighlightFormProps) => {
   const theme = useTheme();
-  const {
-    onSubmit,
-    onChecked,
-    onInputChange,
-    onClose,
-    inFeatured,
-    inBestSellers,
-    inPopular,
-    inWeeklyOffer,
-    newPriceCodeOne,
-    newPriceCodeTwo,
-    newPriceCodeThree,
-    newPriceCodeFour,
-    minQuantityError,
-    priceCode1Error,
-    priceCode2Error,
-    priceCode3Error,
-    priceCode4Error,
-    loading,
-    minimumQuantity,
-  } = props;
   return (
     <HighlightContainer
       item
       container
       direction="column"
       component="form"
-      onSubmit={onSubmit}
+      onSubmit={props.onSubmit}
     >
       <Grid item style={{ marginBottom: "2rem" }}>
         <CustomLabelSwitch
           label="Highlight in Featured"
           name="inFeatured"
-          onChange={onChecked}
-          checked={inFeatured}
-          isActive={inFeatured}
+          onChange={props.onChecked}
+          checked={props.inFeatured}
+          isActive={props.inFeatured}
           mainThemeColor={"#fff"}
           lightThemeColor={theme.palette.common.grey}
         />
@@ -90,9 +48,9 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
         <CustomLabelSwitch
           label="Highlight in Best Sellers"
           name="inBestSellers"
-          checked={inBestSellers}
-          isActive={inBestSellers}
-          onChange={onChecked}
+          checked={props.inBestSellers}
+          isActive={props.inBestSellers}
+          onChange={props.onChecked}
           mainThemeColor={"#fff"}
           lightThemeColor={theme.palette.common.grey}
         />
@@ -101,9 +59,9 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
         <CustomLabelSwitch
           label="Highlight in Popular"
           name="inPopular"
-          checked={inPopular}
-          isActive={inPopular}
-          onChange={onChecked}
+          checked={props.inPopular}
+          isActive={props.inPopular}
+          onChange={props.onChecked}
           mainThemeColor={"#fff"}
           lightThemeColor={theme.palette.common.grey}
         />
@@ -113,14 +71,14 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
           <CustomLabelSwitch
             label="Highlight in Weekly Offers"
             name="inWeeklyOffer"
-            checked={inWeeklyOffer}
-            isActive={inWeeklyOffer}
-            onChange={onChecked}
+            checked={props.inWeeklyOffer}
+            isActive={props.inWeeklyOffer}
+            onChange={props.onChecked}
             mainThemeColor={"#fff"}
             lightThemeColor={theme.palette.common.grey}
           />
         </Grid>
-        {inWeeklyOffer && (
+        {props.inWeeklyOffer && (
           <Grid item container direction="column">
             <Grid item container columnGap={3} rowSpacing={2} sx={{ mb: 2 }}>
               <Grid item sm xs={12}>
@@ -129,10 +87,10 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
                   label="New Price Code 1"
                   labelId="newPriceCodeOne"
                   name="newPriceCodeOne"
-                  value={newPriceCodeOne}
+                  value={props.newPriceCodeOne}
                   placeholder="Enter Price Code 1"
-                  onChange={onInputChange}
-                  error={priceCode1Error}
+                  onChange={props.onInputChange}
+                  error={props.priceCode1Error}
                 />
               </Grid>
               <Grid item sm xs={12}>
@@ -141,10 +99,10 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
                   label="New Price Code 2"
                   labelId="newPriceCodeTwo"
                   name="newPriceCodeTwo"
-                  value={newPriceCodeTwo}
+                  value={props.newPriceCodeTwo}
                   placeholder="Enter Price Code 2"
-                  onChange={onInputChange}
-                  error={priceCode2Error}
+                  onChange={props.onInputChange}
+                  error={props.priceCode2Error}
                 />
               </Grid>
             </Grid>
@@ -155,10 +113,10 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
                   label="New Price Code 3"
                   labelId="newPriceCodeThree"
                   name="newPriceCodeThree"
-                  value={newPriceCodeThree}
+                  value={props.newPriceCodeThree}
                   placeholder="Enter Price Code 3"
-                  onChange={onInputChange}
-                  error={priceCode3Error}
+                  onChange={props.onInputChange}
+                  error={props.priceCode3Error}
                 />
               </Grid>
               <Grid item sm xs={12}>
@@ -167,10 +125,10 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
                   label="New Price Code 4"
                   labelId="newPriceCodeFour"
                   name="newPriceCodeFour"
-                  value={newPriceCodeFour}
+                  value={props.newPriceCodeFour}
                   placeholder="Enter Price Code 4"
-                  onChange={onInputChange}
-                  error={priceCode4Error}
+                  onChange={props.onInputChange}
+                  error={props.priceCode4Error}
                 />
               </Grid>
             </Grid>
@@ -181,10 +139,10 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
                   label="Minimum Quantity"
                   labelId="minimumQuantity"
                   name="minimumQuantity"
-                  value={minimumQuantity}
+                  value={props.minimumQuantity}
                   placeholder="Enter Minmimum Quantity"
-                  onChange={onInputChange}
-                  error={minQuantityError}
+                  onChange={props.onInputChange}
+                  error={props.minQuantityError}
                 />
               </Grid>
               <Grid item sm xs={12}></Grid>
@@ -201,7 +159,7 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
         style={{ marginTop: "5rem" }}
       >
         <Grid item>
-          <CancelButton onClick={onClose}>Cancel</CancelButton>
+          <CancelButton onClick={props.onClose}>Cancel</CancelButton>
         </Grid>
         <Grid item>
           <SubmitButton
@@ -209,9 +167,9 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
             variant="contained"
             disableRipple
             color="secondary"
-            disabled={loading}
+            disabled={props.loading}
           >
-            {loading && (
+            {props.loading && (
               <StyledCircularProgress style={{ height: 25, width: 25 }} />
             )}{" "}
             Submit

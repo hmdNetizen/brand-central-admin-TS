@@ -109,3 +109,25 @@ export type WholesaleDataType = {
 export type ProductSizeDataType = {
   productSize: ProductSizeTypes[];
 };
+
+export type HighlightFormProps = {
+  onSubmit: (event: React.FormEvent<Element>) => void;
+  onChecked: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onClose: () => void;
+  inFeatured: boolean;
+  inPopular: boolean;
+  inBestSellers: boolean;
+  inWeeklyOffer: boolean;
+  loading: boolean;
+  newPriceCodeOne: number;
+  newPriceCodeTwo: number;
+  newPriceCodeThree: number;
+  newPriceCodeFour: number;
+  priceCode1Error: string;
+  minimumQuantity: number;
+  priceCode2Error: string;
+  priceCode3Error: string;
+  priceCode4Error: string;
+  minQuantityError: string;
+};
