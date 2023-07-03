@@ -1,6 +1,6 @@
 import React, { ElementType } from "react";
 import Grid from "@mui/material/Grid";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import {
   SubmitButton,
   CancelButton,
@@ -45,6 +45,7 @@ type HighlightFormProps = {
 };
 
 const ProductHighlightForm = (props: HighlightFormProps) => {
+  const theme = useTheme();
   const {
     onSubmit,
     onChecked,
@@ -81,6 +82,8 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
           onChange={onChecked}
           checked={inFeatured}
           isActive={inFeatured}
+          mainThemeColor={"#fff"}
+          lightThemeColor={theme.palette.common.grey}
         />
       </Grid>
       <Grid item style={{ marginBottom: "2rem" }}>
@@ -90,6 +93,8 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
           checked={inBestSellers}
           isActive={inBestSellers}
           onChange={onChecked}
+          mainThemeColor={"#fff"}
+          lightThemeColor={theme.palette.common.grey}
         />
       </Grid>
       <Grid item style={{ marginBottom: "2rem" }}>
@@ -99,6 +104,8 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
           checked={inPopular}
           isActive={inPopular}
           onChange={onChecked}
+          mainThemeColor={"#fff"}
+          lightThemeColor={theme.palette.common.grey}
         />
       </Grid>
       <Grid item container direction="column">
@@ -109,6 +116,8 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
             checked={inWeeklyOffer}
             isActive={inWeeklyOffer}
             onChange={onChecked}
+            mainThemeColor={"#fff"}
+            lightThemeColor={theme.palette.common.grey}
           />
         </Grid>
         {inWeeklyOffer && (

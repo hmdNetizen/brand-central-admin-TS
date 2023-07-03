@@ -80,7 +80,7 @@ const ProductHighlights = (props: HighlightProps) => {
   ) => {
     setHighlightData((prev) => ({
       ...prev,
-      [event.target.name]: event.target.value,
+      [event.target.name]: event.target.checked,
     }));
     // setHighlightChecked({
     //   ...highlightChecked,

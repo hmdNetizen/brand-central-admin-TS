@@ -8,9 +8,12 @@ import { SwitchProps } from "@mui/material";
 interface LabelSwitchProps extends SwitchProps {
   isActive: boolean;
   label: string;
+  mainThemeColor: string;
+  lightThemeColor: string;
 }
 
-const CustomLabelSwitch = ({ label, isActive, ...rest }: LabelSwitchProps) => {
+const CustomLabelSwitch = (props: LabelSwitchProps) => {
+  const { label, isActive, mainThemeColor, lightThemeColor, ...rest } = props;
   const matchesXXS = useMediaQuery("(max-width: 340px)");
   return (
     <Grid container justifyContent="space-between" alignItems="center">
@@ -26,7 +29,12 @@ const CustomLabelSwitch = ({ label, isActive, ...rest }: LabelSwitchProps) => {
         </Typography>
       </Grid>
       <Grid item>
-        <CustomSwitch isActive={isActive} {...rest} />
+        <CustomSwitch
+          isActive={isActive}
+          mainThemeColor={mainThemeColor}
+          lightThemeColor={lightThemeColor}
+          {...rest}
+        />
       </Grid>
     </Grid>
   );
