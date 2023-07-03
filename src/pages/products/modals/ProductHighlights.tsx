@@ -10,16 +10,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { toast } from "react-toastify";
 import { isQuantityInMultiples } from "src/lib/helpers";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-import {
-  initialHighlightCheckedState,
-  initialHighlightPriceCodes,
-  initialHighlightState,
-} from "./data";
-import {
-  InitialHighlightCheckedTypes,
-  InitialHighlightPriceCodesTypes,
-  InitialHighlightStateTypes,
-} from "./data/types";
+import { initialHighlightState } from "./data";
 import ProductHighlightForm from "../utils/ProductHighlightForm";
 import { ProductHighlightTypes } from "src/services/products/ProductTypes";
 
@@ -242,11 +233,21 @@ const ProductHighlights = (props: HighlightProps) => {
 
       for (const key in singleProduct.highlight) {
         if (key in newHighlightData) {
+          // @ts-ignore
           newHighlightData[key as keyof ProductHighlightTypes] =
             singleProduct.highlight[key as keyof ProductHighlightTypes];
+          setHighlightData(newHighlightData);
         }
 
-        setHighlightData(newHighlightData);
+        if (!singleProduct.highlight.inWeeklyOffer) {
+          setHighlightData((prev) => ({
+            ...prev,
+            newPriceCodeOne: Number(singleProduct.priceCode1),
+            newPriceCodeTwo: Number(singleProduct.priceCode2),
+            newPriceCodeThree: Number(singleProduct.priceCode3),
+            newPriceCodeFour: Number(singleProduct.priceCode4),
+          }));
+        }
       }
     }
   }, [singleProduct]);

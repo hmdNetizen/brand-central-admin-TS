@@ -126,9 +126,9 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
               <Grid item sm xs={12}>
                 <CustomFormInput
                   type="number"
-                  label="Price Code 1"
-                  labelId="priceCode1"
-                  name="priceCode1"
+                  label="New Price Code 1"
+                  labelId="newPriceCodeOne"
+                  name="newPriceCodeOne"
                   value={newPriceCodeOne}
                   placeholder="Enter Price Code 1"
                   onChange={onInputChange}
@@ -138,9 +138,9 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
               <Grid item sm xs={12}>
                 <CustomFormInput
                   type="number"
-                  label="Price Code 2"
-                  labelId="priceCode2"
-                  name="priceCode2"
+                  label="New Price Code 2"
+                  labelId="newPriceCodeTwo"
+                  name="newPriceCodeTwo"
                   value={newPriceCodeTwo}
                   placeholder="Enter Price Code 2"
                   onChange={onInputChange}
@@ -152,9 +152,9 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
               <Grid item sm xs={12}>
                 <CustomFormInput
                   type="number"
-                  label="Price Code 3"
-                  labelId="priceCode3"
-                  name="priceCode3"
+                  label="New Price Code 3"
+                  labelId="newPriceCodeThree"
+                  name="newPriceCodeThree"
                   value={newPriceCodeThree}
                   placeholder="Enter Price Code 3"
                   onChange={onInputChange}
@@ -164,9 +164,9 @@ const ProductHighlightForm = (props: HighlightFormProps) => {
               <Grid item sm xs={12}>
                 <CustomFormInput
                   type="number"
-                  label="Price Code 4"
-                  labelId="priceCode4"
-                  name="priceCode4"
+                  label="New Price Code 4"
+                  labelId="newPriceCodeFour"
+                  name="newPriceCodeFour"
                   value={newPriceCodeFour}
                   placeholder="Enter Price Code 4"
                   onChange={onInputChange}
