@@ -621,6 +621,11 @@ const productsSlice = createSlice({
             : product
         );
         state.error = null;
+
+        toast.success("Product successfully highlighted", {
+          position: "top-center",
+          hideProgressBar: true,
+        });
       })
       .addCase(toggleProductHighlight.rejected, (state, action) => {
         state.loadingProductAction = false;
