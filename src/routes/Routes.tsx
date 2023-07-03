@@ -27,7 +27,7 @@ import PrintOrderInvoice from "src/pages/orders/PrintOrderInvoice";
 import ProcessingOrders from "src/pages/orders/ProcessingOrders";
 import PreOrders from "src/pages/pre-orders/PreOrders";
 import AllProducts from "src/pages/products/AllProducts";
-import CreateProduct from "src/pages/products/modals/CreateProduct";
+import CreateProduct from "src/pages/products/CreateProduct";
 import ShippingZipCodes from "src/pages/shipping/ShippingZipCodes";
 import SubCategories from "src/pages/subcategories/SubCategories";
 import UpdateInventory from "src/pages/UpdateInventory";
