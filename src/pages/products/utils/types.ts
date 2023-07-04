@@ -195,7 +195,6 @@ export type ProductLeftFormProps = {
 };
 
 export type ProductRightFormProps = {
-  onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   setOpenGallery: React.Dispatch<React.SetStateAction<boolean>>;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   priceCode1: number;
