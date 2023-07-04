@@ -13,6 +13,7 @@ type FileUploadLayoutProps = {
   onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   preview: string | undefined;
   setPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
+  width?: number | string;
 };
 
 const FileUploadLayout = (props: FileUploadLayoutProps) => {
@@ -24,10 +25,11 @@ const FileUploadLayout = (props: FileUploadLayoutProps) => {
     setSelectedFile,
     preview,
     setPreview,
+    width,
   } = props;
   return (
     <Grid item container justifyContent="center">
-      <Grid item style={{ width: "100%" }}>
+      <Grid item style={{ width: width ? width : 200 }}>
         <FileUploadBox
           iconSize="5rem"
           setImageError={setImageError}
