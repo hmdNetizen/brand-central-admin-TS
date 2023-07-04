@@ -1,4 +1,8 @@
 import React from "react";
+import {
+  ProductSizeDataType,
+  WholesaleDataType,
+} from "src/pages/products/utils/types";
 
 export type ProductHighlightTypes = {
   inFeatured: boolean;
@@ -210,6 +214,79 @@ export type DashboardProductType = Pick<
 export type DashboardProductPayloadType = {
   data: {
     products: DashboardProductType[];
+  };
+};
+
+export type ProductDetailsTypes = {
+  productName: string;
+  productUPC: string;
+  units: string;
+  itemCode: string;
+  category: string;
+  subCategory: string;
+  productBrand: string;
+  customBrandName: string;
+  shippingTime: string;
+  sizeName: string;
+  sizeQuantity: string;
+  sizePrice: string;
+  wholesaleQuantity: string;
+  wholesaleDiscountPercentage: string;
+  productStock: number;
+  productDescription: string;
+  productMeasurement: string;
+  customMeasurement: string;
+  priceCode1: number;
+  priceCode2: number;
+  priceCode3: number;
+  priceCode4: number;
+  srpPrice: number;
+  shippingCategory: string;
+  maximumQuantity: 0;
+};
+
+type OptionsCheckedTypes = {
+  shippingTimeChecked: boolean;
+  sizesChecked: boolean;
+  wholesaleChecked: boolean;
+  measurementChecked: boolean;
+  isThresholdActive: boolean;
+};
+
+export type CreateProductRequestPayload = {
+  setProductDetails: React.Dispatch<React.SetStateAction<ProductDetailsTypes>>;
+  setOptionChecked: React.Dispatch<React.SetStateAction<OptionsCheckedTypes>>;
+  setProductSizeForm: React.Dispatch<React.SetStateAction<ProductSizeDataType>>;
+  setWholesaleForm: React.Dispatch<React.SetStateAction<WholesaleDataType>>;
+  dataset: {
+    productName: string;
+    productType: string;
+    productUPC: string;
+    itemCode: string;
+    units: string;
+    category: string;
+    subCategory: string;
+    brandName: string;
+    allowEstimatedShippingTime: boolean;
+    estimatedShippingTime: string;
+    shippingCategory: string;
+    allowProductSizes: boolean;
+    productSize: ProductSizeExcerpt[];
+    allowMeasurement: boolean;
+    productMeasurement: string;
+    allowProductWholesale: boolean;
+    productWholesale: WholesaleExcerpt[];
+    productStock: number;
+    productDescription: string;
+    threshold: ThresholdTypes;
+    featuredImage: string;
+    hasImage: boolean;
+    productGalleryImages: string[];
+    priceCode1: number;
+    priceCode2: number;
+    priceCode3: number;
+    priceCode4: number;
+    SRP: number;
   };
 };
 
