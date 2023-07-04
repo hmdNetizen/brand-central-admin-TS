@@ -146,8 +146,8 @@ export type ProductLeftFormProps = {
   productNameError: string;
   productStock: number;
   productStockError: string;
-  productCode: string;
-  productCodeError: string;
+  productUPC: string;
+  productUPCError: string;
   itemCode: string;
   itemCodeError: string;
   units: string;
