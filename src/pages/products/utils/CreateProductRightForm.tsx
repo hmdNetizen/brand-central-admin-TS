@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import { useTheme, styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
 
-import { Content } from "./CreateProduct.Styles";
+import { Content, StyledButton } from "./CreateProduct.Styles";
 import CustomFormInput from "src/utils/CustomFormInput";
 import {
   StyledCircularProgress,
@@ -35,22 +35,6 @@ type ProductRightFormProps = {
   setImagePreview: React.Dispatch<React.SetStateAction<string | undefined>>;
   setProductImageError: React.Dispatch<React.SetStateAction<string>>;
 };
-
-const StyledButton = styled(Button)(({ theme }) => ({
-  padding: "1rem",
-  fontSize: "1.5rem",
-  textTransform: "none",
-  background: theme.palette.primary.light,
-  borderRadius: 0,
-
-  "&:hover": {
-    background: theme.palette.primary.light,
-  },
-
-  "&:active": {
-    background: theme.palette.primary.main,
-  },
-}));
 
 const CreateProductRightForm = (props: ProductRightFormProps) => {
   const theme = useTheme();
