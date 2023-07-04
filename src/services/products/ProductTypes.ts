@@ -280,7 +280,7 @@ export type CreateProductRequestPayload = {
     productStock: number;
     productDescription: string;
     threshold: ThresholdTypes;
-    featuredImage: string;
+    featuredImage?: string;
     hasImage: boolean;
     productGalleryImages: string[];
     priceCode1: number;
