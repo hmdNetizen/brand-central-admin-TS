@@ -93,11 +93,11 @@ const CreateProductLeftForm = (props: ProductLeftFormProps) => {
             type="text"
             label="Product UPC"
             labelId="productUPC"
-            name="productCode"
-            value={props.productCode}
+            name="productUPC"
+            value={props.productUPC}
             placeholder="Enter Unique Product Code"
             onChange={props.onChange}
-            error={props.productCodeError}
+            error={props.productUPCError}
           />
         </Grid>
         <Grid item>
