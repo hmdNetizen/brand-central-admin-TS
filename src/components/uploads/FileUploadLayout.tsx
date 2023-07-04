@@ -27,7 +27,7 @@ const FileUploadLayout = (props: FileUploadLayoutProps) => {
   } = props;
   return (
     <Grid item container justifyContent="center">
-      <Grid item style={{ width: 200 }}>
+      <Grid item style={{ width: "100%" }}>
         <FileUploadBox
           iconSize="5rem"
           setImageError={setImageError}

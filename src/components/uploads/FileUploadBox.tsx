@@ -6,23 +6,20 @@ import { useSelector } from "react-redux";
 import CustomCircularProgress from "src/utils/CustomCircularProgress";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import NewItemImagePreview from "./NewItemImagePreview";
+import { GridProps } from "@mui/system";
 
-const UploadWrapper = styled(Grid)(({ theme }) => ({
+const UploadWrapper = styled(Grid, {
+  shouldForwardProp: (prop) => prop !== "width",
+})<GridProps & { width?: string | number }>(({ theme, width }) => ({
   background: "#f4f4f4",
   height: 200,
-  width: 200,
+  width: width ? width : 200,
   position: "relative",
 
   [theme.breakpoints.down("md")]: {
     maxWidth: 200,
   },
 }));
-
-const StyledImage = styled("img")({
-  width: "100%",
-  height: "100%",
-  objectFit: "cover",
-});
 
 type FileUploadBoxProps = {
   setImageError: React.Dispatch<React.SetStateAction<string>>;
@@ -32,6 +29,7 @@ type FileUploadBoxProps = {
   setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
   preview: string | undefined;
   setPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
+  width?: number | string;
 };
 
 const FileUploadBox = (props: FileUploadBoxProps) => {
@@ -43,10 +41,17 @@ const FileUploadBox = (props: FileUploadBoxProps) => {
     setSelectedFile,
     preview,
     setPreview,
+    width,
   } = props;
 
   return (
-    <UploadWrapper item container justifyContent="center" alignItems="center">
+    <UploadWrapper
+      item
+      container
+      justifyContent="center"
+      alignItems="center"
+      width={width}
+    >
       {selectedFile || preview ? (
         <NewItemImagePreview
           selectedFile={selectedFile}

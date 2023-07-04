@@ -14,6 +14,7 @@ import CreateProductLeftForm from "./utils/CreateProductLeftForm";
 import { SelectChangeEvent } from "@mui/material";
 import { ProductSizeDataType, WholesaleDataType } from "./utils/types";
 import { initialProductSize, initialProductWholesale } from "./modals/data";
+import CreateProductRightForm from "./utils/CreateProductRightForm";
 
 const Container = styled(Grid)(({ theme }) => ({
   padding: "2rem 3rem",
@@ -55,11 +56,11 @@ const CreateProduct = () => {
     productDescription: "",
     productMeasurement: "",
     customMeasurement: "",
-    priceCode1: "",
-    priceCode2: "",
-    priceCode3: "",
-    priceCode4: "",
-    srpPrice: "",
+    priceCode1: 0,
+    priceCode2: 0,
+    priceCode3: 0,
+    priceCode4: 0,
+    srpPrice: 0,
     shippingCategory: "",
     maximumQuantity: 0,
   });
@@ -77,6 +78,8 @@ const CreateProduct = () => {
   const [wholesaleForm, setWholesaleForm] = useState<WholesaleDataType>(
     initialProductWholesale
   );
+  const [imagePreview, setImagePreview] = useState<string | undefined>();
+  const [selectedFile, setSelectedFile] = useState<File | string>("");
 
   // ERROR HANDLING STATES
   const [productNameError, setProductNameError] = useState("");
@@ -210,11 +213,11 @@ const CreateProduct = () => {
       !productBrand.trim() &&
       productStock.toString().trim() === "" &&
       !uploadedFile &&
-      priceCode1.trim() === "" &&
-      priceCode2.trim() === "" &&
-      priceCode3.trim() === "" &&
-      priceCode4.trim() === "" &&
-      srpPrice.trim() === ""
+      priceCode1.toString().trim() === "" &&
+      priceCode2.toString().trim() === "" &&
+      priceCode3.toString().trim() === "" &&
+      priceCode4.toString().trim() === "" &&
+      srpPrice.toString().trim() === ""
     ) {
       setProductNameError("Enter Product Name");
       setProductCodeError("Enter unique product code");
@@ -339,27 +342,27 @@ const CreateProduct = () => {
       return;
     }
 
-    if (priceCode1.trim() === "") {
+    if (priceCode1.toString().trim() === "") {
       setPriceCode1Error("Price code 1 must be provided");
       return;
     }
 
-    if (priceCode2.trim() === "") {
+    if (priceCode2.toString().trim() === "") {
       setPriceCode2Error("Price code 2 must be provided");
       return;
     }
 
-    if (priceCode3.trim() === "") {
+    if (priceCode3.toString().trim() === "") {
       setPriceCode3Error("Price code 3 must be provided");
       return;
     }
 
-    if (priceCode4.trim() === "") {
+    if (priceCode4.toString().trim() === "") {
       setPriceCode4Error("Price code 4 must be provided");
       return;
     }
 
-    if (srpPrice.trim() === "") {
+    if (srpPrice.toString().trim() === "") {
       setSRPError("SRP value must be provided");
       return;
     }
@@ -414,11 +417,11 @@ const CreateProduct = () => {
         uploadedFiles.length > 0
           ? uploadedFiles.map((uploaded) => uploaded.url)
           : [],
-      priceCode1: priceCode1 ? parseFloat(priceCode1) : 0,
-      priceCode2: priceCode2 ? parseFloat(priceCode2) : 0,
-      priceCode3: priceCode3 ? parseFloat(priceCode3) : 0,
-      priceCode4: priceCode4 ? parseFloat(priceCode4) : 0,
-      SRP: srpPrice ? parseFloat(srpPrice) : 0,
+      priceCode1,
+      priceCode2,
+      priceCode3,
+      priceCode4,
+      SRP: srpPrice,
     });
   };
 
@@ -647,6 +650,24 @@ const CreateProduct = () => {
         />
 
         {/* Right form goes here */}
+        <CreateProductRightForm
+          onChange={handleChange}
+          SRPError={SRPError}
+          srpPrice={srpPrice}
+          priceCode1={priceCode1}
+          priceCode2={priceCode2}
+          priceCode3={priceCode3}
+          priceCode4={priceCode4}
+          priceCode1Error={priceCode1Error}
+          priceCode2Error={priceCode2Error}
+          priceCode3Error={priceCode3Error}
+          priceCode4Error={priceCode4Error}
+          imagePreview={imagePreview}
+          selectedFile={selectedFile}
+          setSelectedFile={setSelectedFile}
+          setImagePreview={setImagePreview}
+          setProductImageError={setProductImageError}
+        />
       </Grid>
       {/* <ShowDialog
         openModal={openGallery}
