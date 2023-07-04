@@ -21,25 +21,11 @@ import ProductSizeForm from "./ProductSizeForm";
 import { ProductSizeDataType, WholesaleDataType } from "./types";
 import ProductWholesaleForm from "./ProductWholesaleForm";
 import { productMeasurements, shippingCategoryList } from "src/lib/helpers";
-
-const Content = styled(Grid)({
-  boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
-  background: "#fff",
-  borderRadius: 5,
-  padding: "2rem 3rem 5rem",
-});
-
-const SuccessWrapper = styled(Grid)(({ theme }) => ({
-  background: theme.palette.common.lightGreen,
-  padding: "1rem 3rem",
-  borderRadius: 5,
-}));
-
-const SuccessMessage = styled(Typography)(({ theme }) => ({
-  color: theme.palette.success.main,
-  fontWeight: 400,
-  fontSize: "1.35rem",
-}));
+import {
+  Content,
+  SuccessMessage,
+  SuccessWrapper,
+} from "./CreateProduct.Styles";
 
 type ProductLeftFormProps = {
   onChange: (
