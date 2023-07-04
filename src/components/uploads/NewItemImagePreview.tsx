@@ -9,7 +9,7 @@ type NewItemImagePreviewProps = {
 };
 
 const Image = styled("img")(({ theme }) => ({
-  height: 200,
+  height: 180,
 
   [theme.breakpoints.down("md")]: {
     maxWidth: 200,
@@ -34,7 +34,7 @@ const NewItemImagePreview = (props: NewItemImagePreviewProps) => {
   }, [selectedFile]);
 
   return (
-    <Grid item container>
+    <Grid item container justifyContent="center">
       <Image src={preview} alt="Category image preview" />
     </Grid>
   );
