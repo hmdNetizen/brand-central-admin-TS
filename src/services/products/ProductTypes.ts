@@ -258,6 +258,7 @@ export type CreateProductRequestPayload = {
   setOptionChecked: React.Dispatch<React.SetStateAction<OptionsCheckedTypes>>;
   setProductSizeForm: React.Dispatch<React.SetStateAction<ProductSizeDataType>>;
   setWholesaleForm: React.Dispatch<React.SetStateAction<WholesaleDataType>>;
+  file: string | File;
   dataset: {
     productName: string;
     productType: string;
