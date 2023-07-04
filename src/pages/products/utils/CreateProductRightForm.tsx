@@ -66,6 +66,7 @@ const CreateProductRightForm = (props: ProductRightFormProps) => {
           setSelectedFile={props.setSelectedFile}
           preview={props.imagePreview}
           setPreview={props.setImagePreview}
+          width={"100%"}
         />
         {/* {props.productImageError && <small>{props.productImageError}</small>} */}
         <Grid

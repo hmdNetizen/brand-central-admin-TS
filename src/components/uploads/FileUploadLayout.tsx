@@ -38,6 +38,7 @@ const FileUploadLayout = (props: FileUploadLayoutProps) => {
           setSelectedFile={setSelectedFile}
           preview={preview}
           setPreview={setPreview}
+          width={width}
         />
       </Grid>
       {(selectedFile || preview) && (
