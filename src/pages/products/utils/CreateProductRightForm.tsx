@@ -13,28 +13,7 @@ import {
   SubmitButton,
 } from "src/utilityStyles/pagesUtilityStyles";
 import FileUploadLayout from "src/components/uploads/FileUploadLayout";
-
-type ProductRightFormProps = {
-  onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  setOpenGallery: React.Dispatch<React.SetStateAction<boolean>>;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  priceCode1: number;
-  priceCode1Error: string;
-  priceCode2: number;
-  priceCode2Error: string;
-  priceCode3: number;
-  priceCode3Error: string;
-  priceCode4: number;
-  priceCode4Error: string;
-  srpPrice: number;
-  SRPError: string;
-  loading: boolean;
-  selectedFile: File | string;
-  setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
-  imagePreview: string | undefined;
-  setImagePreview: React.Dispatch<React.SetStateAction<string | undefined>>;
-  setProductImageError: React.Dispatch<React.SetStateAction<string>>;
-};
+import { ProductRightFormProps } from "./types";
 
 const CreateProductRightForm = (props: ProductRightFormProps) => {
   const theme = useTheme();
