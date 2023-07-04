@@ -91,10 +91,10 @@ export type ProductFormProps = {
 };
 
 export type ProductSizeFormProps = {
-  productSizeForm: ProductSizeDataType;
   sizeNameError: string;
   sizeQuantityError: string;
   sizePriceError: string;
+  productSizeForm: ProductSizeDataType;
   setProductSizeForm: React.Dispatch<React.SetStateAction<ProductSizeDataType>>;
 };
 
