@@ -2,7 +2,7 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import { SelectChangeEvent } from "@mui/material";
 
 import CustomFormInput from "src/utils/CustomFormInput";
@@ -16,9 +16,8 @@ import {
   ErrorMsg,
 } from "src/utilityStyles/pagesUtilityStyles";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-import { SubCategoryReturnedPayload } from "src/services/categories/CategoryTypes";
 import ProductSizeForm from "./ProductSizeForm";
-import { ProductSizeDataType, WholesaleDataType } from "./types";
+import { ProductLeftFormProps } from "./types";
 import ProductWholesaleForm from "./ProductWholesaleForm";
 import { productMeasurements, shippingCategoryList } from "src/lib/helpers";
 import {
@@ -26,68 +25,6 @@ import {
   SuccessMessage,
   SuccessWrapper,
 } from "./CreateProduct.Styles";
-
-type ProductLeftFormProps = {
-  onChange: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
-  onSelectChange: (event: SelectChangeEvent<unknown>) => void;
-  onChecked: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  setFilteredSubCategory: React.Dispatch<
-    React.SetStateAction<SubCategoryReturnedPayload[]>
-  >;
-  filteredSubCategory: SubCategoryReturnedPayload[];
-  productName: string;
-  productNameError: string;
-  productStock: number;
-  productStockError: string;
-  productCode: string;
-  productCodeError: string;
-  itemCode: string;
-  itemCodeError: string;
-  units: string;
-  unitsError: string;
-  category: string;
-  categoryError: string;
-  subCategory: string;
-  subCategoryError: string;
-  productBrand: string;
-  productBrandError: string;
-  customBrandName: string;
-  customBrandNameError: string;
-  shippingTimeChecked: boolean;
-  shippingTime: string;
-  shippingTimeError: string;
-  sizesChecked: boolean;
-  sizeNameError: string;
-  sizePriceError: string;
-  sizeQuantityError: string;
-  productSizeForm: ProductSizeDataType;
-  setProductSizeForm: React.Dispatch<React.SetStateAction<ProductSizeDataType>>;
-  wholesaleChecked: boolean;
-  wholesaleQuantityError: string;
-  setWholesaleQuantityError: React.Dispatch<React.SetStateAction<string>>;
-  wholesalePercentageDiscountError: string;
-  setWholesalePercentageDiscountError: React.Dispatch<
-    React.SetStateAction<string>
-  >;
-  wholesaleForm: WholesaleDataType;
-  setWholesaleForm: React.Dispatch<React.SetStateAction<WholesaleDataType>>;
-  isThresholdActive: boolean;
-  setMaximumQuantityError: React.Dispatch<React.SetStateAction<string>>;
-  maximumQuantityError: string;
-  maximumQuantity: number;
-  shippingCategory: string;
-  measurementChecked: boolean;
-  productMeasurement: string;
-  productMeasurementError: string;
-  customMeasurement: string;
-  customMeasurementError: string;
-  productDescription: string;
-  loading: boolean;
-  error: { param: string; msg: string }[];
-  productSuccessMessage: string;
-};
 
 const CreateProductLeftForm = (props: ProductLeftFormProps) => {
   const theme = useTheme();

@@ -131,3 +131,65 @@ export type HighlightFormProps = {
   priceCode4Error: string;
   minQuantityError: string;
 };
+
+export type ProductLeftFormProps = {
+  onChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
+  onSelectChange: (event: SelectChangeEvent<unknown>) => void;
+  onChecked: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  setFilteredSubCategory: React.Dispatch<
+    React.SetStateAction<SubCategoryReturnedPayload[]>
+  >;
+  filteredSubCategory: SubCategoryReturnedPayload[];
+  productName: string;
+  productNameError: string;
+  productStock: number;
+  productStockError: string;
+  productCode: string;
+  productCodeError: string;
+  itemCode: string;
+  itemCodeError: string;
+  units: string;
+  unitsError: string;
+  category: string;
+  categoryError: string;
+  subCategory: string;
+  subCategoryError: string;
+  productBrand: string;
+  productBrandError: string;
+  customBrandName: string;
+  customBrandNameError: string;
+  shippingTimeChecked: boolean;
+  shippingTime: string;
+  shippingTimeError: string;
+  sizesChecked: boolean;
+  sizeNameError: string;
+  sizePriceError: string;
+  sizeQuantityError: string;
+  productSizeForm: ProductSizeDataType;
+  setProductSizeForm: React.Dispatch<React.SetStateAction<ProductSizeDataType>>;
+  wholesaleChecked: boolean;
+  wholesaleQuantityError: string;
+  setWholesaleQuantityError: React.Dispatch<React.SetStateAction<string>>;
+  wholesalePercentageDiscountError: string;
+  setWholesalePercentageDiscountError: React.Dispatch<
+    React.SetStateAction<string>
+  >;
+  wholesaleForm: WholesaleDataType;
+  setWholesaleForm: React.Dispatch<React.SetStateAction<WholesaleDataType>>;
+  isThresholdActive: boolean;
+  setMaximumQuantityError: React.Dispatch<React.SetStateAction<string>>;
+  maximumQuantityError: string;
+  maximumQuantity: number;
+  shippingCategory: string;
+  measurementChecked: boolean;
+  productMeasurement: string;
+  productMeasurementError: string;
+  customMeasurement: string;
+  customMeasurementError: string;
+  productDescription: string;
+  loading: boolean;
+  error: { param: string; msg: string }[];
+  productSuccessMessage: string;
+};
