@@ -56,8 +56,9 @@ export const getPaginatedProducts = createAsyncThunk(
     const { page, limit } = query;
     try {
       const { data } = await axios.get(
-        `/api/products/paginated?page=${page + 1}&limit=${limit}`
+        `/api/products/paginated?page=${page}&limit=${limit}`
       );
+
       const result = data as PaginatedReturnedPayloadType;
 
       return {
