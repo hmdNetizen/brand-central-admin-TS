@@ -105,26 +105,26 @@ const CreateProduct = () => {
   const [itemCodeError, setItemCodeError] = useState("");
   const [maximumQuantityError, setMaximumQuantityError] = useState("");
 
-  const { uploadedFile, uploadedFiles } = useSelector((state) => state.common);
-
   const categories = useTypedSelector((state) => state.categories.categories);
   const subCategories = useTypedSelector(
     (state) => state.categories.subCategories
   );
   const brands = useTypedSelector((state) => state.brands.brandsList);
 
+  const errors = useTypedSelector((state) => state.products.errors);
+  const loadingProductAction = useTypedSelector(
+    (state) => state.products.loadingProductAction
+  );
+  const productSuccessMsg = useTypedSelector(
+    (state) => state.products.productSuccessMsg
+  );
+
   const [openGallery, setOpenGallery] = useState(false);
   const [filteredSubCategory, setFilteredSubCategory] = useState(subCategories);
 
-  const { loadingProducts, productSuccessMessage, error } = useSelector(
-    (state) => state.products
-  );
-
   const {
     uploadFile,
-    createProduct,
-    clearProductMessages,
-    clearUploadedImages,
+    createNewProduct,
     getAllCategories,
     getAllSubcategories,
     fetchAllBrands,
@@ -164,30 +164,10 @@ const CreateProduct = () => {
     isThresholdActive,
   } = optionChecked;
 
-  const handleFilter = (value: string) => {
-    const newSubCategories = [...subCategories].filter((subCategory) =>
-      subCategory.category.toLowerCase().includes(value.toLowerCase())
-    );
-
-    setFilteredSubCategory(newSubCategories);
-  };
-
   const handleChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, name } = event.target;
 
     setOptionChecked((prev) => ({ ...prev, [name]: checked }));
-  };
-
-  const handleChangeProductImage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
-
-    if (!file) return;
-
-    uploadFile({
-      file,
-    });
   };
 
   const handleFormSubmit = (event: FormEvent<Element>) => {
@@ -202,7 +182,6 @@ const CreateProduct = () => {
       !subCategory.trim() &&
       !productBrand.trim() &&
       productStock.toString().trim() === "" &&
-      !uploadedFile &&
       priceCode1.toString().trim() === "" &&
       priceCode2.toString().trim() === "" &&
       priceCode3.toString().trim() === "" &&
@@ -327,11 +306,6 @@ const CreateProduct = () => {
       }
     }
 
-    if (!uploadedFile) {
-      setProductImageError("Add a photo for this product");
-      return;
-    }
-
     if (priceCode1.toString().trim() === "") {
       setPriceCode1Error("Price code 1 must be provided");
       return;
@@ -357,61 +331,57 @@ const CreateProduct = () => {
       return;
     }
 
-    createProduct({
+    createNewProduct({
       setProductDetails,
       setOptionChecked,
-      productName,
-      productType: "Physical",
-      productUPC: productUPC,
-      itemCode,
-      units: units,
-      category: capitalizeFirstLetters(category),
-      subCategory: capitalizeFirstLetters(subCategory),
-      brandName:
-        productBrand === "Others"
-          ? capitalizeFirstLetters(customBrandName)
-          : capitalizeFirstLetters(productBrand),
-      allowEstimatedShippingTime: shippingTimeChecked,
-      estimatedShippingTime: shippingTime,
-      shippingCategory: shippingCategory ? shippingCategory.toLowerCase() : "",
-      allowProductSizes: sizesChecked,
-      // productSize: [
-      //   { name: sizeName },
-      //   { quantity: sizeQuantity ? parseInt(sizeQuantity) : "" },
-      //   { price: sizePrice ? parseFloat(sizePrice) : "" },
-      // ],
-      allowMeasurement: measurementChecked,
-      productMeasurement:
-        productMeasurement === "Custom"
-          ? customMeasurement
-          : productMeasurement,
-      allowProductWholesale: wholesaleChecked,
-      // productWholesale: [
-      //   { quantity: wholesaleQuantity ? parseInt(wholesaleQuantity) : "" },
-      //   {
-      //     percentage: wholesaleDiscountPercentage
-      //       ? parseFloat(wholesaleDiscountPercentage)
-      //       : "",
-      //   },
-      // ],
-      productStock,
-      productDescription,
-      threshold: {
-        isThresholdActive,
-        maximumQuantity:
-          isThresholdActive && maximumQuantity ? Number(maximumQuantity) : 0,
-      },
-      featuredImage: uploadedFile.url,
-      hasImage: uploadedFile.url ? true : false,
-      productGalleryImages:
-        uploadedFiles.length > 0
-          ? uploadedFiles.map((uploaded) => uploaded.url)
+      setPreview: setImagePreview,
+      setSelectedFile,
+      setProductSizeForm,
+      setWholesaleForm,
+      file: selectedFile,
+      dataset: {
+        allowEstimatedShippingTime: shippingTimeChecked,
+        allowMeasurement: measurementChecked,
+        allowProductSizes: sizesChecked,
+        allowProductWholesale: wholesaleChecked,
+        brandName: productBrand,
+        category,
+        subCategory,
+        estimatedShippingTime: shippingTime,
+        itemCode,
+        priceCode1,
+        priceCode2,
+        priceCode3,
+        priceCode4,
+        productDescription,
+        productMeasurement,
+        productName,
+        productSize: sizesChecked
+          ? productSizeForm.productSize.map((size) => ({
+              name: size.name,
+              price: Number(size.price),
+              quantity: Number(size.quantity),
+            }))
           : [],
-      priceCode1,
-      priceCode2,
-      priceCode3,
-      priceCode4,
-      SRP: srpPrice,
+        productStock,
+        productType: "Physical",
+        productUPC,
+        productWholesale: wholesaleChecked
+          ? wholesaleForm.productWholesale.map((wholesale) => ({
+              percentage: Number(wholesale.percentage),
+              quantity: Number(wholesale.quantity),
+            }))
+          : [],
+        shippingCategory,
+        SRP: srpPrice,
+        threshold: {
+          isThresholdActive,
+          maximumQuantity,
+        },
+        units,
+        hasImage: imagePreview ? true : false,
+        productGalleryImages: [],
+      },
     });
   };
 
@@ -637,6 +607,9 @@ const CreateProduct = () => {
           setProductSizeForm={setProductSizeForm}
           wholesaleForm={wholesaleForm}
           setWholesaleForm={setWholesaleForm}
+          loading={loadingProductAction}
+          error={errors}
+          productSuccessMessage={productSuccessMsg}
         />
 
         {/* Right form goes here */}
@@ -657,6 +630,8 @@ const CreateProduct = () => {
           setSelectedFile={setSelectedFile}
           setImagePreview={setImagePreview}
           setProductImageError={setProductImageError}
+          loading={loadingProductAction}
+          setOpenGallery={setOpenGallery}
         />
       </Grid>
       {/* <ShowDialog
