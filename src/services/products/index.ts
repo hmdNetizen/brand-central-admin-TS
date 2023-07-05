@@ -719,7 +719,7 @@ const productsSlice = createSlice({
         state.loadingProductAction = false;
         state.products = [action.payload, ...state.products];
         state.error = null;
-        state.errors = [];
+        state.errors = null;
         state.productSuccessMsg = `${action.payload.itemCode.toUpperCase()} has been created successfully`;
       })
       .addCase(createNewProduct.rejected, (state, action) => {
