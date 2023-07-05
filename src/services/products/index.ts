@@ -696,7 +696,7 @@ const productsSlice = createSlice({
       .addCase(addPhotosToGallery.pending, (state) => {
         state.uploadingImage = true;
       })
-      .addCase(addPhotosToGallery.fulfilled, (state, action) => {
+      .addCase(addPhotosToGallery.fulfilled, (state) => {
         state.uploadingImage = false;
         state.error = null;
 

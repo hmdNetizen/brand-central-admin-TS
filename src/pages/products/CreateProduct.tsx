@@ -427,10 +427,18 @@ const CreateProduct = () => {
         }
         break;
       case "maximumQuantity":
-        if (isThresholdActive && !value.trim()) {
+        if (isThresholdActive && !value.toString().trim()) {
           setMaximumQuantityError("Maximum Quantity Threshold cannot be empty");
-        } else if (!Number(value)) {
+        } else if (isThresholdActive && Number(value) === 0) {
           setMaximumQuantityError("Enter a valid maximum Quantity");
+        } else if (
+          isThresholdActive &&
+          units.toUpperCase() === "EA" &&
+          Number(value) % 6 !== 0
+        ) {
+          setMaximumQuantityError(
+            "Only values with multiples of 6 is allowed for this product"
+          );
         } else {
           setMaximumQuantityError("");
         }
