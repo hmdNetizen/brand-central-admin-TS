@@ -63,7 +63,7 @@ const CreateProductLeftForm = (props: ProductLeftFormProps) => {
           </Grid>
         )}
         {!props.loading && props.error && (
-          <ErrorsList item component="ul">
+          <ErrorsList item component="ul" hasBullet>
             {props.error.map((err) => (
               <ErrorMsg
                 variant="body1"

@@ -10,14 +10,16 @@ export const ContentContainer = styled(Grid)({
   paddingBottom: "3rem",
 });
 
-export const ErrorsList = styled(Grid)<{ component?: React.ElementType }>(
-  ({ theme }) => ({
+export const ErrorsList = styled(Grid, {
+  shouldForwardProp: (prop) => prop !== "hasBullet",
+})<{ component?: React.ElementType; hasBullet?: boolean }>(
+  ({ theme, hasBullet }) => ({
     padding: "1rem 2rem 1rem 3rem",
     background: theme.palette.common.lightRed,
     alignSelf: "center",
     marginTop: "1rem",
     borderRadius: 5,
-    listStyle: "none",
+    listStyle: hasBullet ? "initial" : "none",
     borderLeft: `4px solid ${theme.palette.error.main}`,
   })
 );
