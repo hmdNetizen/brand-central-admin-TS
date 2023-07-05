@@ -279,10 +279,10 @@ const CreateProduct = () => {
     //   }
     // }
 
-    // if (productStock.toString().trim() === "") {
-    //   setProductStockError("Enter product stock");
-    //   return;
-    // }
+    if (productStock.toString().trim() === "") {
+      setProductStockError("Enter product stock");
+      return;
+    }
 
     if (isThresholdActive) {
       if (!Number(maximumQuantity)) {

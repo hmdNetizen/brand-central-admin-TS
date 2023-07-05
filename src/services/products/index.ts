@@ -698,8 +698,6 @@ const productsSlice = createSlice({
       })
       .addCase(addPhotosToGallery.fulfilled, (state, action) => {
         state.uploadingImage = false;
-        // state.singleProduct?.productGalleryImages.push(action.payload);
-        // state.singleProduct = state.singleProduct;
         state.error = null;
 
         toast.success("Image uploaded successfully", {
@@ -722,7 +720,7 @@ const productsSlice = createSlice({
         state.products = [action.payload, ...state.products];
         state.error = null;
         state.errors = [];
-        state.productSuccessMsg = `${action.payload.itemCode} created successfully`;
+        state.productSuccessMsg = `${action.payload.itemCode.toUpperCase()} has been created successfully`;
       })
       .addCase(createNewProduct.rejected, (state, action) => {
         state.loadingProductAction = false;
