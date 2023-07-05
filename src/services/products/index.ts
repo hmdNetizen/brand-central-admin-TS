@@ -47,7 +47,7 @@ const initialState: initStateType = {
   updatedInventory: "",
   productSuccessMsg: "",
   error: null,
-  errors: [],
+  errors: null,
 };
 
 export const getPaginatedProducts = createAsyncThunk(
@@ -727,7 +727,7 @@ const productsSlice = createSlice({
       .addCase(createNewProduct.rejected, (state, action) => {
         state.loadingProductAction = false;
 
-        if (Array.isArray(action.payload)) {
+        if (Array.isArray(action.payload) || action.payload === null) {
           state.errors = action.payload;
         }
       });
