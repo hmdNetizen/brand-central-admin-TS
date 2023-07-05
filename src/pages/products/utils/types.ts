@@ -190,7 +190,7 @@ export type ProductLeftFormProps = {
   customMeasurementError: string;
   productDescription: string;
   loading: boolean;
-  error: { param: string; msg: string }[];
+  error: { param: string; msg: string }[] | null;
   productSuccessMessage: string;
 };
 
