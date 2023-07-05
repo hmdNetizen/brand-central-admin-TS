@@ -46,6 +46,7 @@ const initialState: initStateType = {
   uploadedFiles: "",
   updatedInventory: "",
   error: null,
+  errors: [],
 };
 
 export const getPaginatedProducts = createAsyncThunk(
@@ -387,7 +388,7 @@ export const toggleProductHighlight = createAsyncThunk(
   }
 );
 
-const createProduct = createAsyncThunk(
+export const createProduct = createAsyncThunk(
   "add-product",
   async (details: CreateProductRequestPayload, thunkAPI) => {
     const {
@@ -698,6 +699,23 @@ const productsSlice = createSlice({
         state.uploadingImage = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(createProduct.pending, (state) => {
+        state.loadingProductAction = true;
+      })
+      .addCase(createProduct.fulfilled, (state, action) => {
+        state.loadingProductAction = false;
+        state.products = [action.payload, ...state.products];
+        state.error = null;
+        state.errors = [];
+      })
+      .addCase(createProduct.rejected, (state, action) => {
+        state.loadingProductAction = false;
+
+        if (Array.isArray(action.payload)) {
+          state.errors = action.payload;
         }
       });
     builder
