@@ -722,7 +722,7 @@ const productsSlice = createSlice({
         state.products = [action.payload, ...state.products];
         state.error = null;
         state.errors = [];
-        state.productSuccessMsg = "Product created successfully";
+        state.productSuccessMsg = `${action.payload.itemCode} created successfully`;
       })
       .addCase(createNewProduct.rejected, (state, action) => {
         state.loadingProductAction = false;
