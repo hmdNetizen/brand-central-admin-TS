@@ -22,6 +22,7 @@ import {
   ProductRequestPayloadTypes,
   ProductEditRequestPayload,
   ProductHighlightRequestPayload,
+  CreateProductRequestPayload,
 } from "./ProductTypes";
 
 type ProductQueryType = {
@@ -282,7 +283,6 @@ export const updateProduct = createAsyncThunk(
 
         return result.data;
       }
-      console.log(details);
     } catch (error: AxiosError | any) {
       if (error.response) {
         return thunkAPI.rejectWithValue(error.response.data.error);
@@ -383,6 +383,173 @@ export const toggleProductHighlight = createAsyncThunk(
       return result.data.data;
     } catch (error) {
       thunkAPI.rejectWithValue("Something went wrong. Try again");
+    }
+  }
+);
+
+const createProduct = createAsyncThunk(
+  "add-product",
+  async (details: CreateProductRequestPayload, thunkAPI) => {
+    const {
+      setProductDetails,
+      setOptionChecked,
+      setProductSizeForm,
+      setWholesaleForm,
+      setPreview,
+      setSelectedFile,
+      file,
+      dataset,
+    } = details;
+    const { config, formData } = fileUploadConfig(file);
+    try {
+      if (typeof file === "object") {
+        const { data: uploadedFile } = await axios.post(
+          `/api/uploads/file`,
+          formData,
+          config
+        );
+        const uploadedResult = uploadedFile as UploadedFilePayload;
+
+        const { data, status } = await axios.put(`/api/products/add`, {
+          ...dataset,
+          featuredImage: uploadedResult.url,
+          hasImage: true,
+        });
+
+        const result = data as { data: ProductTypes };
+
+        if (status === 200) {
+          // This resets the form
+          setProductDetails({
+            productName: "",
+            category: "",
+            customBrandName: "",
+            customMeasurement: "",
+            itemCode: "",
+            maximumQuantity: 0,
+            priceCode1: 0,
+            priceCode2: 0,
+            priceCode3: 0,
+            priceCode4: 0,
+            productBrand: "",
+            productDescription: "",
+            productMeasurement: "",
+            productStock: 0,
+            productUPC: "",
+            shippingCategory: "",
+            shippingTime: "",
+            srpPrice: 0,
+            subCategory: "",
+            units: "",
+          });
+
+          setOptionChecked({
+            isThresholdActive: false,
+            measurementChecked: false,
+            shippingTimeChecked: false,
+            sizesChecked: false,
+            wholesaleChecked: false,
+          });
+
+          setProductSizeForm({
+            productSize: [
+              {
+                _id: nanoid(),
+                name: "",
+                price: 0,
+                quantity: 0,
+              },
+            ],
+          });
+
+          setWholesaleForm({
+            productWholesale: [
+              {
+                _id: nanoid(),
+                percentage: 0,
+                quantity: 0,
+              },
+            ],
+          });
+
+          setPreview(undefined);
+          setSelectedFile("");
+        }
+
+        return result.data;
+      } else {
+        const { data, status } = await axios.post(`/api/products/add`, dataset);
+
+        const result = data as { data: ProductTypes };
+
+        if (status === 200) {
+          // This resets the form
+          setProductDetails({
+            productName: "",
+            category: "",
+            customBrandName: "",
+            customMeasurement: "",
+            itemCode: "",
+            maximumQuantity: 0,
+            priceCode1: 0,
+            priceCode2: 0,
+            priceCode3: 0,
+            priceCode4: 0,
+            productBrand: "",
+            productDescription: "",
+            productMeasurement: "",
+            productStock: 0,
+            productUPC: "",
+            shippingCategory: "",
+            shippingTime: "",
+            srpPrice: 0,
+            subCategory: "",
+            units: "",
+          });
+
+          setOptionChecked({
+            isThresholdActive: false,
+            measurementChecked: false,
+            shippingTimeChecked: false,
+            sizesChecked: false,
+            wholesaleChecked: false,
+          });
+
+          setProductSizeForm({
+            productSize: [
+              {
+                _id: nanoid(),
+                name: "",
+                price: 0,
+                quantity: 0,
+              },
+            ],
+          });
+
+          setWholesaleForm({
+            productWholesale: [
+              {
+                _id: nanoid(),
+                percentage: 0,
+                quantity: 0,
+              },
+            ],
+          });
+
+          setPreview(undefined);
+          setSelectedFile("");
+        }
+
+        return result.data;
+      }
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.errors);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
     }
   }
 );
