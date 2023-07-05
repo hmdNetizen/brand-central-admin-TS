@@ -303,6 +303,7 @@ export type initStateType = {
   totalProducts: number;
   uploadedFiles: string;
   updatedInventory: string;
+  productSuccessMsg: string;
   errors: { param: string; msg: string }[];
   error: null | string;
 };
