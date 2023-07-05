@@ -237,7 +237,7 @@ export type ProductDetailsTypes = {
   priceCode4: number;
   srpPrice: number;
   shippingCategory: string;
-  maximumQuantity: 0;
+  maximumQuantity: number;
 };
 
 type OptionsCheckedTypes = {
@@ -254,7 +254,7 @@ export type CreateProductRequestPayload = {
   setProductSizeForm: React.Dispatch<React.SetStateAction<ProductSizeDataType>>;
   setWholesaleForm: React.Dispatch<React.SetStateAction<WholesaleDataType>>;
   setPreview: React.Dispatch<React.SetStateAction<undefined | string>>;
-  setSelectedFile: React.Dispatch<React.SetStateAction<File | "">>;
+  setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
   file: string | File;
   dataset: {
     productName: string;
