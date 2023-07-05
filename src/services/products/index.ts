@@ -388,7 +388,7 @@ export const toggleProductHighlight = createAsyncThunk(
   }
 );
 
-export const createProduct = createAsyncThunk(
+export const createNewProduct = createAsyncThunk(
   "add-product",
   async (details: CreateProductRequestPayload, thunkAPI) => {
     const {
@@ -477,6 +477,8 @@ export const createProduct = createAsyncThunk(
           setSelectedFile("");
         }
 
+        window.scrollTo(0, 0);
+
         return result.data;
       } else {
         const { data, status } = await axios.post(`/api/products/add`, dataset);
@@ -539,11 +541,14 @@ export const createProduct = createAsyncThunk(
 
           setPreview(undefined);
           setSelectedFile("");
+
+          window.scrollTo(0, 0);
         }
 
         return result.data;
       }
     } catch (error: AxiosError | any) {
+      window.scrollTo(0, 0);
       if (error.response) {
         return thunkAPI.rejectWithValue(error.response.data.errors);
       } else if (error.request) {
@@ -702,16 +707,16 @@ const productsSlice = createSlice({
         }
       });
     builder
-      .addCase(createProduct.pending, (state) => {
+      .addCase(createNewProduct.pending, (state) => {
         state.loadingProductAction = true;
       })
-      .addCase(createProduct.fulfilled, (state, action) => {
+      .addCase(createNewProduct.fulfilled, (state, action) => {
         state.loadingProductAction = false;
         state.products = [action.payload, ...state.products];
         state.error = null;
         state.errors = [];
       })
-      .addCase(createProduct.rejected, (state, action) => {
+      .addCase(createNewProduct.rejected, (state, action) => {
         state.loadingProductAction = false;
 
         if (Array.isArray(action.payload)) {
