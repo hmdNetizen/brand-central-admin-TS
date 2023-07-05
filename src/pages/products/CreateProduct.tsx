@@ -285,7 +285,7 @@ const CreateProduct = () => {
     }
 
     if (isThresholdActive) {
-      if (!Number(maximumQuantity)) {
+      if (Number(maximumQuantity) === 0) {
         setMaximumQuantityError("Enter a valid maximum quantity");
         return;
       } else if (units === "EA" && Number(maximumQuantity) % 6 !== 0) {

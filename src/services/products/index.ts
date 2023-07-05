@@ -412,7 +412,7 @@ export const createNewProduct = createAsyncThunk(
         );
         const uploadedResult = uploadedFile as UploadedFilePayload;
 
-        const { data, status } = await axios.put(`/api/products/add`, {
+        const { data, status } = await axios.post(`/api/products/add`, {
           ...dataset,
           featuredImage: uploadedResult.url,
           hasImage: true,
