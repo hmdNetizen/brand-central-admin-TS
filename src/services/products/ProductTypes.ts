@@ -304,6 +304,6 @@ export type initStateType = {
   uploadedFiles: string;
   updatedInventory: string;
   productSuccessMsg: string;
-  errors: { param: string; msg: string }[];
+  errors: { param: string; msg: string }[] | null;
   error: null | string;
 };
