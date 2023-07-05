@@ -45,6 +45,7 @@ const initialState: initStateType = {
   totalProducts: 0,
   uploadedFiles: "",
   updatedInventory: "",
+  productSuccessMsg: "",
   error: null,
   errors: [],
 };
@@ -477,6 +478,9 @@ export const createNewProduct = createAsyncThunk(
           setSelectedFile("");
         }
 
+        setTimeout(() => {
+          thunkAPI.dispatch(clearProductSuccessMsg());
+        }, 5000);
         window.scrollTo(0, 0);
 
         return result.data;
@@ -574,6 +578,9 @@ const productsSlice = createSlice({
     },
     setCurrentProduct: (state, action: PayloadAction<ProductTypes | null>) => {
       state.singleProduct = action.payload;
+    },
+    clearProductSuccessMsg: (state) => {
+      state.productSuccessMsg = "";
     },
   },
   extraReducers(builder) {
@@ -715,6 +722,7 @@ const productsSlice = createSlice({
         state.products = [action.payload, ...state.products];
         state.error = null;
         state.errors = [];
+        state.productSuccessMsg = "Product created successfully";
       })
       .addCase(createNewProduct.rejected, (state, action) => {
         state.loadingProductAction = false;
@@ -826,6 +834,10 @@ const productsSlice = createSlice({
   },
 });
 
-export const { setUpdatingInventory, setUploadingFileText, setCurrentProduct } =
-  productsSlice.actions;
+export const {
+  setUpdatingInventory,
+  setUploadingFileText,
+  setCurrentProduct,
+  clearProductSuccessMsg,
+} = productsSlice.actions;
 export default productsSlice.reducer;
