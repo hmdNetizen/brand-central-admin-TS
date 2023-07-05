@@ -227,11 +227,6 @@ export type ProductDetailsTypes = {
   productBrand: string;
   customBrandName: string;
   shippingTime: string;
-  sizeName: string;
-  sizeQuantity: string;
-  sizePrice: string;
-  wholesaleQuantity: string;
-  wholesaleDiscountPercentage: string;
   productStock: number;
   productDescription: string;
   productMeasurement: string;
@@ -258,6 +253,8 @@ export type CreateProductRequestPayload = {
   setOptionChecked: React.Dispatch<React.SetStateAction<OptionsCheckedTypes>>;
   setProductSizeForm: React.Dispatch<React.SetStateAction<ProductSizeDataType>>;
   setWholesaleForm: React.Dispatch<React.SetStateAction<WholesaleDataType>>;
+  setPreview: React.Dispatch<React.SetStateAction<undefined | string>>;
+  setSelectedFile: React.Dispatch<React.SetStateAction<File | "">>;
   file: string | File;
   dataset: {
     productName: string;

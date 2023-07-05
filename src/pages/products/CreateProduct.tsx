@@ -39,7 +39,7 @@ const CreateProduct = () => {
 
   const [productDetails, setProductDetails] = useState({
     productName: "",
-    productCode: "",
+    productUPC: "",
     units: "",
     itemCode: "",
     category: "",
@@ -47,11 +47,6 @@ const CreateProduct = () => {
     productBrand: "",
     customBrandName: "",
     shippingTime: "",
-    sizeName: "",
-    sizeQuantity: "",
-    sizePrice: "",
-    wholesaleQuantity: "",
-    wholesaleDiscountPercentage: "",
     productStock: 0,
     productDescription: "",
     productMeasurement: "",
@@ -83,7 +78,7 @@ const CreateProduct = () => {
 
   // ERROR HANDLING STATES
   const [productNameError, setProductNameError] = useState("");
-  const [productCodeError, setProductCodeError] = useState("");
+  const [productUPCError, setProductUPCError] = useState("");
   const [unitsError, setUnitsError] = useState("");
   const [categoryError, setCategoryError] = useState("");
   const [subCategoryError, setSubCategoryError] = useState("");
@@ -140,7 +135,7 @@ const CreateProduct = () => {
 
   const {
     productName,
-    productCode,
+    productUPC,
     units,
     itemCode,
     category,
@@ -148,11 +143,6 @@ const CreateProduct = () => {
     productBrand,
     customBrandName,
     shippingTime,
-    sizeName,
-    sizeQuantity,
-    sizePrice,
-    wholesaleQuantity,
-    wholesaleDiscountPercentage,
     productStock,
     productDescription,
     productMeasurement,
@@ -205,7 +195,7 @@ const CreateProduct = () => {
 
     if (
       !productName.trim() &&
-      !productCode.trim() &&
+      !productUPC.trim() &&
       !units.trim() &&
       !itemCode.trim() &&
       !category.trim() &&
@@ -220,7 +210,7 @@ const CreateProduct = () => {
       srpPrice.toString().trim() === ""
     ) {
       setProductNameError("Enter Product Name");
-      setProductCodeError("Enter unique product code");
+      setProductUPCError("Enter unique product code");
       setUnitsError("Enter the unit of measurement");
       setItemCodeError("Enter Item Code for this product");
       setCategoryError("Please select a category");
@@ -241,8 +231,8 @@ const CreateProduct = () => {
       return;
     }
 
-    if (!productCode.trim()) {
-      setProductCodeError("Enter Product Code");
+    if (!productUPC.trim()) {
+      setProductUPCError("Enter Product Code");
       return;
     }
 
@@ -281,34 +271,34 @@ const CreateProduct = () => {
       return;
     }
 
-    if (sizesChecked) {
-      if (!sizeName.trim()) {
-        setSizeNameError("Enter size name for product");
-        return;
-      }
+    // if (sizesChecked) {
+    //   if (!sizeName.trim()) {
+    //     setSizeNameError("Enter size name for product");
+    //     return;
+    //   }
 
-      if (!sizeQuantity.trim()) {
-        setSizeQuantityError("Enter size quantity for product");
-        return;
-      }
+    //   if (!sizeQuantity.trim()) {
+    //     setSizeQuantityError("Enter size quantity for product");
+    //     return;
+    //   }
 
-      if (!sizePrice.trim()) {
-        setSizePriceError("Enter size price for product");
-        return;
-      }
-    }
+    //   if (!sizePrice.trim()) {
+    //     setSizePriceError("Enter size price for product");
+    //     return;
+    //   }
+    // }
 
-    if (wholesaleChecked) {
-      if (!wholesaleQuantity.trim()) {
-        setWholesaleQuantityError("Enter wholesale quantity for product");
-        return;
-      }
+    // if (wholesaleChecked) {
+    //   if (!wholesaleQuantity.trim()) {
+    //     setWholesaleQuantityError("Enter wholesale quantity for product");
+    //     return;
+    //   }
 
-      // if(!wholesaleDiscountPercentage) {
-      //   setWholesaleDiscountPercentageError("Enter wholesale discount for product");
-      // return;
-      // }
-    }
+    //   if(!wholesaleDiscountPercentage) {
+    //     setWholesaleDiscountPercentageError("Enter wholesale discount for product");
+    //   return;
+    //   }
+    // }
 
     if (productStock.toString().trim() === "") {
       setProductStockError("Enter product stock");
@@ -372,7 +362,7 @@ const CreateProduct = () => {
       setOptionChecked,
       productName,
       productType: "Physical",
-      productUPC: productCode,
+      productUPC: productUPC,
       itemCode,
       units: units,
       category: capitalizeFirstLetters(category),
@@ -385,25 +375,25 @@ const CreateProduct = () => {
       estimatedShippingTime: shippingTime,
       shippingCategory: shippingCategory ? shippingCategory.toLowerCase() : "",
       allowProductSizes: sizesChecked,
-      productSize: [
-        { name: sizeName },
-        { quantity: sizeQuantity ? parseInt(sizeQuantity) : "" },
-        { price: sizePrice ? parseFloat(sizePrice) : "" },
-      ],
+      // productSize: [
+      //   { name: sizeName },
+      //   { quantity: sizeQuantity ? parseInt(sizeQuantity) : "" },
+      //   { price: sizePrice ? parseFloat(sizePrice) : "" },
+      // ],
       allowMeasurement: measurementChecked,
       productMeasurement:
         productMeasurement === "Custom"
           ? customMeasurement
           : productMeasurement,
       allowProductWholesale: wholesaleChecked,
-      productWholesale: [
-        { quantity: wholesaleQuantity ? parseInt(wholesaleQuantity) : "" },
-        {
-          percentage: wholesaleDiscountPercentage
-            ? parseFloat(wholesaleDiscountPercentage)
-            : "",
-        },
-      ],
+      // productWholesale: [
+      //   { quantity: wholesaleQuantity ? parseInt(wholesaleQuantity) : "" },
+      //   {
+      //     percentage: wholesaleDiscountPercentage
+      //       ? parseFloat(wholesaleDiscountPercentage)
+      //       : "",
+      //   },
+      // ],
       productStock,
       productDescription,
       threshold: {
@@ -438,11 +428,11 @@ const CreateProduct = () => {
           setProductNameError("");
         }
         break;
-      case "productCode":
+      case "productUPC":
         if (!value.trim()) {
-          setProductCodeError("Enter Product Code");
+          setProductUPCError("Enter Product Code");
         } else {
-          setProductCodeError("");
+          setProductUPCError("");
         }
         break;
       case "units":
@@ -512,7 +502,7 @@ const CreateProduct = () => {
         break;
       default:
         setProductNameError("");
-        setProductCodeError("");
+        setProductUPCError("");
         setUnitsError("");
         setCategoryError("");
         setSubCategoryError("");
@@ -612,8 +602,8 @@ const CreateProduct = () => {
           onSelectChange={handleSelectChange}
           productBrand={productBrand}
           productBrandError={productBrandError}
-          productCode={productCode}
-          productCodeError={productCodeError}
+          productUPC={productUPC}
+          productUPCError={productUPCError}
           productDescription={productDescription}
           productMeasurement={productMeasurement}
           productName={productName}
