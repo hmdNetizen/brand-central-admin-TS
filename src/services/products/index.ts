@@ -71,6 +71,8 @@ export const getPaginatedProducts = createAsyncThunk(
   }
 );
 
+export const getSearchedProducts = createAsyncThunk("searched-product", async () => {})
+
 export const getRecentlyAddedProducts = createAsyncThunk(
   "recently-added",
   async (page: number, thunkAPI) => {
