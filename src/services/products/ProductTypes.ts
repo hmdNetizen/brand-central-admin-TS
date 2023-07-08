@@ -176,6 +176,12 @@ export type PaginatedReturnedPayloadType = {
   };
 };
 
+export type ProductQueryType = {
+  page: number;
+  limit: number;
+  searchTerm?: string;
+};
+
 export type ProductsReturnedPayloadType = {
   data: {
     products: ProductTypes[];

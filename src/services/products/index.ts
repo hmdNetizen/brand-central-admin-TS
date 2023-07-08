@@ -23,12 +23,8 @@ import {
   ProductEditRequestPayload,
   ProductHighlightRequestPayload,
   CreateProductRequestPayload,
+  ProductQueryType,
 } from "./ProductTypes";
-
-type ProductQueryType = {
-  page: number;
-  limit: number;
-};
 
 const initialState: initStateType = {
   loadingProducts: false,
@@ -71,7 +67,30 @@ export const getPaginatedProducts = createAsyncThunk(
   }
 );
 
-export const getSearchedProducts = createAsyncThunk("searched-product", async () => {})
+export const getSearchedProducts = createAsyncThunk(
+  "searched-product",
+  async (details: ProductQueryType, thunkAPI) => {
+    const { limit, page, searchTerm } = details;
+    const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+
+    try {
+      const { data } = await axios.get(
+        `/api/products/v1/searched?page=${page}&limit=${limit}&${searchQuery}`
+      );
+
+      const result = data as {
+        data: { products: ProductTypes[]; total: number };
+      };
+
+      return {
+        products: result.data.products,
+        total: result.data.total,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Error occurred while fetching products");
+    }
+  }
+);
 
 export const getRecentlyAddedProducts = createAsyncThunk(
   "recently-added",
@@ -603,6 +622,12 @@ const productsSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder.addCase(getSearchedProducts.fulfilled, (state, action) => {
+      state.products = action.payload.products;
+      state.totalProducts = action.payload.total;
+      state.error = null;
+      state.errors = null;
+    });
     builder
       .addCase(getRecentlyAddedProducts.pending, (state) => {
         state.loadingRecentProducts = true;
