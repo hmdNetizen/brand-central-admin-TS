@@ -54,7 +54,7 @@ const EditProduct = (props: EditProductProps) => {
   );
   const brands = useTypedSelector((state) => state.brands.brands);
 
-  const { updateProduct } = useActions();
+  const { updateProduct, setCurrentProduct } = useActions();
 
   //   MEDIA QUERIES
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
@@ -585,8 +585,8 @@ const EditProduct = (props: EditProductProps) => {
   const handleClose = () => {
     setOpenEditProduct((prev) => !prev);
     setPreviews([]);
-    // setImagePreview(undefined);
     setSelectedFile("");
+    setCurrentProduct(null);
   };
 
   const handleCloseGallery = () => {
