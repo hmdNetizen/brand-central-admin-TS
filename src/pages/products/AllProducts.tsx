@@ -13,6 +13,7 @@ const Products = () => {
     getAllCategories,
     getAllSubcategories,
     fetchAllBrands,
+    getSearchedProducts,
   } = useActions();
 
   const products = useTypedSelector((state) => state.products.products);
@@ -26,20 +27,20 @@ const Products = () => {
   const [openHighlight, setOpenHighlight] = useState(false);
   const [openProductGallery, setOpenProductGallery] = useState(false);
 
-  // const debounceFilteredProducts = useCallback(
-  //   debounce(fetchSearchedProducts, 500),
-  //   []
-  // );
+  const debounceSearchedProducts = useCallback(
+    debounce(getSearchedProducts, 500),
+    []
+  );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPage(0);
     setFilterText(event.target.value);
 
-    // debounceFilteredProducts({
-    //   searchQuery: event.target.value,
-    //   limit: rowsPerPage,
-    //   page,
-    // });
+    debounceSearchedProducts({
+      searchTerm: event.target.value,
+      limit: rowsPerPage,
+      page: page + 1,
+    });
   };
 
   useEffect(() => {
@@ -50,17 +51,15 @@ const Products = () => {
     // eslint-disable-next-line
   }, [rowsPerPage, page, filterText]);
 
-  // useEffect(() => {
-  //   if (filterText) {
-  //     debounceFilteredProducts({
-  //       searchQuery: filterText,
-  //       limit: rowsPerPage,
-  //       page: page + 1,
-  //     });
-  //   }
-
-  //   // eslint-disable-next-line
-  // }, [filterText, page, rowsPerPage]);
+  useEffect(() => {
+    if (filterText) {
+      debounceSearchedProducts({
+        searchTerm: filterText,
+        limit: rowsPerPage,
+        page: page + 1,
+      });
+    }
+  }, [filterText, page]);
 
   useEffect(() => {
     getAllCategories();
