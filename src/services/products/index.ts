@@ -49,10 +49,14 @@ const initialState: initStateType = {
 export const getPaginatedProducts = createAsyncThunk(
   "get-products",
   async (query: ProductQueryType, thunkAPI) => {
-    const { page, limit } = query;
+    const { page, limit, variant } = query;
+
     try {
       const { data } = await axios.get(
-        `/api/products/v1/variants?page=${page}&limit=${limit}`
+        `/api/products/v1/variants?page=${page}&limit=${limit}&variant=${variant}`
+      );
+      console.log(
+        `/api/products/v1/variants?page=${page}&limit=${limit}&variant=${variant}`
       );
 
       const result = data as PaginatedReturnedPayloadType;
@@ -70,12 +74,13 @@ export const getPaginatedProducts = createAsyncThunk(
 export const getSearchedProducts = createAsyncThunk(
   "searched-product",
   async (details: ProductQueryType, thunkAPI) => {
-    const { limit, page, searchTerm } = details;
+    const { limit, page, searchTerm, variant } = details;
     const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+    const pageVariant = variant ? `&variant=${variant}` : "";
 
     try {
       const { data } = await axios.get(
-        `/api/products/v1/variants/searched?page=${page}&limit=${limit}&${searchQuery}`
+        `/api/products/v1/variants/searched?page=${page}&limit=${limit}&${searchQuery}${pageVariant}`
       );
 
       const result = data as {

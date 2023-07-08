@@ -180,7 +180,7 @@ export type ProductQueryType = {
   page: number;
   limit: number;
   searchTerm?: string;
-  variant?: "featured" | "weekly-offer" | "popular";
+  variant?: string;
 };
 
 export type ProductsReturnedPayloadType = {
