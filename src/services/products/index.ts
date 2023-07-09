@@ -655,6 +655,7 @@ const productsSlice = createSlice({
       });
     builder.addCase(getSearchedProducts.fulfilled, (state, action) => {
       state.products = action.payload.products;
+      state.paginatedProducts = action.payload.products;
       state.totalProducts = action.payload.total;
       state.error = null;
       state.errors = null;
