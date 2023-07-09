@@ -49,14 +49,11 @@ const initialState: initStateType = {
 export const getPaginatedProducts = createAsyncThunk(
   "get-products",
   async (query: ProductQueryType, thunkAPI) => {
-    const { page, limit, variant } = query;
+    const { page, limit } = query;
 
     try {
       const { data } = await axios.get(
-        `/api/products/v1/variants?page=${page}&limit=${limit}&variant=${variant}`
-      );
-      console.log(
-        `/api/products/v1/variants?page=${page}&limit=${limit}&variant=${variant}`
+        `/api/products/paginated?page=${page}&limit=${limit}`
       );
 
       const result = data as PaginatedReturnedPayloadType;
@@ -67,6 +64,33 @@ export const getPaginatedProducts = createAsyncThunk(
       };
     } catch (error) {
       return thunkAPI.rejectWithValue("Error occurred while fetching products");
+    }
+  }
+);
+
+export const getProductVariants = createAsyncThunk(
+  "product-variant",
+  async (details: ProductQueryType, thunkAPI) => {
+    const { page, limit, variant } = details;
+    const pageVariant = variant ? `&variant=${variant}` : "";
+    try {
+      const { data } = await axios.get(
+        `/api/products/v1/variants?page=${page}&limit=${limit}${pageVariant}`
+      );
+
+      const result = data as {
+        data: {
+          products: ProductTypes[];
+          total: number;
+        };
+      };
+
+      return {
+        products: result.data.products,
+        total: result.data.total,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
     }
   }
 );
@@ -659,6 +683,22 @@ const productsSlice = createSlice({
       })
       .addCase(getDashboardPopularProducts.rejected, (state, action) => {
         state.loadingPopularProducts = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(getProductVariants.pending, (state) => {
+        state.loadingProducts = true;
+      })
+      .addCase(getProductVariants.fulfilled, (state, action) => {
+        state.loadingProducts = false;
+        state.products = action.payload.products;
+        state.error = null;
+        state.errors = null;
+      })
+      .addCase(getProductVariants.rejected, (state, action) => {
+        state.loadingProducts = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }
