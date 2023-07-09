@@ -11,12 +11,12 @@ import "react-toastify/dist/ReactToastify.css";
 function App() {
   const { getPaginatedProducts } = useActions();
 
-  useEffect(() => {
-    getPaginatedProducts({
-      limit: 10,
-      page: 1,
-    });
-  }, []);
+  // useEffect(() => {
+  //   getPaginatedProducts({
+  //     limit: 10,
+  //     page: 1,
+  //   });
+  // }, []);
   return (
     <ThemeProvider theme={theme}>
       <ScrollToView>

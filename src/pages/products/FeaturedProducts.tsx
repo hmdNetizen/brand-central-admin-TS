@@ -5,19 +5,20 @@ import debounce from "lodash.debounce";
 import ProductPageLayout from "src/components/products/ProductPageLayout";
 import useTitle from "src/hooks/useTitle";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-import { useLocation } from "react-router-dom";
 
 const FeaturedProducts = () => {
   useTitle("Admin : Find all featured products");
   const {
-    getPaginatedProducts,
+    getProductVariants,
     getAllCategories,
     getAllSubcategories,
     fetchAllBrands,
     getSearchedProducts,
   } = useActions();
 
-  const products = useTypedSelector((state) => state.products.products);
+  const paginatedProducts = useTypedSelector(
+    (state) => state.products.paginatedProducts
+  );
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
@@ -46,7 +47,7 @@ const FeaturedProducts = () => {
 
   useEffect(() => {
     if (!filterText) {
-      getPaginatedProducts({
+      getProductVariants({
         page: page + 1,
         limit: rowsPerPage,
         variant: "featured",
@@ -54,16 +55,16 @@ const FeaturedProducts = () => {
     }
   }, [rowsPerPage, page, filterText]);
 
-  useEffect(() => {
-    if (filterText) {
-      debounceSearchedProducts({
-        searchTerm: filterText,
-        limit: rowsPerPage,
-        page: page + 1,
-        variant: "featured",
-      });
-    }
-  }, [filterText, page]);
+  // useEffect(() => {
+  //   if (filterText) {
+  //     debounceSearchedProducts({
+  //       searchTerm: filterText,
+  //       limit: rowsPerPage,
+  //       page: page + 1,
+  //       variant: "featured",
+  //     });
+  //   }
+  // }, [filterText, page]);
 
   useEffect(() => {
     getAllCategories();
@@ -88,7 +89,7 @@ const FeaturedProducts = () => {
       openProductGallery={openProductGallery}
       setOpenProductGallery={setOpenProductGallery}
       onChange={handleSearch}
-      productDataset={products}
+      productDataset={paginatedProducts}
     />
   );
 };

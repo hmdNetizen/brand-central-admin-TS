@@ -35,6 +35,7 @@ const initialState: initStateType = {
   loadingSingleProduct: false,
   uploadingImage: false,
   products: [],
+  paginatedProducts: [],
   recentProducts: [],
   popularProducts: [],
   singleProduct: null,
@@ -80,13 +81,13 @@ export const getProductVariants = createAsyncThunk(
 
       const result = data as {
         data: {
-          products: ProductTypes[];
+          paginatedProducts: ProductTypes[];
           total: number;
         };
       };
 
       return {
-        products: result.data.products,
+        products: result.data.paginatedProducts,
         total: result.data.total,
       };
     } catch (error) {
@@ -642,6 +643,7 @@ const productsSlice = createSlice({
       .addCase(getPaginatedProducts.fulfilled, (state, action) => {
         state.loadingProducts = false;
         state.products = action.payload.paginatedProduct;
+        state.paginatedProducts = action.payload.paginatedProduct;
         state.totalProducts = action.payload.totalProducts;
         state.error = null;
       })
@@ -693,7 +695,8 @@ const productsSlice = createSlice({
       })
       .addCase(getProductVariants.fulfilled, (state, action) => {
         state.loadingProducts = false;
-        state.products = action.payload.products;
+        state.paginatedProducts = action.payload.products;
+        state.totalProducts = action.payload.total;
         state.error = null;
         state.errors = null;
       })
