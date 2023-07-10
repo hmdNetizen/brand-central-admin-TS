@@ -33,7 +33,7 @@ const ProductItem = (props: ProductItemProps) => {
       <TableCell>{product.productName}</TableCell>
       <TableCell>{product.productType || "Physical"}</TableCell>
       <TableCell>{product.productStock}</TableCell>
-      <TableCell>${product.priceCode1.toFixed(2)}</TableCell>
+      <TableCell>${Number(product.priceCode3).toFixed(2)}</TableCell>
       <TableCell>
         <CustomMenus product={product} />
       </TableCell>
