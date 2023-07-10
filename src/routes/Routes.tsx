@@ -29,6 +29,7 @@ import PreOrders from "src/pages/pre-orders/PreOrders";
 import AllProducts from "src/pages/products/AllProducts";
 import CreateProduct from "src/pages/products/CreateProduct";
 import FeaturedProducts from "src/pages/products/FeaturedProducts";
+import WeeklyOffersProducts from "src/pages/products/WeeklyOffers";
 import ShippingZipCodes from "src/pages/shipping/ShippingZipCodes";
 import SubCategories from "src/pages/subcategories/SubCategories";
 import UpdateInventory from "src/pages/UpdateInventory";
@@ -76,6 +77,10 @@ const PagesRoutes = () => {
                 <Route index element={<AllProducts />} />
                 <Route path="create" element={<CreateProduct />} />
                 <Route path="featured" element={<FeaturedProducts />} />
+                <Route
+                  path="weekly-offers"
+                  element={<WeeklyOffersProducts />}
+                />
               </Route>
               <Route path="customers">
                 <Route index element={<Customers />} />
