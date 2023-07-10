@@ -7,7 +7,6 @@ import React, {
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { styled, useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import EmailCustomer from "../orders/modals/EmailCustomerOrder";
@@ -42,9 +41,6 @@ const PreOrders = () => {
   useTitle("Admin : Find all pre-orders");
   const theme = useTheme();
 
-  const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
-  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [filterText, setFilterText] = useState("");
@@ -63,12 +59,8 @@ const PreOrders = () => {
     (state) => state.preOrders.filteredPreOrders
   );
 
-  const {
-    getAllPreOrders,
-    setCurrentPreOrder,
-    getPreOrderData,
-    handleFilteredPreOrdersData,
-  } = useActions();
+  const { getAllPreOrders, getPreOrderData, handleFilteredPreOrdersData } =
+    useActions();
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
