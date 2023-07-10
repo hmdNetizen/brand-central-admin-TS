@@ -30,6 +30,7 @@ const initialState: initStateType = {
   preOrdersUpdatedStock: [],
   filteredUpdatedStock: [],
   singlePreOrder: null,
+  singleUpdatedStock: null,
   error: null,
 };
 
@@ -81,6 +82,9 @@ const preorderSlice = createSlice({
     },
     getUpdatedStock: (state, action: PayloadAction<UpdateStockType[]>) => {
       state.filteredUpdatedStock = action.payload;
+    },
+    setSingleUpdatedStock: (state, action: PayloadAction<UpdateStockType>) => {
+      state.singleUpdatedStock = action.payload;
     },
     handleFilteredPreOrdersData: (
       state,
@@ -340,5 +344,6 @@ export const {
   showAvailableStockForPreOrders,
   getUpdatedStock,
   handleFilteredUpdatedStock,
+  setSingleUpdatedStock,
 } = preorderSlice.actions;
 export default preorderSlice.reducer;
