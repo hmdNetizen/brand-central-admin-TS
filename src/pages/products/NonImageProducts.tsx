@@ -6,7 +6,7 @@ import ProductPageLayout from "src/components/products/ProductPageLayout";
 import useTitle from "src/hooks/useTitle";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 
-const WeeklyOffersProducts = () => {
+const NonImageProducts = () => {
   useTitle("Admin : Find all non-image products");
   const {
     getProductVariants,
@@ -74,7 +74,7 @@ const WeeklyOffersProducts = () => {
 
   return (
     <ProductPageLayout
-      title="Weekly Offers Products"
+      title="Non-Image Products"
       page={page}
       setPage={setPage}
       rowsPerPage={rowsPerPage}
@@ -94,4 +94,4 @@ const WeeklyOffersProducts = () => {
   );
 };
 
-export default WeeklyOffersProducts;
+export default NonImageProducts;
