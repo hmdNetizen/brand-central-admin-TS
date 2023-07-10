@@ -105,7 +105,7 @@ const CustomProductTable = (props: CustomProductsTableProps) => {
                     <TableCell>
                       {productType ? productType : "Physical"}
                     </TableCell>
-                    <TableCell>${priceCode3.toFixed(2)}</TableCell>
+                    <TableCell>${Number(priceCode3).toFixed(2)}</TableCell>
                   </TableRow>
                 );
               })}
