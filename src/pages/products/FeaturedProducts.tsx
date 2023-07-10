@@ -55,16 +55,16 @@ const FeaturedProducts = () => {
     }
   }, [rowsPerPage, page, filterText]);
 
-  // useEffect(() => {
-  //   if (filterText) {
-  //     debounceSearchedProducts({
-  //       searchTerm: filterText,
-  //       limit: rowsPerPage,
-  //       page: page + 1,
-  //       variant: "featured",
-  //     });
-  //   }
-  // }, [filterText, page]);
+  useEffect(() => {
+    if (filterText) {
+      debounceSearchedProducts({
+        searchTerm: filterText,
+        limit: rowsPerPage,
+        page: page + 1,
+        variant: "featured",
+      });
+    }
+  }, [filterText, page]);
 
   useEffect(() => {
     getAllCategories();
