@@ -28,6 +28,7 @@ import ProcessingOrders from "src/pages/orders/ProcessingOrders";
 import PreOrders from "src/pages/pre-orders/PreOrders";
 import AllProducts from "src/pages/products/AllProducts";
 import CreateProduct from "src/pages/products/CreateProduct";
+import DeactivatedProducts from "src/pages/products/DeactivatedProducts";
 import FeaturedProducts from "src/pages/products/FeaturedProducts";
 import NonImageProducts from "src/pages/products/NonImageProducts";
 import PopularProducts from "src/pages/products/Popular";
@@ -81,6 +82,7 @@ const PagesRoutes = () => {
                 <Route path="featured" element={<FeaturedProducts />} />
                 <Route path="popular" element={<PopularProducts />} />
                 <Route path="missing-images" element={<NonImageProducts />} />
+                <Route path="deactivated" element={<DeactivatedProducts />} />
                 <Route
                   path="weekly-offers"
                   element={<WeeklyOffersProducts />}
