@@ -7,6 +7,7 @@ import {
   PreOrderedPayloadType,
   DeletePreOrderType,
   UpdateStockType,
+  CustomerListDataType,
 } from "./PreOrderTypes";
 import { ProductTypes } from "../products/ProductTypes";
 
@@ -14,6 +15,11 @@ type UserWishListUserIdTypes = {
   _id: string;
   companyName: string;
   companyEmail: string;
+};
+
+type ProductListDataType = {
+  customerData: CustomerListDataType[] | CustomerListDataType;
+  productData: ProductTypes[];
 };
 
 const initialState: initStateType = {
@@ -108,16 +114,15 @@ const preorderSlice = createSlice({
     },
     showAvailableStockForPreOrders: (
       state,
-      action: PayloadAction<{
-        productData: ProductTypes[];
-        preOrderData: ProductTypes[];
-      }>
+      action: PayloadAction<{ productData: ProductTypes[] }>
     ) => {
       const products = [...action.payload.productData];
-      const preOrders = [...action.payload.preOrderData];
+      const preOrderData = state.preOrders;
 
-      // Finds all wishlist items whose current stock is atleast 2 for non-multiples and 12 for multiples("EA" units)
-      const sanitzePreOrders = preOrders.map((preOrder) => {
+      /* Finds all wishlist items whose current stock is atleast 2 for 
+     non-multiples and 12 for multiples("EA" units)  */
+
+      const sanitizePreOrder = preOrderData.map((preOrder) => {
         // Find index of the preordered item in the products array
         const productIndex = products.findIndex(
           (product) => product._id === preOrder._id
@@ -127,11 +132,11 @@ const preorderSlice = createSlice({
 
         // Checks if the index of the product exist and that the stock is
         // atleast 2 if the unit is not EA And 2 if it is not EA
+
         if (
-          productIndex !== -1 &&
-          ((currentProduct.units === "EA" &&
+          (currentProduct.units === "EA" &&
             currentProduct.productStock >= 12) ||
-            (currentProduct.units !== "EA" && currentProduct.productStock >= 2))
+          (currentProduct.units !== "EA" && currentProduct.productStock >= 2)
         ) {
           return preOrder;
         } else {
@@ -139,26 +144,35 @@ const preorderSlice = createSlice({
         }
       });
 
-      // FIrst of all filter out the null values and then returns all wishlists that has
-      // isNotified property in the userWishList array set to false.
-      // isNotified is used to track the notification that has been either ignored or fulfilled via
-      // email sent to customer.
-      const productsInStock = sanitzePreOrders
-        .filter((item) => item)
-        // eslint-disable-next-line
-        .filter((newPreOrder) => {
-          const itemCopy = { ...newPreOrder };
-          itemCopy.userWishList = itemCopy.userWishList.filter(
-            (wishlist) => !wishlist.isNotified
-          );
-          if (itemCopy?.userWishList?.length! > 0) {
-            return itemCopy;
-          }
-        });
+      /* - FIrst of all filter out the nullish values and then returns all wishlists that has
+       - isNotified property in the userWishList array set to false.
+       - isNotified is used to track the notification that has been either ignored or fulfilled via
+         email sent to customer.
+      */
+
+      sanitizePreOrder.filter((item): ProductTypes | undefined => {
+        if (item !== null) {
+          productsInStock.push(item);
+          return item;
+        }
+      });
+
+      const productsInStock: ProductTypes[] = [];
+      productsInStock.filter((newPreOrder) => {
+        const itemCopy = { ...newPreOrder };
+
+        itemCopy.userWishList = itemCopy.userWishList.filter(
+          (wishlist) => !wishlist.isNotified
+        );
+
+        if (itemCopy.userWishList.length > 0) {
+          return itemCopy;
+        }
+      });
 
       const emailList: string[] = [];
       productsInStock.forEach((item) => {
-        return item?.userWishList.map((wishlist) =>
+        return item.userWishList.map((wishlist) =>
           emailList.push(wishlist.userId.companyEmail)
         );
       });
@@ -168,22 +182,12 @@ const preorderSlice = createSlice({
         (email, index, self) => self.indexOf(email) === index
       );
 
-      type ProductListType = {
-        customerData: {
-              id: string;
-              companyEmail: string;
-              companyName: string;
-            }[]
-          | undefined;
-        productData: ProductTypes[]
-      };
-
-      const productList: ProductListType[] = [];
+      const productsList: ProductListDataType[] = [];
 
       productsInStock.forEach((product, index, self) => {
-        if (product?.userWishList?.length! > 1) {
-          const productData = {
-            customerData: product?.userWishList.map((wishlist) => ({
+        if (product.userWishList.length > 1) {
+          const preOrderData = {
+            customerData: product.userWishList.map((wishlist) => ({
               companyEmail: wishlist.userId.companyEmail,
               companyName: wishlist.userId.companyName,
               id: wishlist.userId._id,
@@ -191,44 +195,47 @@ const preorderSlice = createSlice({
             productData: [product],
           };
 
-          productList.push(productData);
+          productsList.push(preOrderData);
         } else {
           const emailIndex = uniqueEmails.findIndex(
-            (email) => email === product?.userWishList[0].userId.companyEmail
+            (email) => email === product.userWishList[0].userId.companyEmail
           );
 
           const newProductsInStock = {
             customerData: {
-              id: product?.userWishList[0].userId._id,
-              companyEmail: product?.userWishList[0].userId.companyEmail,
-              companyName: product?.userWishList[0].userId.companyName,
+              id: product.userWishList[0].userId._id,
+              companyEmail: product.userWishList[0].userId.companyEmail,
+              companyName: product.userWishList[0].userId.companyName,
             },
             productData: self.filter(
               (product) =>
-                Array.isArray(product?.userWishList) &&
-                product?.userWishList?.length! < 2 &&
-                product?.userWishList[0].userId.companyEmail ===
+                product.userWishList.length < 2 &&
+                product.userWishList[0].userId.companyEmail ===
                   uniqueEmails[emailIndex]
             ),
           };
 
-          productList.push(newProductsInStock);
+          productsList.push(newProductsInStock);
         }
       });
 
-      const result = productList
+      const results: UpdateStockType[] = productsList
         .filter((item, index, self) => {
           if (Array.isArray(item.customerData)) {
             return item;
           } else {
-            return (
-              self.findIndex(
-                (newItem) =>
+            self.findIndex((newItem) => {
+              if (
+                !Array.isArray(newItem.customerData) &&
+                !Array.isArray(item.customerData)
+              ) {
+                return (
                   newItem.customerData.id === item.customerData.id &&
                   newItem.customerData.companyEmail ===
                     item.customerData.companyEmail
-              ) === index
-            );
+                );
+              }
+            }) === index;
           }
         })
         .map((product) => ({
@@ -236,7 +243,7 @@ const preorderSlice = createSlice({
           ...product,
         }));
 
-      state.preOrdersUpdatedStock = result;
+      state.preOrdersUpdatedStock = results;
     },
   },
   extraReducers(builder) {
