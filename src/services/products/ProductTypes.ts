@@ -185,7 +185,8 @@ export type ProductQueryType = {
     | "weekly-offer"
     | "popular"
     | "non-image"
-    | "deactivated";
+    | "deactivated"
+    | "best-sellers";
 };
 
 export type ProductsReturnedPayloadType = {
