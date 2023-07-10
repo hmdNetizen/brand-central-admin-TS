@@ -16,8 +16,9 @@ const Products = () => {
     getSearchedProducts,
   } = useActions();
 
-  const products = useTypedSelector((state) => state.products.products);
-  // const { currentPage } = useSelector((state) => state.utils);
+  const products = useTypedSelector(
+    (state) => state.products.paginatedProducts
+  );
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
