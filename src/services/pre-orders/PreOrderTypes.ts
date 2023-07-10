@@ -30,5 +30,6 @@ export type initStateType = {
   preOrdersUpdatedStock: UpdateStockType[];
   filteredUpdatedStock: UpdateStockType[];
   singlePreOrder: null | ProductTypes;
+  singleUpdatedStock: UpdateStockType | null;
   error: null | string;
 };

@@ -28,6 +28,7 @@ const initialState: initStateType = {
   preOrders: [],
   filteredPreOrders: [],
   preOrdersUpdatedStock: [],
+  filteredUpdatedStock: [],
   singlePreOrder: null,
   error: null,
 };
@@ -77,6 +78,9 @@ const preorderSlice = createSlice({
     },
     getPreOrderData: (state, action: PayloadAction<ProductTypes[]>) => {
       state.filteredPreOrders = action.payload;
+    },
+    getUpdatedStock: (state, action: PayloadAction<UpdateStockType[]>) => {
+      state.filteredUpdatedStock = action.payload;
     },
     handleFilteredPreOrdersData: (
       state,
@@ -245,6 +249,48 @@ const preorderSlice = createSlice({
 
       state.preOrdersUpdatedStock = results;
     },
+    handleFilteredUpdatedStock: (
+      state,
+      action: PayloadAction<{
+        text: string;
+        updatedPreOrderData: UpdateStockType[];
+      }>
+    ) => {
+      const keys = ["companyEmail", "companyName"];
+
+      type CustomerListExcerptType = Pick<
+        CustomerListDataType,
+        "companyEmail" | "companyName"
+      >;
+
+      if (action.payload.text) {
+        const newUpdatedPreOrder: UpdateStockType[] = [
+          ...action.payload.updatedPreOrderData,
+        ].filter((item) => {
+          const itemCopy: ProductListDataType = { ...item };
+          if (Array.isArray(itemCopy.customerData)) {
+            return itemCopy.customerData.filter((customer) =>
+              keys.some((key) =>
+                customer[key as keyof CustomerListExcerptType]
+                  .toLowerCase()
+                  .includes(action.payload.text.toLowerCase())
+              )
+            );
+          } else {
+            return keys.some(
+              (key) =>
+                !Array.isArray(itemCopy.customerData) &&
+                itemCopy.customerData[key as keyof CustomerListExcerptType]
+                  .toLowerCase()
+                  .includes(action.payload.text.toLowerCase())
+            );
+          }
+        });
+        state.filteredUpdatedStock = newUpdatedPreOrder;
+      } else {
+        state.filteredUpdatedStock = action.payload.updatedPreOrderData;
+      }
+    },
   },
   extraReducers(builder) {
     builder
@@ -292,5 +338,7 @@ export const {
   getPreOrderData,
   handleFilteredPreOrdersData,
   showAvailableStockForPreOrders,
+  getUpdatedStock,
+  handleFilteredUpdatedStock,
 } = preorderSlice.actions;
 export default preorderSlice.reducer;
