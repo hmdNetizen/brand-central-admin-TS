@@ -291,5 +291,6 @@ export const {
   setCurrentPreOrder,
   getPreOrderData,
   handleFilteredPreOrdersData,
+  showAvailableStockForPreOrders,
 } = preorderSlice.actions;
 export default preorderSlice.reducer;
