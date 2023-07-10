@@ -42,8 +42,8 @@ const EmailCustomer = (props: EmailCustomerProps) => {
     (state) => state.customers.singleCustomer
   );
   const singleOrder = useTypedSelector((state) => state.orders.singleOrder);
-  const loadingEmailAction = useTypedSelector(
-    (state) => state.utils.loadingEmailAction
+  const loadingSendMessage = useTypedSelector(
+    (state) => state.messages.loadingSendMessage
   );
 
   const [mailData, setMailData] = useState<initialStateProps>(initialState);
@@ -174,8 +174,6 @@ const EmailCustomer = (props: EmailCustomerProps) => {
     if (singleOrder) {
       getSingleCustomer(singleOrder.ordersCustomer.id);
     }
-
-    // eslint-disable-next-line
   }, []);
 
   return (
@@ -252,9 +250,9 @@ const EmailCustomer = (props: EmailCustomerProps) => {
               variant="contained"
               color="secondary"
               disableRipple
-              disabled={loadingEmailAction}
+              disabled={loadingSendMessage}
             >
-              {loadingEmailAction && (
+              {loadingSendMessage && (
                 <StyledCircularProgress style={{ height: 25, width: 25 }} />
               )}{" "}
               Send Message
