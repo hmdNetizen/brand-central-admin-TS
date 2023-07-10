@@ -1,5 +1,8 @@
 import { EmailList, MailDataTypes } from "src/components/messages/types";
-import { ProductsBulkUpdatePayload } from "src/services/products/ProductTypes";
+import {
+  ProductsBulkUpdatePayload,
+  ProductTypes,
+} from "src/services/products/ProductTypes";
 
 export const capitalizeFirstLetters = (sentence: string) => {
   const lowerCaseSentence = sentence.toLowerCase();
@@ -128,5 +131,27 @@ export const isQuantityInMultiples = (customQuantity: string) => {
     return true;
   } else {
     return false;
+  }
+};
+
+export const domain = import.meta.env.VITE_DOMAIN_URL;
+
+export const getProductSlug = (product: ProductTypes) => {
+  if (product) {
+    const { productName, itemCode } = product;
+    const slug = `${productName
+      .split(" ")
+      .join("-")
+      .split("/")
+      .join("-")}-${itemCode}`;
+    return slug.toLowerCase();
+  }
+};
+
+export const addBrandWithApostrophe = (brand: string) => {
+  if (brand.slice(-1) === "s") {
+    return `${brand}'`;
+  } else {
+    return `${brand}'s`;
   }
 };
