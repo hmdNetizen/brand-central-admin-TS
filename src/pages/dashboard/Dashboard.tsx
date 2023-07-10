@@ -24,9 +24,14 @@ const Dashboard = ({ menuSlideIn }: DashboardProps) => {
     getAllPreOrders,
     getRecentlyAddedProducts,
     getDashboardPopularProducts,
+    getProductVariants,
   } = useActions();
 
   useEffect(() => {
+    getProductVariants({
+      limit: 10,
+      page: 1,
+    });
     getRecentSales();
     getRecentOrders();
     getOrdersCount();

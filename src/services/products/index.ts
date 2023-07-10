@@ -643,7 +643,6 @@ const productsSlice = createSlice({
       .addCase(getPaginatedProducts.fulfilled, (state, action) => {
         state.loadingProducts = false;
         state.products = action.payload.paginatedProduct;
-        state.paginatedProducts = action.payload.paginatedProduct;
         state.totalProducts = action.payload.totalProducts;
         state.error = null;
       })

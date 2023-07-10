@@ -9,7 +9,7 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 const Products = () => {
   useTitle("Admin : Find all products");
   const {
-    getPaginatedProducts,
+    getProductVariants,
     getAllCategories,
     getAllSubcategories,
     fetchAllBrands,
@@ -45,7 +45,7 @@ const Products = () => {
 
   useEffect(() => {
     if (!filterText) {
-      getPaginatedProducts({ page: page + 1, limit: rowsPerPage });
+      getProductVariants({ page: page + 1, limit: rowsPerPage });
     }
 
     // eslint-disable-next-line
