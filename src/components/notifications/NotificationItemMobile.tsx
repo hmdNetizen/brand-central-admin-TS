@@ -1,14 +1,15 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MailOutlinedIcon from "@mui/icons-material/MailOutline";
-import MessageBox from "src/components/messages/MessageBox";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
+
 import { useActions } from "src/hooks/useActions";
+import MessageBox from "src/components/messages/MessageBox";
 import {
   validateEmail,
   inMailList,
@@ -17,7 +18,6 @@ import {
   addBrandWithApostrophe,
   domain,
 } from "src/lib/helpers";
-import { toast } from "react-toastify";
 import {
   Container,
   CompanyName,
@@ -25,6 +25,9 @@ import {
   IgnoreButton,
   ProductImage,
 } from "./styles";
+import { NotificationItemProps } from "./types";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import { EmailList, MailDataTypes } from "../messages/types";
 
 const initialState = {
   companyEmail: "",
@@ -32,19 +35,24 @@ const initialState = {
   message: "",
 };
 
-const NotificationItemMobile = ({ stock, setProductCode, productCode }) => {
+const NotificationItemMobile = (props: NotificationItemProps) => {
+  const { stock, setProductCode, productCode } = props;
   const { customerData, productData } = stock;
 
   const theme = useTheme();
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
   const matchesXXS = useMediaQuery("(max-width: 450px)");
 
-  const { loadingPreOrderAction } = useSelector((state) => state.preOrders);
+  const loadingPreOrderAction = useTypedSelector(
+    (state) => state.preOrders.loadingPreOrderAction
+  );
 
-  const [mailData, setMailData] = useState(initialState);
+  const [mailData, setMailData] = useState<MailDataTypes>(initialState);
   const [messageBoxOpen, setMessageBoxOpen] = useState(false);
   const [companyEmailError, setCompanyEmailError] = useState("");
-  const [emailList, setEmailList] = useState([]);
+  const [subjectError, setSubjectError] = useState("");
+  const [messageError, setMessageError] = useState("");
+  const [emailList, setEmailList] = useState<EmailList[]>([]);
 
   const { companyEmail, message, subject } = mailData;
 
@@ -92,7 +100,7 @@ const NotificationItemMobile = ({ stock, setProductCode, productCode }) => {
           ? `${addBrandWithApostrophe(
               singleProduct.brandName
             )} <a href=${domain}/products/${encodeURIComponent(
-              getProductSlug(singleProduct)
+              getProductSlug(singleProduct)!
             )}>${capitalizeFirstLetters(singleProduct.productName)} (UPC : ${
               singleProduct.productUPC
             })</a>`
@@ -101,7 +109,7 @@ const NotificationItemMobile = ({ stock, setProductCode, productCode }) => {
                 `${addBrandWithApostrophe(product.brandName)}${
                   self.length - 1 === self.indexOf(product) ? " and " : " "
                 }<a href=${domain}/products/${encodeURIComponent(
-                  getProductSlug(product)
+                  getProductSlug(product)!
                 )}>${capitalizeFirstLetters(product.productName)} (UPC : ${
                   product.productUPC
                 })</a>`
@@ -122,7 +130,7 @@ const NotificationItemMobile = ({ stock, setProductCode, productCode }) => {
     setMessageBoxOpen(false);
   };
 
-  const handleAddToEmailList = (event) => {
+  const handleAddToEmailList = (event: React.KeyboardEvent) => {
     if (event.key === "Enter") {
       if (!validateEmail(companyEmail)) {
         setCompanyEmailError("Please enter a valid email");
@@ -138,15 +146,26 @@ const NotificationItemMobile = ({ stock, setProductCode, productCode }) => {
   };
 
   const handleIgnoreNotification = async () => {
-    setProductCode(stock._id);
-    await updatePreOrderMultiples({
-      productId: stock._id,
-      isNotified: true,
-      addedBy:
-        stock.userWishList.length > 1
-          ? stock.userWishList[stock.userWishList.length - 1].userId._id
-          : stock.userWishList[0].userId._id,
-    });
+    setProductCode(stock.id);
+    if (productData.length > 1) {
+      await updatePreOrderMultiples({
+        productId: productData.map((product) => product._id),
+        isNotified: true,
+        addedBy: Array.isArray(customerData)
+          ? customerData.map((customer) => customer.id)
+          : [customerData.id],
+        itemId: stock.id,
+      });
+    } else {
+      await updatePreOrderMultiples({
+        productId: productData[0]._id,
+        isNotified: true,
+        addedBy: Array.isArray(customerData)
+          ? customerData.map((customer) => customer.id)
+          : [customerData.id],
+        itemId: stock.id,
+      });
+    }
 
     toast.warning("Pre-order item has been removed from notification", {
       position: "top-center",
@@ -281,7 +300,7 @@ const NotificationItemMobile = ({ stock, setProductCode, productCode }) => {
                 color="warning"
                 onClick={handleIgnoreNotification}
               >
-                {loadingPreOrderAction && productCode === stock._id ? (
+                {loadingPreOrderAction && productCode === stock.id ? (
                   <CircularProgress
                     style={{ height: 20, width: 20, color: "#fff" }}
                   />
@@ -306,15 +325,18 @@ const NotificationItemMobile = ({ stock, setProductCode, productCode }) => {
       <MessageBox
         mailData={mailData}
         setMailData={setMailData}
-        handleClose={handleCloseMessageBox}
+        messageError={messageError}
+        setMessageError={setMessageError}
+        subjectError={subjectError}
+        setSubjectError={setSubjectError}
+        onClose={handleCloseMessageBox}
         open={messageBoxOpen}
         setOpen={setMessageBoxOpen}
         onSubmit={handleSubmit}
-        handleAddToEmailList={handleAddToEmailList}
+        onAddEmailToList={handleAddToEmailList}
         companyEmailError={companyEmailError}
         setCompanyEmailError={setCompanyEmailError}
         emailList={emailList}
-        setEmailList={setEmailList}
       />
     </Fragment>
   );
