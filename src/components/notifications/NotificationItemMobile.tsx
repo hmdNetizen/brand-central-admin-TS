@@ -1,26 +1,30 @@
 import React, { Fragment, useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
-import { useActions } from "src/hooks/useActions";
+import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
-import { toast } from "react-toastify";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import MailOutlinedIcon from "@mui/icons-material/MailOutline";
 import MessageBox from "src/components/messages/MessageBox";
+import { styled, useTheme } from "@mui/material/styles";
 import { v4 as uuidv4 } from "uuid";
-import { useTheme } from "@mui/material/styles";
+import { useActions } from "src/hooks/useActions";
 import {
+  validateEmail,
   inMailList,
   getProductSlug,
   capitalizeFirstLetters,
-  validateEmail,
   addBrandWithApostrophe,
   domain,
 } from "src/lib/helpers";
-import { useTypedSelector } from "src/hooks/useTypedSelector";
-import { UpdateStockType } from "src/services/pre-orders/PreOrderTypes";
-import { EmailList, MailDataTypes } from "../messages/types";
-import { CompanyName, Container, EmailButton, IgnoreButton } from "./styles";
-import { NotificationItemProps } from "./types";
+import { toast } from "react-toastify";
+import {
+  Container,
+  CompanyName,
+  EmailButton,
+  IgnoreButton,
+  ProductImage,
+} from "./styles";
 
 const initialState = {
   companyEmail: "",
@@ -28,27 +32,26 @@ const initialState = {
   message: "",
 };
 
-const NotificationItem = (props: NotificationItemProps) => {
-  const theme = useTheme();
-  const { stock, productCode, setProductCode } = props;
+const NotificationItemMobile = ({ stock, setProductCode, productCode }) => {
   const { customerData, productData } = stock;
-  const loadingPreOrderAction = useTypedSelector(
-    (state) => state.preOrders.loadingPreOrderAction
-  );
 
-  const [mailData, setMailData] = useState<MailDataTypes>(initialState);
+  const theme = useTheme();
+  const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
+  const matchesXXS = useMediaQuery("(max-width: 450px)");
+
+  const { loadingPreOrderAction } = useSelector((state) => state.preOrders);
+
+  const [mailData, setMailData] = useState(initialState);
   const [messageBoxOpen, setMessageBoxOpen] = useState(false);
   const [companyEmailError, setCompanyEmailError] = useState("");
-  const [subjectError, setSubjectError] = useState("");
-  const [messageError, setMessageError] = useState("");
-  const [emailList, setEmailList] = useState<EmailList[]>([]);
+  const [emailList, setEmailList] = useState([]);
 
-  const { companyEmail, subject, message } = mailData;
+  const { companyEmail, message, subject } = mailData;
 
   const {
     setSingleUpdatedStock,
-    updatePreOrderMultiples,
     sendNotificationEmail,
+    updatePreOrderMultiples,
   } = useActions();
 
   const singleProduct = productData[0];
@@ -89,7 +92,7 @@ const NotificationItem = (props: NotificationItemProps) => {
           ? `${addBrandWithApostrophe(
               singleProduct.brandName
             )} <a href=${domain}/products/${encodeURIComponent(
-              getProductSlug(singleProduct)!
+              getProductSlug(singleProduct)
             )}>${capitalizeFirstLetters(singleProduct.productName)} (UPC : ${
               singleProduct.productUPC
             })</a>`
@@ -98,7 +101,7 @@ const NotificationItem = (props: NotificationItemProps) => {
                 `${addBrandWithApostrophe(product.brandName)}${
                   self.length - 1 === self.indexOf(product) ? " and " : " "
                 }<a href=${domain}/products/${encodeURIComponent(
-                  getProductSlug(product)!
+                  getProductSlug(product)
                 )}>${capitalizeFirstLetters(product.productName)} (UPC : ${
                   product.productUPC
                 })</a>`
@@ -115,41 +118,11 @@ const NotificationItem = (props: NotificationItemProps) => {
     }));
   };
 
-  const handleIgnoreNotification = async () => {
-    setProductCode(stock.id);
-    if (productData.length > 1) {
-      await updatePreOrderMultiples({
-        productId: productData.map((product) => product._id),
-        isNotified: true,
-        addedBy: Array.isArray(customerData)
-          ? customerData.map((customer) => customer.id)
-          : [customerData.id],
-        itemId: stock.id,
-      });
-    } else {
-      await updatePreOrderMultiples({
-        productId: productData[0]._id,
-        isNotified: true,
-        addedBy: Array.isArray(customerData)
-          ? customerData.map((customer) => customer.id)
-          : [customerData.id],
-        itemId: stock.id,
-      });
-    }
-
-    toast.warning("Pre-order item has been removed from notification", {
-      position: "top-center",
-      hideProgressBar: true,
-    });
-
-    setProductCode("");
-  };
-
   const handleCloseMessageBox = () => {
     setMessageBoxOpen(false);
   };
 
-  const handleAddToEmailList = (event: React.KeyboardEvent) => {
+  const handleAddToEmailList = (event) => {
     if (event.key === "Enter") {
       if (!validateEmail(companyEmail)) {
         setCompanyEmailError("Please enter a valid email");
@@ -164,6 +137,25 @@ const NotificationItem = (props: NotificationItemProps) => {
     }
   };
 
+  const handleIgnoreNotification = async () => {
+    setProductCode(stock._id);
+    await updatePreOrderMultiples({
+      productId: stock._id,
+      isNotified: true,
+      addedBy:
+        stock.userWishList.length > 1
+          ? stock.userWishList[stock.userWishList.length - 1].userId._id
+          : stock.userWishList[0].userId._id,
+    });
+
+    toast.warning("Pre-order item has been removed from notification", {
+      position: "top-center",
+      hideProgressBar: true,
+    });
+
+    setProductCode("");
+  };
+
   const handleSubmit = () => {
     const emails = emailList.map((list) => list.email);
     sendNotificationEmail({
@@ -175,110 +167,121 @@ const NotificationItem = (props: NotificationItemProps) => {
     });
   };
 
-  useEffect(() => {
-    if (!loadingPreOrderAction) {
-      setProductCode("");
-    }
-
-    // eslint-disable-next-line
-  }, [loadingPreOrderAction]);
-
   return (
     <Fragment>
-      <Container container alignItems="center">
-        <Grid item>
-          {productData.map((product) => (
-            <Grid container direction="column" key={product._id} mb={2}>
-              <Grid item>
-                <img
-                  src={product.featuredImage}
-                  alt={product.productName}
-                  style={{ width: 50 }}
-                />
-              </Grid>
-              <Grid item>
-                <Grid container direction="column">
-                  <Grid item style={{ maxWidth: 250 }}>
-                    <Typography
-                      variant="body2"
-                      style={{ fontFamily: "Nunito", fontWeight: 600 }}
-                    >
-                      {product.productName}
-                    </Typography>
-                  </Grid>
+      <Container container columnSpacing={1}>
+        {/* Column 1 */}
+        <Grid item xs={3}>
+          <Grid container direction="column">
+            {productData.map((product) => {
+              const { _id, productName, featuredImage, brandName, itemCode } =
+                product;
+
+              return (
+                <Fragment key={_id}>
                   <Grid item>
-                    <Typography
-                      variant="body2"
-                      style={{
-                        color: theme.palette.secondary.light,
-                        fontSize: "1.35rem",
-                      }}
-                    >
-                      Item-code: {product.itemCode}
+                    <ProductImage src={featuredImage} alt={productName} />
+                  </Grid>
+                  <Grid item pl={1}>
+                    <Typography variant="body2" color="secondary">
+                      {itemCode}
                     </Typography>
                   </Grid>
-                  <Grid item>
-                    <Typography
-                      variant="body2"
-                      style={{
-                        fontSize: "1.25rem",
-                      }}
-                    >
-                      UPC: {product.productUPC}
-                    </Typography>
+                  <Grid item pl={1}>
+                    <Typography variant="body2">{brandName}</Typography>
                   </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          ))}
+                </Fragment>
+              );
+            })}
+          </Grid>
         </Grid>
-        <Grid item style={{ flex: 1 }}>
-          <Grid container direction="column" alignItems="center">
-            {Array.isArray(customerData) ? (
-              customerData.map((customer) => (
-                <Grid container direction="column" key={customer.id} mb={1}>
+        {/* Column 2 */}
+        <Grid item xs={9}>
+          <Grid
+            container
+            direction="column"
+            justifyContent={productData.length > 1 ? "space-between" : "center"}
+            style={{ minHeight: "100%" }}
+            pt={2}
+          >
+            {productData.map((product) => {
+              const { productName } = product;
+              return (
+                <Grid item container direction="column" pb={2}>
+                  <Typography
+                    variant="h5"
+                    style={{
+                      fontWeight: 600,
+                      fontSize: "1.45rem",
+                      fontFamily: "Nunito",
+                    }}
+                  >
+                    {productName}
+                  </Typography>
+                </Grid>
+              );
+            })}
+            <Grid item container direction="column">
+              {Array.isArray(customerData) ? (
+                customerData.map((customer) => {
+                  const { id, companyName, companyEmail } = customer;
+
+                  return (
+                    <Grid item container direction="column" key={id} pb={1}>
+                      <Grid item>
+                        <CompanyName variant="body2">{companyName}</CompanyName>
+                      </Grid>
+                      <Grid item>
+                        <Typography
+                          variant="body2"
+                          style={{
+                            overflowWrap: "break-word",
+                            wordWrap: "break-word",
+                            hyphens: "auto",
+                            maxWidth: matchesXXS ? 250 : "none",
+                          }}
+                        >
+                          {companyEmail}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  );
+                })
+              ) : (
+                <Fragment>
                   <Grid item>
-                    <CompanyName variant="body2" align="center">
-                      {customer.companyName}
+                    <CompanyName variant="body2">
+                      {customerData.companyName}
                     </CompanyName>
                   </Grid>
                   <Grid item>
-                    <Typography variant="body2" align="center">
-                      {customer.companyEmail}
+                    <Typography
+                      variant="body2"
+                      style={{
+                        overflowWrap: "break-word",
+                        wordWrap: "break-word",
+                        hyphens: "auto",
+                        maxWidth: matchesXXS ? 250 : "none",
+                      }}
+                    >
+                      {customerData.companyEmail}
                     </Typography>
                   </Grid>
-                </Grid>
-              ))
-            ) : (
-              <Fragment key={customerData.id}>
-                <Grid item>
-                  <CompanyName variant="body2" align="center">
-                    {customerData.companyName}
-                  </CompanyName>
-                </Grid>
-                <Grid item>
-                  <Typography variant="body2" align="center">
-                    {customerData.companyEmail}
-                  </Typography>
-                </Grid>
-              </Fragment>
-            )}
+                </Fragment>
+              )}
+            </Grid>
           </Grid>
         </Grid>
-        <Grid item>
-          <Grid
-            container
-            justifyContent="space-between"
-            alignItems="center"
-            columnSpacing={2}
-          >
+        <Grid item xs={3}></Grid>
+        <Grid item xs={9} mt={matchesXS ? 5 : 3}>
+          <Grid container alignItems="center" columnSpacing={2}>
             <Grid item>
               <IgnoreButton
                 variant="contained"
                 color="warning"
                 onClick={handleIgnoreNotification}
               >
-                {loadingPreOrderAction && productCode === stock.id ? (
+                {loadingPreOrderAction && productCode === stock._id ? (
                   <CircularProgress
                     style={{ height: 20, width: 20, color: "#fff" }}
                   />
@@ -303,21 +306,18 @@ const NotificationItem = (props: NotificationItemProps) => {
       <MessageBox
         mailData={mailData}
         setMailData={setMailData}
-        messageError={messageError}
-        setMessageError={setMessageError}
-        subjectError={subjectError}
-        setSubjectError={setSubjectError}
-        onClose={handleCloseMessageBox}
-        onAddEmailToList={handleAddToEmailList}
+        handleClose={handleCloseMessageBox}
         open={messageBoxOpen}
         setOpen={setMessageBoxOpen}
         onSubmit={handleSubmit}
+        handleAddToEmailList={handleAddToEmailList}
         companyEmailError={companyEmailError}
         setCompanyEmailError={setCompanyEmailError}
         emailList={emailList}
+        setEmailList={setEmailList}
       />
     </Fragment>
   );
 };
 
-export default NotificationItem;
+export default NotificationItemMobile;
