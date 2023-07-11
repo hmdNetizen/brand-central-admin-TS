@@ -28,6 +28,13 @@ export interface NotificiationEmailRequestType extends SendEmailToCustomerType {
   stock: UpdateStockType;
 }
 
+export type PreOrderMultiplesRequestType = {
+  productId: string[];
+  isNotified: boolean;
+  addedBy: string[];
+  itemId: string;
+};
+
 export type initStateType = {
   loadingPreOrders: boolean;
   loadingPreOrderAction: boolean;
