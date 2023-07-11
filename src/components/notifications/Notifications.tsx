@@ -13,11 +13,12 @@ type NotificationProps = {
   setShowNotification: React.Dispatch<React.SetStateAction<boolean>>;
   productCode: string;
   setProductCode: React.Dispatch<React.SetStateAction<string>>;
+  onClose: () => void;
 };
 
 const Notification = (props: NotificationProps) => {
   const theme = useTheme();
-  const { setShowNotification, productCode, setProductCode } = props;
+  const { setShowNotification, productCode, setProductCode, onClose } = props;
 
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -27,12 +28,6 @@ const Notification = (props: NotificationProps) => {
   const preOrdersUpdatedStock = useTypedSelector(
     (state) => state.preOrders.preOrdersUpdatedStock
   );
-
-  const handleCloseButton = () => {
-    sessionStorage.setItem("hidePreOrderNotification", JSON.stringify(true));
-
-    setShowNotification(false);
-  };
 
   useEffect(() => {
     if (!loadingPreOrderAction) {
@@ -48,7 +43,7 @@ const Notification = (props: NotificationProps) => {
         <Typography variant="body1" color="#fff">
           Available Stock Notification
         </Typography>
-        <IconButton onClick={handleCloseButton}>
+        <IconButton onClick={onClose}>
           <CloseIcon style={{ color: "#fff" }} />
         </IconButton>
       </HeadingWrapper>
