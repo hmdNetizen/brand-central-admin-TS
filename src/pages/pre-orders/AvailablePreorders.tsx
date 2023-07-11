@@ -1,19 +1,15 @@
 import React, { useState, useLayoutEffect, useCallback } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { styled, useTheme } from "@mui/material/styles";
-import CustomSelect from "src/utils/CustomSelect";
-import useMediaQuery from "@mui/material/useMediaQuery";
-
 import Tables from "components/table/Tables";
-import Button from "@mui/material/Button";
-import { preOrdersColumns } from "src/lib/dataset/tableData";
-import { useSelector } from "react-redux";
-import { useActions } from "src/hooks/useActions";
-import IgnorePreOrder from "./modals/DeletePreOrder";
 import debounce from "lodash.debounce";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
+import { SelectChangeEvent } from "@mui/material";
+
+import { preOrdersColumns } from "src/lib/dataset/tableData";
+import { useActions } from "src/hooks/useActions";
+import IgnorePreOrder from "./modals/DeletePreOrder";
 import {
   validateEmail,
   capitalizeFirstLetters,
@@ -24,6 +20,10 @@ import {
 } from "src/lib/helpers";
 import useTitle from "src/hooks/useTitle";
 import MessageBox from "src/components/messages/MessageBox";
+import AvailablePreOrderItem from "src/components/pre-orders/AvailablePreOrderItem";
+import { UpdateStockType } from "src/services/pre-orders/PreOrderTypes";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import PageHeadingActions from "src/components/common/PageHeadingActions";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -103,43 +103,63 @@ const initialState = {
   message: "",
 };
 
+type EmailListType = {
+  key: string;
+  email: string;
+};
+
 const AvailablePreOrders = () => {
   useTitle("Admin : Find all available pre-orders");
   const classes = useStyles();
-  const theme = useTheme();
-
-  const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
-  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [filterText, setFilterText] = useState("");
   const [mailData, setMailData] = useState(initialState);
   const [companyEmailError, setCompanyEmailError] = useState("");
-  const [emailList, setEmailList] = useState([]);
+  const [subjectError, setSubjectError] = useState("");
+  const [messageError, setMessageError] = useState("");
+  const [emailList, setEmailList] = useState<EmailListType[]>([]);
 
   const [openSendEmail, setOpenSendEmail] = useState(false);
   const [openIgnorePreOrder, setOpenIgnorePreOrder] = useState(false);
 
   const { companyEmail, message, subject } = mailData;
 
-  const {
-    loadingPreorders,
-    preOrdersUpdatedStock,
-    singleUpdatedStock,
-    filteredUpdatedStock,
-  } = useSelector((state) => state.preOrders);
+  const loadingPreOrders = useTypedSelector(
+    (state) => state.preOrders.loadingPreOrders
+  );
+  const preOrdersUpdatedStock = useTypedSelector(
+    (state) => state.preOrders.preOrdersUpdatedStock
+  );
+  const singleUpdatedStock = useTypedSelector(
+    (state) => state.preOrders.singleUpdatedStock
+  );
+  const filteredUpdatedStock = useTypedSelector(
+    (state) => state.preOrders.filteredUpdatedStock
+  );
 
   const {
     getUpdatedStock,
     handleFilteredUpdatedStock,
     setSingleUpdatedStock,
     updatePreOrderMultiples,
-    sendNotificationEmail,
+    sendEmailToCustomer,
   } = useActions();
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  const handleSelectRowsPerPage = (
+    event: SelectChangeEvent<unknown>,
+    child: React.ReactNode
+  ): void => {
+    const selectEvent = event as SelectChangeEvent<HTMLInputElement>;
+    setRowsPerPage(+selectEvent.target.value);
     setPage(0);
   };
 
@@ -149,7 +169,7 @@ const AvailablePreOrders = () => {
     []
   );
 
-  const handleClickEmailButton = (stock) => {
+  const handleClickEmailButton = (stock: UpdateStockType) => {
     const { customerData, productData } = stock;
     setOpenSendEmail(true);
     setSingleUpdatedStock(stock);
@@ -188,7 +208,7 @@ const AvailablePreOrders = () => {
           ? `${addBrandWithApostrophe(
               singleProduct.brandName
             )} <a href=${domain}/products/${encodeURIComponent(
-              getProductSlug(singleProduct)
+              getProductSlug(singleProduct)!
             )}>${capitalizeFirstLetters(singleProduct.productName)} (UPC : ${
               singleProduct.productUPC
             })</a>`
@@ -197,7 +217,7 @@ const AvailablePreOrders = () => {
                 `${addBrandWithApostrophe(product.brandName)}${
                   self.length - 1 === self.indexOf(product) ? " and " : " "
                 }<a href=${domain}/products/${encodeURIComponent(
-                  getProductSlug(product)
+                  getProductSlug(product)!
                 )}>${capitalizeFirstLetters(product.productName)} (UPC : ${
                   product.productUPC
                 })</a>`
@@ -215,12 +235,14 @@ const AvailablePreOrders = () => {
   };
 
   const handleIgnoreNotification = async () => {
-    const { id, customerData, productData } = singleUpdatedStock;
+    const { id, customerData, productData } = singleUpdatedStock!;
     if (productData.length > 1) {
       await updatePreOrderMultiples({
         productId: productData.map((product) => product._id),
         isNotified: true,
-        addedBy: customerData.id,
+        addedBy: Array.isArray(customerData)
+          ? customerData.map((customer) => customer.id)
+          : [customerData.id],
         itemId: id,
       });
     } else {
@@ -242,7 +264,7 @@ const AvailablePreOrders = () => {
     setOpenIgnorePreOrder(false);
   };
 
-  const handleOpenIgnoreModal = (stock) => {
+  const handleOpenIgnoreModal = (stock: UpdateStockType) => {
     setSingleUpdatedStock(stock);
     setOpenIgnorePreOrder(true);
   };
@@ -251,7 +273,7 @@ const AvailablePreOrders = () => {
     setOpenSendEmail(false);
   };
 
-  const handleAddToEmailList = (event) => {
+  const handleAddToEmailList = (event: React.KeyboardEvent) => {
     if (event.key === "Enter") {
       if (!validateEmail(companyEmail)) {
         setCompanyEmailError("Please enter a valid email");
@@ -267,7 +289,7 @@ const AvailablePreOrders = () => {
     }
   };
 
-  const handleSearch = (event) => {
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(event.target.value);
     debounceUpdatedPreOrderStock({
       text: event.target.value,
@@ -310,48 +332,12 @@ const AvailablePreOrders = () => {
         </Typography>
       </Grid>
       <Grid item container className={classes.containerWrapper}>
-        <Grid
-          container
-          direction={matchesSM ? "column" : "row"}
-          rowSpacing={matchesSM ? 2 : matchesMD ? 3 : 0}
-          alignItems="center"
-          justifyContent={matchesMD ? "space-between" : undefined}
-        >
-          <Grid
-            item
-            style={{ marginRight: matchesSM ? 0 : matchesMD ? 0 : "20rem" }}
-          >
-            <Grid container alignItems="center">
-              <Grid item>
-                <Typography variant="body2">Show</Typography>
-              </Grid>
-              <Grid item style={{ marginRight: 5, marginLeft: 5 }}>
-                <CustomSelect
-                  style={{ width: "100%" }}
-                  options={[10, 25, 50, 100]}
-                  value={rowsPerPage}
-                  onChange={handleChangeRowsPerPage}
-                  hasLabel={false}
-                />
-              </Grid>
-              <Grid item>
-                <Typography variant="body2">entries</Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid
-            item
-            justifySelf="center"
-            style={{ width: matchesSM ? "100%" : 350 }}
-          >
-            <input
-              className={classes.input}
-              placeholder="Search by Customer Name or Email..."
-              value={filterText}
-              onChange={handleSearch}
-            />
-          </Grid>
-        </Grid>
+        <PageHeadingActions
+          filterText={filterText}
+          onChange={handleSearch}
+          rowsPerPage={rowsPerPage.toString()}
+          handleSelectRowsPerPage={handleSelectRowsPerPage}
+        />
         <Grid item container style={{ marginTop: "5rem" }}>
           <Tables
             headerColumns={preOrdersColumns}
@@ -361,16 +347,24 @@ const AvailablePreOrders = () => {
             setRowsPerPage={setRowsPerPage}
             total={filteredUpdatedStock.length}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
-            loading={loadingPreorders}
+            loading={loadingPreOrders}
             notFoundText="No Updated Preorder found"
           >
-            {!loadingPreorders &&
+            {!loadingPreOrders &&
               filteredUpdatedStock
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((preorder, index) => {
-                  const { customerData, productData } = preorder;
+                .map((preorder) => {
                   return (
-                    // AvailablePreOrder Item
+                    <AvailablePreOrderItem
+                      preOrderItem={preorder}
+                      onClickEmailButton={() =>
+                        handleClickEmailButton(preorder)
+                      }
+                      onClickIgnoreButton={() =>
+                        handleOpenIgnoreModal(preorder)
+                      }
+                      key={preorder.id}
+                    />
                   );
                 })}
           </Tables>
@@ -379,15 +373,18 @@ const AvailablePreOrders = () => {
       <MessageBox
         mailData={mailData}
         setMailData={setMailData}
-        handleClose={handleCloseMessageBox}
+        onClose={handleCloseMessageBox}
         open={openSendEmail}
         setOpen={setOpenSendEmail}
         onSubmit={handleSubmit}
-        handleAddToEmailList={handleAddToEmailList}
+        onAddEmailToList={handleAddToEmailList}
         companyEmailError={companyEmailError}
         setCompanyEmailError={setCompanyEmailError}
         emailList={emailList}
-        setEmailList={setEmailList}
+        messageError={messageError}
+        setMessageError={setMessageError}
+        subjectError={subjectError}
+        setSubjectError={setSubjectError}
       />
       <IgnorePreOrder
         openDeletePreOrder={openIgnorePreOrder}
@@ -395,10 +392,11 @@ const AvailablePreOrders = () => {
         actionType="Ignore"
         clickAction={handleIgnoreNotification}
         productName={
-          singleUpdatedStock?.productData?.length > 1
+          singleUpdatedStock?.productData?.length! > 1
             ? "these products"
             : "this product"
         }
+        isClickAction={true}
       />
     </Grid>
   );

@@ -65,11 +65,6 @@ export const getSearchedSentMessages = createAsyncThunk(
         `/api/messages/v1?page=${page}&limit=${limit}&searchTerm=${searchTerm}`
       );
 
-      console.log(
-        "Search endpoint",
-        `/api/messages/v1?page=${page}&limit=${limit}${searchTerm}`
-      );
-
       const result = data as SentEmailTypes;
       const transformResult = result.data.data.map((message) => ({
         _id: message._id,
