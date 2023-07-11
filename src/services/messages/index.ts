@@ -11,6 +11,8 @@ import {
   MessagesPayloadResponse,
 } from "./MessageTypes";
 import { constructContent } from "src/lib/helpers";
+import { NotificiationEmailRequestType } from "../pre-orders/PreOrderTypes";
+import { updatePreOrderMultiples } from "../pre-orders";
 
 const initialState: initStateTypes = {
   loading: false,
@@ -220,6 +222,58 @@ export const sendEmailToCustomer = createAsyncThunk(
   }
 );
 
+export const sendNotificationEmail = createAsyncThunk(
+  "send-notification-email",
+  async (details: NotificiationEmailRequestType, thunkAPI) => {
+    const { setOpen, stock, ...fields } = details;
+
+    try {
+      const { status } = await axios.post(`/api/messages`, fields);
+
+      if (status === 200) {
+        setOpen(false);
+
+        const { id, productData, customerData } = stock;
+
+        if (productData.length > 1) {
+          await thunkAPI.dispatch(
+            updatePreOrderMultiples({
+              productId: productData.map((product) => product._id),
+              isNotified: true,
+              addedBy: Array.isArray(customerData)
+                ? customerData.map((customer) => customer.id)
+                : [customerData.id],
+              itemId: id,
+            })
+          );
+        } else {
+          await thunkAPI.dispatch(
+            updatePreOrderMultiples({
+              productId: productData[0]._id,
+              isNotified: true,
+              addedBy: Array.isArray(customerData)
+                ? customerData.map((customer) => customer.id)
+                : [customerData.id],
+              itemId: id,
+            })
+          );
+        }
+      }
+
+      return {
+        _id: uuidv4(),
+        emails: fields.to,
+        subject: fields.subject,
+        body: decodeURIComponent(constructContent(fields.content)),
+        createdAt: new Date().toISOString(),
+        isRead: false,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Email could not be sent");
+    }
+  }
+);
+
 const messagesSlice = createSlice({
   name: "messages",
   initialState,
@@ -338,6 +392,21 @@ const messagesSlice = createSlice({
         });
       })
       .addCase(sendEmailToCustomer.rejected, (state, action) => {
+        state.loadingSendMessage = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(sendNotificationEmail.pending, (state) => {
+        state.loadingSendMessage = true;
+      })
+      .addCase(sendNotificationEmail.fulfilled, (state, action) => {
+        state.loadingSendMessage = false;
+        state.sentMessages = [action.payload, ...state.sentMessages];
+        state.error = null;
+      })
+      .addCase(sendNotificationEmail.rejected, (state, action) => {
         state.loadingSendMessage = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;

@@ -8,8 +8,11 @@ import {
   DeletePreOrderType,
   UpdateStockType,
   CustomerListDataType,
+  NotificiationEmailRequestType,
+  PreOrderMultiplesRequestType,
 } from "./PreOrderTypes";
 import { ProductTypes } from "../products/ProductTypes";
+import { constructContent } from "src/lib/helpers";
 
 type UserWishListUserIdTypes = {
   _id: string;
@@ -66,6 +69,76 @@ export const deletePreOrder = createAsyncThunk(
       return preOrderId;
     } catch (error) {
       return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
+export const updatePreOrderMultiples = createAsyncThunk(
+  "update-preorder",
+  async (details: PreOrderMultiplesRequestType, thunkAPI) => {
+    const { productId, isNotified, addedBy, itemId } = details;
+    try {
+      await axios.put(`/api/wishlist/update/multiple`, {
+        productId,
+        isNotified,
+        addedBy,
+      });
+
+      return itemId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something Went wrong!");
+    }
+  }
+);
+
+export const sendNotificationEmail = createAsyncThunk(
+  "send-notification-email",
+  async (details: NotificiationEmailRequestType, thunkAPI) => {
+    const { setOpen, stock, ...fields } = details;
+
+    try {
+      const { status } = await axios.post(`/api/messages`, fields);
+
+      if (status === 200) {
+        setOpen(false);
+
+        const { id, productData, customerData } = stock;
+
+        if (productData.length > 1) {
+          await thunkAPI.dispatch(
+            updatePreOrderMultiples({
+              productId: productData.map((product) => product._id),
+              isNotified: true,
+              addedBy: Array.isArray(customerData)
+                ? customerData.map((customer) => customer.id)
+                : [customerData.id],
+              itemId: id,
+            })
+          );
+        } else {
+          await thunkAPI.dispatch(
+            updatePreOrderMultiples({
+              productId: productData[0]._id,
+              isNotified: true,
+              addedBy: Array.isArray(customerData)
+                ? customerData.map((customer) => customer.id)
+                : [customerData.id],
+              itemId: id,
+            })
+          );
+        }
+      }
+
+      return {
+        _id: uuidv4(),
+        emails: fields.to,
+        subject: fields.subject,
+        body: decodeURIComponent(constructContent(fields.content)),
+        createdAt: new Date().toISOString(),
+        isRead: false,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Email could not be sent");
     }
   }
 );
