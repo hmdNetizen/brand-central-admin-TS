@@ -8,11 +8,9 @@ import {
   DeletePreOrderType,
   UpdateStockType,
   CustomerListDataType,
-  NotificiationEmailRequestType,
   PreOrderMultiplesRequestType,
 } from "./PreOrderTypes";
 import { ProductTypes } from "../products/ProductTypes";
-import { constructContent } from "src/lib/helpers";
 
 type UserWishListUserIdTypes = {
   _id: string;
@@ -87,58 +85,6 @@ export const updatePreOrderMultiples = createAsyncThunk(
       return itemId;
     } catch (error) {
       return thunkAPI.rejectWithValue("Something Went wrong!");
-    }
-  }
-);
-
-export const sendNotificationEmail = createAsyncThunk(
-  "send-notification-email",
-  async (details: NotificiationEmailRequestType, thunkAPI) => {
-    const { setOpen, stock, ...fields } = details;
-
-    try {
-      const { status } = await axios.post(`/api/messages`, fields);
-
-      if (status === 200) {
-        setOpen(false);
-
-        const { id, productData, customerData } = stock;
-
-        if (productData.length > 1) {
-          await thunkAPI.dispatch(
-            updatePreOrderMultiples({
-              productId: productData.map((product) => product._id),
-              isNotified: true,
-              addedBy: Array.isArray(customerData)
-                ? customerData.map((customer) => customer.id)
-                : [customerData.id],
-              itemId: id,
-            })
-          );
-        } else {
-          await thunkAPI.dispatch(
-            updatePreOrderMultiples({
-              productId: productData[0]._id,
-              isNotified: true,
-              addedBy: Array.isArray(customerData)
-                ? customerData.map((customer) => customer.id)
-                : [customerData.id],
-              itemId: id,
-            })
-          );
-        }
-      }
-
-      return {
-        _id: uuidv4(),
-        emails: fields.to,
-        subject: fields.subject,
-        body: decodeURIComponent(constructContent(fields.content)),
-        createdAt: new Date().toISOString(),
-        isRead: false,
-      };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Email could not be sent");
     }
   }
 );
@@ -405,6 +351,28 @@ const preorderSlice = createSlice({
         state.loadingPreOrderAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updatePreOrderMultiples.pending, (state) => {
+        state.loadingPreOrderAction = true;
+      })
+      .addCase(updatePreOrderMultiples.fulfilled, (state, action) => {
+        state.loadingPreOrderAction = false;
+        state.preOrdersUpdatedStock = state.preOrdersUpdatedStock.filter(
+          (item) => item.id !== action.payload
+        );
+        state.error = null;
+      })
+      .addCase(updatePreOrderMultiples.rejected, (state, action) => {
+        state.loadingPreOrderAction = false;
+        if (typeof action.payload === "string") {
+          state.error = action.payload;
+
+          toast.error(action.payload, {
+            position: "top-center",
+            hideProgressBar: true,
+          });
         }
       });
   },
