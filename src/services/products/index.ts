@@ -27,6 +27,7 @@ import {
 
 const initialState: initStateType = {
   loadingProducts: false,
+  loadingAllProducts: false,
   loadingPopularProducts: false,
   loadingRecentProducts: false,
   loadingProductAction: false,
