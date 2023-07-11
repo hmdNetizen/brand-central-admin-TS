@@ -651,8 +651,15 @@ const productsSlice = createSlice({
     },
   },
   extraReducers(builder) {
+    builder.addCase(fetchAllProducts.pending, (state) => {
+      state.loadingAllProducts = true;
+    });
     builder.addCase(fetchAllProducts.fulfilled, (state, action) => {
       state.allProducts = action.payload;
+      state.loadingAllProducts = false;
+    });
+    builder.addCase(fetchAllProducts.rejected, (state) => {
+      state.loadingAllProducts = false;
     });
     builder
       .addCase(getPaginatedProducts.pending, (state) => {
