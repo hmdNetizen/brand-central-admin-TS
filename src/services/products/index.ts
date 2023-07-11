@@ -13,7 +13,6 @@ import { setUploadPercentage } from "../common";
 import { UploadedFilePayload } from "../common/commonTypes";
 import {
   PaginatedReturnedPayloadType,
-  ProductsReturnedPayloadType,
   DashboardProductPayloadType,
   initStateType,
   ProductBulkUpdateRequestPayload,
@@ -34,6 +33,7 @@ const initialState: initStateType = {
   loadingProductActivation: false,
   loadingSingleProduct: false,
   uploadingImage: false,
+  allProducts: [],
   products: [],
   paginatedProducts: [],
   recentProducts: [],
@@ -46,6 +46,20 @@ const initialState: initStateType = {
   error: null,
   errors: null,
 };
+
+export const fetchAllProducts = createAsyncThunk(
+  "fetch-all-products",
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await axios.get(`/api/products`);
+      const result = data as { data: ProductTypes[] };
+
+      return result.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
 
 export const getPaginatedProducts = createAsyncThunk(
   "get-products",
@@ -636,6 +650,9 @@ const productsSlice = createSlice({
     },
   },
   extraReducers(builder) {
+    builder.addCase(fetchAllProducts.fulfilled, (state, action) => {
+      state.allProducts = action.payload;
+    });
     builder
       .addCase(getPaginatedProducts.pending, (state) => {
         state.loadingProducts = true;
