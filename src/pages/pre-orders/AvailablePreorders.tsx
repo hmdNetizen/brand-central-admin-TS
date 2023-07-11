@@ -1,7 +1,7 @@
 import React, { useState, useLayoutEffect, useCallback } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Tables from "components/table/Tables";
+import Tables from "src/components/table/Tables";
 import debounce from "lodash.debounce";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
