@@ -329,7 +329,7 @@ const AvailablePreOrders = () => {
         productName={
           singleUpdatedStock?.productData?.length! > 1
             ? "these products"
-            : "this product"
+            : singleUpdatedStock?.productData[0].productName!
         }
         isClickAction={true}
       />

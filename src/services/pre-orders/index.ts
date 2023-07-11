@@ -287,7 +287,7 @@ const preorderSlice = createSlice({
       >;
 
       if (action.payload.text) {
-        const newUpdatedPreOrder: UpdateStockType[] = [
+        const newUpdatedPreOrder = [
           ...action.payload.updatedPreOrderData,
         ].filter((item) => {
           const itemCopy: ProductListDataType = { ...item };
@@ -309,9 +309,10 @@ const preorderSlice = createSlice({
             );
           }
         });
+
         state.filteredUpdatedStock = newUpdatedPreOrder;
       } else {
-        state.filteredUpdatedStock = action.payload.updatedPreOrderData;
+        state.filteredUpdatedStock = state.preOrdersUpdatedStock;
       }
     },
   },
