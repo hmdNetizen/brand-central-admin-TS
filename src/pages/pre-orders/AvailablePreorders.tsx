@@ -6,6 +6,7 @@ import debounce from "lodash.debounce";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import { SelectChangeEvent } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 import { preOrdersColumns } from "src/lib/dataset/tableData";
 import { useActions } from "src/hooks/useActions";
@@ -24,78 +25,10 @@ import AvailablePreOrderItem from "src/components/pre-orders/AvailablePreOrderIt
 import { UpdateStockType } from "src/services/pre-orders/PreOrderTypes";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import PageHeadingActions from "src/components/common/PageHeadingActions";
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    "&.MuiGrid-root": {
-      padding: "1rem 2rem 5rem 2rem",
-
-      [theme.breakpoints.only("xs")]: {
-        padding: "5rem 1rem 5rem 1rem",
-      },
-    },
-  },
-  containerWrapper: {
-    background: "#fff",
-    padding: "2rem 3rem",
-    borderRadius: 5,
-
-    [theme.breakpoints.only("xs")]: {
-      padding: "2rem 1rem",
-    },
-  },
-
-  input: {
-    fontSize: "1.6rem",
-    borderRadius: 5,
-    border: `1px solid ${theme.palette.common.lighterGrey}`,
-    padding: "1rem 1rem",
-    width: "100%",
-
-    "&:focus": {
-      outline: "none",
-    },
-  },
-  actionButton: {
-    "&.MuiButton-root": {
-      minWidth: 64,
-      padding: "1rem 1.5rem",
-      borderRadius: "2rem",
-    },
-  },
-  iconButton: {
-    "&.MuiIconButton-root": {
-      background: theme.palette.error.main,
-      maxWidth: 42,
-
-      "&:hover": {
-        background: theme.palette.error.light,
-      },
-
-      "&:active": {
-        background: theme.palette.error.dark,
-      },
-
-      "& .MuiSvgIcon-root": {
-        color: "#fff",
-      },
-    },
-  },
-  optionsTableData: {
-    minWidth: 150,
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gridColumnGap: "1rem",
-  },
-  orderStatus: {
-    "&.MuiChip-root": {
-      padding: ".5rem .5rem",
-      textAlign: "center",
-      fontWeight: 700,
-      fontSize: "1.5rem",
-    },
-  },
-}));
+import {
+  ContainerWrapper,
+  Container,
+} from "src/components/common/styles/PageContainerStyles";
 
 const initialState = {
   companyEmail: "",
@@ -110,7 +43,7 @@ type EmailListType = {
 
 const AvailablePreOrders = () => {
   useTitle("Admin : Find all available pre-orders");
-  const classes = useStyles();
+  const theme = useTheme();
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -144,7 +77,7 @@ const AvailablePreOrders = () => {
     handleFilteredUpdatedStock,
     setSingleUpdatedStock,
     updatePreOrderMultiples,
-    sendEmailToCustomer,
+    sendNotificationEmail,
   } = useActions();
 
   const handleChangeRowsPerPage = (
@@ -309,7 +242,7 @@ const AvailablePreOrders = () => {
 
     sendNotificationEmail({
       setOpen: setOpenSendEmail,
-      stock: singleUpdatedStock,
+      stock: singleUpdatedStock!,
       to: emails,
       subject,
       content: encodeURIComponent(message),
@@ -320,18 +253,16 @@ const AvailablePreOrders = () => {
     if (preOrdersUpdatedStock.length > 0) {
       getUpdatedStock(preOrdersUpdatedStock);
     }
-
-    // eslint-disable-next-line
   }, [preOrdersUpdatedStock]);
 
   return (
-    <Grid container direction="column" className={classes.container}>
+    <Container container direction="column">
       <Grid item container pb={2}>
         <Typography variant="h3" color={theme.palette.secondary.dark}>
           Available Pre-orders
         </Typography>
       </Grid>
-      <Grid item container className={classes.containerWrapper}>
+      <ContainerWrapper item container>
         <PageHeadingActions
           filterText={filterText}
           onChange={handleSearch}
@@ -369,7 +300,7 @@ const AvailablePreOrders = () => {
                 })}
           </Tables>
         </Grid>
-      </Grid>
+      </ContainerWrapper>
       <MessageBox
         mailData={mailData}
         setMailData={setMailData}
@@ -398,7 +329,7 @@ const AvailablePreOrders = () => {
         }
         isClickAction={true}
       />
-    </Grid>
+    </Container>
   );
 };
 
