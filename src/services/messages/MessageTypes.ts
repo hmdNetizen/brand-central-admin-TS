@@ -33,12 +33,12 @@ export type ReceivedEmailTypes = {
   };
 };
 
-export type SendEmailToCustomerType = {
+export interface SendEmailToCustomerType {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   to: string | string[];
   subject: string;
   content: string;
-};
+}
 
 export type MessagesPayloadResponse = {
   _id: string;

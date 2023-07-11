@@ -1,3 +1,5 @@
+import { SendEmailToCustomerType } from "./../messages/MessageTypes";
+
 import React from "react";
 import { ProductTypes } from "../products/ProductTypes";
 
@@ -21,6 +23,10 @@ export type UpdateStockType = {
   customerData: CustomerListDataType | CustomerListDataType[];
   productData: ProductTypes[];
 };
+
+export interface NotificiationEmailRequestType extends SendEmailToCustomerType {
+  stock: UpdateStockType;
+}
 
 export type initStateType = {
   loadingPreOrders: boolean;
