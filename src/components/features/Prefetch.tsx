@@ -31,6 +31,8 @@ const Prefetch = () => {
     getMessagesNotifications,
     loadAdminProfile,
     getAllSiteData,
+    fetchAllProducts,
+    getAllPreOrders,
   } = useActions();
 
   const {
@@ -115,7 +117,14 @@ const Prefetch = () => {
     getPreOrderNotifications();
     getMessagesNotifications();
     getAllSiteData();
+    fetchAllProducts();
   }, []);
+
+  useEffect(() => {
+    if (accessToken) {
+      getAllPreOrders();
+    }
+  }, [accessToken]);
 
   return <Outlet />;
 };
