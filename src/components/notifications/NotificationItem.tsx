@@ -1,12 +1,9 @@
 import React, { Fragment, useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
-import { styled } from "@mui/material/styles";
 import { useActions } from "src/hooks/useActions";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import MessageBox from "src/components/messages/MessageBox";
 import { v4 as uuidv4 } from "uuid";
@@ -22,27 +19,7 @@ import {
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { UpdateStockType } from "src/services/pre-orders/PreOrderTypes";
 import { EmailList, MailDataTypes } from "../messages/types";
-
-const Container = styled(Grid)(({ theme }) => ({
-  padding: "2rem",
-  borderBottom: `1px solid ${theme.palette.common.lightGrey}`,
-}));
-
-const CompanyName = styled(Typography)(({ theme }) => ({
-  fontWeight: 600,
-  color: theme.palette.secondary.dark,
-  textTransform: "uppercase",
-}));
-
-const EmailButton = styled(Button)({
-  fontSize: "1.2rem",
-});
-
-const IgnoreButton = styled(Button)({
-  fontSize: "1.05rem",
-  color: "#fff",
-  minWidth: 56,
-});
+import { CompanyName, Container, EmailButton, IgnoreButton } from "./styles";
 
 const initialState = {
   companyEmail: "",
