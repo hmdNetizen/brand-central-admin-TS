@@ -176,6 +176,7 @@ const preorderSlice = createSlice({
        - isNotified is used to track the notification that has been either ignored or fulfilled via
          email sent to customer.
       */
+      const productsInStock: ProductTypes[] = [];
 
       sanitizePreOrder.filter((item): ProductTypes | undefined => {
         if (item !== null) {
@@ -184,7 +185,6 @@ const preorderSlice = createSlice({
         }
       });
 
-      const productsInStock: ProductTypes[] = [];
       productsInStock.filter((newPreOrder) => {
         const itemCopy = { ...newPreOrder };
 
