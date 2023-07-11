@@ -62,6 +62,9 @@ const AvailablePreOrders = () => {
   const loadingPreOrders = useTypedSelector(
     (state) => state.preOrders.loadingPreOrders
   );
+  const loadingAllProducts = useTypedSelector(
+    (state) => state.products.loadingAllProducts
+  );
   const preOrdersUpdatedStock = useTypedSelector(
     (state) => state.preOrders.preOrdersUpdatedStock
   );
@@ -278,10 +281,11 @@ const AvailablePreOrders = () => {
             setRowsPerPage={setRowsPerPage}
             total={filteredUpdatedStock.length}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
-            loading={loadingPreOrders}
+            loading={loadingPreOrders || loadingAllProducts}
             notFoundText="No Updated Preorder found"
           >
             {!loadingPreOrders &&
+              !loadingAllProducts &&
               filteredUpdatedStock
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((preorder) => {
