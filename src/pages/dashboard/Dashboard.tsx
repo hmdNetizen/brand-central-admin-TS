@@ -21,7 +21,6 @@ const Dashboard = ({ menuSlideIn }: DashboardProps) => {
     getRecentOrders,
     getOrdersCount,
     getRecentCustomers,
-    getAllPreOrders,
     getRecentlyAddedProducts,
     getDashboardPopularProducts,
     getProductVariants,
@@ -36,7 +35,6 @@ const Dashboard = ({ menuSlideIn }: DashboardProps) => {
     getRecentOrders();
     getOrdersCount();
     getRecentCustomers();
-    getAllPreOrders();
     getRecentlyAddedProducts(1);
     getDashboardPopularProducts(1);
   }, []);
