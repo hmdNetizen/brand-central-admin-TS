@@ -1,10 +1,11 @@
 import React, { Fragment, useEffect } from "react";
-import NotificationItem from "./NotificationItem";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
+
+import NotificationItem from "./NotificationItem";
 import NotificationItemMobile from "./NotificationItemMobile";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { HeadingWrapper } from "./styles";
