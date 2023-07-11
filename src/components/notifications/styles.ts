@@ -35,3 +35,9 @@ export const ProductImage = styled("img")(({ theme }) => ({
     width: 60,
   },
 }));
+
+export const HeadingWrapper = styled(Grid)(({ theme }) => ({
+  padding: "1rem 2rem",
+  background: theme.palette.secondary.main,
+  color: "#fff",
+}));
