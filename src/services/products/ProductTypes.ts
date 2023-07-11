@@ -303,6 +303,7 @@ export type CreateProductRequestPayload = {
 
 export type initStateType = {
   loadingProducts: boolean;
+  loadingAllProducts: boolean;
   loadingRecentProducts: boolean;
   loadingPopularProducts: boolean;
   loadingProductAction: boolean;
