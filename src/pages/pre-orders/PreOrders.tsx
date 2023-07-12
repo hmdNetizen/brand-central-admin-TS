@@ -132,7 +132,7 @@ const PreOrders = () => {
             total={filteredPreOrders.length}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
             loading={loadingPreOrders}
-            notFoundText="No Order found"
+            notFoundText="No Pre-ordered product found"
           >
             {!loadingPreOrders &&
               filteredPreOrders

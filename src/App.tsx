@@ -23,15 +23,15 @@ function App() {
 
   const [showNotification, setShowNotification] = useState(false);
 
-  useEffect(() => {
-    if (allProducts.length > 0 && preOrders.length > 0) {
-      showAvailableStockForPreOrders({
-        productData: allProducts,
-      });
-    }
+  // useEffect(() => {
+  //   if (allProducts.length > 0 && preOrders.length > 0) {
+  //     showAvailableStockForPreOrders({
+  //       productData: allProducts,
+  //     });
+  //   }
 
-    // eslint-disable-next-line
-  }, [allProducts, preOrders]);
+  //   // eslint-disable-next-line
+  // }, [allProducts, preOrders]);
 
   useEffect(() => {
     const isNotified = sessionStorage.getItem("hidePreOrderNotification");
