@@ -18,6 +18,11 @@ const FormContainer = styled(Grid)<
   background: "#fff",
 });
 
+const StyledCustomTextArea = styled(CustomTextArea)({
+  fontSize: "1.4rem",
+  lineHeight: 1.7,
+});
+
 const MessageForm = (props: MessageFormProps) => {
   const {
     onSubmit,
@@ -60,7 +65,7 @@ const MessageForm = (props: MessageFormProps) => {
         />
       </Grid>
       <Grid item container style={{ marginBottom: "2rem" }}>
-        <CustomTextArea
+        <StyledCustomTextArea
           label=""
           name="message"
           placeholder="Enter your message"
