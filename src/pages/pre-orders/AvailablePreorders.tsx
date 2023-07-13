@@ -235,7 +235,8 @@ const AvailablePreOrders = () => {
     setPage(0);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: React.FormEvent<Element>) => {
+    event.preventDefault();
     const emails = emailList.map((list) => list.email);
 
     if (emails.length === 0) {
