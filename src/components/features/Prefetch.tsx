@@ -15,7 +15,13 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Prefetch = () => {
-  const socket = io(`${BASE_URL}`);
+  const socket = io(`ws://localhost:4000`, {
+    transports: ["websocket", "polling"],
+    forceNew: true,
+    reconnectionAttempts: 3,
+    timeout: 2000,
+  });
+
   const navigate = useNavigate();
 
   const {
@@ -35,70 +41,117 @@ const Prefetch = () => {
     getAllPreOrders,
   } = useActions();
 
-  const {
-    orderNotifications,
-    customerNotifications,
-    lowStockNotifications,
-    messagesNotifications,
-    preOrderNotifications,
-  } = useTypedSelector((state) => state.notifications);
+  // const {
+  //   orderNotifications,
+  //   customerNotifications,
+  //   lowStockNotifications,
+  //   messagesNotifications,
+  //   preOrderNotifications,
+  // } = useTypedSelector((state) => state.notifications);
 
   const { adminEmail, accessToken } = useTypedSelector((state) => state.auth);
 
   useEffect(() => {
+    socket.open();
+    console.log("Connected");
     socket.emit("adminJoin", { email: adminEmail });
 
     return () => {
-      socket.disconnect();
+      console.log("Disconnected");
+      socket.off("adminJoin");
+      socket.close();
     };
-
-    // eslint-disable-next-line
   }, [socket]);
 
+  const handleAddNewCustomerNotification = (
+    data: CustomerNotificationReturnedPayload
+  ) => {
+    addNewUserNotification(data);
+  };
+
+  const handleAddNewOrderNotification = (
+    data: OrderNotificationReturnedPayload
+  ) => {
+    addNewOrderNotification(data);
+  };
+
+  const handleLowStockNotification = (data: {
+    lowStock: LowStockNotificationReturnedPayload;
+    newOrder: OrderNotificationReturnedPayload;
+  }) => {
+    addNewLowStockNotification(data.lowStock);
+  };
+
+  const handleNewMessageNotification = (
+    data: MessagesNotificationReturnedPayload
+  ) => {
+    addNewMessageNotification(data);
+  };
+
+  const handleNewPreOrderNotification = (
+    data: PreOrderNotificationReturnedPayload
+  ) => {
+    console.log("Yay!!!");
+    addNewPreOrderNotification(data);
+  };
+
   useEffect(() => {
-    socket.on("newOrder", (data: OrderNotificationReturnedPayload) => {
-      addNewOrderNotification(data);
-    });
-
-    socket.on("newUser", (data: CustomerNotificationReturnedPayload) => {
-      addNewUserNotification(data);
-    });
-
-    socket.on(
-      "lowStock",
-      (data: {
-        lowStock: LowStockNotificationReturnedPayload;
-        newOrder: OrderNotificationReturnedPayload;
-      }) => {
-        addNewLowStockNotification(data.lowStock);
-        addNewOrderNotification(data.newOrder);
-      }
-    );
-
-    socket.on(
-      "new_contact_message",
-      (data: MessagesNotificationReturnedPayload) => {
-        addNewMessageNotification(data);
-      }
-    );
-
-    socket.on(
-      "newPreOrderNotification",
-      (data: PreOrderNotificationReturnedPayload) => {
-        addNewPreOrderNotification(data);
-      }
-    );
+    socket.on("newUser", handleAddNewCustomerNotification);
 
     return () => {
-      socket.disconnect();
+      socket.off("newUser", handleAddNewCustomerNotification);
+      socket.close();
     };
-  }, [
-    orderNotifications,
-    customerNotifications,
-    lowStockNotifications,
-    preOrderNotifications,
-    messagesNotifications,
-  ]);
+  }, []);
+
+  useEffect(() => {
+    socket.on("newOrder", handleAddNewOrderNotification);
+
+    return () => {
+      socket.off("newOrder", handleAddNewOrderNotification);
+      socket.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    socket.on("lowStock", handleLowStockNotification);
+
+    return () => {
+      socket.off("lowStock", handleLowStockNotification);
+      socket.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    socket.on("new_contact_message", handleNewMessageNotification);
+
+    return () => {
+      socket.off("new_contact_message", handleNewMessageNotification);
+      socket.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    socket.on("newPreOrderNotification", handleNewPreOrderNotification);
+
+    return () => {
+      socket.off("newPreOrderNotification", handleNewPreOrderNotification);
+      socket.close();
+    };
+  }, []);
+
+  // useEffect(() => {
+
+  //   // return () => {
+  //   //   socket.disconnect();
+  //   // };
+  // }, [
+  //   orderNotifications,
+  //   customerNotifications,
+  //   lowStockNotifications,
+  //   preOrderNotifications,
+  //   messagesNotifications,
+  // ]);
 
   useLayoutEffect(() => {
     if (localStorage.accessToken) {
