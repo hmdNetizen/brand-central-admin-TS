@@ -750,7 +750,7 @@ const productsSlice = createSlice({
       })
       .addCase(toggleProductActivation.fulfilled, (state, action) => {
         state.loadingProductActivation = false;
-        state.products = state.products.map((product) =>
+        state.paginatedProducts = state.paginatedProducts.map((product) =>
           product._id === action.payload.productId
             ? {
                 ...product,
@@ -818,7 +818,7 @@ const productsSlice = createSlice({
       })
       .addCase(createNewProduct.fulfilled, (state, action) => {
         state.loadingProductAction = false;
-        state.products = [action.payload, ...state.products];
+        state.paginatedProducts = [action.payload, ...state.paginatedProducts];
         state.error = null;
         state.errors = null;
         state.productSuccessMsg = `${action.payload.itemCode.toUpperCase()} has been created successfully`;
@@ -836,7 +836,7 @@ const productsSlice = createSlice({
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
         state.loadingProductAction = false;
-        state.products = state.products.map((product) =>
+        state.paginatedProducts = state.paginatedProducts.map((product) =>
           product._id === action.payload._id
             ? { ...product, ...action.payload }
             : product
@@ -859,7 +859,7 @@ const productsSlice = createSlice({
       })
       .addCase(updateProductGallery.fulfilled, (state, action) => {
         state.uploadingImage = false;
-        state.products = state.products.map((product) =>
+        state.paginatedProducts = state.paginatedProducts.map((product) =>
           product._id === action.payload.productId
             ? {
                 ...product,
@@ -887,7 +887,7 @@ const productsSlice = createSlice({
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.loadingProductAction = false;
-        state.products = state.products.filter(
+        state.paginatedProducts = state.paginatedProducts.filter(
           (product) => product._id !== action.payload
         );
         state.error = null;
@@ -909,7 +909,7 @@ const productsSlice = createSlice({
       })
       .addCase(toggleProductHighlight.fulfilled, (state, action) => {
         state.loadingProductAction = false;
-        state.products = state.products.map((product) =>
+        state.paginatedProducts = state.paginatedProducts.map((product) =>
           product._id === action.payload?._id
             ? {
                 ...product,
