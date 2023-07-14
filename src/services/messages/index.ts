@@ -405,6 +405,11 @@ const messagesSlice = createSlice({
         state.loadingSendMessage = false;
         state.sentMessages = [action.payload, ...state.sentMessages];
         state.error = null;
+
+        toast.success("Email Sent Successfully", {
+          position: "top-center",
+          hideProgressBar: true,
+        });
       })
       .addCase(sendNotificationEmail.rejected, (state, action) => {
         state.loadingSendMessage = false;
