@@ -164,7 +164,9 @@ const NotificationItem = (props: NotificationItemProps) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: React.FormEvent<Element>) => {
+    event.preventDefault();
+
     const emails = emailList.map((list) => list.email);
     sendNotificationEmail({
       setOpen: setMessageBoxOpen,
