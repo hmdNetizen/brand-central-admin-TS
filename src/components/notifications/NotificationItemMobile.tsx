@@ -175,7 +175,9 @@ const NotificationItemMobile = (props: NotificationItemProps) => {
     setProductCode("");
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: React.FormEvent<Element>) => {
+    event.preventDefault();
+
     const emails = emailList.map((list) => list.email);
     sendNotificationEmail({
       setOpen: setMessageBoxOpen,
@@ -224,9 +226,9 @@ const NotificationItemMobile = (props: NotificationItemProps) => {
             pt={2}
           >
             {productData.map((product) => {
-              const { productName } = product;
+              const { productName, _id } = product;
               return (
-                <Grid item container direction="column" pb={2}>
+                <Grid item container direction="column" pb={2} key={_id}>
                   <Typography
                     variant="h5"
                     style={{
