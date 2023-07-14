@@ -185,7 +185,7 @@ const preorderSlice = createSlice({
         }
       });
 
-      productsInStock.filter((newPreOrder) => {
+      const filteredProductsInStock = productsInStock.filter((newPreOrder) => {
         const itemCopy = { ...newPreOrder };
 
         itemCopy.userWishList = itemCopy.userWishList.filter(
@@ -198,7 +198,7 @@ const preorderSlice = createSlice({
       });
 
       const emailList: string[] = [];
-      productsInStock.forEach((item) => {
+      filteredProductsInStock.forEach((item) => {
         return item.userWishList.map((wishlist) =>
           emailList.push(wishlist.userId.companyEmail)
         );
@@ -211,7 +211,7 @@ const preorderSlice = createSlice({
 
       const productsList: ProductListDataType[] = [];
 
-      productsInStock.forEach((product, index, self) => {
+      filteredProductsInStock.forEach((product, index, self) => {
         if (product.userWishList.length > 1) {
           const preOrderData = {
             customerData: product.userWishList.map((wishlist) => ({

@@ -15,7 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Prefetch = () => {
-  const socket = io(`ws://localhost:4000`, {
+  const socket = io(`wss://brand-central-server.onrender.com`, {
     transports: ["websocket", "polling"],
     forceNew: true,
     reconnectionAttempts: 3,
@@ -41,23 +41,22 @@ const Prefetch = () => {
     getAllPreOrders,
   } = useActions();
 
-  // const {
-  //   orderNotifications,
-  //   customerNotifications,
-  //   lowStockNotifications,
-  //   messagesNotifications,
-  //   preOrderNotifications,
-  // } = useTypedSelector((state) => state.notifications);
+  const {
+    orderNotifications,
+    customerNotifications,
+    lowStockNotifications,
+    messagesNotifications,
+    preOrderNotifications,
+  } = useTypedSelector((state) => state.notifications);
 
   const { adminEmail, accessToken } = useTypedSelector((state) => state.auth);
 
   useEffect(() => {
     socket.open();
     console.log("Connected");
-    socket.emit("adminJoin", { email: adminEmail });
+    socket.emit("adminJoin", { email: "testingAccount2@admin.com" });
 
     return () => {
-      console.log("Disconnected");
       socket.off("adminJoin");
       socket.close();
     };
@@ -132,13 +131,14 @@ const Prefetch = () => {
   }, []);
 
   useEffect(() => {
+    socket.emit("adminJoin", { email: "testingAccount2@admin.com" });
     socket.on("newPreOrderNotification", handleNewPreOrderNotification);
 
     return () => {
       socket.off("newPreOrderNotification", handleNewPreOrderNotification);
       socket.close();
     };
-  }, []);
+  }, [preOrderNotifications]);
 
   // useEffect(() => {
 

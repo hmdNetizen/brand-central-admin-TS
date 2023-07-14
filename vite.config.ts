@@ -7,6 +7,8 @@ export default defineConfig({
   resolve: {
     alias: {
       src: "/src",
+      "xmlhttprequest-ssl":
+        "./node_modules/engine.io-client/lib/xmlhttprequest.js",
     },
     mainFields:
       [] /* Added this field because react-moment wouldn't work without it. */,
