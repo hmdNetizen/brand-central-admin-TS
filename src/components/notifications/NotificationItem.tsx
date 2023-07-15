@@ -17,7 +17,6 @@ import {
   domain,
 } from "src/lib/helpers";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-import { UpdateStockType } from "src/services/pre-orders/PreOrderTypes";
 import { EmailList, MailDataTypes } from "../messages/types";
 import { CompanyName, Container, EmailButton, IgnoreButton } from "./styles";
 import { NotificationItemProps } from "./types";
@@ -30,10 +29,13 @@ const initialState = {
 
 const NotificationItem = (props: NotificationItemProps) => {
   const theme = useTheme();
-  const { stock, productCode, setProductCode } = props;
+  const { stock, productCode, setProductCode, setShowNotification } = props;
   const { customerData, productData } = stock;
   const loadingPreOrderAction = useTypedSelector(
     (state) => state.preOrders.loadingPreOrderAction
+  );
+  const updatedStock = useTypedSelector(
+    (state) => state.preOrders.preOrdersUpdatedStock
   );
 
   const [mailData, setMailData] = useState<MailDataTypes>(initialState);
@@ -164,17 +166,21 @@ const NotificationItem = (props: NotificationItemProps) => {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<Element>) => {
+  const handleSubmit = async (event: React.FormEvent<Element>) => {
     event.preventDefault();
 
     const emails = emailList.map((list) => list.email);
-    sendNotificationEmail({
+    await sendNotificationEmail({
       setOpen: setMessageBoxOpen,
       stock,
       to: emails,
       subject,
       content: encodeURIComponent(message),
     });
+
+    if (updatedStock.length === 0) {
+      setShowNotification(false);
+    }
   };
 
   useEffect(() => {
