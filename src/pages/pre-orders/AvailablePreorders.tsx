@@ -280,14 +280,14 @@ const AvailablePreOrders = () => {
             setPage={setPage}
             rowsPerPage={rowsPerPage}
             setRowsPerPage={setRowsPerPage}
-            total={filteredUpdatedStock.length}
+            total={preOrdersUpdatedStock.length}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
             loading={loadingPreOrders || loadingAllProducts}
             notFoundText="No Updated Preorder found"
           >
             {!loadingPreOrders &&
               !loadingAllProducts &&
-              filteredUpdatedStock
+              preOrdersUpdatedStock
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((preorder) => {
                   return (

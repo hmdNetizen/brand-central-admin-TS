@@ -27,6 +27,7 @@ function App() {
     if (allProducts.length > 0 && preOrders.length > 0) {
       showAvailableStockForPreOrders({
         productData: allProducts,
+        preOrderData: preOrders,
       });
     }
 

@@ -141,10 +141,13 @@ const preorderSlice = createSlice({
     },
     showAvailableStockForPreOrders: (
       state,
-      action: PayloadAction<{ productData: ProductTypes[] }>
+      action: PayloadAction<{
+        productData: ProductTypes[];
+        preOrderData: ProductTypes[];
+      }>
     ) => {
       const products = [...action.payload.productData];
-      const preOrderData = state.preOrders;
+      const preOrderData = [...action.payload.preOrderData];
 
       /* Finds all wishlist items whose current stock is atleast 2 for 
      non-multiples and 12 for multiples("EA" units)  */
@@ -176,7 +179,7 @@ const preorderSlice = createSlice({
        - isNotified is used to track the notification that has been either ignored or fulfilled via
          email sent to customer.
       */
-      const productsInStock: ProductTypes[] = [];
+      let productsInStock: ProductTypes[] = [];
 
       sanitizePreOrder.filter((item): ProductTypes | undefined => {
         if (item !== null) {
@@ -185,7 +188,7 @@ const preorderSlice = createSlice({
         }
       });
 
-      const filteredProductsInStock = productsInStock.filter((newPreOrder) => {
+      productsInStock = productsInStock.filter((newPreOrder) => {
         const itemCopy = { ...newPreOrder };
 
         itemCopy.userWishList = itemCopy.userWishList.filter(
@@ -198,11 +201,12 @@ const preorderSlice = createSlice({
       });
 
       const emailList: string[] = [];
-      filteredProductsInStock.forEach((item) => {
-        return item.userWishList.map((wishlist) =>
+
+      for (let i = 0; i < productsInStock.length; i++) {
+        productsInStock[i].userWishList.forEach((wishlist) =>
           emailList.push(wishlist.userId.companyEmail)
         );
-      });
+      }
 
       // Returns unique email from the email list
       const uniqueEmails = emailList.filter(
@@ -211,7 +215,7 @@ const preorderSlice = createSlice({
 
       const productsList: ProductListDataType[] = [];
 
-      filteredProductsInStock.forEach((product, index, self) => {
+      productsInStock.forEach((product, index, self) => {
         if (product.userWishList.length > 1) {
           const preOrderData = {
             customerData: product.userWishList.map((wishlist) => ({
@@ -246,23 +250,22 @@ const preorderSlice = createSlice({
         }
       });
 
-      const results: UpdateStockType[] = productsList
+      const results = productsList
         .filter((item, index, self) => {
           if (Array.isArray(item.customerData)) {
             return item;
           } else {
-            self.findIndex((newItem) => {
-              if (
-                !Array.isArray(newItem.customerData) &&
-                !Array.isArray(item.customerData)
-              ) {
-                return (
+            return (
+              self.findIndex(
+                (newItem) =>
+                  // @ts-ignore
                   newItem.customerData.id === item.customerData.id &&
+                  // @ts-ignore
                   newItem.customerData.companyEmail ===
+                    // @ts-ignore
                     item.customerData.companyEmail
-                );
-              }
-            }) === index;
+              ) === index
+            );
           }
         })
         .map((product) => ({
