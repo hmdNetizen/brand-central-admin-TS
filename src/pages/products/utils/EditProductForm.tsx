@@ -1,9 +1,11 @@
-import React, { ChangeEvent, useMemo } from "react";
+import React, { ChangeEvent, Fragment } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { styled, useTheme } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
+import { SelectChangeEvent } from "@mui/material";
+
 import CustomFormInput from "src/utils/CustomFormInput";
 import CustomSelect from "src/utils/CustomSelect";
 import {
@@ -17,8 +19,9 @@ import {
   StyledCircularProgress,
   CancelButton,
   SubmitButton,
+  ErrorsList,
+  ErrorMsg,
 } from "src/utilityStyles/pagesUtilityStyles";
-import { SelectChangeEvent } from "@mui/material";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import FileUploadLayout from "src/components/uploads/FileUploadLayout";
 import GalleryItem from "src/components/products/GalleryItem";
@@ -41,6 +44,10 @@ const EditProductForm = (props: ProductFormProps) => {
   const categories = useTypedSelector((state) => state.categories.categories);
   const subCategories = useTypedSelector(
     (state) => state.categories.subCategories
+  );
+  const error = useTypedSelector((state) => state.products.error);
+  const loadingProductAction = useTypedSelector(
+    (state) => state.products.loadingProductAction
   );
   const brandsList = useTypedSelector((state) => state.brands.brandsList);
 
@@ -80,487 +87,503 @@ const EditProductForm = (props: ProductFormProps) => {
   };
 
   return (
-    <Grid
-      item
-      container
-      direction="column"
-      component="form"
-      style={{ padding: "2rem", paddingBottom: "3rem" }}
-      onSubmit={props.onSubmit}
-    >
+    <Fragment>
+      {!loadingProductAction && error && (
+        <ErrorsList item component="ul">
+          <ErrorMsg variant="body1" component="li" color="error">
+            {error}
+          </ErrorMsg>
+        </ErrorsList>
+      )}
       <Grid
         item
         container
-        columnGap={3}
-        rowGap={2}
-        sx={{ mb: 2 }}
-        direction={matchesXS ? "column" : "row"}
+        direction="column"
+        component="form"
+        style={{ padding: "2rem", paddingBottom: "3rem" }}
+        onSubmit={props.onSubmit}
       >
-        <Grid item sx={{ flex: 1 }}>
-          <CustomFormInput
-            type="text"
-            label="Product Name"
-            labelId="productName"
-            name="productName"
-            value={props.productName}
-            placeholder="Enter Product Name"
-            onChange={props.onInputChange}
-            error={props.productNameError}
-          />
-        </Grid>
-        <Grid item sx={{ flex: 1 }}>
-          <CustomFormInput
-            type="text"
-            label="Product UPC"
-            labelId="productUPC"
-            name="productUPC"
-            value={props.productUPC}
-            placeholder="Enter Unique Product Code"
-            onChange={props.onInputChange}
-            error={props.productUPCError}
-          />
-        </Grid>
-      </Grid>
-      <Grid
-        item
-        container
-        columnGap={3}
-        sx={{ mb: 2 }}
-        direction={matchesXS ? "column" : "row"}
-        rowGap={2}
-      >
-        <Grid item sx={{ flex: 1 }}>
-          <CustomFormInput
-            type="text"
-            label="Units of Measurement"
-            labelId="units"
-            name="units"
-            value={props.units}
-            placeholder="CS, EA, BX, DZ, PK etc..."
-            onChange={props.onInputChange}
-            error={props.unitsError}
-          />
-        </Grid>
-        <Grid item sx={{ flex: 1 }}>
-          <CustomFormInput
-            type="text"
-            label="Item Code"
-            labelId="itemCode"
-            name="itemCode"
-            value={props.itemCode}
-            placeholder="AIRCO16"
-            onChange={props.onInputChange}
-            error={props.itemCodeError}
-          />
-        </Grid>
-      </Grid>
-      <Grid
-        item
-        container
-        columnGap={3}
-        sx={{ mb: 2 }}
-        direction={matchesXS ? "column" : "row"}
-        rowGap={2}
-      >
-        <Grid item sx={{ flex: 1 }}>
-          <CustomSelect
-            options={categories.map(({ categoryName }) =>
-              categoryName.toLowerCase()
-            )}
-            name="category"
-            onChange={handleSelectChange}
-            label="Category"
-            placeholder="Select Category"
-            value={props.category}
-            errorMessage={props.categoryError}
-          />
-        </Grid>
-        <Grid item sx={{ flex: 1 }}>
-          <CustomSelect
-            options={props.filteredSubCategory.map(({ name }) =>
-              name.toLowerCase()
-            )}
-            name="subCategory"
-            value={props.subCategory}
-            onChange={handleSelectChange}
-            label="Sub Category"
-            placeholder="Select Sub Category"
-            errorMessage={props.subCategoryError}
-          />
-        </Grid>
-      </Grid>
-      <Grid
-        item
-        container
-        sx={{ mb: 2 }}
-        direction={matchesXS ? "column" : "row"}
-        rowGap={2}
-        columnGap={3}
-      >
-        <Grid item sx={{ flex: 1 }}>
-          <CustomSelect
-            options={brandsList.map((brand) =>
-              capitalizeFirstLetters(brand.name)
-            )}
-            name="brandName"
-            value={props.brandName}
-            onChange={props.onSelectChange}
-            label="Brand"
-            placeholder="Select Brand"
-            errorMessage={props.brandNameError}
-          />
-        </Grid>
-        {props.brandName === "Others" && (
-          <Grid item sx={{ flex: 1, mt: matchesXS ? 0 : "2rem" }}>
-            <CustomFormInput
-              type="text"
-              label=""
-              labelId=""
-              name="customBrandName"
-              value={props.customBrandName}
-              placeholder="Enter Brand Name"
-              onChange={(event) => props.setCustomBrandName(event.target.value)}
-              autoFocus={props.brandName === "Others"}
-            />
-          </Grid>
-        )}
-      </Grid>
-      <Grid
-        item
-        container
-        columnGap={3}
-        sx={{ mb: 2 }}
-        direction={matchesXS ? "column" : "row"}
-        rowGap={2}
-      >
-        <Grid item sx={{ flex: 1 }}>
-          <CustomFormInput
-            type="number"
-            label="Price Code 1"
-            labelId="priceCode1"
-            name="priceCode1"
-            value={props.priceCode1}
-            placeholder="e.g 20"
-            onChange={props.onInputChange}
-            error={props.priceCode1Error}
-          />
-        </Grid>
-        <Grid item sx={{ flex: 1 }}>
-          <CustomFormInput
-            type="number"
-            label="Price Code 2"
-            labelId="priceCode2"
-            name="priceCode2"
-            value={props.priceCode2}
-            placeholder="e.g 20"
-            onChange={props.onInputChange}
-            error={props.priceCode2Error}
-          />
-        </Grid>
-      </Grid>
-      <Grid
-        item
-        container
-        columnGap={3}
-        sx={{ mb: 2 }}
-        direction={matchesXS ? "column" : "row"}
-        rowGap={2}
-      >
-        <Grid item sx={{ flex: 1 }}>
-          <CustomFormInput
-            type="number"
-            label="Price Code 3"
-            labelId="priceCode3"
-            name="priceCode3"
-            value={props.priceCode3}
-            placeholder="e.g 20"
-            onChange={props.onInputChange}
-            error={props.priceCode3Error}
-          />
-        </Grid>
-        <Grid item sx={{ flex: 1 }}>
-          <CustomFormInput
-            type="number"
-            label="Price Code 4"
-            labelId="priceCode4"
-            name="priceCode4"
-            value={props.priceCode4}
-            placeholder="e.g 20"
-            onChange={props.onInputChange}
-            error={props.priceCode4Error}
-          />
-        </Grid>
-      </Grid>
-      <Grid
-        item
-        container
-        columnGap={3}
-        sx={{ mb: 2 }}
-        direction={matchesXS ? "column" : "row"}
-        rowGap={2}
-      >
-        <Grid item sx={{ flex: 1 }}>
-          <CustomFormInput
-            type="number"
-            label="Product Stock"
-            labelId="productStock"
-            name="productStock"
-            value={props.productStock}
-            placeholder="e.g 20"
-            onChange={props.onInputChange}
-            error={props.productStockError}
-          />
-        </Grid>
-        <Grid item sx={{ flex: 1 }}>
-          <CustomFormInput
-            type="number"
-            label="SRP"
-            labelId="SRP"
-            name="SRP"
-            value={props.SRP}
-            placeholder="e.g 20"
-            onChange={props.onInputChange}
-            error={props.SRPError}
-          />
-        </Grid>
-        <Grid item container style={{ marginTop: "1rem" }}>
-          <CustomSelect
-            options={shippingCategoryList}
-            name="shippingCategory"
-            value={props.shippingCategory}
-            onChange={props.onSelectChange}
-            label="Shipping Category"
-            placeholder="Select Shipping Category"
-          />
-        </Grid>
-        <ProductThresholdForm
-          thresholdData={props.thresholdData}
-          setThresholdData={props.setThresholdData}
-          maximumQuantityError={props.maximumQuantityError}
-          setMaximumQuantityError={props.setMaximumQuantityError}
-        />
-
-        <Grid item container style={{ marginTop: "1rem" }}>
-          <CustomTextArea
-            label="Product Description"
-            id="productDescription"
-            name="productDescription"
-            onChange={props.onInputChange}
-            value={props.productDescription}
-          />
-        </Grid>
-      </Grid>
-      <Grid item container justifyContent="center" sx={{ mt: 2 }}>
-        <Typography
-          variant="h3"
-          style={{ fontSize: matchesXS ? "1.65rem" : "2rem" }}
-        >
-          Product Image *
-        </Typography>
-      </Grid>
-      <Grid
-        item
-        container
-        justifyContent="center"
-        style={{
-          marginTop: "2rem",
-          marginBottom: "1rem",
-          maxWidth: 300,
-          maxHeight: 300,
-          marginLeft: "auto",
-          marginRight: "auto",
-        }}
-      >
-        <FileUploadLayout
-          onImageChange={handleChangeProductImage}
-          onRemoveImage={handleRemoveProductImage}
-          selectedFile={props.selectedFile}
-          setImageError={props.setProductImageError}
-          setSelectedFile={props.setSelectedFile}
-          preview={props.imagePreview}
-          setPreview={props.setImagePreview}
-        />
-        {props.productImageError && <small>{props.productImageError}</small>}
-      </Grid>
-      <Grid
-        item
-        style={{
-          marginTop: matchesSM ? "2rem" : "1rem",
-          marginBottom: "1rem",
-        }}
-        container
-        justifyContent="center"
-      >
-        <Typography variant="body2">Product Gallery Images </Typography>
-      </Grid>
-      <Grid
-        item
-        style={{ marginBottom: "2rem" }}
-        container
-        justifyContent="center"
-      >
-        <AddMoreButton
-          startIcon={<AddIcon />}
-          variant="contained"
-          disableRipple
-          onClick={() => props.setOpenProductGallery(true)}
-        >
-          Add More Photos
-        </AddMoreButton>
-      </Grid>
-      {props.previews.length > 0 && (
         <Grid
           item
           container
-          flexWrap="wrap"
-          sx={{ mb: 2 }}
-          columnGap={2}
+          columnGap={3}
           rowGap={2}
+          sx={{ mb: 2 }}
+          direction={matchesXS ? "column" : "row"}
+        >
+          <Grid item sx={{ flex: 1 }}>
+            <CustomFormInput
+              type="text"
+              label="Product Name"
+              labelId="productName"
+              name="productName"
+              value={props.productName}
+              placeholder="Enter Product Name"
+              onChange={props.onInputChange}
+              error={props.productNameError}
+            />
+          </Grid>
+          <Grid item sx={{ flex: 1 }}>
+            <CustomFormInput
+              type="text"
+              label="Product UPC"
+              labelId="productUPC"
+              name="productUPC"
+              value={props.productUPC}
+              placeholder="Enter Unique Product Code"
+              onChange={props.onInputChange}
+              error={props.productUPCError}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          container
+          columnGap={3}
+          sx={{ mb: 2 }}
+          direction={matchesXS ? "column" : "row"}
+          rowGap={2}
+        >
+          <Grid item sx={{ flex: 1 }}>
+            <CustomFormInput
+              type="text"
+              label="Units of Measurement"
+              labelId="units"
+              name="units"
+              value={props.units}
+              placeholder="CS, EA, BX, DZ, PK etc..."
+              onChange={props.onInputChange}
+              error={props.unitsError}
+            />
+          </Grid>
+          <Grid item sx={{ flex: 1 }}>
+            <CustomFormInput
+              type="text"
+              label="Item Code"
+              labelId="itemCode"
+              name="itemCode"
+              value={props.itemCode}
+              placeholder="AIRCO16"
+              onChange={props.onInputChange}
+              error={props.itemCodeError}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          container
+          columnGap={3}
+          sx={{ mb: 2 }}
+          direction={matchesXS ? "column" : "row"}
+          rowGap={2}
+        >
+          <Grid item sx={{ flex: 1 }}>
+            <CustomSelect
+              options={categories.map(({ categoryName }) =>
+                categoryName.toLowerCase()
+              )}
+              name="category"
+              onChange={handleSelectChange}
+              label="Category"
+              placeholder="Select Category"
+              value={props.category}
+              errorMessage={props.categoryError}
+            />
+          </Grid>
+          <Grid item sx={{ flex: 1 }}>
+            <CustomSelect
+              options={props.filteredSubCategory.map(({ name }) =>
+                name.toLowerCase()
+              )}
+              name="subCategory"
+              value={props.subCategory}
+              onChange={handleSelectChange}
+              label="Sub Category"
+              placeholder="Select Sub Category"
+              errorMessage={props.subCategoryError}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          container
+          sx={{ mb: 2 }}
+          direction={matchesXS ? "column" : "row"}
+          rowGap={2}
+          columnGap={3}
+        >
+          <Grid item sx={{ flex: 1 }}>
+            <CustomSelect
+              options={brandsList.map((brand) =>
+                capitalizeFirstLetters(brand.name)
+              )}
+              name="brandName"
+              value={props.brandName}
+              onChange={props.onSelectChange}
+              label="Brand"
+              placeholder="Select Brand"
+              errorMessage={props.brandNameError}
+            />
+          </Grid>
+          {props.brandName === "Others" && (
+            <Grid item sx={{ flex: 1, mt: matchesXS ? 0 : "2rem" }}>
+              <CustomFormInput
+                type="text"
+                label=""
+                labelId=""
+                name="customBrandName"
+                value={props.customBrandName}
+                placeholder="Enter Brand Name"
+                onChange={(event) =>
+                  props.setCustomBrandName(event.target.value)
+                }
+                autoFocus={props.brandName === "Others"}
+              />
+            </Grid>
+          )}
+        </Grid>
+        <Grid
+          item
+          container
+          columnGap={3}
+          sx={{ mb: 2 }}
+          direction={matchesXS ? "column" : "row"}
+          rowGap={2}
+        >
+          <Grid item sx={{ flex: 1 }}>
+            <CustomFormInput
+              type="number"
+              label="Price Code 1"
+              labelId="priceCode1"
+              name="priceCode1"
+              value={props.priceCode1}
+              placeholder="e.g 20"
+              onChange={props.onInputChange}
+              error={props.priceCode1Error}
+            />
+          </Grid>
+          <Grid item sx={{ flex: 1 }}>
+            <CustomFormInput
+              type="number"
+              label="Price Code 2"
+              labelId="priceCode2"
+              name="priceCode2"
+              value={props.priceCode2}
+              placeholder="e.g 20"
+              onChange={props.onInputChange}
+              error={props.priceCode2Error}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          container
+          columnGap={3}
+          sx={{ mb: 2 }}
+          direction={matchesXS ? "column" : "row"}
+          rowGap={2}
+        >
+          <Grid item sx={{ flex: 1 }}>
+            <CustomFormInput
+              type="number"
+              label="Price Code 3"
+              labelId="priceCode3"
+              name="priceCode3"
+              value={props.priceCode3}
+              placeholder="e.g 20"
+              onChange={props.onInputChange}
+              error={props.priceCode3Error}
+            />
+          </Grid>
+          <Grid item sx={{ flex: 1 }}>
+            <CustomFormInput
+              type="number"
+              label="Price Code 4"
+              labelId="priceCode4"
+              name="priceCode4"
+              value={props.priceCode4}
+              placeholder="e.g 20"
+              onChange={props.onInputChange}
+              error={props.priceCode4Error}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          container
+          columnGap={3}
+          sx={{ mb: 2 }}
+          direction={matchesXS ? "column" : "row"}
+          rowGap={2}
+        >
+          <Grid item sx={{ flex: 1 }}>
+            <CustomFormInput
+              type="number"
+              label="Product Stock"
+              labelId="productStock"
+              name="productStock"
+              value={props.productStock}
+              placeholder="e.g 20"
+              onChange={props.onInputChange}
+              error={props.productStockError}
+            />
+          </Grid>
+          <Grid item sx={{ flex: 1 }}>
+            <CustomFormInput
+              type="number"
+              label="SRP"
+              labelId="SRP"
+              name="SRP"
+              value={props.SRP}
+              placeholder="e.g 20"
+              onChange={props.onInputChange}
+              error={props.SRPError}
+            />
+          </Grid>
+          <Grid item container style={{ marginTop: "1rem" }}>
+            <CustomSelect
+              options={shippingCategoryList}
+              name="shippingCategory"
+              value={props.shippingCategory}
+              onChange={props.onSelectChange}
+              label="Shipping Category"
+              placeholder="Select Shipping Category"
+            />
+          </Grid>
+          <ProductThresholdForm
+            thresholdData={props.thresholdData}
+            setThresholdData={props.setThresholdData}
+            maximumQuantityError={props.maximumQuantityError}
+            setMaximumQuantityError={props.setMaximumQuantityError}
+          />
+
+          <Grid item container style={{ marginTop: "1rem" }}>
+            <CustomTextArea
+              label="Product Description"
+              id="productDescription"
+              name="productDescription"
+              onChange={props.onInputChange}
+              value={props.productDescription}
+            />
+          </Grid>
+        </Grid>
+        <Grid item container justifyContent="center" sx={{ mt: 2 }}>
+          <Typography
+            variant="h3"
+            style={{ fontSize: matchesXS ? "1.65rem" : "2rem" }}
+          >
+            Product Image *
+          </Typography>
+        </Grid>
+        <Grid
+          item
+          container
+          justifyContent="center"
+          style={{
+            marginTop: "2rem",
+            marginBottom: "1rem",
+            maxWidth: 300,
+            maxHeight: 300,
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        >
+          <FileUploadLayout
+            onImageChange={handleChangeProductImage}
+            onRemoveImage={handleRemoveProductImage}
+            selectedFile={props.selectedFile}
+            setImageError={props.setProductImageError}
+            setSelectedFile={props.setSelectedFile}
+            preview={props.imagePreview}
+            setPreview={props.setImagePreview}
+          />
+          {props.productImageError && <small>{props.productImageError}</small>}
+        </Grid>
+        <Grid
+          item
+          style={{
+            marginTop: matchesSM ? "2rem" : "1rem",
+            marginBottom: "1rem",
+          }}
+          container
           justifyContent="center"
         >
-          {props.previews.map((previewItem) => (
-            <GalleryItem
-              key={previewItem.id}
-              item={previewItem}
-              onRemove={() => handleRemove(previewItem.id)}
-              id={previewItem.id}
-              setGalleryItemId={props.setGalleryItemId}
-              galleryItemId={props.galleryItemId}
-              loading={props.uploadingImage}
-              previews={props.previews}
-              setPreviews={props.setPreviews}
-            />
-          ))}
+          <Typography variant="body2">Product Gallery Images </Typography>
         </Grid>
-      )}
+        <Grid
+          item
+          style={{ marginBottom: "2rem" }}
+          container
+          justifyContent="center"
+        >
+          <AddMoreButton
+            startIcon={<AddIcon />}
+            variant="contained"
+            disableRipple
+            onClick={() => props.setOpenProductGallery(true)}
+          >
+            Add More Photos
+          </AddMoreButton>
+        </Grid>
+        {props.previews.length > 0 && (
+          <Grid
+            item
+            container
+            flexWrap="wrap"
+            sx={{ mb: 2 }}
+            columnGap={2}
+            rowGap={2}
+            justifyContent="center"
+          >
+            {props.previews.map((previewItem) => (
+              <GalleryItem
+                key={previewItem.id}
+                item={previewItem}
+                onRemove={() => handleRemove(previewItem.id)}
+                id={previewItem.id}
+                setGalleryItemId={props.setGalleryItemId}
+                galleryItemId={props.galleryItemId}
+                loading={props.uploadingImage}
+                previews={props.previews}
+                setPreviews={props.setPreviews}
+              />
+            ))}
+          </Grid>
+        )}
 
-      <Grid item container direction="column" sx={{ mb: 2 }}>
-        <CustomCheckbox
-          name="allowProductSizes"
-          label="Allow Product Sizes"
-          id="allowProductSizes"
-          description="Allow Product Sizes"
-          checked={props.allowProductSizes}
-          onChange={props.onCheck}
-        />
-        {props.allowProductSizes && (
-          <ProductSizeForm
-            sizeNameError={props.sizeNameError}
-            sizePriceError={props.sizePriceError}
-            sizeQuantityError={props.sizeQuantityError}
-            productSizeForm={props.productSizeForm}
-            setProductSizeForm={props.setProductSizeForm}
+        <Grid item container direction="column" sx={{ mb: 2 }}>
+          <CustomCheckbox
+            name="allowProductSizes"
+            label="Allow Product Sizes"
+            id="allowProductSizes"
+            description="Allow Product Sizes"
+            checked={props.allowProductSizes}
+            onChange={props.onCheck}
           />
-        )}
-      </Grid>
-      <Grid item container direction="column" sx={{ mb: 2 }}>
-        <CustomCheckbox
-          name="allowProductWholesale"
-          label="Allow Product Wholesale"
-          id="allowProductWholesale"
-          description="Allow Product Wholesale"
-          checked={props.allowProductWholesale}
-          onChange={props.onCheck}
-        />
-        {props.allowProductWholesale && (
-          <ProductWholesaleForm
-            wholesaleForm={props.wholesaleForm}
-            setWholesaleForm={props.setWholesaleForm}
-            wholesaleQuantityError={props.wholesaleQuantityError}
-            setWholesaleQuantityError={props.setWholesaleQuantityError}
-            wholesalePercentageDiscountError={
-              props.wholesalePercentageDiscountError
-            }
-            setWholesalePercentageDiscountError={
-              props.setWholesalePercentageDiscountError
-            }
+          {props.allowProductSizes && (
+            <ProductSizeForm
+              sizeNameError={props.sizeNameError}
+              sizePriceError={props.sizePriceError}
+              sizeQuantityError={props.sizeQuantityError}
+              productSizeForm={props.productSizeForm}
+              setProductSizeForm={props.setProductSizeForm}
+            />
+          )}
+        </Grid>
+        <Grid item container direction="column" sx={{ mb: 2 }}>
+          <CustomCheckbox
+            name="allowProductWholesale"
+            label="Allow Product Wholesale"
+            id="allowProductWholesale"
+            description="Allow Product Wholesale"
+            checked={props.allowProductWholesale}
+            onChange={props.onCheck}
           />
-        )}
-      </Grid>
-      <Grid item container direction="column">
-        <CustomCheckbox
-          name="allowMeasurement"
-          label="Allow Product Measurement"
-          id="allowMeasurement"
-          description="Allow Product Measurement"
-          checked={props.allowMeasurement}
-          onChange={props.onCheck}
-        />
-        {props.allowMeasurement && (
-          <Grid item container direction="column" style={{ marginTop: "1rem" }}>
+          {props.allowProductWholesale && (
+            <ProductWholesaleForm
+              wholesaleForm={props.wholesaleForm}
+              setWholesaleForm={props.setWholesaleForm}
+              wholesaleQuantityError={props.wholesaleQuantityError}
+              setWholesaleQuantityError={props.setWholesaleQuantityError}
+              wholesalePercentageDiscountError={
+                props.wholesalePercentageDiscountError
+              }
+              setWholesalePercentageDiscountError={
+                props.setWholesalePercentageDiscountError
+              }
+            />
+          )}
+        </Grid>
+        <Grid item container direction="column">
+          <CustomCheckbox
+            name="allowMeasurement"
+            label="Allow Product Measurement"
+            id="allowMeasurement"
+            description="Allow Product Measurement"
+            checked={props.allowMeasurement}
+            onChange={props.onCheck}
+          />
+          {props.allowMeasurement && (
             <Grid
               item
               container
-              alignItems="center"
-              justifyContent="space-between"
+              direction="column"
+              style={{ marginTop: "1rem" }}
             >
-              <Grid item>
-                <Typography variant="body1">Product Measurement</Typography>
-              </Grid>
-              <Grid item container={matchesXS}>
-                <CustomSelect
-                  options={productMeasurements}
-                  name="productMeasurement"
-                  value={props.productMeasurement}
-                  onChange={props.onSelectChange}
-                  label=""
-                  placeholder="Choose Measurement"
-                  errorMessage={props.productMeasurementError}
-                />
-              </Grid>
-            </Grid>
-            {props.productMeasurement === "Custom" && (
               <Grid
                 item
-                style={{
-                  width: matchesXS ? "100%" : 250,
-                  marginTop: matchesXS ? "1rem" : 0,
-                }}
+                container
+                alignItems="center"
+                justifyContent="space-between"
               >
-                <CustomFormInput
-                  type="number"
-                  label=""
-                  labelId=""
-                  name="customMeasurement"
-                  value={props.customMeasurement}
-                  placeholder="Enter Unit"
-                  onChange={(event) =>
-                    props.setCustomMeasurement(event.target.value)
-                  }
-                  error={props.customMeasurementError}
-                />
+                <Grid item>
+                  <Typography variant="body1">Product Measurement</Typography>
+                </Grid>
+                <Grid item container={matchesXS}>
+                  <CustomSelect
+                    options={productMeasurements}
+                    name="productMeasurement"
+                    value={props.productMeasurement}
+                    onChange={props.onSelectChange}
+                    label=""
+                    placeholder="Choose Measurement"
+                    errorMessage={props.productMeasurementError}
+                  />
+                </Grid>
               </Grid>
-            )}
-          </Grid>
-        )}
-        <Grid
-          item
-          container
-          justifyContent="center"
-          alignItems="center"
-          columnSpacing={1}
-          style={{ marginTop: "5rem" }}
-        >
-          <Grid item>
-            <CancelButton onClick={props.onClose}>Cancel</CancelButton>
-          </Grid>
-          <Grid item>
-            <SubmitButton
-              type="submit"
-              variant="contained"
-              disableRipple
-              color="secondary"
-              disabled={props.loadingProductAction}
-            >
-              {props.loadingProductAction && (
-                <StyledCircularProgress style={{ width: 25, height: 25 }} />
-              )}{" "}
-              Update Product
-            </SubmitButton>
+              {props.productMeasurement === "Custom" && (
+                <Grid
+                  item
+                  style={{
+                    width: matchesXS ? "100%" : 250,
+                    marginTop: matchesXS ? "1rem" : 0,
+                  }}
+                >
+                  <CustomFormInput
+                    type="number"
+                    label=""
+                    labelId=""
+                    name="customMeasurement"
+                    value={props.customMeasurement}
+                    placeholder="Enter Unit"
+                    onChange={(event) =>
+                      props.setCustomMeasurement(event.target.value)
+                    }
+                    error={props.customMeasurementError}
+                  />
+                </Grid>
+              )}
+            </Grid>
+          )}
+          <Grid
+            item
+            container
+            justifyContent="center"
+            alignItems="center"
+            columnSpacing={1}
+            style={{ marginTop: "5rem" }}
+          >
+            <Grid item>
+              <CancelButton onClick={props.onClose}>Cancel</CancelButton>
+            </Grid>
+            <Grid item>
+              <SubmitButton
+                type="submit"
+                variant="contained"
+                disableRipple
+                color="secondary"
+                disabled={props.loadingProductAction}
+              >
+                {props.loadingProductAction && (
+                  <StyledCircularProgress style={{ width: 25, height: 25 }} />
+                )}{" "}
+                Update Product
+              </SubmitButton>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </Fragment>
   );
 };
 

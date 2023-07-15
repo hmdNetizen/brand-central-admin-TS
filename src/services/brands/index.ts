@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import axios from "../axios";
+import axios, { axiosPrivate } from "../axios";
 import { toast } from "react-toastify";
 import {
   initStateType,
