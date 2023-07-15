@@ -139,6 +139,10 @@ const NotificationItem = (props: NotificationItemProps) => {
       });
     }
 
+    if (updatedStock.length === 0) {
+      setShowNotification(false);
+    }
+
     toast.warning("Pre-order item has been removed from notification", {
       position: "top-center",
       hideProgressBar: true,

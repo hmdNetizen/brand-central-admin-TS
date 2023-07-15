@@ -194,6 +194,10 @@ const NotificationItemMobile = (props: NotificationItemProps) => {
       subject,
       content: encodeURIComponent(message),
     });
+
+    if (preOrdersUpdatedStock.length === 0) {
+      setShowNotification(false);
+    }
   };
 
   return (
