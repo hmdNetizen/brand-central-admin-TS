@@ -14,6 +14,7 @@ import { SelectChangeEvent } from "@mui/material";
 import { Container, ContainerWrapper } from "./styles/OrderPageDisplayStyles";
 import OrderItem from "src/components/orders/OrderItem";
 import PageHeadingActions from "src/components/common/PageHeadingActions";
+import ErrorDialog from "src/utils/ErrorDialog";
 
 type OrdersTitle =
   | "All Orders"
@@ -59,6 +60,7 @@ const OrderPageDisplay = (props: OrderPageDisplayProps) => {
   const loadingOrderAction = useTypedSelector(
     (state) => state.orders.loadingOrderAction
   );
+  const error = useTypedSelector((state) => state.orders.error);
   const totalOrders = useTypedSelector((state) => state.orders.totalOrders);
 
   const [openDeleteOrder, setOpenDeleteOrder] = useState(false);
@@ -140,6 +142,7 @@ const OrderPageDisplay = (props: OrderPageDisplayProps) => {
         openDeleteOrder={openDeleteOrder}
         setOpenDeleteOrder={setOpenDeleteOrder}
       />
+      <ErrorDialog error={error} />
     </Container>
   );
 };

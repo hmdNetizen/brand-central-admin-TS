@@ -13,6 +13,7 @@ import {
   PaginatedOrdersQueryType,
 } from "./OrderTypes";
 import React from "react";
+import { AxiosError } from "axios";
 
 const initialState: initStateType = {
   loadingOrders: false,
@@ -123,8 +124,14 @@ export const getOrdersCount = createAsyncThunk(
         pendingOrders: result.data.pending,
         completedOrders: result.data.completed,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occured while fetching orders");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+      }
     }
   }
 );
@@ -137,8 +144,14 @@ export const getSingleOrder = createAsyncThunk(
       const result = data as SingleOrderPayloadType;
 
       return result.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Order could not be retrieved");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Order could not be retrieved");
+      }
     }
   }
 );
@@ -159,8 +172,14 @@ export const updateOrderStatus = createAsyncThunk(
       }
 
       return result.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occurred while updating order");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while updating order");
+      }
     }
   }
 );
@@ -183,10 +202,16 @@ export const deleteOrder = createAsyncThunk(
       }
 
       return orderId;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        "Error occurred while attempting to delete order"
-      );
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error while attempting to delete order"
+        );
+      }
     }
   }
 );
@@ -202,8 +227,14 @@ export const markOrderStatusAsCompleted = createAsyncThunk(
       const result = data as SingleOrderPayloadType;
 
       return result.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
     }
   }
 );
