@@ -55,14 +55,12 @@ const Notification = (props: NotificationProps) => {
               stock={stock}
               productCode={productCode}
               setProductCode={setProductCode}
-              setShowNotification={setShowNotification}
             />
           ) : (
             <NotificationItem
               stock={stock}
               productCode={productCode}
               setProductCode={setProductCode}
-              setShowNotification={setShowNotification}
             />
           )}
         </Fragment>

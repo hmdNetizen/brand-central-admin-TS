@@ -29,13 +29,10 @@ const initialState = {
 
 const NotificationItem = (props: NotificationItemProps) => {
   const theme = useTheme();
-  const { stock, productCode, setProductCode, setShowNotification } = props;
+  const { stock, productCode, setProductCode } = props;
   const { customerData, productData } = stock;
   const loadingPreOrderAction = useTypedSelector(
     (state) => state.preOrders.loadingPreOrderAction
-  );
-  const updatedStock = useTypedSelector(
-    (state) => state.preOrders.preOrdersUpdatedStock
   );
 
   const [mailData, setMailData] = useState<MailDataTypes>(initialState);
@@ -139,10 +136,6 @@ const NotificationItem = (props: NotificationItemProps) => {
       });
     }
 
-    if (updatedStock.length === 0) {
-      setShowNotification(false);
-    }
-
     toast.warning("Pre-order item has been removed from notification", {
       position: "top-center",
       hideProgressBar: true,
@@ -181,10 +174,6 @@ const NotificationItem = (props: NotificationItemProps) => {
       subject,
       content: encodeURIComponent(message),
     });
-
-    if (updatedStock.length === 0) {
-      setShowNotification(false);
-    }
   };
 
   useEffect(() => {
