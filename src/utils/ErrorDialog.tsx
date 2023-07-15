@@ -11,7 +11,7 @@ const ErrorDialog = ({ error }: { error: string }) => {
   };
 
   useEffect(() => {
-    if (error) {
+    if (error === "Session Expired. Please login again") {
       setOpen(true);
     }
   }, [error]);
