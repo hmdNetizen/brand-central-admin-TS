@@ -31,7 +31,7 @@ export interface NotificiationEmailRequestType extends SendEmailToCustomerType {
 export type PreOrderMultiplesRequestType = {
   productId: string[] | string;
   isNotified: boolean;
-  addedBy: string[];
+  addedBy: string | string[];
   itemId: string;
 };
 

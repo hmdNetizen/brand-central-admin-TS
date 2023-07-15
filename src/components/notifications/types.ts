@@ -4,4 +4,5 @@ export type NotificationItemProps = {
   stock: UpdateStockType;
   productCode: string;
   setProductCode: React.Dispatch<React.SetStateAction<string>>;
+  setShowNotification: React.Dispatch<React.SetStateAction<boolean>>;
 };

@@ -84,9 +84,9 @@ const NotificationItem = (props: NotificationItemProps) => {
         Array.isArray(customerData)
           ? "Dear customer"
           : "Hello " + capitalizeFirstLetters(customerData.companyName)
-      },%0A%0AWe are pleased to notify you that ${
+      },%0A%0AWe are pleased to notify you that${
         productData.length === 1
-          ? `${addBrandWithApostrophe(
+          ? ` ${addBrandWithApostrophe(
               singleProduct.brandName
             )} <a href=${domain}/products/${encodeURIComponent(
               getProductSlug(singleProduct)!
@@ -95,7 +95,7 @@ const NotificationItem = (props: NotificationItemProps) => {
             })</a>`
           : productData.map(
               (product, index, self) =>
-                `${addBrandWithApostrophe(product.brandName)}${
+                ` ${addBrandWithApostrophe(product.brandName)}${
                   self.length - 1 === self.indexOf(product) ? " and " : " "
                 }<a href=${domain}/products/${encodeURIComponent(
                   getProductSlug(product)!
@@ -123,7 +123,7 @@ const NotificationItem = (props: NotificationItemProps) => {
         isNotified: true,
         addedBy: Array.isArray(customerData)
           ? customerData.map((customer) => customer.id)
-          : [customerData.id],
+          : customerData.id,
         itemId: stock.id,
       });
     } else {

@@ -242,7 +242,7 @@ export const sendNotificationEmail = createAsyncThunk(
               isNotified: true,
               addedBy: Array.isArray(customerData)
                 ? customerData.map((customer) => customer.id)
-                : [customerData.id],
+                : customerData.id,
               itemId: id,
             })
           );

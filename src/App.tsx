@@ -48,6 +48,8 @@ function App() {
       timeout = setTimeout(() => {
         setShowNotification(true);
       }, 30000);
+    } else {
+      setShowNotification(false);
     }
 
     return () => clearTimeout(timeout);

@@ -842,6 +842,12 @@ const productsSlice = createSlice({
             : product
         );
 
+        state.allProducts = state.allProducts.map((product) =>
+          product._id === action.payload._id
+            ? { ...product, ...action.payload }
+            : product
+        );
+
         toast.success("Product successfully updated", {
           position: "top-center",
           hideProgressBar: true,
