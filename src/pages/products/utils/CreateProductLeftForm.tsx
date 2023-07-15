@@ -62,9 +62,18 @@ const CreateProductLeftForm = (props: ProductLeftFormProps) => {
             </SuccessWrapper>
           </Grid>
         )}
+
         {!props.loading && props.error && (
+          <ErrorsList item component="ul">
+            <ErrorMsg variant="body1" component="li" color="error">
+              {props.error}
+            </ErrorMsg>
+          </ErrorsList>
+        )}
+
+        {!props.loading && props.errors && (
           <ErrorsList item component="ul" hasBullet>
-            {props.error.map((err) => (
+            {props.errors.map((err) => (
               <ErrorMsg
                 variant="body1"
                 component="li"

@@ -109,6 +109,7 @@ const CreateProduct = () => {
   const brands = useTypedSelector((state) => state.brands.brandsList);
 
   const errors = useTypedSelector((state) => state.products.errors);
+  const error = useTypedSelector((state) => state.products.error);
   const loadingProductAction = useTypedSelector(
     (state) => state.products.loadingProductAction
   );
@@ -613,7 +614,8 @@ const CreateProduct = () => {
           wholesaleForm={wholesaleForm}
           setWholesaleForm={setWholesaleForm}
           loading={loadingProductAction}
-          error={errors}
+          errors={errors}
+          error={error}
           productSuccessMessage={productSuccessMsg}
         />
 
