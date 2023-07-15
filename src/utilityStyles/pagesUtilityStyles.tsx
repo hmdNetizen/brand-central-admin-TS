@@ -25,7 +25,7 @@ export const ErrorsList = styled(Grid, {
 );
 
 export const ErrorMsg = styled(Typography)<{ component?: React.ElementType }>({
-  fontSize: "1.5rem",
+  fontSize: "1.4rem",
 });
 
 export const StyledFormContainer = styled(Grid)<{
