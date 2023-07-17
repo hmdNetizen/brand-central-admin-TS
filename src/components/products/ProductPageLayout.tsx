@@ -20,6 +20,7 @@ import ProductItem from "./ProductItem";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { ProductPageLayoutProps } from "./types";
 import { PhotoGalleryTypes } from "src/services/products/ProductTypes";
+import ErrorDialog from "src/utils/ErrorDialog";
 
 const ProductPageLayout = (props: ProductPageLayoutProps) => {
   const {
@@ -51,6 +52,7 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
   const loadingProducts = useTypedSelector(
     (state) => state.products.loadingProducts
   );
+  const error = useTypedSelector((state) => state.products.error);
   const totalProducts = useTypedSelector(
     (state) => state.products.totalProducts
   );
@@ -164,6 +166,7 @@ const ProductPageLayout = (props: ProductPageLayoutProps) => {
         loading={loadingProductActivation}
         handleLoading={handleLoadingActivation}
       />
+      <ErrorDialog error={error} />
     </Container>
   );
 };
