@@ -440,8 +440,14 @@ export const deleteProduct = createAsyncThunk(
       }
 
       return productId;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Product could not be deleted");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Product could not be deleted");
+      }
     }
   }
 );
@@ -460,12 +466,17 @@ export const toggleProductHighlight = createAsyncThunk(
 
       if (status === 200) {
         setOpenHighlight(false);
-        // thunkAPI.dispatch(getSingleProduct(productId));
       }
 
       return result.data.data;
-    } catch (error) {
-      thunkAPI.rejectWithValue("Something went wrong. Try again");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong. Try again");
+      }
     }
   }
 );
@@ -634,7 +645,9 @@ export const createNewProduct = createAsyncThunk(
       }
     } catch (error: AxiosError | any) {
       window.scrollTo(0, 0);
-      if (error.response) {
+      if (error.response && error.code === 403) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.response) {
         return thunkAPI.rejectWithValue(error.response.data.errors);
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
@@ -839,6 +852,10 @@ const productsSlice = createSlice({
       })
       .addCase(createNewProduct.rejected, (state, action) => {
         state.loadingProductAction = false;
+
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
 
         if (Array.isArray(action.payload) || action.payload === null) {
           state.errors = action.payload;
