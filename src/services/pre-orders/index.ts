@@ -11,6 +11,7 @@ import {
   PreOrderMultiplesRequestType,
 } from "./PreOrderTypes";
 import { ProductTypes } from "../products/ProductTypes";
+import { AxiosError } from "axios";
 
 type UserWishListUserIdTypes = {
   _id: string;
@@ -65,8 +66,14 @@ export const deletePreOrder = createAsyncThunk(
       }
 
       return preOrderId;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+      }
     }
   }
 );
