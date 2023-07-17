@@ -10,10 +10,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useActions } from "src/hooks/useActions";
 
 const Button = styled(SubmitButton)(({ theme }) => ({
-  background: theme.palette.primary.light,
+  background: theme.palette.error.main,
 
   "&:hover": {
-    background: theme.palette.primary.main,
+    background: theme.palette.error.light,
   },
 }));
 
@@ -49,7 +49,7 @@ const ErrorDialog = ({ error }: { error: string | null }) => {
           item
           container
           py={1}
-          style={{ background: theme.palette.primary.light }}
+          style={{ background: theme.palette.error.light }}
         >
           <Grid item px={2}>
             <Typography
