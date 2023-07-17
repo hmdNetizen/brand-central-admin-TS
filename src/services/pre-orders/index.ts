@@ -44,10 +44,16 @@ export const getAllPreOrders = createAsyncThunk(
       const result = data as PreOrderedPayloadType;
 
       return result.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        "Error occurred while fetching pre-orders"
-      );
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching pre-orders"
+        );
+      }
     }
   }
 );
@@ -72,7 +78,9 @@ export const deletePreOrder = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while deleting preorder"
+        );
       }
     }
   }
@@ -96,7 +104,9 @@ export const updatePreOrderMultiples = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while updating pre-order"
+        );
       }
     }
   }
