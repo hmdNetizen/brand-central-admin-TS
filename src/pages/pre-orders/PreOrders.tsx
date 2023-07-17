@@ -18,6 +18,7 @@ import PageHeadingActions from "src/components/common/PageHeadingActions";
 import { SelectChangeEvent } from "@mui/material";
 import { preOrdersColumns } from "src/lib/dataset/tableData";
 import PreOrderItem from "src/components/pre-orders/PreOrderItem";
+import ErrorDialog from "src/utils/ErrorDialog";
 
 const Container = styled(Grid)(({ theme }) => ({
   padding: "1rem 2rem 5rem 2rem",
@@ -55,6 +56,7 @@ const PreOrders = () => {
   const singlePreOrder = useTypedSelector(
     (state) => state.preOrders.singlePreOrder
   );
+  const error = useTypedSelector((state) => state.preOrders.error);
   const filteredPreOrders = useTypedSelector(
     (state) => state.preOrders.filteredPreOrders
   );
@@ -161,6 +163,7 @@ const PreOrders = () => {
         productName={singlePreOrder?.productName!}
         isClickAction={false}
       />
+      <ErrorDialog error={error} />
     </Container>
   );
 };
