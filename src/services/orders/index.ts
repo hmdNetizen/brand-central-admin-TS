@@ -50,8 +50,14 @@ export const fetchAllOrders = createAsyncThunk(
         orders: result.data.orders,
         totalOrders: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+      }
     }
   }
 );
@@ -74,8 +80,14 @@ export const getAllSearchedOrders = createAsyncThunk(
         orders: result.data.orders,
         totalOrders: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+      }
     }
   }
 );
