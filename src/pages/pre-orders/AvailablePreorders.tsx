@@ -29,6 +29,7 @@ import {
   ContainerWrapper,
   Container,
 } from "src/components/common/styles/PageContainerStyles";
+import ErrorDialog from "src/utils/ErrorDialog";
 
 const initialState = {
   companyEmail: "",
@@ -71,6 +72,8 @@ const AvailablePreOrders = () => {
   const singleUpdatedStock = useTypedSelector(
     (state) => state.preOrders.singleUpdatedStock
   );
+  const error = useTypedSelector((state) => state.preOrders.error);
+
   const filteredUpdatedStock = useTypedSelector(
     (state) => state.preOrders.filteredUpdatedStock
   );
@@ -334,6 +337,7 @@ const AvailablePreOrders = () => {
         }
         isClickAction={true}
       />
+      <ErrorDialog error={error} />
     </Container>
   );
 };
