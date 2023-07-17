@@ -208,10 +208,18 @@ export const updateInventoryProducts = createAsyncThunk(
       }
 
       return data;
-    } catch (error) {
+    } catch (error: AxiosError | any) {
       thunkAPI.dispatch(setUploadPercentage(0));
       thunkAPI.dispatch(setUpdatingInventory(""));
-      return thunkAPI.rejectWithValue("Something went wrong");
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while updating inventory"
+        );
+      }
     }
   }
 );
@@ -304,8 +312,14 @@ export const addPhotosToGallery = createAsyncThunk(
         id: nanoid(),
         url: result.url,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong. Try again");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong. Try again");
+      }
     }
   }
 );
