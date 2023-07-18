@@ -35,7 +35,7 @@ const ErrorDialog = ({ error }: { error: string | null }) => {
 
   useEffect(() => {
     if (
-      error === "Session Expired. Please login to continue" &&
+      error === "You're not authorized to perform this action" &&
       pathname !== "/login"
     ) {
       setOpen(true);
@@ -57,7 +57,7 @@ const ErrorDialog = ({ error }: { error: string | null }) => {
               color="white"
               style={{ fontWeight: "600" }}
             >
-              Authorization Error
+              Session Expired
             </Typography>
           </Grid>
         </Grid>
