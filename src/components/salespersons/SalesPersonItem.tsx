@@ -20,17 +20,12 @@ type SalesPersonItemProps = {
   salesperson: SalesPersonReturnedPayload;
   setOpenEditSalesperson: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenDeleteSalesperson: React.Dispatch<React.SetStateAction<boolean>>;
-  setOpenEmail: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const SalesPersonItem = (prop: SalesPersonItemProps) => {
   const theme = useTheme();
-  const {
-    salesperson,
-    setOpenDeleteSalesperson,
-    setOpenEditSalesperson,
-    setOpenEmail,
-  } = prop;
+  const { salesperson, setOpenDeleteSalesperson, setOpenEditSalesperson } =
+    prop;
   const {
     _id,
     email,
