@@ -7,3 +7,9 @@ export type SalesPersonReturnedPayload = {
   profileImage: string;
   customers: [];
 };
+
+export type InitStateType = {
+  loadingSalespersons: boolean;
+  salespersons: SalesPersonReturnedPayload[];
+  error: null | string;
+};
