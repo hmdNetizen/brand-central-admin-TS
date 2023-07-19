@@ -7,7 +7,10 @@ import {
   MdOutlineShoppingBag as PreOrderIcon,
 } from "react-icons/md";
 import { BiPurchaseTagAlt as OrderIcon } from "react-icons/bi";
-import { BsCart4 as ProductIcon } from "react-icons/bs";
+import {
+  BsCart4 as ProductIcon,
+  BsPeople as SalesPeopleIcon,
+} from "react-icons/bs";
 import {
   IoPersonOutline as CustomersIcon,
   IoDiamondOutline as BrandsIcon,
@@ -120,6 +123,20 @@ export const menus = [
   },
   {
     id: 5,
+    title: "Salespersons",
+    icon: SalesPeopleIcon,
+    path: "/dashboard/salespersons",
+    subMenus: [
+      { subId: 0, title: "Salespersons List", path: "/dashboard/salespersons" },
+      {
+        subId: 1,
+        title: "Deactivated Salespersons",
+        path: "/dashboard/salespersons/deactivated",
+      },
+    ],
+  },
+  {
+    id: 6,
     title: "Manage Categories",
     icon: CategoryIcon,
     path: "/categories",
@@ -134,7 +151,7 @@ export const menus = [
     ],
   },
   {
-    id: 6,
+    id: 7,
     title: "Brands",
     icon: BrandsIcon,
     path: "/dashboard/brands",
@@ -148,13 +165,13 @@ export const menus = [
     ],
   },
   {
-    id: 7,
+    id: 8,
     title: "Set Coupons",
     icon: CouponIcon,
     path: "/dashboard/coupons",
   },
   {
-    id: 8,
+    id: 9,
     title: "Messages",
     icon: MessagesIcon,
     path: "/dashboard/messages",
@@ -168,7 +185,7 @@ export const menus = [
     ],
   },
   {
-    id: 9,
+    id: 10,
     title: "Shipping",
     icon: ShippingIcon,
     path: "/dashboard/shipping/zip-codes",
@@ -181,7 +198,7 @@ export const menus = [
     ],
   },
   {
-    id: 10,
+    id: 11,
     title: "General Settings",
     icon: GeneralSettingsIcon,
     path: "/dashboard/general-settings",
@@ -204,7 +221,7 @@ export const menus = [
     ],
   },
   {
-    id: 11,
+    id: 12,
     title: "Update Inventory",
     icon: IoCloudUploadOutline,
     path: "/dashboard/update-inventory",
