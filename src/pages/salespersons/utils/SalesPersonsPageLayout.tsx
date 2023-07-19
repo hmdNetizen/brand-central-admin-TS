@@ -93,7 +93,7 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
             setRowsPerPage={setRowsPerPage}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
             loading={loadingCustomers}
-            notFoundText="No Customer found"
+            notFoundText="No Salesperson found"
           >
             {!loadingCustomers &&
               salesPersonsDataset.map((salesperson) => {
