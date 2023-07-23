@@ -1,15 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import setAuthorizationToken from "src/services/auth/setAuthToken";
 import { initAdminStateTypes, UserProfilePayloadType } from "./UserTypes";
 import axios from "../axios";
 import jwt_decode from "jwt-decode";
 import { NavigateFunction } from "react-router-dom";
 import { logout } from "../auth";
 import { AxiosError } from "axios";
-
-type AuthError = {
-  message: string;
-};
 
 const initialState: initAdminStateTypes = {
   loadingProfile: false,
@@ -36,7 +31,7 @@ export const loadAdminProfile = createAsyncThunk(
       } = jwt_decode(token);
 
       // logs out after token expires
-      if (decoded.exp > Date.now() || status === 400) {
+      if (decoded.exp > Date.now() || status === 401) {
         thunkAPI.dispatch(clearAdminProfile());
         thunkAPI.dispatch(logout());
         navigate("/login");
@@ -45,11 +40,17 @@ export const loadAdminProfile = createAsyncThunk(
       const result = data as UserProfilePayloadType;
 
       return result.data;
-    } catch (error: AxiosError<AuthError> | any) {
-      thunkAPI.dispatch(logout());
+    } catch (error: AxiosError | any) {
       thunkAPI.dispatch(clearAdminProfile());
-      navigate("/login");
-      return thunkAPI.rejectWithValue(error.response.data.error);
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching admin profile"
+        );
+      }
     }
   }
 );
