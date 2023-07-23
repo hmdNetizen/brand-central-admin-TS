@@ -16,10 +16,6 @@ function App() {
 
   const allProducts = useTypedSelector((state) => state.products.allProducts);
   const preOrders = useTypedSelector((state) => state.preOrders.preOrders);
-  const preOrdersUpdatedStock = useTypedSelector(
-    (state) => state.preOrders.preOrdersUpdatedStock
-  );
-  const accessToken = useTypedSelector((state) => state.auth.accessToken);
 
   const [showNotification, setShowNotification] = useState(false);
 
@@ -30,34 +26,7 @@ function App() {
         preOrderData: preOrders,
       });
     }
-
-    // eslint-disable-next-line
   }, [allProducts, preOrders]);
-
-  useEffect(() => {
-    const isNotified = sessionStorage.getItem("hidePreOrderNotification");
-
-    let timeout: NodeJS.Timeout;
-
-    if (
-      !isNotified &&
-      accessToken &&
-      !showNotification &&
-      preOrdersUpdatedStock.length > 0
-    ) {
-      timeout = setTimeout(() => {
-        setShowNotification(true);
-      }, 30000);
-    }
-
-    return () => clearTimeout(timeout);
-  }, [showNotification, preOrdersUpdatedStock, accessToken]);
-
-  useEffect(() => {
-    if (preOrdersUpdatedStock.length === 0) {
-      setShowNotification(false);
-    }
-  }, [preOrdersUpdatedStock]);
 
   return (
     <ThemeProvider theme={theme}>
