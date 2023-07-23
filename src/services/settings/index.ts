@@ -7,6 +7,7 @@ import {
 } from "./SettingsTypes";
 import { UploadedFilePayload } from "../common/commonTypes";
 import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 
 const initialState: initStateTypes = {
   loading: false,
@@ -23,8 +24,16 @@ export const getAllSiteData = createAsyncThunk(
       const result = data as { data: GeneralSettingTypes };
 
       return result.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching messages"
+        );
+      }
     }
   }
 );
@@ -65,8 +74,16 @@ export const updateHeaderLogo = createAsyncThunk(
         const result = data as { data: GeneralSettingTypes };
         return result.data;
       }
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again."
+        );
+      }
     }
   }
 );
@@ -107,8 +124,16 @@ export const updateInvoiceLogo = createAsyncThunk(
         const result = data as { data: GeneralSettingTypes };
         return result.data;
       }
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again."
+        );
+      }
     }
   }
 );
@@ -148,8 +173,16 @@ export const updateFavicon = createAsyncThunk(
         const result = data as { data: GeneralSettingTypes };
         return result.data;
       }
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again."
+        );
+      }
     }
   }
 );
@@ -162,8 +195,16 @@ export const updateSocialLinks = createAsyncThunk(
       const result = data as { data: GeneralSettingTypes };
 
       return result.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again."
+        );
+      }
     }
   }
 );
