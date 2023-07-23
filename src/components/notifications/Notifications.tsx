@@ -30,7 +30,6 @@ const Notification = (props: NotificationProps) => {
 
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
 
-  const accessToken = useTypedSelector((state) => state.auth.accessToken);
   const loadingPreOrderAction = useTypedSelector(
     (state) => state.preOrders.loadingPreOrderAction
   );
@@ -38,30 +37,11 @@ const Notification = (props: NotificationProps) => {
     (state) => state.preOrders.preOrdersUpdatedStock
   );
 
-  useEffect(() => {
-    const isNotified = sessionStorage.getItem("hidePreOrderNotification");
-
-    let timeout: NodeJS.Timeout;
-
-    if (
-      !isNotified &&
-      accessToken &&
-      !showNotification &&
-      preOrdersUpdatedStock.length > 0
-    ) {
-      timeout = setTimeout(() => {
-        setShowNotification(true);
-      }, 30000);
-    }
-
-    return () => clearTimeout(timeout);
-  }, [showNotification, preOrdersUpdatedStock, accessToken]);
-
-  useEffect(() => {
-    if (preOrdersUpdatedStock.length === 0) {
-      setShowNotification(false);
-    }
-  }, [preOrdersUpdatedStock]);
+  //   useEffect(() => {
+  //     if (preOrdersUpdatedStock.length === 0) {
+  //       setShowNotification(false);
+  //     }
+  //   }, [preOrdersUpdatedStock]);
 
   useEffect(() => {
     if (!loadingPreOrderAction) {
