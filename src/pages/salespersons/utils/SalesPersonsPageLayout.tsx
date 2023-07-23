@@ -39,14 +39,9 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
   const loadingCustomers = useTypedSelector(
     (state) => state.customers.loadingCustomers
   );
+
   const loadingCustomerAction = useTypedSelector(
     (state) => state.customers.loadingCustomerAction
-  );
-  const singleCustomer = useTypedSelector(
-    (state) => state.customers.singleCustomer
-  );
-  const totalCustomers = useTypedSelector(
-    (state) => state.customers.totalCustomers
   );
 
   const handleChangeRowsPerPage = (
@@ -88,7 +83,7 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
             headerColumns={salespeopleListColumns}
             page={page}
             setPage={setPage}
-            total={totalCustomers}
+            total={salesPersonsDataset.length}
             rowsPerPage={rowsPerPage}
             setRowsPerPage={setRowsPerPage}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
