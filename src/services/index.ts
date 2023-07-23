@@ -2,7 +2,6 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./auth";
 import userReducer from "./user";
 import productReducer from "./products";
-import utilsReducer from "./utils";
 import notificationReducer from "./notifications";
 import commonReducer from "./common";
 import orderReducer from "./orders";
@@ -18,7 +17,6 @@ import salespersonReducer from "./salespersons";
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  utils: utilsReducer,
   notifications: notificationReducer,
   user: userReducer,
   customers: customersReducer,
