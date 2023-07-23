@@ -37,8 +37,14 @@ export const getAllPaginatedBrands = createAsyncThunk(
         brands: result.data.data,
         total: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occurred while fetching brands");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching brands");
+      }
     }
   }
 );
@@ -83,8 +89,14 @@ export const getSearchedBrands = createAsyncThunk(
         brands: result.data.data,
         total: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occurred while fetching brands");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching brands");
+      }
     }
   }
 );
@@ -102,8 +114,16 @@ export const toggleBrandActivation = createAsyncThunk(
         brandId,
         isActivated,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again."
+        );
+      }
     }
   }
 );
@@ -247,7 +267,9 @@ export const updateBrand = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Something went wrong");
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again."
+        );
       }
     }
   }
@@ -271,8 +293,14 @@ export const deleteBrand = createAsyncThunk(
       }
 
       return brandId;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Brand could not be deleted");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Brand could not be deleted.");
+      }
     }
   }
 );
@@ -291,8 +319,16 @@ export const getDeactivatedBrands = createAsyncThunk(
         brands: result.data.data,
         total: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occurred while fetching data");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching deactivated brands"
+        );
+      }
     }
   }
 );
@@ -315,8 +351,16 @@ export const getSearchedDeactivatedBrands = createAsyncThunk(
         brands: result.data.data,
         total: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occurred while fetching data");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching deactivated brands"
+        );
+      }
     }
   }
 );
