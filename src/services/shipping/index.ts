@@ -32,8 +32,16 @@ export const getShippingZipCodes = createAsyncThunk(
         zipCodes: result.data.data,
         total: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error fetching zip codes");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching zip codes"
+        );
+      }
     }
   }
 );
@@ -56,8 +64,16 @@ export const getSearchedZipCodes = createAsyncThunk(
         zipCodes: result.data.data,
         total: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error fetching zip codes");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching zip codes"
+        );
+      }
     }
   }
 );
@@ -89,7 +105,9 @@ export const addShippingZipCodes = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Something went wrong");
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again"
+        );
       }
     }
   }
@@ -125,7 +143,9 @@ export const updateShippingZipCodes = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Something went wrong");
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again"
+        );
       }
     }
   }
@@ -149,8 +169,16 @@ export const deleteShippingZipCodes = createAsyncThunk(
         setOpenDeleteZipCode(false);
       }
       return result.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Zip code could not be deleted. Please try again."
+        );
+      }
     }
   }
 );

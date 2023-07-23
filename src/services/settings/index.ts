@@ -30,9 +30,7 @@ export const getAllSiteData = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue(
-          "Error occurred while fetching messages"
-        );
+        return thunkAPI.rejectWithValue("Error occurred while fetching data");
       }
     }
   }
