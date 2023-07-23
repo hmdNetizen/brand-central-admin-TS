@@ -6,7 +6,6 @@ export * as ordersActions from "../orders";
 export * as preOrderActions from "../pre-orders";
 export * as productActions from "../products";
 export * as commonActions from "../common";
-export * as utilActions from "../utils";
 export * as categoriesActions from "../categories";
 export * as brandsActions from "../brands";
 export * as couponActions from "../coupon";
