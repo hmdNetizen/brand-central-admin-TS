@@ -13,6 +13,7 @@ import {
 import { UserProfileReturnedPayload } from "../user/UserTypes";
 import { toast } from "react-toastify";
 import { capitalizeFirstLetters } from "src/lib/helpers";
+import { AxiosError } from "axios";
 
 const initialState: initStateTypes = {
   loadingCustomers: false,
@@ -46,8 +47,16 @@ export const getAllCustomers = createAsyncThunk(
         customers: result.data.customers,
         totalCustomers: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching customers"
+        );
+      }
     }
   }
 );
@@ -70,10 +79,16 @@ export const getSearchedCustomers = createAsyncThunk(
         customers: result.data.customers,
         totalCustomers: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        "Error occurred while fetching customers"
-      );
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching customers"
+        );
+      }
     }
   }
 );
@@ -90,10 +105,16 @@ export const getRecentCustomers = createAsyncThunk(
         lastThirtyDays: result.data.lastThirtyDays,
         totalCustomers: result.data.totalCustomers,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        "Error occurred while fetching customers"
-      );
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching customers"
+        );
+      }
     }
   }
 );
@@ -106,10 +127,16 @@ export const getSingleCustomer = createAsyncThunk(
       const result = data as SingleCustomerPayloadType;
 
       return result.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        "Error occurred while fetching customer data"
-      );
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching customer information"
+        );
+      }
     }
   }
 );
@@ -124,8 +151,16 @@ export const handleToggleCustomerBlock = createAsyncThunk(
       });
 
       return details;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again."
+        );
+      }
     }
   }
 );
@@ -134,20 +169,21 @@ export const unblockCustomer = createAsyncThunk(
   "unblock-customer",
   async (customerId: string, thunkAPI) => {
     try {
-      const { status } = await axios.patch(
-        `/api/customers/${customerId}/block`,
-        {
-          isBlocked: false,
-        }
-      );
-
-      // if (status === 200) {
-      //   getAllBlockedCustomers();
-      // }
+      await axios.patch(`/api/customers/${customerId}/block`, {
+        isBlocked: false,
+      });
 
       return customerId;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again."
+        );
+      }
     }
   }
 );
@@ -170,8 +206,16 @@ export const updateCustomerProfile = createAsyncThunk(
         customerId,
         ...fields,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Profile Could not be updated");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Profile could not be updated. Try again."
+        );
+      }
     }
   }
 );
@@ -191,8 +235,14 @@ export const deleteCustomer = createAsyncThunk(
       }
 
       return customerId;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Customer could not be deleted");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Customer could not be deleted.");
+      }
     }
   }
 );
@@ -210,8 +260,16 @@ export const getCustomerOrders = createAsyncThunk(
         orders: response.data.orders,
         totalOrders: response.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching customer orders"
+        );
+      }
     }
   }
 );
