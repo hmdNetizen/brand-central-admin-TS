@@ -6,11 +6,6 @@ import React from "react";
 import jwt_decode from "jwt-decode";
 import { CredentialProps } from "src/pages/auth/Login";
 
-type AuthCredentials = {
-  Email: string;
-  password: string;
-};
-
 type AuthReturnedData = {
   data: {
     Email: string;

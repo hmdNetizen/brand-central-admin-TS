@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { useActions } from "src/hooks/useActions";
 import { Outlet } from "react-router-dom";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
@@ -15,7 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Prefetch = () => {
-  const socket = io(`wss://brand-central-server.onrender.com`, {
+  const socket = io(BASE_URL, {
     transports: ["websocket", "polling"],
     forceNew: true,
     reconnectionAttempts: 3,
@@ -41,26 +41,34 @@ const Prefetch = () => {
     getAllPreOrders,
   } = useActions();
 
-  const {
-    orderNotifications,
-    customerNotifications,
-    lowStockNotifications,
-    messagesNotifications,
-    preOrderNotifications,
-  } = useTypedSelector((state) => state.notifications);
+  const orderNotifications = useTypedSelector(
+    (state) => state.notifications.orderNotifications
+  );
+  const customerNotifications = useTypedSelector(
+    (state) => state.notifications.customerNotifications
+  );
+  const lowStockNotifications = useTypedSelector(
+    (state) => state.notifications.lowStockNotifications
+  );
+  const messagesNotifications = useTypedSelector(
+    (state) => state.notifications.messagesNotifications
+  );
+  const preOrderNotifications = useTypedSelector(
+    (state) => state.notifications.preOrderNotifications
+  );
 
-  const { adminEmail, accessToken } = useTypedSelector((state) => state.auth);
+  const accessToken = useTypedSelector((state) => state.auth.accessToken);
+  const admin = useTypedSelector((state) => state.user.admin);
 
   useEffect(() => {
     socket.open();
-    console.log("Connected");
-    socket.emit("adminJoin", { email: "testingAccount2@admin.com" });
+    socket.emit("adminJoin", { email: admin?.companyEmail });
 
     return () => {
       socket.off("adminJoin");
       socket.close();
     };
-  }, [socket]);
+  }, [socket, admin]);
 
   const handleAddNewCustomerNotification = (
     data: CustomerNotificationReturnedPayload
@@ -90,7 +98,6 @@ const Prefetch = () => {
   const handleNewPreOrderNotification = (
     data: PreOrderNotificationReturnedPayload
   ) => {
-    console.log("Yay!!!");
     addNewPreOrderNotification(data);
   };
 
@@ -101,7 +108,7 @@ const Prefetch = () => {
       socket.off("newUser", handleAddNewCustomerNotification);
       socket.close();
     };
-  }, []);
+  }, [customerNotifications]);
 
   useEffect(() => {
     socket.on("newOrder", handleAddNewOrderNotification);
@@ -110,7 +117,7 @@ const Prefetch = () => {
       socket.off("newOrder", handleAddNewOrderNotification);
       socket.close();
     };
-  }, []);
+  }, [orderNotifications]);
 
   useEffect(() => {
     socket.on("lowStock", handleLowStockNotification);
@@ -119,7 +126,7 @@ const Prefetch = () => {
       socket.off("lowStock", handleLowStockNotification);
       socket.close();
     };
-  }, []);
+  }, [lowStockNotifications]);
 
   useEffect(() => {
     socket.on("new_contact_message", handleNewMessageNotification);
@@ -128,10 +135,9 @@ const Prefetch = () => {
       socket.off("new_contact_message", handleNewMessageNotification);
       socket.close();
     };
-  }, []);
+  }, [messagesNotifications]);
 
   useEffect(() => {
-    socket.emit("adminJoin", { email: "testingAccount2@admin.com" });
     socket.on("newPreOrderNotification", handleNewPreOrderNotification);
 
     return () => {
@@ -140,22 +146,9 @@ const Prefetch = () => {
     };
   }, [preOrderNotifications]);
 
-  // useEffect(() => {
-
-  //   // return () => {
-  //   //   socket.disconnect();
-  //   // };
-  // }, [
-  //   orderNotifications,
-  //   customerNotifications,
-  //   lowStockNotifications,
-  //   preOrderNotifications,
-  //   messagesNotifications,
-  // ]);
-
   useLayoutEffect(() => {
-    if (localStorage.accessToken) {
-      setAuthorizationToken(localStorage.accessToken);
+    if (accessToken) {
+      setAuthorizationToken(accessToken);
     }
   }, []);
 
