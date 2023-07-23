@@ -36,8 +36,16 @@ export const getAllCoupons = createAsyncThunk(
         coupons: result.data.data,
         total: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occurred while fetching coupons");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching coupons"
+        );
+      }
     }
   }
 );
@@ -60,8 +68,16 @@ export const getSearchedCoupon = createAsyncThunk(
         coupons: result.data.data,
         total: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occurred while fetching coupons");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching coupons"
+        );
+      }
     }
   }
 );
@@ -78,8 +94,16 @@ export const toggleCouponActivation = createAsyncThunk(
       const result = data as SingleCouponPayloadType;
 
       return result.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again."
+        );
+      }
     }
   }
 );
@@ -103,7 +127,9 @@ export const addNewCoupon = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Something went wrong");
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again."
+        );
       }
     }
   }
@@ -125,8 +151,16 @@ export const updateCoupon = createAsyncThunk(
       }
 
       return result.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error Adding Coupon");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching coupons"
+        );
+      }
     }
   }
 );
@@ -151,8 +185,14 @@ export const deleteCoupon = createAsyncThunk(
       }
 
       return couponId;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occurred while deleting coupon");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Coupon could not be deleted.");
+      }
     }
   }
 );
