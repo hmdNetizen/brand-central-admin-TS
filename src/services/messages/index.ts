@@ -13,6 +13,7 @@ import {
 import { constructContent } from "src/lib/helpers";
 import { NotificiationEmailRequestType } from "../pre-orders/PreOrderTypes";
 import { updatePreOrderMultiples } from "../pre-orders";
+import { AxiosError } from "axios";
 
 const initialState: initStateTypes = {
   loading: false,
@@ -49,8 +50,16 @@ export const getAllSentMessages = createAsyncThunk(
         sentMessages: transformResult,
         total: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occurred while fetching messages");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching messages"
+        );
+      }
     }
   }
 );
@@ -81,8 +90,16 @@ export const getSearchedSentMessages = createAsyncThunk(
         sentMessages: transformResult,
         total: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occurred while fetching messages");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching messages"
+        );
+      }
     }
   }
 );
@@ -111,8 +128,16 @@ export const getAllReceivedMessages = createAsyncThunk(
         receivedMessages: transformResult,
         total: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occurred while fetching messages");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching messages"
+        );
+      }
     }
   }
 );
@@ -144,8 +169,16 @@ export const getSearchedReceivedMessages = createAsyncThunk(
         receivedMessages: transformResult,
         total: result.data.total,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Error occurred while fetching messages");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching messages"
+        );
+      }
     }
   }
 );
@@ -168,8 +201,16 @@ export const deleteSentMessage = createAsyncThunk(
       }
 
       return messageId;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again."
+        );
+      }
     }
   }
 );
@@ -192,8 +233,16 @@ export const deleteReceivedMessage = createAsyncThunk(
       }
 
       return messageId;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Message could not be deleted. Try again."
+        );
+      }
     }
   }
 );
@@ -216,8 +265,14 @@ export const sendEmailToCustomer = createAsyncThunk(
         createdAt: new Date().toISOString(),
         isRead: false,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Email could not be sent");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Email could not be sent. Try again");
+      }
     }
   }
 );
@@ -268,8 +323,16 @@ export const sendNotificationEmail = createAsyncThunk(
         createdAt: new Date().toISOString(),
         isRead: false,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Email could not be sent");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Email could not be sent. Please try again."
+        );
+      }
     }
   }
 );
