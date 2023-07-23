@@ -37,11 +37,11 @@ const Notification = (props: NotificationProps) => {
     (state) => state.preOrders.preOrdersUpdatedStock
   );
 
-  //   useEffect(() => {
-  //     if (preOrdersUpdatedStock.length === 0) {
-  //       setShowNotification(false);
-  //     }
-  //   }, [preOrdersUpdatedStock]);
+  useEffect(() => {
+    if (preOrdersUpdatedStock.length === 0) {
+      setShowNotification(false);
+    }
+  }, [preOrdersUpdatedStock]);
 
   useEffect(() => {
     if (!loadingPreOrderAction) {
