@@ -45,10 +45,16 @@ export const getAllCategories = createAsyncThunk(
       const result = data as ReturnedPayloadType<CategoryReturnedPayload>;
 
       return result.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        "Error occurred while fetching categories"
-      );
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching categories"
+        );
+      }
     }
   }
 );
@@ -62,10 +68,16 @@ export const getSearchedCategory = createAsyncThunk(
       const result = data as ReturnedPayloadType<CategoryReturnedPayload>;
 
       return result.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        "Error occurred while fetching categories"
-      );
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching categories"
+        );
+      }
     }
   }
 );
@@ -82,8 +94,16 @@ export const toggleCategoryActivation = createAsyncThunk(
       const result = data as ReturnedSinglePayloadType<CategoryReturnedPayload>;
 
       return result.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again"
+        );
+      }
     }
   }
 );
@@ -123,7 +143,9 @@ export const addNewCategory = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Something went wrong");
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again"
+        );
       }
     }
   }
@@ -181,8 +203,16 @@ export const updateCategory = createAsyncThunk(
 
         return response.data;
       }
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again"
+        );
+      }
     }
   }
 );
@@ -208,8 +238,14 @@ export const deleteCategory = createAsyncThunk(
       }
 
       return categoryId;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Category could not be deleted");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Category could not be deleted");
+      }
     }
   }
 );
@@ -238,10 +274,16 @@ export const getSearchedSubCategory = createAsyncThunk(
       const result = data as ReturnedPayloadType<SubCategoryReturnedPayload>;
 
       return result.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        "Error occurred while fetching categories"
-      );
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching Sub-categories"
+        );
+      }
     }
   }
 );
@@ -259,8 +301,16 @@ export const toggleSubCategoryActivation = createAsyncThunk(
         subCategoryId,
         isActivate,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again"
+        );
+      }
     }
   }
 );
@@ -296,7 +346,9 @@ export const addNewSubCategory = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Something went wrong");
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again"
+        );
       }
     }
   }
@@ -326,7 +378,9 @@ export const updateSubCategory = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Something went wrong");
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again"
+        );
       }
     }
   }
@@ -352,8 +406,14 @@ export const deleteSubCategory = createAsyncThunk(
       }
 
       return subCategoryId;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Sub Category could not be deleted");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Sub-category could not be deleted.");
+      }
     }
   }
 );
@@ -374,10 +434,14 @@ export const getAllBrandsCategories = createAsyncThunk(
         total: result.data.total,
         brandCategories: result.data.data,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        "Error occurred while fetching brands categories"
-      );
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching brands");
+      }
     }
   }
 );
@@ -401,10 +465,14 @@ export const getSearchedBrandsCategories = createAsyncThunk(
         total: result.data.total,
         brandCategories: result.data.data,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        "Error occurred while fetching brands categories"
-      );
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching brands");
+      }
     }
   }
 );
@@ -425,8 +493,16 @@ export const toggleBrandCategoryActivation = createAsyncThunk(
         brandCategoryId,
         isActivate,
       };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Something went wrong");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again"
+        );
+      }
     }
   }
 );
@@ -466,7 +542,9 @@ export const addNewBrandCategory = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Something went wrong");
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again"
+        );
       }
     }
   }
@@ -495,7 +573,9 @@ export const updateBrandCategory = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Something went wrong");
+        return thunkAPI.rejectWithValue(
+          "Something went wrong. Please try again."
+        );
       }
     }
   }
@@ -521,8 +601,14 @@ export const deleteBrandCategory = createAsyncThunk(
       }
 
       return brandCategoryId;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Brand Category could not be deleted");
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Brand category could not be deleted.");
+      }
     }
   }
 );
