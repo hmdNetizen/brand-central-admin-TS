@@ -38,6 +38,7 @@ const InStockNotificationModal = (props: NotificationModalProps) => {
           productCode={productCode}
           setProductCode={setProductCode}
           onClose={handleClose}
+          showNotification={showNotification}
         />
       </Grid>
     </ShowDialog>
