@@ -11,6 +11,7 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { HeadingWrapper } from "./styles";
 
 type NotificationProps = {
+  showNotification: boolean;
   setShowNotification: React.Dispatch<React.SetStateAction<boolean>>;
   productCode: string;
   setProductCode: React.Dispatch<React.SetStateAction<string>>;
@@ -19,16 +20,42 @@ type NotificationProps = {
 
 const Notification = (props: NotificationProps) => {
   const theme = useTheme();
-  const { setShowNotification, productCode, setProductCode, onClose } = props;
+  const {
+    showNotification,
+    setShowNotification,
+    productCode,
+    setProductCode,
+    onClose,
+  } = props;
 
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
 
+  const accessToken = useTypedSelector((state) => state.auth.accessToken);
   const loadingPreOrderAction = useTypedSelector(
     (state) => state.preOrders.loadingPreOrderAction
   );
   const preOrdersUpdatedStock = useTypedSelector(
     (state) => state.preOrders.preOrdersUpdatedStock
   );
+
+  useEffect(() => {
+    const isNotified = sessionStorage.getItem("hidePreOrderNotification");
+
+    let timeout: NodeJS.Timeout;
+
+    if (
+      !isNotified &&
+      accessToken &&
+      !showNotification &&
+      preOrdersUpdatedStock.length > 0
+    ) {
+      timeout = setTimeout(() => {
+        setShowNotification(true);
+      }, 30000);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [showNotification, preOrdersUpdatedStock, accessToken]);
 
   useEffect(() => {
     if (preOrdersUpdatedStock.length === 0) {

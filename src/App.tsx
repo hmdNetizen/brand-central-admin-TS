@@ -53,6 +53,12 @@ function App() {
     return () => clearTimeout(timeout);
   }, [showNotification, preOrdersUpdatedStock, accessToken]);
 
+  useEffect(() => {
+    if (preOrdersUpdatedStock.length === 0) {
+      setShowNotification(false);
+    }
+  }, [preOrdersUpdatedStock]);
+
   return (
     <ThemeProvider theme={theme}>
       <ScrollToView>
