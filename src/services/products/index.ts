@@ -7,6 +7,7 @@ import {
 import { AxiosError, AxiosProgressEvent } from "axios";
 import React from "react";
 import { toast } from "react-toastify";
+import { config } from "src/config/config";
 import { fileUploadConfig } from "src/config/fileUpload";
 import axios from "../axios";
 import { setUploadPercentage } from "../common";
@@ -52,7 +53,7 @@ export const fetchAllProducts = createAsyncThunk(
   "fetch-all-products",
   async (_, thunkAPI) => {
     try {
-      const { data } = await axios.get(`/api/products`);
+      const { data } = await axios.get(`/${config.product.get}`);
       const result = data as { data: ProductTypes[] };
 
       return result.data;
@@ -69,7 +70,7 @@ export const getPaginatedProducts = createAsyncThunk(
 
     try {
       const { data } = await axios.get(
-        `/api/products/paginated?page=${page}&limit=${limit}`
+        `/${config.product.get}/paginated?page=${page}&limit=${limit}`
       );
 
       const result = data as PaginatedReturnedPayloadType;
@@ -242,7 +243,7 @@ export const getSingleProduct = createAsyncThunk(
   "product/admin/single-product",
   async (productId: string, thunkAPI) => {
     try {
-      const { data } = await axios.get(`/api/products/${productId}`);
+      const { data } = await axios.get(`/${config.product.getById(productId)}`);
       const result = data as { data: ProductTypes };
       result.data.productGalleryImages.map((url) => ({
         id: nanoid(),
