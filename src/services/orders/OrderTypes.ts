@@ -10,6 +10,7 @@ type AddressType = {
 
 type PaymentMethodType = {
   platform: string;
+  transactionFee: number;
   transactionDetails: {
     transactionId: string;
   };
