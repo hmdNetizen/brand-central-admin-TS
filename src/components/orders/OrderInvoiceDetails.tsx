@@ -55,6 +55,12 @@ const OrderInvoiceDetails = ({ singleOrder }: OrderInvoiceProps) => {
             : singleOrder.orderPaymentMethod}
         </span>
       </Title>
+      {singleOrder.orderPaymentMethod === "Credit Card" && (
+        <Title variant="body1">
+          Transaction Fee :{" "}
+          <span>${singleOrder?.paymentReceipt?.transactionFee}</span>
+        </Title>
+      )}
       {singleOrder.orderDiscount !== 0 && (
         <Title variant="body1">
           Order Discount : <span>${singleOrder.orderDiscount}</span>
