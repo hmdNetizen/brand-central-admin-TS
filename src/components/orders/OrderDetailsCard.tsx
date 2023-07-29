@@ -79,6 +79,14 @@ const OrderDetailsCard = (props: OrderDetailsCardProps) => {
             />
           </td>
         </tr>
+
+        {orderPaymentMethod === "Credit Card" && (
+          <tr>
+            <td>Processing Fee</td>
+            <td>${paymentReceipt?.transactionFee}</td>
+          </tr>
+        )}
+
         {orderPaymentMethod !== "Cash/Check" && (
           <tr>
             <td>Transaction ID</td>
