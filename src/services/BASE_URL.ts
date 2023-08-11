@@ -1,3 +1,3 @@
 // export const BASE_URL = import.meta.env.VITE_BASE_URL;
 // export const BASE_URL = "http://localhost:4000";
-export const BASE_URL = "https://brand-central-server.onrender.com";
+export const BASE_URL = "http://localhost:4000";
