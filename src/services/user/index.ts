@@ -42,6 +42,7 @@ export const loadAdminProfile = createAsyncThunk(
       return result.data;
     } catch (error: AxiosError | any) {
       thunkAPI.dispatch(clearAdminProfile());
+      thunkAPI.dispatch(logout());
       if (error.response) {
         return thunkAPI.rejectWithValue(error.response.data.error);
       } else if (error.request) {

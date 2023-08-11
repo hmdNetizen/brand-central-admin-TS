@@ -39,6 +39,7 @@ import Salespersons from "src/pages/salespersons/Salespersons";
 import ShippingZipCodes from "src/pages/shipping/ShippingZipCodes";
 import SubCategories from "src/pages/subcategories/SubCategories";
 import UpdateInventory from "src/pages/UpdateInventory";
+import PrivateRoute from "./PrivateRoute";
 
 const PagesRoutes = () => {
   const [menuSlideIn, setMenuSlideIn] = useState<boolean>(false);
@@ -49,99 +50,117 @@ const PagesRoutes = () => {
           <Route index element={<Login />} />
           <Route path="login" element={<Login />} />
           <Route element={<Prefetch />}>
-            <Route
-              path="/dashboard"
-              element={
-                <DashboardLayout
-                  menuSlideIn={menuSlideIn}
-                  setMenuSlideIn={setMenuSlideIn}
-                />
-              }
-            >
-              <Route index element={<Dashboard menuSlideIn={menuSlideIn} />} />
-              <Route path="orders">
-                <Route index element={<AllOrders />} />
-                <Route path="pending" element={<PendingOrders />} />
-                <Route path="completed" element={<CompletedOrders />} />
-                <Route path="processing" element={<ProcessingOrders />} />
-                <Route path="declined" element={<DeclinedOrders />} />
-                <Route path=":orderId">
-                  <Route
-                    index
-                    element={<OrderDetails menuSlideIn={menuSlideIn} />}
+            <Route element={<PrivateRoute />}>
+              <Route
+                path="/dashboard"
+                element={
+                  <DashboardLayout
+                    menuSlideIn={menuSlideIn}
+                    setMenuSlideIn={setMenuSlideIn}
                   />
-                  <Route path="invoice">
-                    <Route index element={<OrderInvoice />} />
-                    <Route path="print" element={<PrintOrderInvoice />} />
+                }
+              >
+                <Route
+                  index
+                  element={<Dashboard menuSlideIn={menuSlideIn} />}
+                />
+                <Route path="orders">
+                  <Route index element={<AllOrders />} />
+                  <Route path="pending" element={<PendingOrders />} />
+                  <Route path="completed" element={<CompletedOrders />} />
+                  <Route path="processing" element={<ProcessingOrders />} />
+                  <Route path="declined" element={<DeclinedOrders />} />
+                  <Route path=":orderId">
+                    <Route
+                      index
+                      element={<OrderDetails menuSlideIn={menuSlideIn} />}
+                    />
+                    <Route path="invoice">
+                      <Route index element={<OrderInvoice />} />
+                      <Route path="print" element={<PrintOrderInvoice />} />
+                    </Route>
                   </Route>
                 </Route>
-              </Route>
-              <Route path="pre-orders">
-                <Route index element={<PreOrders />} />
-                <Route path="available" element={<AvailablePreOrders />} />
-              </Route>
-              <Route path="products">
-                <Route index element={<AllProducts />} />
-                <Route path="create" element={<CreateProduct />} />
-                <Route path="featured" element={<FeaturedProducts />} />
-                <Route path="popular" element={<PopularProducts />} />
-                <Route path="missing-images" element={<NonImageProducts />} />
-                <Route path="deactivated" element={<DeactivatedProducts />} />
-                <Route path="best-sellers" element={<BestSellersProducts />} />
-                <Route
-                  path="weekly-offers"
-                  element={<WeeklyOffersProducts />}
-                />
-              </Route>
-              <Route path="customers">
-                <Route index element={<Customers />} />
-                <Route path="blocked" element={<BlockedCustomers />} />
-                <Route
-                  path=":customerId"
-                  element={<CustomerProfileDetails menuSlideIn={menuSlideIn} />}
-                />
-              </Route>
-              <Route path="salespersons">
-                <Route index element={<Salespersons />} />
-                {/* <Route path="blocked" element={<BlockedCustomers />} />
+                <Route path="pre-orders">
+                  <Route index element={<PreOrders />} />
+                  <Route path="available" element={<AvailablePreOrders />} />
+                </Route>
+                <Route path="products">
+                  <Route index element={<AllProducts />} />
+                  <Route path="create" element={<CreateProduct />} />
+                  <Route path="featured" element={<FeaturedProducts />} />
+                  <Route path="popular" element={<PopularProducts />} />
+                  <Route path="missing-images" element={<NonImageProducts />} />
+                  <Route path="deactivated" element={<DeactivatedProducts />} />
+                  <Route
+                    path="best-sellers"
+                    element={<BestSellersProducts />}
+                  />
+                  <Route
+                    path="weekly-offers"
+                    element={<WeeklyOffersProducts />}
+                  />
+                </Route>
+                <Route path="customers">
+                  <Route index element={<Customers />} />
+                  <Route path="blocked" element={<BlockedCustomers />} />
+                  <Route
+                    path=":customerId"
+                    element={
+                      <CustomerProfileDetails menuSlideIn={menuSlideIn} />
+                    }
+                  />
+                </Route>
+                <Route path="salespersons">
+                  <Route index element={<Salespersons />} />
+                  {/* <Route path="blocked" element={<BlockedCustomers />} />
                 <Route
                   path=":customerId"
                   element={<CustomerProfileDetails menuSlideIn={menuSlideIn} />}
                 /> */}
-              </Route>
-              <Route path="categories">
-                <Route index element={<Categories />} />
-              </Route>
-              <Route path="subcategories">
-                <Route index element={<SubCategories />} />
-              </Route>
-              <Route path="brands-categories">
-                <Route index element={<BrandsCategory />} />
-              </Route>
-              <Route path="brands">
-                <Route index element={<Brands />} />
-                <Route path="deactivated" element={<DeactivatedBrands />} />
-              </Route>
-              <Route path="coupons">
-                <Route index element={<Coupons />} />
-              </Route>
-              <Route path="messages">
-                <Route index path="sent-messages" element={<SentMessages />} />
-                <Route
-                  path="received-messages"
-                  element={<ReceivedMessages />}
-                />
-              </Route>
-              <Route path="shipping">
-                <Route index path="zip-codes" element={<ShippingZipCodes />} />
-              </Route>
-              <Route path="general-settings">
-                <Route index path="logo" element={<Logo />} />
-                <Route path="favicon" element={<Favicon />} />
-                <Route path="socials" element={<SocialLinks />} />
-              </Route>
-              <Route path="update-inventory">
-                <Route index element={<UpdateInventory />} />
+                </Route>
+                <Route path="categories">
+                  <Route index element={<Categories />} />
+                </Route>
+                <Route path="subcategories">
+                  <Route index element={<SubCategories />} />
+                </Route>
+                <Route path="brands-categories">
+                  <Route index element={<BrandsCategory />} />
+                </Route>
+                <Route path="brands">
+                  <Route index element={<Brands />} />
+                  <Route path="deactivated" element={<DeactivatedBrands />} />
+                </Route>
+                <Route path="coupons">
+                  <Route index element={<Coupons />} />
+                </Route>
+                <Route path="messages">
+                  <Route
+                    index
+                    path="sent-messages"
+                    element={<SentMessages />}
+                  />
+                  <Route
+                    path="received-messages"
+                    element={<ReceivedMessages />}
+                  />
+                </Route>
+                <Route path="shipping">
+                  <Route
+                    index
+                    path="zip-codes"
+                    element={<ShippingZipCodes />}
+                  />
+                </Route>
+                <Route path="general-settings">
+                  <Route index path="logo" element={<Logo />} />
+                  <Route path="favicon" element={<Favicon />} />
+                  <Route path="socials" element={<SocialLinks />} />
+                </Route>
+                <Route path="update-inventory">
+                  <Route index element={<UpdateInventory />} />
+                </Route>
               </Route>
             </Route>
           </Route>

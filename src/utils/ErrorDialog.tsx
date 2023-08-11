@@ -35,7 +35,7 @@ const ErrorDialog = ({ error }: { error: string | null }) => {
 
   useEffect(() => {
     if (
-      error === "You're not authorized to perform this action" &&
+      error === "You are not authorized to perform this action" &&
       pathname !== "/login"
     ) {
       setOpen(true);
