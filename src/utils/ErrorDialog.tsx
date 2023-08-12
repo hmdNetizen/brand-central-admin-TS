@@ -30,17 +30,17 @@ const ErrorDialog = ({ error }: { error: string | null }) => {
     setOpen(false);
 
     logout();
-    navigate("/login", { replace: true });
+    navigate("/login", { state: { from: location } });
   };
 
-  useEffect(() => {
-    if (
-      error === "You are not authorized to perform this action" &&
-      pathname !== "/login"
-    ) {
-      setOpen(true);
-    }
-  }, [error, pathname]);
+  // useEffect(() => {
+  //   if (
+  //     error === "You are not authorized to perform this action" &&
+  //     pathname !== "/login"
+  //   ) {
+  //     setOpen(true);
+  //   }
+  // }, [error, pathname]);
 
   return (
     <ShowDialog width={600} openModal={open} handleClose={handleClick}>

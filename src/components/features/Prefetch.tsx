@@ -153,7 +153,10 @@ const Prefetch = () => {
   }, []);
 
   useEffect(() => {
-    if (accessToken) loadAdminProfile(navigate);
+    if (accessToken) {
+      loadAdminProfile(navigate);
+      getAllPreOrders();
+    }
   }, [accessToken]);
 
   useEffect(() => {
@@ -165,12 +168,6 @@ const Prefetch = () => {
     getAllSiteData();
     fetchAllProducts();
   }, []);
-
-  useEffect(() => {
-    if (accessToken) {
-      getAllPreOrders();
-    }
-  }, [accessToken]);
 
   return <Outlet />;
 };

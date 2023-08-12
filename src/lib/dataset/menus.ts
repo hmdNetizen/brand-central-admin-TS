@@ -121,20 +121,20 @@ export const menus = [
       },
     ],
   },
-  {
-    id: 5,
-    title: "Salespersons",
-    icon: SalesPeopleIcon,
-    path: "/dashboard/salespersons",
-    subMenus: [
-      { subId: 0, title: "Salespersons List", path: "/dashboard/salespersons" },
-      {
-        subId: 1,
-        title: "Deactivated Salespersons",
-        path: "/dashboard/salespersons/deactivated",
-      },
-    ],
-  },
+  // {
+  //   id: 5,
+  //   title: "Salespersons",
+  //   icon: SalesPeopleIcon,
+  //   path: "/dashboard/salespersons",
+  //   subMenus: [
+  //     { subId: 0, title: "Salespersons List", path: "/dashboard/salespersons" },
+  //     {
+  //       subId: 1,
+  //       title: "Deactivated Salespersons",
+  //       path: "/dashboard/salespersons/deactivated",
+  //     },
+  //   ],
+  // },
   {
     id: 6,
     title: "Manage Categories",
