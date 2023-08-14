@@ -74,7 +74,7 @@ const BestSellersProducts = () => {
 
   return (
     <ProductPageLayout
-      title="Weekly Offers Products"
+      title="Best Sellers Products"
       page={page}
       setPage={setPage}
       rowsPerPage={rowsPerPage}
