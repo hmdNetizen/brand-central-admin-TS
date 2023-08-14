@@ -14,6 +14,7 @@ import { UserProfileReturnedPayload } from "../user/UserTypes";
 import { toast } from "react-toastify";
 import { capitalizeFirstLetters } from "src/lib/helpers";
 import { AxiosError } from "axios";
+import { logout } from "../auth";
 
 const initialState: initStateTypes = {
   loadingCustomers: false,
@@ -49,13 +50,19 @@ export const getAllCustomers = createAsyncThunk(
       };
     } catch (error: AxiosError | any) {
       if (error.response) {
-        return thunkAPI.rejectWithValue(error.response.data.error);
+        if (
+          error.response.data.error ===
+          "You are not authorized to perform this action"
+        ) {
+          thunkAPI.dispatch(logout());
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        } else {
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        }
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue(
-          "Error occurred while fetching customers"
-        );
+        return thunkAPI.rejectWithValue("Something went wrong. Try again.");
       }
     }
   }
@@ -129,13 +136,19 @@ export const getSingleCustomer = createAsyncThunk(
       return result.data;
     } catch (error: AxiosError | any) {
       if (error.response) {
-        return thunkAPI.rejectWithValue(error.response.data.error);
+        if (
+          error.response.data.error ===
+          "You are not authorized to perform this action"
+        ) {
+          thunkAPI.dispatch(logout());
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        } else {
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        }
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue(
-          "Error occurred while fetching customer information"
-        );
+        return thunkAPI.rejectWithValue("Something went wrong. Try again.");
       }
     }
   }
@@ -153,13 +166,19 @@ export const handleToggleCustomerBlock = createAsyncThunk(
       return details;
     } catch (error: AxiosError | any) {
       if (error.response) {
-        return thunkAPI.rejectWithValue(error.response.data.error);
+        if (
+          error.response.data.error ===
+          "You are not authorized to perform this action"
+        ) {
+          thunkAPI.dispatch(logout());
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        } else {
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        }
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue(
-          "Something went wrong. Please try again."
-        );
+        return thunkAPI.rejectWithValue("Something went wrong. Try again.");
       }
     }
   }
@@ -176,13 +195,19 @@ export const unblockCustomer = createAsyncThunk(
       return customerId;
     } catch (error: AxiosError | any) {
       if (error.response) {
-        return thunkAPI.rejectWithValue(error.response.data.error);
+        if (
+          error.response.data.error ===
+          "You are not authorized to perform this action"
+        ) {
+          thunkAPI.dispatch(logout());
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        } else {
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        }
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue(
-          "Something went wrong. Please try again."
-        );
+        return thunkAPI.rejectWithValue("Something went wrong. Try again.");
       }
     }
   }
@@ -262,13 +287,19 @@ export const getCustomerOrders = createAsyncThunk(
       };
     } catch (error: AxiosError | any) {
       if (error.response) {
-        return thunkAPI.rejectWithValue(error.response.data.error);
+        if (
+          error.response.data.error ===
+          "You are not authorized to perform this action"
+        ) {
+          thunkAPI.dispatch(logout());
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        } else {
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        }
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue(
-          "Error occurred while fetching customer orders"
-        );
+        return thunkAPI.rejectWithValue("Something went wrong. Try again.");
       }
     }
   }
