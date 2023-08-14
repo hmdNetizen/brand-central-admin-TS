@@ -103,13 +103,19 @@ export const toggleCouponActivation = createAsyncThunk(
       return result.data;
     } catch (error: AxiosError | any) {
       if (error.response) {
-        return thunkAPI.rejectWithValue(error.response.data.error);
+        if (
+          error.response.data.error ===
+          "You are not authorized to perform this action"
+        ) {
+          thunkAPI.dispatch(logout());
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        } else {
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        }
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue(
-          "Something went wrong. Please try again."
-        );
+        return thunkAPI.rejectWithValue("Something went wrong. Try again.");
       }
     }
   }
