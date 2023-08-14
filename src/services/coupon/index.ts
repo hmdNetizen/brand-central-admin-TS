@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import React from "react";
 import { toast } from "react-toastify";
+import { logout } from "../auth";
 import axios from "../axios";
 import {
   InitStateType,
@@ -38,13 +39,19 @@ export const getAllCoupons = createAsyncThunk(
       };
     } catch (error: AxiosError | any) {
       if (error.response) {
-        return thunkAPI.rejectWithValue(error.response.data.error);
+        if (
+          error.response.data.error ===
+          "You are not authorized to perform this action"
+        ) {
+          thunkAPI.dispatch(logout());
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        } else {
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        }
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue(
-          "Error occurred while fetching coupons"
-        );
+        return thunkAPI.rejectWithValue("Something went wrong. Try again.");
       }
     }
   }
