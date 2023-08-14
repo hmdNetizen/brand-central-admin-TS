@@ -14,6 +14,7 @@ import { constructContent } from "src/lib/helpers";
 import { NotificiationEmailRequestType } from "../pre-orders/PreOrderTypes";
 import { updatePreOrderMultiples } from "../pre-orders";
 import { AxiosError } from "axios";
+import { logout } from "../auth";
 
 const initialState: initStateTypes = {
   loading: false,
@@ -52,13 +53,19 @@ export const getAllSentMessages = createAsyncThunk(
       };
     } catch (error: AxiosError | any) {
       if (error.response) {
-        return thunkAPI.rejectWithValue(error.response.data.error);
+        if (
+          error.response.data.error ===
+          "You are not authorized to perform this action"
+        ) {
+          thunkAPI.dispatch(logout());
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        } else {
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        }
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue(
-          "Error occurred while fetching messages"
-        );
+        return thunkAPI.rejectWithValue("Something went wrong. Try again.");
       }
     }
   }
@@ -130,13 +137,19 @@ export const getAllReceivedMessages = createAsyncThunk(
       };
     } catch (error: AxiosError | any) {
       if (error.response) {
-        return thunkAPI.rejectWithValue(error.response.data.error);
+        if (
+          error.response.data.error ===
+          "You are not authorized to perform this action"
+        ) {
+          thunkAPI.dispatch(logout());
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        } else {
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        }
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue(
-          "Error occurred while fetching messages"
-        );
+        return thunkAPI.rejectWithValue("Something went wrong. Try again.");
       }
     }
   }
@@ -325,13 +338,19 @@ export const sendNotificationEmail = createAsyncThunk(
       };
     } catch (error: AxiosError | any) {
       if (error.response) {
-        return thunkAPI.rejectWithValue(error.response.data.error);
+        if (
+          error.response.data.error ===
+          "You are not authorized to perform this action"
+        ) {
+          thunkAPI.dispatch(logout());
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        } else {
+          return thunkAPI.rejectWithValue(error.response.data.error);
+        }
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue(
-          "Email could not be sent. Please try again."
-        );
+        return thunkAPI.rejectWithValue("Email could not be sent. Try again.");
       }
     }
   }
