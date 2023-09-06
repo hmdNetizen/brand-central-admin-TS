@@ -467,11 +467,16 @@ export const invoiceColumns: TableHeaderColumnTypes[] = [
   },
   {
     id: 3,
-    label: "Details",
+    label: "Product Codes",
     align: "left",
   },
   {
     id: 4,
+    label: "Details",
+    align: "left",
+  },
+  {
+    id: 5,
     label: "Total",
     align: "center",
   },

@@ -20,16 +20,27 @@ const OrderedProductsItem = (props: OrderProductsItemProps) => {
   const {
     order: { product, productQuantity, productTotalCost },
   } = props;
-  const { id, image, itemCode, brandName, name, price } = product;
+  const { id, image, itemCode, brandName, name, price, productUPC } = product;
 
   return (
     <TableRow hover role="checkbox" tabIndex={-1} key={id}>
       <TableCell>
         <ProductImage src={image} alt={`${name} icon`} />
       </TableCell>
-      {/* <TableCell>{itemCode}</TableCell> */}
       <TableCell>{brandName}</TableCell>
-      <TableCell style={{ minWidth: 250 }}>{name}</TableCell>
+      <TableCell style={{ minWidth: 200 }}>{name}</TableCell>
+      <TableCell>
+        <p>
+          <span style={{ fontWeight: 700, fontSize: "1.3rem" }}>
+            Item Code:
+          </span>{" "}
+          {itemCode}
+        </p>
+        <p>
+          <span style={{ fontWeight: 700, fontSize: "1.3rem" }}>UPC:</span>{" "}
+          {productUPC}
+        </p>
+      </TableCell>
       <TableCell style={{ minWidth: 100 }}>
         <Typography variant="body1" style={{ fontWeight: 600 }}>
           <span>Price: </span>${price}

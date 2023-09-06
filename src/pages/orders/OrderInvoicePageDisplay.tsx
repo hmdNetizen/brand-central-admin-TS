@@ -217,7 +217,7 @@ const OrderInvoicePageDisplay = () => {
                   columnSpacing={8}
                   justifyContent="flex-end"
                   py={2}
-                  pr={4}
+                  pr={1}
                 >
                   <Grid item>
                     <Typography variant="h5" sx={{ fontWeight: 600 }}>
@@ -239,7 +239,7 @@ const OrderInvoicePageDisplay = () => {
                   columnSpacing={8}
                   justifyContent="flex-end"
                   py={1}
-                  pr={4}
+                  pr={1}
                 >
                   <Grid item>
                     <Typography variant="h4" sx={{ fontWeight: 600 }}>
