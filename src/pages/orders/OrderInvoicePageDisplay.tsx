@@ -52,8 +52,6 @@ const OrderInvoicePageDisplay = () => {
 
   useEffect(() => {
     getSingleOrder(orderId!);
-
-    // eslint-disable-next-line
   }, [orderId]);
 
   useEffect(() => {
