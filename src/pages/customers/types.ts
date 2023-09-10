@@ -37,21 +37,6 @@ export type CustomerProfileExcerpt = Pick<
   | "businesContact"
 >;
 
-export type NewCustomerDataType = Pick<
-  UserProfileReturnedPayload,
-  | "companyName"
-  | "companyEmail"
-  | "companyPhoneNumber"
-  | "businessType"
-  | "paymentMethod"
-  | "priceCode"
-  | "taxID"
-  | "primaryContactName"
-  | "primaryContactRole"
-  | "primaryContactPhoneNumber"
-  | "primaryContactEmail"
->;
-
 export type EditCustomerProps = {
   openEditCustomer: boolean;
   setOpenEditCustomer: React.Dispatch<React.SetStateAction<boolean>>;
