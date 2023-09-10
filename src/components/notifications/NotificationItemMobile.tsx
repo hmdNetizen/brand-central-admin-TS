@@ -28,6 +28,7 @@ import {
 import { NotificationItemProps } from "./types";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { EmailList, MailDataTypes } from "../messages/types";
+import placeholderImage from "src/assets/images/not-found-img.png";
 
 const initialState = {
   companyEmail: "",
@@ -201,7 +202,14 @@ const NotificationItemMobile = (props: NotificationItemProps) => {
               return (
                 <Fragment key={_id}>
                   <Grid item>
-                    <ProductImage src={featuredImage} alt={productName} />
+                    <ProductImage
+                      src={
+                        product.hasImage
+                          ? product.featuredImage
+                          : placeholderImage
+                      }
+                      alt={productName}
+                    />
                   </Grid>
                   <Grid item pl={1}>
                     <Typography variant="body2" color="secondary">

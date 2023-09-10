@@ -20,6 +20,7 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { EmailList, MailDataTypes } from "../messages/types";
 import { CompanyName, Container, EmailButton, IgnoreButton } from "./styles";
 import { NotificationItemProps } from "./types";
+import placeholderImage from "src/assets/images/not-found-img.png"
 
 const initialState = {
   companyEmail: "",
@@ -192,7 +193,7 @@ const NotificationItem = (props: NotificationItemProps) => {
             <Grid container direction="column" key={product._id} mb={2}>
               <Grid item>
                 <img
-                  src={product.featuredImage}
+                  src={product.hasImage ? product.featuredImage : placeholderImage}
                   alt={product.productName}
                   style={{ width: 50 }}
                 />
