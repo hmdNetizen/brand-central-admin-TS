@@ -352,51 +352,51 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
     });
   };
 
-  // useEffect(() => {
-  //   if (customerProfileData) {
-  //     const newCustomerData = { ...initialState };
-  //     const newBusinessContact = { ...contactInitialState };
+  useEffect(() => {
+    if (customerProfileData) {
+      const newCustomerData = { ...initialState };
+      const newBusinessContact = { ...contactInitialState };
 
-  //     for (const key in customerProfileData) {
-  //       if (key in newCustomerData) {
-  //         // @ts-ignore
-  //         newCustomerData[key as keyof CustomerProfileExcerpt] =
-  //           customerProfileData[key as keyof CustomerProfileExcerpt];
+      for (const key in customerProfileData) {
+        if (key in newCustomerData) {
+          // @ts-ignore
+          newCustomerData[key as keyof CustomerProfileExcerpt] =
+            customerProfileData[key as keyof CustomerProfileExcerpt];
 
-  //         if (
-  //           key === "primaryContactRole" &&
-  //           roles.indexOf(customerProfileData.primaryContactRole) === -1
-  //         ) {
-  //           newCustomerData[key] = "Others";
-  //           setCustomPrimaryContactRole(
-  //             customerProfileData["primaryContactRole"]
-  //           );
-  //         }
+          if (
+            key === "primaryContactRole" &&
+            roles.indexOf(customerProfileData.primaryContactRole) === -1
+          ) {
+            newCustomerData[key] = "Others";
+            setCustomPrimaryContactRole(
+              customerProfileData["primaryContactRole"]
+            );
+          }
 
-  //         if (customerProfileData.primaryContactEmail === null) {
-  //           newCustomerData["primaryContactEmail"] = "";
-  //         }
+          if (customerProfileData.primaryContactEmail === null) {
+            newCustomerData["primaryContactEmail"] = "";
+          }
 
-  //         if (customerProfileData.primaryContactPhoneNumber === null) {
-  //           newCustomerData["primaryContactPhoneNumber"] = "";
-  //         }
+          if (customerProfileData.primaryContactPhoneNumber === null) {
+            newCustomerData["primaryContactPhoneNumber"] = "";
+          }
 
-  //         setCustomerData(newCustomerData);
-  //       }
-  //     }
+          setCustomerData(newCustomerData);
+        }
+      }
 
-  //     for (const key in customerProfileData.businesContact) {
-  //       if (key in newBusinessContact) {
-  //         newBusinessContact[key as keyof ContactInitialStateType] =
-  //           customerProfileData.businesContact[
-  //             key as keyof ContactInitialStateType
-  //           ];
-  //       }
-  //     }
+      for (const key in customerProfileData.businesContact) {
+        if (key in newBusinessContact) {
+          newBusinessContact[key as keyof ContactInitialStateType] =
+            customerProfileData.businesContact[
+              key as keyof ContactInitialStateType
+            ];
+        }
+      }
 
-  //     setBusinessContact(newBusinessContact);
-  //   }
-  // }, [customerProfileData]);
+      setBusinessContact(newBusinessContact);
+    }
+  }, [customerProfileData]);
 
   return (
     <ShowDialog
