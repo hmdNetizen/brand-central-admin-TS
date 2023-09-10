@@ -53,7 +53,7 @@ export const fetchAllProducts = createAsyncThunk(
   "fetch-all-products",
   async (_, thunkAPI) => {
     try {
-      const { data } = await axios.get(`/${config.product.get}`);
+      const { data } = await axios.get(config.product.get);
       const result = data as { data: ProductTypes[] };
 
       return result.data;
