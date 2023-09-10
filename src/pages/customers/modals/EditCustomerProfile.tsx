@@ -505,7 +505,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
               />
             </Grid>
           </Grid>
-          {/* <Grid
+          <Grid
             item
             container
             columnGap={3}
@@ -537,8 +537,8 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 error={cityError}
               />
             </Grid>
-          </Grid> */}
-          {/* <Grid
+          </Grid>
+          <Grid
             item
             container
             columnGap={3}
@@ -567,8 +567,8 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 onChange={handleSelectChange}
               />
             </Grid>
-          </Grid> */}
-          {/* <Grid
+          </Grid>
+          <Grid
             item
             container
             columnGap={3}
@@ -594,8 +594,8 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 onChange={handleSelectChange}
               />
             </Grid>
-          </Grid> */}
-          {/* <Grid
+          </Grid>
+          <Grid
             item
             container
             columnGap={3}
@@ -630,8 +630,8 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 errorMessage={priceCodeError}
               />
             </Grid>
-          </Grid> */}
-          {/* <Grid
+          </Grid>
+          <Grid
             item
             container
             columnGap={3}
@@ -663,8 +663,8 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 error={primaryContactEmailError}
               />
             </Grid>
-          </Grid> */}
-          {/* <Grid
+          </Grid>
+          <Grid
             item
             container
             columnGap={3}
@@ -705,8 +705,8 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 />
               )}
             </Grid>
-          </Grid> */}
-          {/* <Grid
+          </Grid>
+          <Grid
             item
             container
             justifyContent="center"
@@ -733,7 +733,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 Save
               </SubmitButton>
             </Grid>
-          </Grid> */}
+          </Grid>
         </FormContainer>
       </ContentContainer>
       {/* <Typography variant="h2">Edit Customer</Typography> */}
