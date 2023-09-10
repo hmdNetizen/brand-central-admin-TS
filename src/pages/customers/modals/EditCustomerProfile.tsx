@@ -385,10 +385,10 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
         }
       }
 
-      for (const key in customerProfileData.businesContact) {
+      for (const key in customerProfileData?.businesContact) {
         if (key in newBusinessContact) {
           newBusinessContact[key as keyof ContactInitialStateType] =
-            customerProfileData.businesContact[
+            customerProfileData?.businesContact[
               key as keyof ContactInitialStateType
             ];
         }
