@@ -482,7 +482,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
             direction={matchesXS ? "column" : "row"}
           >
             <Grid item sx={{ flex: 1 }}>
-              <PhoneNumberInput
+              {/* <PhoneNumberInput
                 name="companyPhoneNumber"
                 value={companyPhoneNumber}
                 label="Company Phone Number"
@@ -491,10 +491,10 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 onChange={handleCompanyPhoneNumber}
                 error={companyPhoneNumberError}
                 labelColor={theme.palette.secondary.main}
-              />
+              /> */}
             </Grid>
             <Grid item sx={{ flex: 1 }}>
-              {/* <CustomFormInput
+              <CustomFormInput
                 type="text"
                 label="Company Address"
                 labelId="address"
@@ -502,7 +502,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 value={address}
                 placeholder="Enter Company Address"
                 onChange={handleContactChange}
-              /> */}
+              />
             </Grid>
           </Grid>
           {/* <Grid
