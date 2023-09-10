@@ -673,7 +673,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
             direction={matchesXS ? "column" : "row"}
           >
             <Grid item sx={{ flex: 1 }}>
-              <PhoneNumberInput
+              {/* <PhoneNumberInput
                 name="primaryContactPhoneNumber"
                 value={primaryContactPhoneNumber}
                 label="Primary Contact Phone Number"
@@ -681,7 +681,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 placeholder="Enter Primary Contact Phone Number"
                 onChange={handlePrimaryContactPhoneNumber}
                 error={primaryContactPhoneNumberError}
-              />
+              /> */}
             </Grid>
             <Grid item sx={{ flex: 1 }}>
               <CustomSelect
