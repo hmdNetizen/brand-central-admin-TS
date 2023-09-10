@@ -493,7 +493,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
               />
             </Grid>
             <Grid item sx={{ flex: 1 }}>
-              <CustomFormInput
+              {/* <CustomFormInput
                 type="text"
                 label="Company Address"
                 labelId="address"
@@ -501,7 +501,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 value={address}
                 placeholder="Enter Company Address"
                 onChange={handleContactChange}
-              />
+              /> */}
             </Grid>
           </Grid>
           {/* <Grid
