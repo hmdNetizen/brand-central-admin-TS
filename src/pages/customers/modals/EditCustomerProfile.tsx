@@ -425,7 +425,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
             </IconButton>
           </Grid>
         </Grid>
-        {/* <FormContainer
+        <FormContainer
           item
           container
           direction="column"
@@ -469,12 +469,11 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 value={companyEmail}
                 placeholder="Enter Company Email"
                 onChange={handleChange}
-                // error={companyEmailError}
                 disabled
               />
             </Grid>
           </Grid>
-          <Grid
+          {/* <Grid
             item
             container
             columnGap={3}
@@ -734,10 +733,10 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 Save
               </SubmitButton>
             </Grid>
-          </Grid>
-        </FormContainer> */}
+          </Grid> */}
+        </FormContainer>
       </ContentContainer>
-      <Typography variant="h2">Edit Customer</Typography>
+      {/* <Typography variant="h2">Edit Customer</Typography> */}
     </ShowDialog>
   );
 };
