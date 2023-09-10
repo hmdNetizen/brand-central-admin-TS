@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ShowDialog from "src/utils/ShowDialog";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -404,7 +404,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
       handleClose={() => setOpenEditCustomer(false)}
       width={matchesXS ? "100%" : matchesSM ? "85%" : 800}
     >
-      {/* <ContentContainer container direction="column">
+      <ContentContainer container direction="column">
         <Grid
           item
           container
@@ -425,7 +425,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
             </IconButton>
           </Grid>
         </Grid>
-        <FormContainer
+        {/* <FormContainer
           item
           container
           direction="column"
@@ -735,8 +735,8 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
               </SubmitButton>
             </Grid>
           </Grid>
-        </FormContainer>
-      </ContentContainer> */}
+        </FormContainer> */}
+      </ContentContainer>
       <Typography variant="h2">Edit Customer</Typography>
     </ShowDialog>
   );
