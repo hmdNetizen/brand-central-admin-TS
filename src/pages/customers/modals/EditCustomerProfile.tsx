@@ -482,7 +482,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
             direction={matchesXS ? "column" : "row"}
           >
             <Grid item sx={{ flex: 1 }}>
-              {/* <PhoneNumberInput
+              <PhoneNumberInput
                 name="companyPhoneNumber"
                 value={companyPhoneNumber}
                 label="Company Phone Number"
@@ -490,8 +490,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 placeholder="Enter Company Phone Number"
                 onChange={handleCompanyPhoneNumber}
                 error={companyPhoneNumberError}
-                labelColor={theme.palette.secondary.main}
-              /> */}
+              />
             </Grid>
             <Grid item sx={{ flex: 1 }}>
               <CustomFormInput
@@ -673,7 +672,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
             direction={matchesXS ? "column" : "row"}
           >
             <Grid item sx={{ flex: 1 }}>
-              {/* <PhoneNumberInput
+              <PhoneNumberInput
                 name="primaryContactPhoneNumber"
                 value={primaryContactPhoneNumber}
                 label="Primary Contact Phone Number"
@@ -681,7 +680,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 placeholder="Enter Primary Contact Phone Number"
                 onChange={handlePrimaryContactPhoneNumber}
                 error={primaryContactPhoneNumberError}
-              /> */}
+              />
             </Grid>
             <Grid item sx={{ flex: 1 }}>
               <CustomSelect

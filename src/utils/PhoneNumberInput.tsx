@@ -1,5 +1,6 @@
 import React from "react";
-import PhoneInput from "react-phone-input-2";
+import PI from "react-phone-input-2";
+const PhoneInput = (PI as any).default !== null ? (PI as any).default : PI;
 import "react-phone-input-2/lib/style.css";
 import "./styles/PhoneNumberInput.css";
 import { styled } from "@mui/material/styles";
