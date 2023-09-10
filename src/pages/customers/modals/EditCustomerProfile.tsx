@@ -490,6 +490,7 @@ const EditCustomerProfile = (props: EditCustomerProps) => {
                 placeholder="Enter Company Phone Number"
                 onChange={handleCompanyPhoneNumber}
                 error={companyPhoneNumberError}
+                labelColor={theme.palette.secondary.main}
               />
             </Grid>
             <Grid item sx={{ flex: 1 }}>
