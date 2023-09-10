@@ -26,7 +26,9 @@ export const uploadFile = createAsyncThunk(
       onUploadProgress: (progressEvent: AxiosProgressEvent) => {
         thunkAPI.dispatch(
           setUploadPercentage(
-            Math.round((progressEvent.loaded * 100) / progressEvent.total!)
+            Number(
+              Math.round((progressEvent.loaded * 100) / progressEvent.total!)
+            )
           )
         );
       },

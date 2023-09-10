@@ -184,7 +184,9 @@ export const updateInventoryProducts = createAsyncThunk(
         thunkAPI.dispatch(setUploadingFileText());
         thunkAPI.dispatch(
           setUploadPercentage(
-            Math.round((progressEvent.loaded * 100) / progressEvent.total!)
+            Number(
+              Math.round((progressEvent.loaded * 100) / progressEvent.total!)
+            )
           )
         );
       },
@@ -192,7 +194,9 @@ export const updateInventoryProducts = createAsyncThunk(
         thunkAPI.dispatch(setUpdatingInventory("Updating Inventory"));
         thunkAPI.dispatch(
           setUploadPercentage(
-            Math.round((progressEvent.loaded * 100) / progressEvent.total!)
+            Number(
+              Math.round((progressEvent.loaded * 100) / progressEvent.total!)
+            )
           )
         );
       },
