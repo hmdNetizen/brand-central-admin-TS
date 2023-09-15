@@ -1,7 +1,9 @@
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Typography from "@mui/material/Typography";
+import Chip from "@mui/material/Chip";
 import { styled } from "@mui/material/styles";
+import StarsIcon from "@mui/icons-material/Stars";
 
 import { OrdersProductsType } from "src/services/orders/OrderTypes";
 
@@ -12,19 +14,36 @@ const ProductImage = styled("img")({
   maxHeight: 100,
 });
 
+const StyledChip = styled(Chip)(({ theme }) => ({
+  position: "absolute",
+  top: 2,
+  left: 5,
+  fontSize: "1rem",
+  color: "#fff",
+  textAlign: "center",
+  background: theme.palette.primary.light,
+  height: 20,
+}));
+
 type OrderProductsItemProps = {
   order: OrdersProductsType;
 };
 
 const OrderedProductsItem = (props: OrderProductsItemProps) => {
   const {
-    order: { product, productQuantity, productTotalCost },
+    order: { product, productQuantity, productTotalCost, isSpecial },
   } = props;
   const { id, image, itemCode, brandName, name, price, productUPC } = product;
 
   return (
     <TableRow hover role="checkbox" tabIndex={-1} key={id}>
-      <TableCell>
+      <TableCell style={{ position: "relative" }}>
+        {isSpecial && (
+          <StyledChip
+            label="Special"
+            icon={<StarsIcon style={{ color: "#e2cc4a", fontSize: 16 }} />}
+          />
+        )}
         <ProductImage src={image} alt={`${name} icon`} />
       </TableCell>
       <TableCell>{brandName}</TableCell>

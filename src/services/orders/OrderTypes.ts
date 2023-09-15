@@ -34,6 +34,7 @@ export type OrdersProductsType = {
   };
   productQuantity: number;
   productTotalCost: number;
+  isSpecial: boolean;
 };
 
 export type OrderReturnedPayload = {
