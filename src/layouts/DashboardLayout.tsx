@@ -1,5 +1,7 @@
 import React, { useState, Fragment, useEffect } from "react";
 import Header from "./header/Header";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 import { Outlet, Params, useParams, useLocation } from "react-router-dom";
 import AsideNavigation from "./aside/AsideNavigation";
 import { OutletContainer } from "src/layouts/DashLayoutStyles";
@@ -11,7 +13,10 @@ type DashLayoutProps = {
 };
 
 const DashboardLayout = (props: DashLayoutProps) => {
+  const theme = useTheme();
   const { menuSlideIn, setMenuSlideIn } = props;
+
+  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
 
   const [selectedMenu, setSelectedMenu] = useState<number>(0);
   const [selectedSubMenu, setSelectedSubMenu] = useState<number>(0);
@@ -61,6 +66,14 @@ const DashboardLayout = (props: DashLayoutProps) => {
       );
     });
   }, [selectedSubMenu, pathname]);
+
+  useEffect(() => {
+    if (matchesSM) {
+      setMenuSlideIn(true);
+    } else {
+      setMenuSlideIn(false);
+    }
+  }, [matchesSM]);
 
   return (
     <Fragment>
