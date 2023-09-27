@@ -59,7 +59,7 @@ export const login = createAsyncThunk(
 
         setTimeout(() => {
           navigate(path, { replace: true });
-          // thunkAPI.dispatch(clearSuccessMessage());
+          thunkAPI.dispatch(clearSuccessMessage());
         }, 2000);
 
         const token = result.data.token;
@@ -102,6 +102,9 @@ const authSlice = createSlice({
       state.loginSuccess = "";
       state.error = null;
     },
+    clearSuccessMessage: (state) => {
+      state.loginSuccess = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -124,5 +127,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, clearSuccessMessage } = authSlice.actions;
 export default authSlice.reducer;
