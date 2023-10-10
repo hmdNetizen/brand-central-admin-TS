@@ -256,7 +256,7 @@ const FormContainer = (props: FormContainerProps) => {
             <CustomFormInput
               type="number"
               label=""
-              name="minPurchaseAmount"
+              name="minimumPurchaseAmount"
               value={minimumPurchaseAmount}
               placeholder="Enter Minimum Purchase Amount"
               onChange={onChange}
