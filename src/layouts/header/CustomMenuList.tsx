@@ -26,13 +26,13 @@ const accountMenus = [
     id: 0,
     title: "Edit Profile",
     icon: ManageAccountsIcon,
-    path: "/admin/profile",
+    path: "/dashboard/profile",
   },
   {
     id: 1,
     title: "Change Password",
     icon: LockResetRoundedIcon,
-    path: "/admin/reset-password",
+    path: "/dashboard/reset-password",
   },
 ];
 
@@ -135,7 +135,7 @@ const CustomMenuList = (props: MenuListProps) => {
         }}
         sx={{ background: !message.isRead ? "#f6f6f6" : undefined }}
         component={Link}
-        to="/admin/received-emails"
+        to="/dashboard/received-emails"
       >
         <div>
           <ListItemIcon>
@@ -195,7 +195,7 @@ const CustomMenuList = (props: MenuListProps) => {
         markCustomerNotificationsAsRead(notification._id);
       }}
       component={Link}
-      to={`/admin/customers/${notification.customerId}`}
+      to={`/dashboard/customers/${notification.customerId}`}
       sx={{ background: !notification.isRead ? "#f6f6f6" : undefined }}
     >
       <div>
@@ -222,7 +222,7 @@ const CustomMenuList = (props: MenuListProps) => {
         markOrdersNotificationsAsRead(order._id);
       }}
       component={Link}
-      to={`/admin/orders/${order.orderId}`}
+      to={`/dashboard/orders/${order.orderId}`}
       color="secondary"
       sx={{ background: !order.isRead ? "#f6f6f6" : undefined }}
     >
