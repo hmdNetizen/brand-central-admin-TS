@@ -15,6 +15,7 @@ import Spinner from "src/utils/Spinner";
 import placeholderAvatar from "src/assets/images/placeholder-avatar.png";
 import CustomIconButton from "src/utils/CustomIconButton";
 import SalespersonDetailsTable from "src/components/salespersons/SalespersonDetailsTable";
+import SalespersonOrdersTable from "src/components/salespersons/orders/SalespersonOrdersTable";
 
 export const DetailsWrapper = styled(Grid, {
   shouldForwardProp: (prop) => prop !== "menuSlideIn",
@@ -55,8 +56,17 @@ const SalespersonProfileDetails = ({
   const singleSalesperson = useTypedSelector(
     (state) => state.salesPersons.singleSalesperson
   );
+  const loadingOrders = useTypedSelector(
+    (state) => state.salespersonOrders.loadingOrders
+  );
+  const salespersonOrders = useTypedSelector(
+    (state) => state.salespersonOrders.salespersonOrders
+  );
+  const totalOrders = useTypedSelector(
+    (state) => state.salespersonOrders.totalOrders
+  );
 
-  const { getSalespersonProfile } = useActions();
+  const { getSalespersonProfile, getSingleSalespersonOrders } = useActions();
 
   const { salespersonId } = useParams();
 
@@ -67,6 +77,7 @@ const SalespersonProfileDetails = ({
   useEffect(() => {
     getSalespersonProfile(salespersonId!);
   }, [salespersonId]);
+
   return (
     <Container container direction="column">
       <Grid item container alignItems="center" columnSpacing={1}>
@@ -177,10 +188,12 @@ const SalespersonProfileDetails = ({
               <Typography variant="h3">Orders Placed</Typography>
             </Grid>
             <Grid item container>
-              {/* <CustomerOrdersTable
-                customerOrders={customerOrders}
-                loading={loadingCustomerOrders}
-              /> */}
+              <SalespersonOrdersTable
+                salespersonOrders={salespersonOrders}
+                loading={loadingOrders}
+                total={totalOrders}
+                salespersonId={salespersonId}
+              />
             </Grid>
           </Grid>
         </Fragment>

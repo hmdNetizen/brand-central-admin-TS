@@ -6,5 +6,10 @@ export const config = {
   salespersons: {
     get: "/api/salespersons",
     getById: (id: string) => `/api/salespersons/profile/${id}`,
+
+    orders: {
+      getById: (salespersonId: string) =>
+        `/api/salesperson-orders/admin/${salespersonId}`,
+    },
   },
 };

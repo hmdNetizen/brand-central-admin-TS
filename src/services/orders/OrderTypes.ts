@@ -53,6 +53,7 @@ export type OrderReturnedPayload = {
   orderPaymentStatus: string;
   orderPaymentDate: string;
   orderInVoiceNumber: string;
+  deliveryMethod: string;
   shippingAddress: AddressType;
   billingAddress: AddressType;
   shipToAddress: boolean;

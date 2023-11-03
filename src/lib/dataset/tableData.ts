@@ -165,6 +165,16 @@ export const customerOrderColumns: TableHeaderColumnTypes[] = [
   { id: 5, label: "", align: "center" },
 ];
 
+export const salespersonOrdersColumns: TableHeaderColumnTypes[] = [
+  { id: 0, label: "Order ID", align: "left" },
+  { id: 1, label: "Customer", align: "left" },
+  { id: 1, label: "Purchase Date", align: "left" },
+  { id: 2, label: "Amount", align: "left" },
+  { id: 3, label: "Status", align: "center" },
+  { id: 4, label: "", align: "center" },
+  { id: 5, label: "", align: "center" },
+];
+
 export const orderedProductsColumn: TableHeaderColumnTypes[] = [
   {
     id: 0,

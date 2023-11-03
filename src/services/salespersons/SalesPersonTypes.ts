@@ -1,3 +1,5 @@
+import { OrderReturnedPayload } from "../orders/OrderTypes";
+
 export type SalespersonReturnedPayload = {
   _id: string;
   fullName: string;

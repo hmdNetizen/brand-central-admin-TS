@@ -117,7 +117,9 @@ const PagesRoutes = () => {
                   {/* <Route path="blocked" element={<BlockedCustomers />} /> */}
                   <Route
                     path=":salespersonId"
-                    element={<SalespersonProfileDetails />}
+                    element={
+                      <SalespersonProfileDetails menuSlideIn={menuSlideIn} />
+                    }
                   />
                 </Route>
                 <Route path="categories">
