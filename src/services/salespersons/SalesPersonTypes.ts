@@ -1,4 +1,4 @@
-export type SalesPersonReturnedPayload = {
+export type SalespersonReturnedPayload = {
   _id: string;
   fullName: string;
   email: string;
@@ -6,12 +6,21 @@ export type SalesPersonReturnedPayload = {
   phoneNumber: string;
   profileImage: string;
   isActive: boolean;
-  customers: [];
+  createdAt: Date;
+};
+
+export type SalespersonsPayloadTypes = {
+  data: Array<SalespersonReturnedPayload>;
+};
+
+export type SingleSalespersonPayloadTypes = {
+  data: SalespersonReturnedPayload;
 };
 
 export type InitStateType = {
   loadingSalespersons: boolean;
-  salespersons: SalesPersonReturnedPayload[];
-  singleSalesperson: SalesPersonReturnedPayload | null;
+  loadingSingleSalesperson: boolean;
+  salespersons: SalespersonReturnedPayload[];
+  singleSalesperson: SalespersonReturnedPayload | null;
   error: null | string;
 };

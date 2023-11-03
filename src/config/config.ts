@@ -3,4 +3,8 @@ export const config = {
     get: "/api/products",
     getById: (id: string) => `/api/products/${id}`,
   },
+  salespersons: {
+    get: "/api/salespersons",
+    getById: (id: string) => `/profile/${id}`,
+  },
 };
