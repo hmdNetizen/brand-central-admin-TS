@@ -126,21 +126,31 @@ export const customersListColumns: TableHeaderColumnTypes[] = [
 export const salespeopleListColumns: TableHeaderColumnTypes[] = [
   {
     id: 0,
-    label: "Name",
+    label: "Photo",
     align: "left",
   },
   {
     id: 1,
-    label: "Email",
+    label: "Name",
     align: "left",
   },
   {
     id: 2,
-    label: "Status",
+    label: "Email",
     align: "left",
   },
   {
     id: 3,
+    label: "Phone",
+    align: "left",
+  },
+  {
+    id: 4,
+    label: "Status",
+    align: "left",
+  },
+  {
+    id: 5,
     label: "Options",
     align: "left",
   },

@@ -11,6 +11,7 @@ import CustomerItem from "src/components/customers/CustomerItem";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
 import { SelectChangeEvent } from "@mui/material";
 import PageHeadingActions from "src/components/common/PageHeadingActions";
+import PageHeadingWithActionButton from "src/components/common/PageHeadingWithActionButton";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { SalesPersonsPageLayoutProps } from "../types";
 import {
@@ -36,8 +37,8 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
   } = props;
   const theme = useTheme();
 
-  const loadingCustomers = useTypedSelector(
-    (state) => state.customers.loadingCustomers
+  const loadingSalespersons = useTypedSelector(
+    (state) => state.salesPersons.loadingSalespersons
   );
 
   const loadingCustomerAction = useTypedSelector(
@@ -72,11 +73,12 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
         </Typography>
       </Grid>
       <ContainerWrapper item container>
-        <PageHeadingActions
+        <PageHeadingWithActionButton
           filterText={filterText}
           onChange={onChange}
-          rowsPerPage={rowsPerPage.toString()}
+          rowsPerPage={rowsPerPage}
           handleSelectRowsPerPage={handleSelectRowsPerPage}
+          buttonTitle="Create a Salesperson"
         />
         <Grid item container style={{ marginTop: "5rem" }}>
           <Tables
@@ -87,10 +89,10 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
             rowsPerPage={rowsPerPage}
             setRowsPerPage={setRowsPerPage}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
-            loading={loadingCustomers}
+            loading={loadingSalespersons}
             notFoundText="No Salesperson found"
           >
-            {!loadingCustomers &&
+            {!loadingSalespersons &&
               salesPersonsDataset.map((salesperson) => {
                 return (
                   <SalesPersonItem

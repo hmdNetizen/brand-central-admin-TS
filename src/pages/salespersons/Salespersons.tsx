@@ -18,6 +18,8 @@ const Salespersons = () => {
   const [openEditSalesperson, setOpenEditSalesperson] = useState(false);
   const [openDeleteSalesperson, setOpenDeleteSalesperson] = useState(false);
 
+  const { getAllSalespersons } = useActions();
+
   //   const { getAllCustomers, getSearchedCustomers } = useActions();
 
   //   const debounceFilteredCustomers = useCallback(
@@ -35,6 +37,10 @@ const Salespersons = () => {
     //   limit: rowsPerPage,
     // });
   };
+
+  useEffect(() => {
+    getAllSalespersons();
+  }, []);
 
   //   useEffect(() => {
   //     if (!filterText) {

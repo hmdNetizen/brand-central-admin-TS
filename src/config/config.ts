@@ -5,6 +5,6 @@ export const config = {
   },
   salespersons: {
     get: "/api/salespersons",
-    getById: (id: string) => `/profile/${id}`,
+    getById: (id: string) => `/api/salespersons/profile/${id}`,
   },
 };
