@@ -4,6 +4,7 @@ import { config } from "src/config/config";
 import axios from "../axios";
 import {
   InitStateType,
+  SalespersonRequestPayload,
   SalespersonReturnedPayload,
   SalespersonsPayloadTypes,
   SingleSalespersonPayloadTypes,
@@ -12,6 +13,7 @@ import {
 const initialState: InitStateType = {
   loadingSalespersons: false,
   loadingSingleSalesperson: false,
+  loadingRequestAction: false,
   salespersons: [],
   singleSalesperson: null,
   error: null,
@@ -44,6 +46,26 @@ export const getSalespersonProfile = createAsyncThunk(
       const { data } = await axios.get(
         config.salespersons.getById(salespersonId)
       );
+      const result = data as SingleSalespersonPayloadTypes;
+
+      return result.data;
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+      }
+    }
+  }
+);
+
+export const addNewSalesperson = createAsyncThunk(
+  "add-new-salesperson",
+  async (details: SalespersonRequestPayload, thunkAPI) => {
+    try {
+      const { data } = await axios.post(config.salespersons.add, details);
       const result = data as SingleSalespersonPayloadTypes;
 
       return result.data;
@@ -98,6 +120,21 @@ const salespersonsSlice = createSlice({
       .addCase(getSalespersonProfile.rejected, (state, action) => {
         state.loadingSingleSalesperson = false;
 
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(addNewSalesperson.pending, (state) => {
+        state.loadingRequestAction = true;
+      })
+      .addCase(addNewSalesperson.fulfilled, (state, action) => {
+        state.loadingRequestAction = false;
+        state.salespersons = [action.payload, ...state.salespersons];
+        state.error = null;
+      })
+      .addCase(addNewSalesperson.rejected, (state, action) => {
+        state.loadingRequestAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

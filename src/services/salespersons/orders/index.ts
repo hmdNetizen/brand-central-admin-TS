@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { config } from "src/config/config";
 import axios from "src/services/axios";
+import { QueryParams } from "src/services/types";
 import {
   SalespersonOrderInitStateTypes,
   SalespersonOrdersPayloadTypes,

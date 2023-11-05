@@ -15,6 +15,7 @@ const Salespersons = () => {
     (state) => state.salesPersons.salespersons
   );
 
+  const [openAddSalesperson, setOpenAddSalesperson] = useState(false);
   const [openEditSalesperson, setOpenEditSalesperson] = useState(false);
   const [openDeleteSalesperson, setOpenDeleteSalesperson] = useState(false);
 
@@ -71,6 +72,8 @@ const Salespersons = () => {
       setOpenEditSalesperson={setOpenEditSalesperson}
       salesPersonsDataset={salesperson}
       onChange={handleSearch}
+      openAddSalesperson={openAddSalesperson}
+      setOpenAddSalesperson={setOpenAddSalesperson}
     />
   );
 };

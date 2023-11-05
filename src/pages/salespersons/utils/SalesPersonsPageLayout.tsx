@@ -19,6 +19,7 @@ import {
   Container,
 } from "src/components/common/styles/PageContainerStyles";
 import SalesPersonItem from "src/components/salespersons/SalesPersonItem";
+import CreateSalesperson from "../modals/CreateSalesperson";
 
 const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
   const {
@@ -34,10 +35,10 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
     openDeleteSalesperson,
     setOpenDeleteSalesperson,
     salesPersonsDataset,
+    setOpenAddSalesperson,
+    openAddSalesperson,
   } = props;
   const theme = useTheme();
-
-  const [OpenCreateSalesperson, setOpenCreateSalesperson] = useState(false);
 
   const loadingSalespersons = useTypedSelector(
     (state) => state.salesPersons.loadingSalespersons
@@ -80,7 +81,7 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
           handleSearch={onChange}
           rowsPerPage={rowsPerPage}
           buttonTitle="Create a Salesperson"
-          setOpen={setOpenCreateSalesperson}
+          setOpen={setOpenAddSalesperson}
           setRowsPerPage={setRowsPerPage}
           setPage={setPage}
           isDeactivatedPage={false}
@@ -111,6 +112,10 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
           </Tables>
         </Grid>
       </ContainerWrapper>
+      <CreateSalesperson
+        openAddSalesperson={openAddSalesperson}
+        setOpenAddSalesperson={setOpenAddSalesperson}
+      />
       {/* <EditCustomerProfile
         openEditCustomer={openEditCustomer}
         setOpenEditCustomer={setOpenEditCustomer}

@@ -19,9 +19,20 @@ export type SingleSalespersonPayloadTypes = {
   data: SalespersonReturnedPayload;
 };
 
+export type SalespersonRequestPayload = {
+  fullName: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  confirmPassword: string;
+  initials: string;
+  profileImage?: string;
+};
+
 export type InitStateType = {
   loadingSalespersons: boolean;
   loadingSingleSalesperson: boolean;
+  loadingRequestAction: boolean;
   salespersons: SalespersonReturnedPayload[];
   singleSalesperson: SalespersonReturnedPayload | null;
   error: null | string;
