@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
@@ -36,6 +36,8 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
     salesPersonsDataset,
   } = props;
   const theme = useTheme();
+
+  const [OpenCreateSalesperson, setOpenCreateSalesperson] = useState(false);
 
   const loadingSalespersons = useTypedSelector(
     (state) => state.salesPersons.loadingSalespersons
@@ -75,10 +77,13 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
       <ContainerWrapper item container>
         <PageHeadingWithActionButton
           filterText={filterText}
-          onChange={onChange}
+          handleSearch={onChange}
           rowsPerPage={rowsPerPage}
-          handleSelectRowsPerPage={handleSelectRowsPerPage}
           buttonTitle="Create a Salesperson"
+          setOpen={setOpenCreateSalesperson}
+          setRowsPerPage={setRowsPerPage}
+          setPage={setPage}
+          isDeactivatedPage={false}
         />
         <Grid item container style={{ marginTop: "5rem" }}>
           <Tables

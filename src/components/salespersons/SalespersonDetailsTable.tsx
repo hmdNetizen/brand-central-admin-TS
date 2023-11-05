@@ -29,7 +29,7 @@ const SalespersonDetailsTable = ({
           </tr>
           <tr>
             <td>Phone Number</td>
-            <td>{phoneNumber}</td>
+            <td>{phoneNumber ? phoneNumber : "N/A"}</td>
           </tr>
           <tr>
             <td>Date Created</td>

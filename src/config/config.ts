@@ -11,5 +11,9 @@ export const config = {
       getById: (salespersonId: string) =>
         `/api/salesperson-orders/admin/${salespersonId}`,
     },
+    customers: {
+      getById: (salespersonId: string) =>
+        `/api/salespersons-customers/admin/${salespersonId}`,
+    },
   },
 };

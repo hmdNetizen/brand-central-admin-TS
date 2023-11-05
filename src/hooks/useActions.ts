@@ -17,6 +17,7 @@ import {
   settingsActions,
   salespersonActions,
   salespersonOrdersActions,
+  salespersonCustomersActions,
 } from "src/services/actions";
 
 export const useActions = () => {
@@ -39,6 +40,7 @@ export const useActions = () => {
       ...settingsActions,
       ...salespersonActions,
       ...salespersonOrdersActions,
+      ...salespersonCustomersActions,
     },
     dispatch
   );

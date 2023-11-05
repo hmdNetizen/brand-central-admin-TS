@@ -33,8 +33,8 @@ export const Status = styled("p")<SalespersonDetailsTableProps>(
     borderRadius: 20,
     fontWeight: 500,
     background: isActive
-      ? theme.palette.common.lightRed
-      : theme.palette.common.lightGreen,
-    color: isActive ? theme.palette.error.main : theme.palette.success.main,
+      ? theme.palette.common.lightGreen
+      : theme.palette.common.lightRed,
+    color: isActive ? theme.palette.success.main : theme.palette.error.main,
   })
 );

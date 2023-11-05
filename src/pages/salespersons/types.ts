@@ -1,4 +1,4 @@
-import { SalesPersonReturnedPayload } from "src/services/salespersons/SalesPersonTypes";
+import { SalespersonReturnedPayload } from "src/services/salespersons/SalesPersonTypes";
 
 export type SalesPersonsPageLayoutProps = {
   title: "Salespersons" | "Deactivated Salespersons";
@@ -12,5 +12,5 @@ export type SalesPersonsPageLayoutProps = {
   setOpenEditSalesperson: React.Dispatch<React.SetStateAction<boolean>>;
   openDeleteSalesperson: boolean;
   setOpenDeleteSalesperson: React.Dispatch<React.SetStateAction<boolean>>;
-  salesPersonsDataset: SalesPersonReturnedPayload[];
+  salesPersonsDataset: SalespersonReturnedPayload[];
 };

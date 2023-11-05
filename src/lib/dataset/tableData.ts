@@ -175,6 +175,15 @@ export const salespersonOrdersColumns: TableHeaderColumnTypes[] = [
   { id: 5, label: "", align: "center" },
 ];
 
+export const salespersonCustomersColumns: TableHeaderColumnTypes[] = [
+  { id: 0, label: "Customer Code", align: "left" },
+  { id: 1, label: "Company Name", align: "left" },
+  { id: 1, label: "Company Email", align: "center", minWidth: 150 },
+  { id: 2, label: "Phone", align: "center" },
+  { id: 3, label: "Price Code", align: "center" },
+  { id: 5, label: "", align: "center" },
+];
+
 export const orderedProductsColumn: TableHeaderColumnTypes[] = [
   {
     id: 0,

@@ -16,6 +16,7 @@ import placeholderAvatar from "src/assets/images/placeholder-avatar.png";
 import CustomIconButton from "src/utils/CustomIconButton";
 import SalespersonDetailsTable from "src/components/salespersons/SalespersonDetailsTable";
 import SalespersonOrdersTable from "src/components/salespersons/orders/SalespersonOrdersTable";
+import SalespersonCustomers from "src/components/salespersons/customers/SalespersonCustomers";
 
 export const DetailsWrapper = styled(Grid, {
   shouldForwardProp: (prop) => prop !== "menuSlideIn",
@@ -66,7 +67,7 @@ const SalespersonProfileDetails = ({
     (state) => state.salespersonOrders.totalOrders
   );
 
-  const { getSalespersonProfile, getSingleSalespersonOrders } = useActions();
+  const { getSalespersonProfile } = useActions();
 
   const { salespersonId } = useParams();
 
@@ -85,7 +86,7 @@ const SalespersonProfileDetails = ({
           <PreviousButton path="/dashboard/salespersons" />
         </Grid>
         <Grid item>
-          <Typography variant="h2">Customer Details</Typography>
+          <Typography variant="h2">Salesperson Details</Typography>
         </Grid>
       </Grid>
       <Grid
@@ -93,12 +94,12 @@ const SalespersonProfileDetails = ({
         container
         alignItems="center"
         columnGap={0.5}
-        style={{ paddingBottom: "2rem" }}
+        style={{ paddingBottom: "1rem" }}
       >
         <Grid
           item
           component={Link}
-          to="/dashboard/customers"
+          to="/dashboard/salespersons"
           style={{
             textDecoration: "none",
             color: theme.palette.secondary.dark,
@@ -131,7 +132,7 @@ const SalespersonProfileDetails = ({
                 marginBottom: matchesSM
                   ? "2rem"
                   : matchesMD && !menuSlideIn
-                  ? "2rem"
+                  ? "1rem"
                   : 0,
               }}
             >
@@ -182,10 +183,12 @@ const SalespersonProfileDetails = ({
             container
             direction="column"
             rowSpacing={2}
-            style={{ marginTop: "2rem" }}
+            style={{ marginTop: "1rem" }}
           >
             <Grid item>
-              <Typography variant="h3">Orders Placed</Typography>
+              <Typography variant="h3" style={{ fontSize: "2.25rem" }}>
+                Orders Placed
+              </Typography>
             </Grid>
             <Grid item container>
               <SalespersonOrdersTable
@@ -194,6 +197,22 @@ const SalespersonProfileDetails = ({
                 total={totalOrders}
                 salespersonId={salespersonId}
               />
+            </Grid>
+          </Grid>
+          <Grid
+            item
+            container
+            direction="column"
+            rowSpacing={2}
+            style={{ marginTop: "2rem" }}
+          >
+            <Grid item>
+              <Typography variant="h2" style={{ fontSize: "2.25rem" }}>
+                My Customers
+              </Typography>
+            </Grid>
+            <Grid item container>
+              <SalespersonCustomers salespersonId={salespersonId} />
             </Grid>
           </Grid>
         </Fragment>
@@ -205,7 +224,7 @@ const SalespersonProfileDetails = ({
           justifyContent="center"
           alignItems="center"
         >
-          <Typography variant="h2">Customer Not Found</Typography>
+          <Typography variant="h2">Salesperson Not Found</Typography>
         </Grid>
       )}
     </Container>

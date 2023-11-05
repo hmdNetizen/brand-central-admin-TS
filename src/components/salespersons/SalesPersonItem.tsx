@@ -91,12 +91,12 @@ const SalesPersonItem = (prop: SalesPersonItemProps) => {
       <TableCell style={{ minWidth: 200 }}>{email}</TableCell>
       <TableCell style={{ minWidth: 150 }}>{phoneNumber}</TableCell>
       <TableCell align="center">
-        {!isActive ? (
+        {isActive ? (
           <CustomSwitch
-            color={!isActive ? "success" : "error"}
+            color={isActive ? "success" : "error"}
             onChange={(event) => handleSwitchChange(event, salesperson)}
-            checked={!isActive}
-            isActive={!isActive}
+            checked={isActive}
+            isActive={isActive}
           />
         ) : (
           <UnblockButton

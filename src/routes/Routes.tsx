@@ -35,6 +35,7 @@ import FeaturedProducts from "src/pages/products/FeaturedProducts";
 import NonImageProducts from "src/pages/products/NonImageProducts";
 import PopularProducts from "src/pages/products/Popular";
 import WeeklyOffersProducts from "src/pages/products/WeeklyOffers";
+import SalespersonCustomerProfile from "src/pages/salespersons/customers/SalespersonCustomerProfile";
 import SalespersonProfileDetails from "src/pages/salespersons/SalespersonProfileDetails";
 import Salespersons from "src/pages/salespersons/Salespersons";
 import ShippingZipCodes from "src/pages/shipping/ShippingZipCodes";
@@ -115,12 +116,19 @@ const PagesRoutes = () => {
                 <Route path="salespersons">
                   <Route index element={<Salespersons />} />
                   {/* <Route path="blocked" element={<BlockedCustomers />} /> */}
-                  <Route
-                    path=":salespersonId"
-                    element={
-                      <SalespersonProfileDetails menuSlideIn={menuSlideIn} />
-                    }
-                  />
+                  <Route path=":salespersonId">
+                    <Route
+                      index
+                      element={
+                        <SalespersonProfileDetails menuSlideIn={menuSlideIn} />
+                      }
+                    />
+                    <Route path="customers">
+                      <Route path=":customerId">
+                        <Route index element={<SalespersonCustomerProfile />} />
+                      </Route>
+                    </Route>
+                  </Route>
                 </Route>
                 <Route path="categories">
                   <Route index element={<Categories />} />

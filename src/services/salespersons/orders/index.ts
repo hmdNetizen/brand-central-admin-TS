@@ -7,11 +7,6 @@ import {
   SalespersonOrdersPayloadTypes,
 } from "./types";
 
-type QueryParams = {
-  page: number;
-  limit: number;
-};
-
 const initialState: SalespersonOrderInitStateTypes = {
   loadingOrders: false,
   salespersonOrders: [],

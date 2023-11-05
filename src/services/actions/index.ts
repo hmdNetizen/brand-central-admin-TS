@@ -14,3 +14,4 @@ export * as shippingActions from "../shipping";
 export * as settingsActions from "../settings";
 export * as salespersonActions from "../salespersons";
 export * as salespersonOrdersActions from "../salespersons/orders";
+export * as salespersonCustomersActions from "../salespersons/customers";
