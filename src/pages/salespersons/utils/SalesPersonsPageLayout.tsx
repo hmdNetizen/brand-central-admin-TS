@@ -21,6 +21,7 @@ import {
 import SalesPersonItem from "src/components/salespersons/SalesPersonItem";
 import CreateSalesperson from "../modals/CreateSalesperson";
 import EditSalesperson from "../modals/EditSalesperson";
+import DeleteSalesperson from "../modals/DeleteSalesperson";
 
 const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
   const {
@@ -121,11 +122,11 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
         openEditSalesperson={openEditSalesperson}
         setOpenEditSalesperson={setOpenEditSalesperson}
       />
-      {/* <EditCustomerProfile
-        openEditCustomer={openEditCustomer}
-        setOpenEditCustomer={setOpenEditCustomer}
-        customerProfileData={singleCustomer!}
+      <DeleteSalesperson
+        openDeleteSalesperson={openDeleteSalesperson}
+        setOpenDeleteSalesperson={setOpenDeleteSalesperson}
       />
+      {/*
       <DeleteCustomer
         openDeleteCustomer={openDeleteCustomer}
         setOpenDeleteCustomer={setOpenDeleteCustomer}

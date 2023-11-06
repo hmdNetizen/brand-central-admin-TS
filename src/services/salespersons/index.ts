@@ -3,6 +3,7 @@ import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { config } from "src/config/config";
 import { fileUploadConfig } from "src/config/fileUpload";
+import { capitalizeFirstLetters } from "src/lib/helpers";
 import axios from "../axios";
 import { UploadedFilePayload } from "../common/commonTypes";
 import {
@@ -174,6 +175,38 @@ export const updateSalesperson = createAsyncThunk(
   }
 );
 
+export const deleteSalesperson = createAsyncThunk(
+  "delete-salesperson",
+  async (
+    details: {
+      salespersonId: string;
+      setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    },
+    thunkAPI
+  ) => {
+    const { salespersonId, setOpen } = details;
+    try {
+      const { status } = await axios.delete(
+        config.salespersons.delete(salespersonId)
+      );
+
+      if (status === 200) {
+        setOpen(false);
+      }
+
+      return salespersonId;
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+      }
+    }
+  }
+);
+
 const salespersonsSlice = createSlice({
   name: "salesperson",
   initialState,
@@ -247,12 +280,44 @@ const salespersonsSlice = createSlice({
           salesperson._id === action.payload._id ? action.payload : salesperson
         );
         state.error = null;
+
+        toast.success(
+          `${capitalizeFirstLetters(
+            `${action.payload.fullName}'s`
+          )} profile has been updated`,
+          {
+            position: "top-center",
+            hideProgressBar: true,
+          }
+        );
       })
       .addCase(updateSalesperson.rejected, (state, action) => {
         state.loadingRequestAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }
+      });
+    builder
+      .addCase(deleteSalesperson.pending, (state) => {
+        state.loadingRequestAction = true;
+      })
+      .addCase(deleteSalesperson.fulfilled, (state, action) => {
+        state.loadingRequestAction = false;
+        state.salespersons = state.salespersons.filter(
+          (salesperson) => salesperson._id !== action.payload
+        );
+        state.error = null;
+      })
+      .addCase(deleteSalesperson.rejected, (state, action) => {
+        state.loadingRequestAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+
+        toast.error("Sales rep's account deleted successfully", {
+          position: "top-center",
+          hideProgressBar: true,
+        });
       });
   },
 });
