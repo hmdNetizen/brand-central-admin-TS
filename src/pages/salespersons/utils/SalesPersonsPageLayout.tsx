@@ -20,6 +20,7 @@ import {
 } from "src/components/common/styles/PageContainerStyles";
 import SalesPersonItem from "src/components/salespersons/SalesPersonItem";
 import CreateSalesperson from "../modals/CreateSalesperson";
+import EditSalesperson from "../modals/EditSalesperson";
 
 const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
   const {
@@ -115,6 +116,10 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
       <CreateSalesperson
         openAddSalesperson={openAddSalesperson}
         setOpenAddSalesperson={setOpenAddSalesperson}
+      />
+      <EditSalesperson
+        openEditSalesperson={openEditSalesperson}
+        setOpenEditSalesperson={setOpenEditSalesperson}
       />
       {/* <EditCustomerProfile
         openEditCustomer={openEditCustomer}

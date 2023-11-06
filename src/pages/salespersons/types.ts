@@ -26,3 +26,17 @@ export type SalespersonInfoProps = {
   confirmPassword: string;
   initials: string;
 };
+
+export type salespersonInfoErrorProps = {
+  fullNameError?: string;
+  initialsError?: string;
+  emailError?: string;
+  phoneNumberError?: string;
+  passwordError?: string;
+  confirmPasswordError?: string;
+};
+
+export type CreateSalespersonProps = {
+  openAddSalesperson: boolean;
+  setOpenAddSalesperson: React.Dispatch<React.SetStateAction<boolean>>;
+};

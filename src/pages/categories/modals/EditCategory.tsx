@@ -157,6 +157,8 @@ const EditCategory = (props: EditCategoryProps) => {
 
         if (singleCategory.setIcon) {
           setPreview(singleCategory.setIcon);
+        } else {
+          setPreview("");
         }
       }
       setCategoryData(newCategoryData);

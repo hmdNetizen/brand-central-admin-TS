@@ -1,44 +1,47 @@
-import React, { useState } from "react";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import React, { useEffect, useState } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import IconButton from "@mui/material/IconButton";
-import { styled, useTheme } from "@mui/material/styles";
-import CloseIcon from "@mui/icons-material/Close";
+import { useTheme } from "@mui/material/styles";
 
 import ShowDialog from "src/utils/ShowDialog";
 import {
   ContentContainer,
-  ErrorsList,
   ErrorMsg,
+  ErrorsList,
 } from "src/utilityStyles/pagesUtilityStyles";
+import ModalHeading from "src/components/common/ModalHeading";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import FormContainer from "src/components/salespersons/utils/FormContainer";
-import {
-  CreateSalespersonProps,
-  salespersonInfoErrorProps,
-  SalespersonInfoProps,
-} from "../types";
-import { useActions } from "src/hooks/useActions";
-import ModalHeading from "src/components/common/ModalHeading";
+import { salespersonInfoErrorProps, SalespersonInfoProps } from "../types";
+import { SalespersonReturnedPayload } from "src/services/salespersons/SalesPersonTypes";
 
-const CreateSalesperson = ({
-  openAddSalesperson,
-  setOpenAddSalesperson,
-}: CreateSalespersonProps) => {
+type EditSalespersonProps = {
+  openEditSalesperson: boolean;
+  setOpenEditSalesperson: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+type SalespersonPayloadExcerpt = Omit<
+  SalespersonReturnedPayload,
+  "_id" | "isActive" | "profileImage" | "createdAt"
+>;
+
+const initialSalespersonInformation = {
+  fullName: "",
+  email: "",
+  initials: "",
+  phoneNumber: "",
+  password: "",
+  confirmPassword: "",
+};
+
+const EditSalesperson = (props: EditSalespersonProps) => {
   const theme = useTheme();
+  const { openEditSalesperson, setOpenEditSalesperson } = props;
+
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
 
   const [salespersonInformation, setSalespersonInformation] =
-    useState<SalespersonInfoProps>({
-      fullName: "",
-      email: "",
-      initials: "",
-      phoneNumber: "",
-      password: "",
-      confirmPassword: "",
-    });
+    useState<SalespersonInfoProps>(initialSalespersonInformation);
 
   const [errors, setErrors] = useState<salespersonInfoErrorProps>({});
   const [selectedFile, setSelectedFile] = useState<File | string>("");
@@ -51,25 +54,9 @@ const CreateSalesperson = ({
     (state) => state.salesPersons.loadingRequestAction
   );
   const error = useTypedSelector((state) => state.salesPersons.error);
-
-  const { addNewSalesperson } = useActions();
-
-  const handleSubmit = (
-    event: React.FormEvent<HTMLFormElement | HTMLDivElement>
-  ) => {
-    event.preventDefault();
-
-    addNewSalesperson({
-      setOpenAddSalesperson,
-      email,
-      fullName,
-      initials,
-      phoneNumber,
-      profileImage: selectedFile,
-      password,
-      confirmPassword,
-    });
-  };
+  const singleSalesperson = useTypedSelector(
+    (state) => state.salesPersons.singleSalesperson
+  );
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -105,17 +92,46 @@ const CreateSalesperson = ({
     setSelectedFile("");
   };
 
+  const handleSubmit = (
+    event: React.FormEvent<HTMLFormElement | HTMLDivElement>
+  ) => {
+    event.preventDefault();
+
+    console.log("Submitted");
+  };
+
+  useEffect(() => {
+    if (singleSalesperson) {
+      const newSalespersonInformation = { ...initialSalespersonInformation };
+
+      for (const key in newSalespersonInformation) {
+        if (key in singleSalesperson) {
+          newSalespersonInformation[key as keyof SalespersonPayloadExcerpt] =
+            singleSalesperson[key as keyof SalespersonPayloadExcerpt];
+        }
+
+        if (singleSalesperson.profileImage) {
+          setPreview(singleSalesperson.profileImage);
+        } else {
+          setPreview("");
+        }
+      }
+      setSalespersonInformation(newSalespersonInformation);
+    }
+
+    // eslint-disable-next-line
+  }, [singleSalesperson]);
+
   return (
     <ShowDialog
-      openModal={openAddSalesperson}
-      handleClose={() => setOpenAddSalesperson(false)}
+      openModal={openEditSalesperson}
+      handleClose={() => setOpenEditSalesperson(false)}
       width={matchesXS ? "95%" : matchesSM ? "85%" : 800}
     >
       <ContentContainer container direction="column">
-        {/* Heading goes here */}
         <ModalHeading
-          title="Add a New Salesperson"
-          setOpen={setOpenAddSalesperson}
+          setOpen={setOpenEditSalesperson}
+          title="Edit Salesperson"
         />
         {!loadingRequestAction && error && (
           <ErrorsList item component="ul">
@@ -142,10 +158,11 @@ const CreateSalesperson = ({
           setSelectedFile={setSelectedFile}
           onImageChange={handleImageChange}
           onRemoveImage={handleRemoveImage}
+          isEdit={true}
         />
       </ContentContainer>
     </ShowDialog>
   );
 };
 
-export default CreateSalesperson;
+export default EditSalesperson;

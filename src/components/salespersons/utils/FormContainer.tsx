@@ -42,6 +42,7 @@ type SalespersonFormContainerProps = {
   onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   preview: string | undefined;
   setPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
+  isEdit?: boolean;
 };
 
 const FormContainer = (props: SalespersonFormContainerProps) => {
@@ -63,6 +64,7 @@ const FormContainer = (props: SalespersonFormContainerProps) => {
     selectedFile,
     setPreview,
     setSelectedFile,
+    isEdit,
   } = props;
   const { fullName, email, phoneNumber, initials, password, confirmPassword } =
     salespersonInformation;
@@ -99,6 +101,7 @@ const FormContainer = (props: SalespersonFormContainerProps) => {
         justifyContent="center"
         style={{ marginBottom: "2rem" }}
         columnGap="2rem"
+        rowGap="2rem"
       >
         <Grid
           item
@@ -141,6 +144,7 @@ const FormContainer = (props: SalespersonFormContainerProps) => {
         justifyContent="center"
         style={{ marginBottom: "2rem" }}
         columnGap="2rem"
+        rowGap="2rem"
       >
         <Grid
           item
@@ -175,58 +179,61 @@ const FormContainer = (props: SalespersonFormContainerProps) => {
           />
         </Grid>
       </Grid>
-      <Grid
-        item
-        container
-        justifyContent="center"
-        style={{ marginBottom: "2rem" }}
-        columnGap="2rem"
-      >
+      {!isEdit && (
         <Grid
           item
-          style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
-          md={5.5}
+          container
+          justifyContent="center"
+          style={{ marginBottom: "2rem" }}
+          columnGap="2rem"
+          rowGap="2rem"
         >
-          <CustomFormInput
-            type={showPassword ? "text" : "password"}
-            label="Password"
-            labelId="password"
-            name="password"
-            value={password}
-            placeholder="Enter Sales Rep's Password"
-            onChange={onChange}
-            error={passwordError}
-            autoComplete="off"
-            right={
-              <IconButton onClick={handleTogglePassword}>
-                {showPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            }
-          />
+          <Grid
+            item
+            style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
+            md={5.5}
+          >
+            <CustomFormInput
+              type={showPassword ? "text" : "password"}
+              label="Password"
+              labelId="password"
+              name="password"
+              value={password}
+              placeholder="Enter Sales Rep's Password"
+              onChange={onChange}
+              error={passwordError}
+              autoComplete="off"
+              right={
+                <IconButton onClick={handleTogglePassword}>
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              }
+            />
+          </Grid>
+          <Grid
+            item
+            style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
+            md={5.5}
+          >
+            <CustomFormInput
+              type={showPassword ? "text" : "password"}
+              label="Confirm Password"
+              labelId="confirmPassword"
+              name="confirmPassword"
+              value={confirmPassword}
+              placeholder="Enter Sales Reps ConfirmPassword"
+              onChange={onChange}
+              error={confirmPasswordError}
+              autoComplete="off"
+              right={
+                <IconButton onClick={handleTogglePassword}>
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              }
+            />
+          </Grid>
         </Grid>
-        <Grid
-          item
-          style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
-          md={5.5}
-        >
-          <CustomFormInput
-            type={showPassword ? "text" : "password"}
-            label="Confirm Password"
-            labelId="confirmPassword"
-            name="confirmPassword"
-            value={confirmPassword}
-            placeholder="Enter Sales Reps ConfirmPassword"
-            onChange={onChange}
-            error={confirmPasswordError}
-            autoComplete="off"
-            right={
-              <IconButton onClick={handleTogglePassword}>
-                {showPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            }
-          />
-        </Grid>
-      </Grid>
+      )}
       <Grid item container mb={5}>
         <FileUploadLayout
           onImageChange={onImageChange}
