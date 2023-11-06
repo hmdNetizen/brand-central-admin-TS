@@ -21,6 +21,7 @@ import {
 } from "./CategoryTypes";
 import { AxiosError } from "axios";
 import React from "react";
+import { config } from "src/config/config";
 
 const initialState: initStateType = {
   loading: false,
@@ -112,12 +113,12 @@ export const addNewCategory = createAsyncThunk(
   "add-category",
   async (details: RequestPayloadType<CategoryRequestPayload>, thunkAPI) => {
     const { setCategoryData, setOpen, file, ...fields } = details;
-    const { config, formData } = fileUploadConfig(file);
+    const { config: fileConfig, formData } = fileUploadConfig(file);
     try {
       const { data: uploadedFile } = await axios.post(
-        `/api/uploads/file`,
+        config.uploads.single,
         formData,
-        config
+        fileConfig
       );
       const result = uploadedFile as UploadedFilePayload;
 
@@ -155,15 +156,15 @@ export const updateCategory = createAsyncThunk(
   "update-category",
   async (details: RequestPayloadType<CategoryRequestNewPayload>, thunkAPI) => {
     const { categoryId, setOpen, setCategoryData, file, ...fields } = details;
-    const { config, formData } = fileUploadConfig(file);
+    const { config: fileConfig, formData } = fileUploadConfig(file);
 
     try {
       // Checks whether a new icon is being uploaded (which by default is an object type)
       if (typeof file === "object") {
         const { data: uploadedFile } = await axios.post(
-          `/api/uploads/file`,
+          config.uploads.single,
           formData,
-          config
+          fileConfig
         );
         const result = uploadedFile as UploadedFilePayload;
 
@@ -704,6 +705,11 @@ const categoriesSlice = createSlice({
         state.loadingRequestAction = false;
         state.categories = [action.payload, ...state.categories];
         state.error = null;
+
+        toast.success(`${action.payload.categoryName} added successfully`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
       })
       .addCase(addNewCategory.rejected, (state, action) => {
         state.loadingRequestAction = false;

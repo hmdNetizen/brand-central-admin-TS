@@ -22,7 +22,7 @@ const UploadWrapper = styled(Grid, {
 }));
 
 type FileUploadBoxProps = {
-  setImageError: React.Dispatch<React.SetStateAction<string>>;
+  setImageError?: React.Dispatch<React.SetStateAction<string>>;
   errorMessage: string;
   iconSize: string | number;
   selectedFile: File | string;

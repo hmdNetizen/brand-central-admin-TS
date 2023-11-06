@@ -15,6 +15,7 @@ import {
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import FormContainer from "src/components/salespersons/utils/FormContainer";
 import { SalespersonInfoProps } from "../types";
+import { useActions } from "src/hooks/useActions";
 
 type salespersonInfoErrorProps = {
   fullNameError?: string;
@@ -49,17 +50,43 @@ const CreateSalesperson = ({
     });
 
   const [errors, setErrors] = useState<salespersonInfoErrorProps>({});
+  const [selectedFile, setSelectedFile] = useState<File | string>("");
+  const [preview, setPreview] = useState<string | undefined>();
 
-  const [fullNameError, setFullNameError] = useState("");
+  const { fullName, email, initials, phoneNumber, password, confirmPassword } =
+    salespersonInformation;
 
-  const { fullName } = salespersonInformation;
+  const loadingRequestAction = useTypedSelector(
+    (state) => state.salesPersons.loadingRequestAction
+  );
+  const error = useTypedSelector((state) => state.salesPersons.error);
+  console.log(error);
+
+  const { addNewSalesperson } = useActions();
 
   const handleSubmit = (
     event: React.FormEvent<HTMLFormElement | HTMLDivElement>
   ) => {
     event.preventDefault();
 
-    console.log("Submitted");
+    addNewSalesperson({
+      setOpenAddSalesperson,
+      email,
+      fullName,
+      initials,
+      phoneNumber,
+      profileImage: selectedFile,
+      password,
+      confirmPassword,
+    });
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    setSelectedFile(file);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,10 +94,26 @@ const CreateSalesperson = ({
     setSalespersonInformation((prev) => ({ ...prev, [name]: value }));
   };
 
-  const loadingRequestAction = useTypedSelector(
-    (state) => state.salesPersons.loadingRequestAction
-  );
-  const error = useTypedSelector((state) => state.salesPersons.error);
+  const handlePhoneNumberChange = (value: string) => {
+    setSalespersonInformation((prev) => ({
+      ...prev,
+      phoneNumber: value,
+    }));
+
+    // if (!value || value === "1") {
+    //   setCompanyPhoneNumberError("Please enter company's phone number");
+    // } else if (
+    //   !/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im.test(value)
+    // ) {
+    //   setCompanyPhoneNumberError("Please input correct phone number");
+    // } else {
+    //   setCompanyPhoneNumberError("");
+    // }
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedFile("");
+  };
 
   return (
     <ShowDialog
@@ -124,7 +167,14 @@ const CreateSalesperson = ({
           phoneNumberError={errors.phoneNumberError}
           passwordError={errors.passwordError}
           confirmPasswordError={errors.confirmPasswordError}
-          buttonTitle="Create Salesperson"
+          buttonTitle="Create a Salesperson"
+          onChangePhoneNumber={handlePhoneNumberChange}
+          preview={preview}
+          setPreview={setPreview}
+          selectedFile={selectedFile}
+          setSelectedFile={setSelectedFile}
+          onImageChange={handleImageChange}
+          onRemoveImage={handleRemoveImage}
         />
       </ContentContainer>
     </ShowDialog>

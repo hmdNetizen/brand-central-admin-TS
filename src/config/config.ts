@@ -17,4 +17,7 @@ export const config = {
         `/api/salespersons-customers/admin/${salespersonId}`,
     },
   },
+  uploads: {
+    single: `/api/uploads/file`,
+  },
 };

@@ -8,7 +8,7 @@ import FileUploadBox from "./FileUploadBox";
 type FileUploadLayoutProps = {
   selectedFile: File | string;
   setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
-  setImageError: React.Dispatch<React.SetStateAction<string>>;
+  setImageError?: React.Dispatch<React.SetStateAction<string>>;
   onRemoveImage: () => void;
   onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   preview: string | undefined;

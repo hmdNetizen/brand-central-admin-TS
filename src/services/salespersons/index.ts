@@ -1,7 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 import { config } from "src/config/config";
+import { fileUploadConfig } from "src/config/fileUpload";
 import axios from "../axios";
+import { UploadedFilePayload } from "../common/commonTypes";
 import {
   InitStateType,
   SalespersonRequestPayload,
@@ -64,8 +67,42 @@ export const getSalespersonProfile = createAsyncThunk(
 export const addNewSalesperson = createAsyncThunk(
   "add-new-salesperson",
   async (details: SalespersonRequestPayload, thunkAPI) => {
+    const { profileImage, setOpenAddSalesperson } = details;
+    const { config: uploadConfig, formData } = fileUploadConfig(profileImage);
     try {
-      const { data } = await axios.post(config.salespersons.add, details);
+      // Checks whether a new icon is being uploaded (which by default is an object type)
+      if (typeof profileImage === "object") {
+        const { data: uploadedFile } = await axios.post(
+          config.uploads.single,
+          formData,
+          uploadConfig
+        );
+
+        const uploadResult = uploadedFile as UploadedFilePayload;
+
+        const { data, status } = await axios.post(config.salespersons.add, {
+          ...details,
+          profileImage: uploadResult.url,
+        });
+
+        if (status === 201) {
+          setOpenAddSalesperson(false);
+        }
+
+        const result = data as SingleSalespersonPayloadTypes;
+
+        return result.data;
+      }
+
+      const { data, status } = await axios.post(
+        config.salespersons.add,
+        details
+      );
+
+      if (status === 201) {
+        setOpenAddSalesperson(false);
+      }
+
       const result = data as SingleSalespersonPayloadTypes;
 
       return result.data;
@@ -132,6 +169,11 @@ const salespersonsSlice = createSlice({
         state.loadingRequestAction = false;
         state.salespersons = [action.payload, ...state.salespersons];
         state.error = null;
+
+        toast.success(`${action.payload.fullName} added as a sales rep`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
       })
       .addCase(addNewSalesperson.rejected, (state, action) => {
         state.loadingRequestAction = false;

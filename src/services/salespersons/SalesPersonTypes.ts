@@ -1,3 +1,4 @@
+import React from "react";
 import { OrderReturnedPayload } from "../orders/OrderTypes";
 
 export type SalespersonReturnedPayload = {
@@ -26,7 +27,8 @@ export type SalespersonRequestPayload = {
   phoneNumber: string;
   confirmPassword: string;
   initials: string;
-  profileImage?: string;
+  profileImage: File | string;
+  setOpenAddSalesperson: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export type InitStateType = {
