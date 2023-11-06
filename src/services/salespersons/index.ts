@@ -11,6 +11,7 @@ import {
   SalespersonReturnedPayload,
   SalespersonsPayloadTypes,
   SingleSalespersonPayloadTypes,
+  UpdateSalespersonRequestPayload,
 } from "./SalesPersonTypes";
 
 const initialState: InitStateType = {
@@ -118,6 +119,61 @@ export const addNewSalesperson = createAsyncThunk(
   }
 );
 
+export const updateSalesperson = createAsyncThunk(
+  "update-salesperson",
+  async (details: UpdateSalespersonRequestPayload, thunkAPI) => {
+    const { id, setOpenEditSalesperson, profileImage } = details;
+    const { config: fileConfig, formData } = fileUploadConfig(profileImage);
+
+    try {
+      // Checks whether a new icon is being uploaded (which by default is an object type)
+      if (typeof profileImage === "object") {
+        const { data: uploadedFile } = await axios.post(
+          config.uploads.single,
+          formData,
+          fileConfig
+        );
+
+        const uploadResult = uploadedFile as UploadedFilePayload;
+
+        const { data, status } = await axios.patch(
+          config.salespersons.update(id),
+          { ...details, profileImage: uploadResult.url }
+        );
+
+        if (status === 200) {
+          setOpenEditSalesperson(false);
+        }
+
+        const result = data as SingleSalespersonPayloadTypes;
+
+        return result.data;
+      }
+
+      const { data, status } = await axios.patch(
+        config.salespersons.update(id),
+        details
+      );
+
+      if (status === 200) {
+        setOpenEditSalesperson(false);
+      }
+
+      const result = data as SingleSalespersonPayloadTypes;
+
+      return result.data;
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+      }
+    }
+  }
+);
+
 const salespersonsSlice = createSlice({
   name: "salesperson",
   initialState,
@@ -176,6 +232,23 @@ const salespersonsSlice = createSlice({
         });
       })
       .addCase(addNewSalesperson.rejected, (state, action) => {
+        state.loadingRequestAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updateSalesperson.pending, (state) => {
+        state.loadingRequestAction = true;
+      })
+      .addCase(updateSalesperson.fulfilled, (state, action) => {
+        state.loadingRequestAction = false;
+        state.salespersons = state.salespersons.map((salesperson) =>
+          salesperson._id === action.payload._id ? action.payload : salesperson
+        );
+        state.error = null;
+      })
+      .addCase(updateSalesperson.rejected, (state, action) => {
         state.loadingRequestAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;

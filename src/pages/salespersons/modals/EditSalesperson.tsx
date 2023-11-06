@@ -13,6 +13,8 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import FormContainer from "src/components/salespersons/utils/FormContainer";
 import { salespersonInfoErrorProps, SalespersonInfoProps } from "../types";
 import { SalespersonReturnedPayload } from "src/services/salespersons/SalesPersonTypes";
+import { validateEmail } from "src/lib/helpers";
+import { useActions } from "src/hooks/useActions";
 
 type EditSalespersonProps = {
   openEditSalesperson: boolean;
@@ -58,6 +60,8 @@ const EditSalesperson = (props: EditSalespersonProps) => {
     (state) => state.salesPersons.singleSalesperson
   );
 
+  const { updateSalesperson } = useActions();
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
@@ -69,6 +73,24 @@ const EditSalesperson = (props: EditSalespersonProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setSalespersonInformation((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validation = () => {
+    const errorsList: salespersonInfoErrorProps = {};
+
+    if (!fullName.trim()) errorsList.fullNameError = "Full name is required";
+
+    if (!initials.trim())
+      errorsList.initialsError = "Initials of sales rep is required";
+
+    if (!email.trim()) errorsList.emailError = "Email address is required";
+
+    if (!validateEmail(email))
+      errorsList.emailError = "Please enter a valid email address";
+
+    setErrors(errorsList);
+
+    return Object.keys(errorsList).length === 0;
   };
 
   const handlePhoneNumberChange = (value: string) => {
@@ -97,7 +119,19 @@ const EditSalesperson = (props: EditSalespersonProps) => {
   ) => {
     event.preventDefault();
 
-    console.log("Submitted");
+    if (!validation()) {
+      return;
+    }
+
+    updateSalesperson({
+      setOpenEditSalesperson,
+      email,
+      fullName,
+      id: singleSalesperson?._id!,
+      initials,
+      phoneNumber,
+      profileImage: selectedFile,
+    });
   };
 
   useEffect(() => {
@@ -131,7 +165,7 @@ const EditSalesperson = (props: EditSalespersonProps) => {
       <ContentContainer container direction="column">
         <ModalHeading
           setOpen={setOpenEditSalesperson}
-          title="Edit Salesperson"
+          title="Edit Sales person"
         />
         {!loadingRequestAction && error && (
           <ErrorsList item component="ul">
@@ -150,7 +184,7 @@ const EditSalesperson = (props: EditSalespersonProps) => {
           phoneNumberError={errors.phoneNumberError}
           passwordError={errors.passwordError}
           confirmPasswordError={errors.confirmPasswordError}
-          buttonTitle="Create a Salesperson"
+          buttonTitle="Update Sales Person"
           onChangePhoneNumber={handlePhoneNumberChange}
           preview={preview}
           setPreview={setPreview}

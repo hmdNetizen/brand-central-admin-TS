@@ -21,6 +21,7 @@ import {
 } from "../types";
 import { useActions } from "src/hooks/useActions";
 import ModalHeading from "src/components/common/ModalHeading";
+import { validateEmail } from "src/lib/helpers";
 
 const CreateSalesperson = ({
   openAddSalesperson,
@@ -59,6 +60,10 @@ const CreateSalesperson = ({
   ) => {
     event.preventDefault();
 
+    if (!validation()) {
+      return;
+    }
+
     addNewSalesperson({
       setOpenAddSalesperson,
       email,
@@ -69,6 +74,30 @@ const CreateSalesperson = ({
       password,
       confirmPassword,
     });
+  };
+
+  const validation = () => {
+    const errorsList: salespersonInfoErrorProps = {};
+
+    if (!fullName.trim()) errorsList.fullNameError = "Full name is required";
+
+    if (!initials.trim())
+      errorsList.initialsError = "Initials of sales rep is required";
+
+    if (!email.trim()) errorsList.emailError = "Email address is required";
+
+    if (!validateEmail(email))
+      errorsList.emailError = "Please enter a valid email address";
+
+    if (!password.trim())
+      errorsList.passwordError = "Password must have minimum of 8 characters";
+
+    if (confirmPassword !== password)
+      errorsList.confirmPasswordError = "Passwords do not match";
+
+    setErrors(errorsList);
+
+    return Object.keys(errorsList).length === 0;
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,16 +118,6 @@ const CreateSalesperson = ({
       ...prev,
       phoneNumber: value,
     }));
-
-    // if (!value || value === "1") {
-    //   setCompanyPhoneNumberError("Please enter company's phone number");
-    // } else if (
-    //   !/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im.test(value)
-    // ) {
-    //   setCompanyPhoneNumberError("Please input correct phone number");
-    // } else {
-    //   setCompanyPhoneNumberError("");
-    // }
   };
 
   const handleRemoveImage = () => {

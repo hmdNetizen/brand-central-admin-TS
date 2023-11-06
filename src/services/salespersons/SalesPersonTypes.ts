@@ -31,6 +31,14 @@ export type SalespersonRequestPayload = {
   setOpenAddSalesperson: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+export type UpdateSalespersonRequestPayload = Pick<
+  SalespersonRequestPayload,
+  "email" | "fullName" | "phoneNumber" | "profileImage" | "initials"
+> & {
+  setOpenEditSalesperson: React.Dispatch<React.SetStateAction<boolean>>;
+  id: string;
+};
+
 export type InitStateType = {
   loadingSalespersons: boolean;
   loadingSingleSalesperson: boolean;

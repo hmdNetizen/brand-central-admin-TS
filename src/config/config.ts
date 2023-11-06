@@ -7,6 +7,7 @@ export const config = {
     get: "/api/salespersons",
     getById: (id: string) => `/api/salespersons/profile/${id}`,
     add: `/api/salespersons/create`,
+    update: (id: string) => `/api/salespersons/admin/${id}`,
 
     orders: {
       getById: (salespersonId: string) =>
