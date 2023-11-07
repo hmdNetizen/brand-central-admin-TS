@@ -13,6 +13,8 @@ import Spinner from "src/utils/Spinner";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import SalespersonOrderDetailsCard from "src/components/salespersons/orders/SalespersonOrderDetailsCard";
 import OrderedProductsList from "src/components/orders/OrderedProductsList";
+import SalespersonShippingDetailsCard from "src/components/salespersons/orders/ShippingDetailsCard";
+import SalespersonBillingDetailsCard from "src/components/salespersons/orders/BillingDetailsCard";
 
 const CardsContainer = styled(Grid)(({ theme }) => ({
   background: "#fff",
@@ -120,9 +122,16 @@ const SalespersonOrderDetails = ({
             <Grid item xs={12} md={!menuSlideIn ? 12 : 6} lg={6}>
               <SalespersonOrderDetailsCard singleOrder={singleOrder} />
             </Grid>
-            {/* <Grid item xs={12} md={!menuSlideIn ? 12 : 6} lg>
-              <BillingDetailsCard singleOrder={singleOrder} />
-            </Grid> */}
+            <Grid item xs={12} md={!menuSlideIn ? 12 : 6} lg>
+              <Grid container direction="column">
+                <Grid item>
+                  <SalespersonShippingDetailsCard singleOrder={singleOrder} />
+                </Grid>
+                <Grid item>
+                  <SalespersonBillingDetailsCard singleOrder={singleOrder} />
+                </Grid>
+              </Grid>
+            </Grid>
           </Grid>
 
           <Grid item container spacing={3} sx={{ pt: 3 }}>

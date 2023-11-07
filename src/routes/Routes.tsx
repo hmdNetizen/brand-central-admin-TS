@@ -134,7 +134,12 @@ const PagesRoutes = () => {
                   <Route path="orders">
                     <Route index element={<SalespeopleOrders />} />
                     <Route path=":orderId">
-                      <Route index element={<SalespersonOrderDetails />} />
+                      <Route
+                        index
+                        element={
+                          <SalespersonOrderDetails menuSlideIn={menuSlideIn} />
+                        }
+                      />
                     </Route>
                   </Route>
                 </Route>

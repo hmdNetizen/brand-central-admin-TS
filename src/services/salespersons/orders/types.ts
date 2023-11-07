@@ -12,6 +12,7 @@ export type SalespersonOrderResponsePayload = Omit<
   orderedFor: {
     id: string;
     companyName: string;
+    phone: string;
   };
 };
 
