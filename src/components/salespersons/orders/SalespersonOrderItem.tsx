@@ -54,7 +54,7 @@ const SalespersonOrderItem = (props: SalespersonOrderItemProps) => {
           variant="contained"
           color="secondary"
           component={Link}
-          to={`/dashboard/salespersons/orders/${order.id}`}
+          to={`/dashboard/salespeople/orders/${order.id}`}
         >
           View Details
         </StyledButton>
@@ -68,7 +68,7 @@ const SalespersonOrderItem = (props: SalespersonOrderItemProps) => {
             fontWeight: 600,
           }}
           component={Link}
-          to={`/dashboard/salespersons/orders/${order.id}/invoice`}
+          to={`/dashboard/salespeople/orders/${order.id}/invoice`}
         >
           View Invoice
         </StyledButton>

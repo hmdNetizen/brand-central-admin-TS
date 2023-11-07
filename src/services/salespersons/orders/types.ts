@@ -22,8 +22,13 @@ export type SalespersonOrdersPayloadTypes = {
   };
 };
 
+export type SingleSalespersonOrderPayloadTypes = {
+  data: SalespersonOrderResponsePayload;
+};
+
 export type SalespersonOrderInitStateTypes = {
   loadingOrders: boolean;
+  loadingSingleOrder: boolean;
   salespersonOrders: Array<SalespersonOrderResponsePayload>;
   singleOrder: SalespersonOrderResponsePayload | null;
   totalOrders: number;

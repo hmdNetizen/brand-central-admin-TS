@@ -11,8 +11,10 @@ export const config = {
     delete: (id: string) => `api/salespersons/${id}`,
 
     orders: {
-      getById: (salespersonId: string) =>
+      getBySalespersonId: (salespersonId: string) =>
         `/api/salesperson-orders/admin/${salespersonId}`,
+      getById: (orderId: string) =>
+        `/api/salesperson-orders/admin/single-order/${orderId}`,
     },
     customers: {
       getById: (salespersonId: string) =>

@@ -6,10 +6,12 @@ import { QueryParams } from "src/services/types";
 import {
   SalespersonOrderInitStateTypes,
   SalespersonOrdersPayloadTypes,
+  SingleSalespersonOrderPayloadTypes,
 } from "./types";
 
 const initialState: SalespersonOrderInitStateTypes = {
   loadingOrders: false,
+  loadingSingleOrder: false,
   salespersonOrders: [],
   totalOrders: 0,
   error: null,
@@ -23,7 +25,7 @@ export const getSingleSalespersonOrders = createAsyncThunk(
 
     try {
       const { data } = await axios.get(
-        config.salespersons.orders.getById(salespersonId),
+        config.salespersons.orders.getBySalespersonId(salespersonId),
         { params: { page, limit } }
       );
 
@@ -33,6 +35,28 @@ export const getSingleSalespersonOrders = createAsyncThunk(
         orders: result.data.results,
         total: result.data.total,
       };
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+      }
+    }
+  }
+);
+
+export const getSalespersonSingleOrder = createAsyncThunk(
+  "create-salesperson-single-order",
+  async (orderId: string, thunkAPI) => {
+    try {
+      const { data } = await axios.get(
+        config.salespersons.orders.getById(orderId)
+      );
+      const result = data as SingleSalespersonOrderPayloadTypes;
+
+      return result.data;
     } catch (error: AxiosError | any) {
       if (error.response) {
         return thunkAPI.rejectWithValue(error.response.data.error);
@@ -62,6 +86,21 @@ const salespersonOrdersSlice = createSlice({
       })
       .addCase(getSingleSalespersonOrders.rejected, (state, action) => {
         state.loadingOrders = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(getSalespersonSingleOrder.pending, (state) => {
+        state.loadingSingleOrder = true;
+      })
+      .addCase(getSalespersonSingleOrder.fulfilled, (state, action) => {
+        state.loadingSingleOrder = false;
+        state.singleOrder = action.payload;
+        state.error = null;
+      })
+      .addCase(getSalespersonSingleOrder.rejected, (state, action) => {
+        state.loadingSingleOrder = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
         }

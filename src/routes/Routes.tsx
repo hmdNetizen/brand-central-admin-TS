@@ -36,6 +36,8 @@ import NonImageProducts from "src/pages/products/NonImageProducts";
 import PopularProducts from "src/pages/products/Popular";
 import WeeklyOffersProducts from "src/pages/products/WeeklyOffers";
 import SalespersonCustomerProfile from "src/pages/salespersons/customers/SalespersonCustomerProfile";
+import SalespeopleOrders from "src/pages/salespersons/orders/SalespeopleOrders";
+import SalespersonOrderDetails from "src/pages/salespersons/orders/SalespersonOrderDetails";
 import SalespersonProfileDetails from "src/pages/salespersons/SalespersonProfileDetails";
 import Salespersons from "src/pages/salespersons/Salespersons";
 import ShippingZipCodes from "src/pages/shipping/ShippingZipCodes";
@@ -113,7 +115,7 @@ const PagesRoutes = () => {
                     }
                   />
                 </Route>
-                <Route path="salespersons">
+                <Route path="salespeople">
                   <Route index element={<Salespersons />} />
                   {/* <Route path="blocked" element={<BlockedCustomers />} /> */}
                   <Route path=":salespersonId">
@@ -127,6 +129,12 @@ const PagesRoutes = () => {
                       <Route path=":customerId">
                         <Route index element={<SalespersonCustomerProfile />} />
                       </Route>
+                    </Route>
+                  </Route>
+                  <Route path="orders">
+                    <Route index element={<SalespeopleOrders />} />
+                    <Route path=":orderId">
+                      <Route index element={<SalespersonOrderDetails />} />
                     </Route>
                   </Route>
                 </Route>

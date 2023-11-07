@@ -39,7 +39,7 @@ const SalespersonCustomerItem = ({
           variant="contained"
           color="secondary"
           component={Link}
-          to={`/dashboard/salespersons/${salespersonId}/customers/${id}`}
+          to={`/dashboard/salespeople/${salespersonId}/customers/${id}`}
         >
           View Details
         </StyledButton>

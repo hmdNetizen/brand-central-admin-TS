@@ -126,13 +126,13 @@ export const menus = [
     id: 5,
     title: "Salespersons",
     icon: SalesPeopleIcon,
-    path: "/dashboard/salespersons",
+    path: "/dashboard/salespeople",
     subMenus: [
-      { subId: 0, title: "Salespersons List", path: "/dashboard/salespersons" },
+      { subId: 0, title: "Salespersons List", path: "/dashboard/salespeople" },
       {
         subId: 1,
         title: "Deactivated Salespersons",
-        path: "/dashboard/salespersons/deactivated",
+        path: "/dashboard/salespeople/deactivated",
       },
     ],
   },

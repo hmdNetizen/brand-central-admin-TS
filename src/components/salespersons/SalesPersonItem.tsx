@@ -116,7 +116,7 @@ const SalesPersonItem = (prop: SalesPersonItemProps) => {
             background={theme.palette.secondary}
             title="Details"
             component={Link}
-            to={`/dashboard/salespersons/${_id}`}
+            to={`/dashboard/salespeople/${_id}`}
           />
           <ActionButton
             startIcon={<EditSharpIcon />}

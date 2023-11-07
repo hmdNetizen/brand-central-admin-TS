@@ -1,27 +1,18 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { styled, useTheme } from "@mui/material/styles";
-import PreviousButton from "src/utils/PreviousButton";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme, styled } from "@mui/material/styles";
 import KeyboardDoubleArrowRightSharpIcon from "@mui/icons-material/KeyboardDoubleArrowRightSharp";
 import { Link, useParams } from "react-router-dom";
-import OrderDetailsCard from "src/components/orders/OrderDetailsCard";
-import BillingDetailsCard from "src/components/orders/BillingDetailsCard";
-import ShippingDetailsCard from "src/components/orders/ShippingDetailsCard";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import OrderedProductsList from "src/components/orders/OrderedProductsList";
+
+import { Container } from "src/components/common/styles/PageContainerStyles";
+import PreviousButton from "src/utils/PreviousButton";
 import { useActions } from "src/hooks/useActions";
 import Spinner from "src/utils/Spinner";
-import useTitle from "src/hooks/useTitle";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-
-const Container = styled(Grid)(({ theme }) => ({
-  padding: "1rem 2rem 5rem 2rem",
-
-  [theme.breakpoints.only("xs")]: {
-    padding: "5rem 1rem 5rem 1rem",
-  },
-}));
+import SalespersonOrderDetailsCard from "src/components/salespersons/orders/SalespersonOrderDetailsCard";
+import OrderedProductsList from "src/components/orders/OrderedProductsList";
 
 const CardsContainer = styled(Grid)(({ theme }) => ({
   background: "#fff",
@@ -33,25 +24,30 @@ const CardsContainer = styled(Grid)(({ theme }) => ({
   },
 }));
 
-const OrderDetails = ({ menuSlideIn }: { menuSlideIn: boolean }) => {
-  useTitle("Admin : Orders | Order details");
+type SalespersonOrderDetailsProps = {
+  menuSlideIn: boolean;
+};
+
+const SalespersonOrderDetails = ({
+  menuSlideIn,
+}: SalespersonOrderDetailsProps) => {
   const theme = useTheme();
+  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
 
   const { orderId } = useParams();
 
-  // const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
-  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
-
   const loadingSingleOrder = useTypedSelector(
-    (state) => state.orders.loadingSingleOrder
+    (state) => state.salespersonOrders.loadingSingleOrder
   );
-  const singleOrder = useTypedSelector((state) => state.orders.singleOrder);
+  const singleOrder = useTypedSelector(
+    (state) => state.salespersonOrders.singleOrder
+  );
 
-  const { getSingleOrder } = useActions();
+  const { getSalespersonSingleOrder } = useActions();
 
   useEffect(() => {
     if (orderId) {
-      getSingleOrder(orderId);
+      getSalespersonSingleOrder(orderId);
     }
   }, [orderId]);
 
@@ -59,7 +55,7 @@ const OrderDetails = ({ menuSlideIn }: { menuSlideIn: boolean }) => {
     <Container container direction="column">
       <Grid item container alignItems="center" columnSpacing={1}>
         <Grid item>
-          <PreviousButton path="/dashboard/orders" />
+          <PreviousButton path="/dashboard/salespeople/orders" />
         </Grid>
         <Grid item>
           <Typography variant="h2">Order Details</Typography>
@@ -75,7 +71,19 @@ const OrderDetails = ({ menuSlideIn }: { menuSlideIn: boolean }) => {
         <Grid
           item
           component={Link}
-          to="/dashboard/orders"
+          to="/dashboard/salespeople"
+          style={{
+            textDecoration: "none",
+            color: theme.palette.secondary.dark,
+          }}
+        >
+          <Typography variant="body2">Salespeople</Typography>
+        </Grid>
+        <KeyboardDoubleArrowRightSharpIcon color="secondary" />
+        <Grid
+          item
+          component={Link}
+          to="/dashboard/salespeople/orders"
           style={{
             textDecoration: "none",
             color: theme.palette.secondary.dark,
@@ -87,7 +95,7 @@ const OrderDetails = ({ menuSlideIn }: { menuSlideIn: boolean }) => {
         <Grid
           item
           component={Link}
-          to={`/dashboard/orders/${orderId}`}
+          to={`/dashboard/salespeople/orders/${orderId}`}
           style={{
             textDecoration: "none",
             color: theme.palette.secondary.dark,
@@ -110,24 +118,24 @@ const OrderDetails = ({ menuSlideIn }: { menuSlideIn: boolean }) => {
             //   direction={matchesSM ? "column" : "row"}
           >
             <Grid item xs={12} md={!menuSlideIn ? 12 : 6} lg={6}>
-              <OrderDetailsCard singleOrder={singleOrder} />
+              <SalespersonOrderDetailsCard singleOrder={singleOrder} />
             </Grid>
-            <Grid item xs={12} md={!menuSlideIn ? 12 : 6} lg>
+            {/* <Grid item xs={12} md={!menuSlideIn ? 12 : 6} lg>
               <BillingDetailsCard singleOrder={singleOrder} />
-            </Grid>
+            </Grid> */}
           </Grid>
 
           <Grid item container spacing={3} sx={{ pt: 3 }}>
-            <Grid item xs={12} md={!menuSlideIn ? 12 : 6} lg={6}>
+            {/* <Grid item xs={12} md={!menuSlideIn ? 12 : 6} lg={6}>
               <ShippingDetailsCard singleOrder={singleOrder} />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} md={!menuSlideIn ? 12 : 6} lg={6}></Grid>
           </Grid>
           <Grid item container>
-            <OrderedProductsList
+            {/* <OrderedProductsList
               loading={loadingSingleOrder}
               singleOrder={singleOrder}
-            />
+            /> */}
           </Grid>
         </CardsContainer>
       ) : (
@@ -145,4 +153,4 @@ const OrderDetails = ({ menuSlideIn }: { menuSlideIn: boolean }) => {
   );
 };
 
-export default OrderDetails;
+export default SalespersonOrderDetails;

@@ -222,7 +222,11 @@ const CustomMenuList = (props: MenuListProps) => {
         markOrdersNotificationsAsRead(order._id);
       }}
       component={Link}
-      to={`/dashboard/orders/${order.orderId}`}
+      to={`${
+        !order.isAddedBySalesperson
+          ? `/dashboard/orders/${order.orderId}`
+          : `/dashboard/salespeople/orders/${order.salespersonOrderId}`
+      }`}
       color="secondary"
       sx={{ background: !order.isRead ? "#f6f6f6" : undefined }}
     >

@@ -83,7 +83,7 @@ const SalespersonProfileDetails = ({
     <Container container direction="column">
       <Grid item container alignItems="center" columnSpacing={1}>
         <Grid item>
-          <PreviousButton path="/dashboard/salespersons" />
+          <PreviousButton path="/dashboard/salespeople" />
         </Grid>
         <Grid item>
           <Typography variant="h2">Salesperson Details</Typography>
@@ -99,7 +99,7 @@ const SalespersonProfileDetails = ({
         <Grid
           item
           component={Link}
-          to="/dashboard/salespersons"
+          to="/dashboard/salespeople"
           style={{
             textDecoration: "none",
             color: theme.palette.secondary.dark,
@@ -111,7 +111,7 @@ const SalespersonProfileDetails = ({
         <Grid
           item
           component={Link}
-          to={`/dashboard/salespersons/${salespersonId}`}
+          to={`/dashboard/salespeople/${salespersonId}`}
           style={{
             textDecoration: "none",
             color: theme.palette.secondary.dark,
