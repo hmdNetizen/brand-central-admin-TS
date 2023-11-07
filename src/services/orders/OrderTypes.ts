@@ -63,6 +63,13 @@ export type OrderReturnedPayload = {
     email: string;
   };
   ordersProducts: OrdersProductsType[];
+  /* I added this here just to bypass TS error. This field is not 
+   available in the Order schema rather in the salesperson's */
+  placedBy?: {
+    id: string;
+    fullName: string;
+    email: string;
+  };
 };
 
 export type RecentSalesPayloadType = {

@@ -18,9 +18,13 @@ import { invoiceColumns } from "src/lib/dataset/tableData";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import OrderedProductsItem from "src/components/orders/OrderedProductsItem";
 import OrderInvoiceDetails from "src/components/orders/OrderInvoiceDetails";
-import { Container, ContentContainer, Logo } from "./styles/OrderInvoiceStyles";
+import {
+  Container,
+  ContentContainer,
+  Logo,
+} from "../../orders/styles/OrderInvoiceStyles";
 
-const OrderInvoicePageDisplay = () => {
+const SalespersonOrderInvoicePageLayout = () => {
   useTitle("Admin : Orders | Order Invoice");
   const theme = useTheme();
   const { pathname } = useLocation();
@@ -28,12 +32,14 @@ const OrderInvoicePageDisplay = () => {
   const { orderId } = useParams();
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(200);
+  const [rowsPerPage, setRowsPerPage] = useState(100);
 
   const loadingSingleOrder = useTypedSelector(
-    (state) => state.orders.loadingSingleOrder
+    (state) => state.salespersonOrders.loadingSingleOrder
   );
-  const singleOrder = useTypedSelector((state) => state.orders.singleOrder);
+  const singleOrder = useTypedSelector(
+    (state) => state.salespersonOrders.singleOrder
+  );
 
   const calculateTotal = useMemo(() => {
     return singleOrder?.ordersProducts.reduce((previousValue, currentValue) => {
@@ -41,7 +47,7 @@ const OrderInvoicePageDisplay = () => {
     }, 0);
   }, [singleOrder]);
 
-  const { getSingleOrder } = useActions();
+  const { getSalespersonSingleOrder } = useActions();
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -51,7 +57,9 @@ const OrderInvoicePageDisplay = () => {
   };
 
   useEffect(() => {
-    getSingleOrder(orderId!);
+    if (orderId) {
+      getSalespersonSingleOrder(orderId);
+    }
   }, [orderId]);
 
   useEffect(() => {
@@ -66,7 +74,9 @@ const OrderInvoicePageDisplay = () => {
         <Fragment>
           <Grid item container alignItems="center" columnSpacing={1}>
             <Grid item>
-              <PreviousButton path={`/dashboard/orders/${orderId}`} />
+              <PreviousButton
+                path={`/dashboard/salespeople/orders/${orderId}`}
+              />
             </Grid>
             <Grid item>
               <Typography variant="h2">Order Invoice</Typography>
@@ -83,7 +93,7 @@ const OrderInvoicePageDisplay = () => {
             <Grid
               item
               component={Link}
-              to={`/dashboard/orders`}
+              to={`/dashboard/salespeople/orders`}
               style={{
                 textDecoration: "none",
                 color: theme.palette.secondary.dark,
@@ -95,7 +105,7 @@ const OrderInvoicePageDisplay = () => {
             <Grid
               item
               component={Link}
-              to={`/dashboard/orders/${orderId}`}
+              to={`/dashboard/salespeople/orders/${orderId}`}
               style={{
                 textDecoration: "none",
                 color: theme.palette.secondary.dark,
@@ -107,7 +117,7 @@ const OrderInvoicePageDisplay = () => {
             <Grid
               item
               component={Link}
-              to={`/dashboard/orders/${orderId}/invoice`}
+              to={`/dashboard/salespeople/orders/${orderId}/invoice`}
               style={{
                 textDecoration: "none",
                 color: theme.palette.secondary.dark,
@@ -150,7 +160,7 @@ const OrderInvoicePageDisplay = () => {
                   background={theme.palette.secondary}
                   title="Print Invoice"
                   component={Link}
-                  to={`/dashboard/orders/${orderId}/invoice/print`}
+                  to={`/dashboard/salespeople/orders/${orderId}/invoice/print`}
                   target="_blank"
                   style={{ maxHeight: 40 }}
                 />
@@ -265,4 +275,4 @@ const OrderInvoicePageDisplay = () => {
   );
 };
 
-export default OrderInvoicePageDisplay;
+export default SalespersonOrderInvoicePageLayout;

@@ -36,8 +36,10 @@ import NonImageProducts from "src/pages/products/NonImageProducts";
 import PopularProducts from "src/pages/products/Popular";
 import WeeklyOffersProducts from "src/pages/products/WeeklyOffers";
 import SalespersonCustomerProfile from "src/pages/salespersons/customers/SalespersonCustomerProfile";
+import PrintSalespersonOrderInvoice from "src/pages/salespersons/orders/PrintSalespersonOrderInvoice";
 import SalespeopleOrders from "src/pages/salespersons/orders/SalespeopleOrders";
 import SalespersonOrderDetails from "src/pages/salespersons/orders/SalespersonOrderDetails";
+import SalespersonOrderInvoice from "src/pages/salespersons/orders/SalespersonOrderInvoice";
 import SalespersonProfileDetails from "src/pages/salespersons/SalespersonProfileDetails";
 import Salespersons from "src/pages/salespersons/Salespersons";
 import ShippingZipCodes from "src/pages/shipping/ShippingZipCodes";
@@ -140,6 +142,13 @@ const PagesRoutes = () => {
                           <SalespersonOrderDetails menuSlideIn={menuSlideIn} />
                         }
                       />
+                      <Route path="invoice">
+                        <Route index element={<SalespersonOrderInvoice />} />
+                        <Route
+                          path="print"
+                          element={<PrintSalespersonOrderInvoice />}
+                        />
+                      </Route>
                     </Route>
                   </Route>
                 </Route>
