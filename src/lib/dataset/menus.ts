@@ -128,11 +128,26 @@ export const menus = [
     icon: SalesPeopleIcon,
     path: "/dashboard/salespeople",
     subMenus: [
-      { subId: 0, title: "Salespersons List", path: "/dashboard/salespeople" },
+      { subId: 0, title: "Salespeople", path: "/dashboard/salespeople" },
       {
         subId: 1,
-        title: "Deactivated Salespersons",
+        title: "Deactivated Salespeople",
         path: "/dashboard/salespeople/deactivated",
+      },
+      {
+        subId: 2,
+        title: "Pending Orders",
+        path: "/dashboard/salespeople/orders/pending",
+      },
+      {
+        subId: 3,
+        title: "Completed Orders",
+        path: "/dashboard/salespeople/orders/completed",
+      },
+      {
+        subId: 4,
+        title: "Customers List",
+        path: "/dashboard/salespeople/customers",
       },
     ],
   },

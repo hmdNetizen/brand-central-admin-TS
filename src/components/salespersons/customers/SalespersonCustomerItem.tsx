@@ -1,7 +1,7 @@
 import React from "react";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import { StyledButton } from "../styles/SalespersonOrderItemStyles";
+import { StyledButton } from "../styles/SalespersonDetailsOrderItemStyles";
 import { SalespersonCustomerResponsePayload } from "src/services/salespersons/customers/types";
 import { Link } from "react-router-dom";
 import { capitalizeFirstLetters } from "src/lib/helpers";

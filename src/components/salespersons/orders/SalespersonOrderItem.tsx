@@ -1,36 +1,75 @@
 import React from "react";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import Moment from "react-moment";
 import { useTheme } from "@mui/material/styles";
-import { Link } from "react-router-dom";
+import Moment from "react-moment";
+import { capitalizeFirstLetters } from "src/lib/helpers";
+import CustomSalespersonOrderOptions from "./CustomSalespersonOrderOptions";
+import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
+import { useActions } from "src/hooks/useActions";
 import {
-  OrderStatus,
-  StyledButton,
-} from "../styles/SalespersonOrderItemStyles";
+  CompletedButton,
+  OptionsTableData,
+  StyledChip,
+  StyledIconButton,
+} from "../../orders/styles/OrderItemStyles";
 import { SalespersonOrderResponsePayload } from "src/services/salespersons/orders/types";
 
-type SalespersonOrderItemProps = {
+type OrderItemProps = {
   order: SalespersonOrderResponsePayload;
+  setOpenDeliveryStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenEmailCustomer: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenDeleteOrder: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const SalespersonOrderItem = (props: SalespersonOrderItemProps) => {
-  const { order } = props;
+const SalespersonOrderItem = (props: OrderItemProps) => {
+  const {
+    order,
+    setOpenDeliveryStatus,
+    setOpenEmailCustomer,
+    setOpenDeleteOrder,
+  } = props;
   const theme = useTheme();
-  const { orderId, orderDate, orderPaymentAmount, orderStatus, orderedFor } =
-    order;
+
+  const { markOrderStatusAsCompleted, setCurrentSalespersonOrder } =
+    useActions();
+
+  const {
+    orderDate,
+    orderId,
+    ordersProducts,
+    orderPaymentAmount,
+    orderStatus,
+    placedBy: { fullName },
+    orderedFor: { companyName },
+  } = order;
+
+  const handleMarkAsCompleted = (order: SalespersonOrderResponsePayload) => {
+    markOrderStatusAsCompleted(order.id);
+  };
+
+  const handleDeleteOrder = (order: SalespersonOrderResponsePayload) => {
+    setCurrentSalespersonOrder(order);
+    setOpenDeleteOrder(true);
+  };
 
   return (
     <TableRow hover role="checkbox" tabIndex={-1}>
-      <TableCell>{orderId}</TableCell>
-      <TableCell>{orderedFor.companyName}</TableCell>
       <TableCell style={{ minWidth: 200 }}>
         <Moment format="YYYY-MM-DD hh:mm:ss">{orderDate}</Moment>
       </TableCell>
-      <TableCell>${orderPaymentAmount.toFixed(2)}</TableCell>
-      <TableCell>
-        <OrderStatus
-          variant="body2"
+      <TableCell style={{ minWidth: 150 }}>{orderId}</TableCell>
+      <TableCell style={{ minWidth: 200 }}>{fullName}</TableCell>
+      <TableCell style={{ minWidth: 250 }}>{companyName}</TableCell>
+      <TableCell style={{ minWidth: 100 }} align="center">
+        {ordersProducts.length}
+      </TableCell>
+      <TableCell style={{ minWidth: 120 }} align="center">
+        {orderPaymentAmount.toFixed(2)}
+      </TableCell>
+      <TableCell align="center">
+        <StyledChip
+          label={capitalizeFirstLetters(orderStatus)}
           style={{
             background:
               orderStatus === "pending"
@@ -45,33 +84,28 @@ const SalespersonOrderItem = (props: SalespersonOrderItemProps) => {
                 ? theme.palette.success.dark
                 : "#fff",
           }}
-        >
-          {orderStatus}
-        </OrderStatus>
+        />
       </TableCell>
-      <TableCell style={{ minWidth: 150 }}>
-        <StyledButton
-          variant="contained"
-          color="secondary"
-          component={Link}
-          to={`/dashboard/salespeople/orders/${order.id}`}
-        >
-          View Details
-        </StyledButton>
-      </TableCell>
-      <TableCell style={{ minWidth: 150 }}>
-        <StyledButton
-          variant="contained"
-          style={{
-            background: theme.palette.common.lightGrey,
-            color: theme.palette.primary.main,
-            fontWeight: 600,
-          }}
-          component={Link}
-          to={`/dashboard/salespeople/orders/${order.id}/invoice`}
-        >
-          View Invoice
-        </StyledButton>
+      <TableCell>
+        <OptionsTableData>
+          <CustomSalespersonOrderOptions
+            order={order}
+            setOpenDeliveryStatus={setOpenDeliveryStatus}
+            setOpenEmailCustomer={setOpenEmailCustomer}
+          />
+          <StyledIconButton onClick={() => handleDeleteOrder(order)}>
+            <DeleteSharpIcon />
+          </StyledIconButton>
+          {orderStatus !== "completed" && orderStatus !== "declined" && (
+            <CompletedButton
+              variant="contained"
+              disableRipple
+              onClick={() => handleMarkAsCompleted(order)}
+            >
+              Mark Completed
+            </CompletedButton>
+          )}
+        </OptionsTableData>
       </TableCell>
     </TableRow>
   );

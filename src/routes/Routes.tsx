@@ -35,7 +35,11 @@ import FeaturedProducts from "src/pages/products/FeaturedProducts";
 import NonImageProducts from "src/pages/products/NonImageProducts";
 import PopularProducts from "src/pages/products/Popular";
 import WeeklyOffersProducts from "src/pages/products/WeeklyOffers";
+import SalespersonCustomersList from "src/pages/salespersons/customers/CustomersList";
 import SalespersonCustomerProfile from "src/pages/salespersons/customers/SalespersonCustomerProfile";
+import DeactivatedSalespeople from "src/pages/salespersons/DeactivatedSalespeople";
+import SalespersonCompletedOrders from "src/pages/salespersons/orders/CompletedOrders";
+import SalespersonPendingOrders from "src/pages/salespersons/orders/PendingOrders";
 import PrintSalespersonOrderInvoice from "src/pages/salespersons/orders/PrintSalespersonOrderInvoice";
 import SalespeopleOrders from "src/pages/salespersons/orders/SalespeopleOrders";
 import SalespersonOrderDetails from "src/pages/salespersons/orders/SalespersonOrderDetails";
@@ -119,7 +123,14 @@ const PagesRoutes = () => {
                 </Route>
                 <Route path="salespeople">
                   <Route index element={<Salespersons />} />
-                  {/* <Route path="blocked" element={<BlockedCustomers />} /> */}
+                  <Route
+                    path="deactivated"
+                    element={<DeactivatedSalespeople />}
+                  />
+                  <Route
+                    path="customers"
+                    element={<SalespersonCustomersList />}
+                  />
                   <Route path=":salespersonId">
                     <Route
                       index
@@ -135,6 +146,14 @@ const PagesRoutes = () => {
                   </Route>
                   <Route path="orders">
                     <Route index element={<SalespeopleOrders />} />
+                    <Route
+                      path="pending"
+                      element={<SalespersonPendingOrders />}
+                    />
+                    <Route
+                      path="completed"
+                      element={<SalespersonCompletedOrders />}
+                    />
                     <Route path=":orderId">
                       <Route
                         index

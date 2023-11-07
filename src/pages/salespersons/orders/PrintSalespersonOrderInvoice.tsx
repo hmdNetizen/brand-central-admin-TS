@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-import SalespersonOrderInvoicePageLayout from "./SalespersonOrderInvoicePageLayout";
+import SalespersonOrderInvoicePageLayout from "../utils/SalespersonOrderInvoicePageLayout";
 
 const PrintSalespersonOrderInvoice = () => {
   const loadingSingleOrder = useTypedSelector(

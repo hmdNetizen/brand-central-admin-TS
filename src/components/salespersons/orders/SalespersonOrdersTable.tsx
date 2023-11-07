@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { salespersonOrdersColumns } from "src/lib/dataset/tableData";
 import Tables from "src/components/table/Tables";
-import SalespersonOrderItem from "./SalespersonOrderItem";
+import SalespersonDetailsOrderItem from "./SalespersonDetailsOrderItem";
 import { SalespersonOrderResponsePayload } from "src/services/salespersons/orders/types";
 import { useActions } from "src/hooks/useActions";
 
@@ -50,7 +50,7 @@ const SalespersonOrdersTable = (props: SalespersonOrdersTableProps) => {
     >
       {!loading &&
         salespersonOrders.map((order) => {
-          return <SalespersonOrderItem key={order.id} order={order} />;
+          return <SalespersonDetailsOrderItem key={order.id} order={order} />;
         })}
     </Tables>
   );

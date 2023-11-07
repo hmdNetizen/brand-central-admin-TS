@@ -344,6 +344,49 @@ export const allOrdersCategoryColumns: TableHeaderColumnTypes[] = [
   },
 ];
 
+export const salespersonOrdersCategoryColumns: TableHeaderColumnTypes[] = [
+  {
+    id: 0,
+    label: "Order Date",
+    align: "left",
+  },
+  {
+    id: 1,
+    label: "Order Number",
+    align: "left",
+  },
+  {
+    id: 2,
+    label: "Sales Rep's Name",
+    align: "left",
+  },
+  {
+    id: 3,
+    label: "Customer Name",
+    align: "left",
+  },
+  {
+    id: 4,
+    label: "Total Qty",
+    align: "center",
+  },
+  {
+    id: 5,
+    label: "Total Cost",
+    align: "center",
+  },
+  {
+    id: 6,
+    label: "Status",
+    align: "center",
+  },
+  {
+    id: 7,
+    label: "Options",
+    align: "left",
+  },
+];
+
 export const brandsColumn: TableHeaderColumnTypes[] = [
   {
     id: 0,
