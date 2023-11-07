@@ -8,7 +8,9 @@ import debounce from "lodash.debounce";
 const SalespersonCompletedOrders = () => {
   useTitle("Admin : Find all sales rep's completed orders");
 
-  const loadingOrders = useTypedSelector((state) => state.orders.loadingOrders);
+  const loadingOrders = useTypedSelector(
+    (state) => state.salespersonOrders.loadingOrders
+  );
   const salespersonOrders = useTypedSelector(
     (state) => state.salespersonOrders.salespersonOrders
   );
