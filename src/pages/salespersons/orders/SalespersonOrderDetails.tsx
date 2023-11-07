@@ -133,18 +133,11 @@ const SalespersonOrderDetails = ({
               </Grid>
             </Grid>
           </Grid>
-
-          <Grid item container spacing={3} sx={{ pt: 3 }}>
-            {/* <Grid item xs={12} md={!menuSlideIn ? 12 : 6} lg={6}>
-              <ShippingDetailsCard singleOrder={singleOrder} />
-            </Grid> */}
-            <Grid item xs={12} md={!menuSlideIn ? 12 : 6} lg={6}></Grid>
-          </Grid>
           <Grid item container>
-            {/* <OrderedProductsList
+            <OrderedProductsList
               loading={loadingSingleOrder}
               singleOrder={singleOrder}
-            /> */}
+            />
           </Grid>
         </CardsContainer>
       ) : (

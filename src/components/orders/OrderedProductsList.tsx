@@ -6,10 +6,11 @@ import Tables from "src/components/table/Tables";
 import OrderedProductsItem from "./OrderedProductsItem";
 
 import { OrderReturnedPayload } from "src/services/orders/OrderTypes";
+import { SalespersonOrderResponsePayload } from "src/services/salespersons/orders/types";
 
 type OrderProductListProps = {
   loading: boolean;
-  singleOrder: OrderReturnedPayload;
+  singleOrder: OrderReturnedPayload | SalespersonOrderResponsePayload;
 };
 
 const OrderedProductsList = (props: OrderProductListProps) => {

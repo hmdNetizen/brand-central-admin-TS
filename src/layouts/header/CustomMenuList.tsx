@@ -13,13 +13,14 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import LockResetRoundedIcon from "@mui/icons-material/LockResetRounded";
 import ShoppingBasketSharpIcon from "@mui/icons-material/ShoppingBasketSharp";
 import LogoutIcon from "@mui/icons-material/Logout";
+import PersonIcon from "@mui/icons-material/Person";
 import { useTheme } from "@mui/material/styles";
 import { Link, useNavigate } from "react-router-dom";
 import { useActions } from "src/hooks/useActions";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import Moment from "react-moment";
 import EmptyNotification from "./EmptyNotification";
-import { StyledMenuItem } from "./styles/CustomMenuListStyles";
+import { StyledMenuItem, StyledChip } from "./styles/CustomMenuListStyles";
 
 const accountMenus = [
   {
@@ -236,6 +237,12 @@ const CustomMenuList = (props: MenuListProps) => {
         </ListItemIcon>
         <ListItemText>You have received a new order</ListItemText>
       </div>
+      {order.isAddedBySalesperson && (
+        <StyledChip
+          label="Sales Rep"
+          icon={<PersonIcon style={{ color: "#e2cc4a", fontSize: 16 }} />}
+        />
+      )}
       <Typography
         variant="subtitle1"
         sx={{ color: theme.palette.secondary.main }}
