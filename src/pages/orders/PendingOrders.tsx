@@ -13,6 +13,7 @@ const PendingOrders = () => {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [orderStatus] = useState("pending");
   const [filterText, setFilterText] = useState("");
   const [openDeliveryStatus, setOpenDeliveryStatus] = useState(false);
   const [openEmailCustomer, setOpenEmailCustomer] = useState(false);

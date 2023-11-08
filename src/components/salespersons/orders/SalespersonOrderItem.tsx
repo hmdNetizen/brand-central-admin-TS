@@ -31,7 +31,7 @@ const SalespersonOrderItem = (props: OrderItemProps) => {
   } = props;
   const theme = useTheme();
 
-  const { markOrderStatusAsCompleted, setCurrentSalespersonOrder } =
+  const { updateSalespersonOrderStatus, setCurrentSalespersonOrder } =
     useActions();
 
   const {
@@ -45,7 +45,11 @@ const SalespersonOrderItem = (props: OrderItemProps) => {
   } = order;
 
   const handleMarkAsCompleted = (order: SalespersonOrderResponsePayload) => {
-    markOrderStatusAsCompleted(order.id);
+    updateSalespersonOrderStatus({
+      orderId: order.id,
+      orderStatus: "completed",
+      paymentStatus: "paid",
+    });
   };
 
   const handleDeleteOrder = (order: SalespersonOrderResponsePayload) => {

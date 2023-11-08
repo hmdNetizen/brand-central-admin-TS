@@ -26,9 +26,11 @@ const initialState: InitStateType = {
 
 export const getAllSalespersons = createAsyncThunk(
   "get-all-salespersons",
-  async (_, thunkAPI) => {
+  async (isActive: boolean, thunkAPI) => {
     try {
-      const { data } = await axios.get(config.salespersons.get);
+      const { data } = await axios.get(config.salespersons.get, {
+        params: { isActive },
+      });
       const result = data as SalespersonsPayloadTypes;
 
       return result.data;

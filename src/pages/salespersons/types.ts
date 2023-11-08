@@ -2,7 +2,7 @@ import React from "react";
 import { SalespersonReturnedPayload } from "src/services/salespersons/SalesPersonTypes";
 
 export type SalesPersonsPageLayoutProps = {
-  title: "Salespersons" | "Deactivated Salespersons";
+  title: "Salespeople" | "Deactivated Salespeople";
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   rowsPerPage: number;

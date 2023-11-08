@@ -16,6 +16,9 @@ export const config = {
       getById: (orderId: string) =>
         `/api/salesperson-orders/admin/single-order/${orderId}`,
       getByStatus: "/api/salesperson-orders/order-status/admin",
+      update: (orderId: string) =>
+        `/api/salesperson-orders/order-status/admin/update/${orderId}`,
+      countByStatus: "/api/salesperson-orders/count/admin",
     },
     customers: {
       getById: (salespersonId: string) =>

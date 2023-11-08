@@ -37,11 +37,20 @@ export type OrdersProductsType = {
   isSpecial: boolean;
 };
 
+export type OrderStatusTypes =
+  | "pending"
+  | "completed"
+  | "declined"
+  | "processing"
+  | "";
+
+export type OrderPaymentStatusTypes = "paid" | "unpaid" | "processing" | "";
+
 export type OrderReturnedPayload = {
   id: string;
   _id?: string;
   orderId: string;
-  orderStatus: string;
+  orderStatus: OrderStatusTypes;
   orderDate: string;
   orderNote: string;
   orderTotalQuantity: number;
@@ -50,7 +59,7 @@ export type OrderReturnedPayload = {
   promoCode: string;
   orderPaymentAmount: number;
   orderPaymentMethod: string;
-  orderPaymentStatus: string;
+  orderPaymentStatus: OrderPaymentStatusTypes;
   orderPaymentDate: string;
   orderInVoiceNumber: string;
   deliveryMethod: string;

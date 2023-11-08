@@ -40,7 +40,7 @@ const Salespersons = () => {
   };
 
   useEffect(() => {
-    getAllSalespersons();
+    getAllSalespersons(true);
   }, []);
 
   //   useEffect(() => {
@@ -60,7 +60,7 @@ const Salespersons = () => {
 
   return (
     <SalesPersonsPageLayout
-      title="Salespersons"
+      title="Salespeople"
       filterText={filterText}
       page={page}
       setPage={setPage}

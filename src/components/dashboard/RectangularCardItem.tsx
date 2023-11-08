@@ -35,7 +35,11 @@ const RectangularCardItem = (props: RectangularCardItemProps) => {
             <Typography
               variant="body1"
               color="#fff"
-              style={{ fontSize: "1.8rem", position: "relative", zIndex: 9 }}
+              style={{
+                fontSize: "1.8rem",
+                position: "relative",
+                zIndex: 9,
+              }}
             >
               {heading}
             </Typography>

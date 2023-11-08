@@ -3,11 +3,8 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import Tables from "src/components/table/Tables";
-import {
-  allOrdersCategoryColumns,
-  salespersonOrdersCategoryColumns,
-} from "src/lib/dataset/tableData";
-// import DeliveryStatus from "./modals/DeliveryStatus";
+import { salespersonOrdersCategoryColumns } from "src/lib/dataset/tableData";
+import SalespersonOrderDeliveryStatus from "../orders/modals/OrderDeliveryStatus";
 // import DeleteOrder from "./modals/DeleteOrder";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
@@ -133,10 +130,10 @@ const SalespersonOrderPageLayout = (props: SalespersonOrderPageLayoutProps) => {
           </Tables>
         </Grid>
       </ContainerWrapper>
-      {/* <DeliveryStatus
+      <SalespersonOrderDeliveryStatus
         openDeliveryStatus={openDeliveryStatus}
         setOpenDeliveryStatus={setOpenDeliveryStatus}
-      /> */}
+      />
       <CustomLoadingDialog
         loading={loadingOrderAction}
         handleLoading={handleLoadingOrders}

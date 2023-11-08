@@ -72,6 +72,9 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
   const processingOrdersCount = useTypedSelector(
     (state) => state.orders.processingOrdersCount
   );
+  const salespersonPendingOrdersTotal = useTypedSelector(
+    (state) => state.salespersonOrders.pendingOrdersTotal
+  );
 
   const totalCustomers = useTypedSelector(
     (state) => state.customers.totalCustomers
@@ -97,7 +100,7 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
         }
         path="/dashboard/orders/pending"
       />
-      <DashboardRectangularCardItem
+      {/* <DashboardRectangularCardItem
         heading="Orders Processing"
         numberCount={processingOrdersCount}
         primaryColor="#047edf"
@@ -108,6 +111,18 @@ const DashboardRectangularCards = ({ menuSlideIn }: CardPropTypes) => {
           />
         }
         path="/dashboard/orders/processing"
+      /> */}
+      <DashboardRectangularCardItem
+        heading="Orders Pending (Sales Reps)"
+        numberCount={salespersonPendingOrdersTotal}
+        primaryColor="#d69e06"
+        secondaryColor="#f7c036"
+        cardIcon={
+          <LocalShippingSharpIcon
+            style={{ transform: "rotate(-20deg)", fontSize: "5rem" }}
+          />
+        }
+        path="/dashboard/salespeople/orders/pending"
       />
       <DashboardRectangularCardItem
         heading="Orders Completed"
