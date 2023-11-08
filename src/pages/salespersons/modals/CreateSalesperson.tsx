@@ -4,7 +4,6 @@ import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import IconButton from "@mui/material/IconButton";
 import { styled, useTheme } from "@mui/material/styles";
-import CloseIcon from "@mui/icons-material/Close";
 
 import ShowDialog from "src/utils/ShowDialog";
 import {
