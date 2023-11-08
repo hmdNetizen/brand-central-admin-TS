@@ -133,7 +133,7 @@ const CreateSalesperson = ({
       <ContentContainer container direction="column">
         {/* Heading goes here */}
         <ModalHeading
-          title="Add a New Salesperson"
+          title="Add a New Sales Rep"
           setOpen={setOpenAddSalesperson}
         />
         {!loadingRequestAction && error && (

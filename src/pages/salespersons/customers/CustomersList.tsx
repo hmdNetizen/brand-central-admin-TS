@@ -10,6 +10,7 @@ import {
 import PageHeadingWithActionButton from "src/components/common/PageHeadingWithActionButton";
 import SalespeopleCustomers from "src/components/salespersons/customers/SalespeopleCustomers";
 import { useActions } from "src/hooks/useActions";
+import CreateSalespersonCustomer from "./modals/CreateSalespersonCustomer";
 
 const SalespersonCustomersList = () => {
   const theme = useTheme();
@@ -17,7 +18,8 @@ const SalespersonCustomersList = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [filterText, setFilterText] = useState("");
-  const [openAddCustomer, setOpenAddCustomer] = useState(false);
+  const [openAddSalespersonCustomer, setOpenAddSalespersonCustomer] =
+    useState(false);
 
   const { getSalespeopleCustomers } = useActions();
 
@@ -47,7 +49,7 @@ const SalespersonCustomersList = () => {
           handleSearch={handleChange}
           rowsPerPage={rowsPerPage}
           buttonTitle="Create a Sales Rep's customer"
-          setOpen={setOpenAddCustomer}
+          setOpen={setOpenAddSalespersonCustomer}
           setRowsPerPage={setRowsPerPage}
           setPage={setPage}
           isDeactivatedPage={false}
@@ -57,6 +59,10 @@ const SalespersonCustomersList = () => {
           <SalespeopleCustomers />
         </Grid>
       </ContainerWrapper>
+      <CreateSalespersonCustomer
+        openAddSalespersonCustomer={openAddSalespersonCustomer}
+        setOpenAddSalespersonCustomer={setOpenAddSalespersonCustomer}
+      />
     </Container>
   );
 };
