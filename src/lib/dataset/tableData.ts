@@ -168,18 +168,27 @@ export const customerOrderColumns: TableHeaderColumnTypes[] = [
 export const salespersonOrdersColumns: TableHeaderColumnTypes[] = [
   { id: 0, label: "Order ID", align: "left" },
   { id: 1, label: "Customer", align: "left" },
-  { id: 1, label: "Purchase Date", align: "left" },
-  { id: 2, label: "Amount", align: "left" },
-  { id: 3, label: "Status", align: "center" },
-  { id: 4, label: "", align: "center" },
+  { id: 2, label: "Purchase Date", align: "left" },
+  { id: 3, label: "Amount", align: "left" },
+  { id: 4, label: "Status", align: "center" },
   { id: 5, label: "", align: "center" },
+  { id: 6, label: "", align: "center" },
 ];
 
 export const salespersonCustomersColumns: TableHeaderColumnTypes[] = [
   { id: 0, label: "Customer Code", align: "left" },
   { id: 1, label: "Company Name", align: "left" },
-  { id: 1, label: "Company Email", align: "center", minWidth: 150 },
-  { id: 2, label: "Phone", align: "center" },
+  { id: 2, label: "Company Email", align: "center", minWidth: 150 },
+  { id: 3, label: "Phone", align: "center" },
+  { id: 4, label: "Price Code", align: "center" },
+  { id: 5, label: "", align: "center" },
+];
+
+export const salespeopleCustomersColumns: TableHeaderColumnTypes[] = [
+  { id: 0, label: "Customer Code", align: "center" },
+  { id: 1, label: "Company Name", align: "left" },
+  { id: 1, label: "Company Phone", align: "center", minWidth: 180 },
+  { id: 2, label: "Sales Rep", align: "center" },
   { id: 3, label: "Price Code", align: "center" },
   { id: 5, label: "", align: "center" },
 ];

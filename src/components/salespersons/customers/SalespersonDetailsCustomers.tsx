@@ -3,13 +3,15 @@ import Tables from "src/components/table/Tables";
 import { useActions } from "src/hooks/useActions";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { salespersonCustomersColumns } from "src/lib/dataset/tableData";
-import SalespersonCustomerItem from "./SalespersonCustomerItem";
+import SalespersonCustomerItem from "./SalespersonDetailsCustomerItem";
 
-type SalespersonCustomersProps = {
+type SalespersonDetailsCustomersProps = {
   salespersonId: string | undefined;
 };
 
-const SalespersonCustomers = ({ salespersonId }: SalespersonCustomersProps) => {
+const SalespersonDetailsCustomers = ({
+  salespersonId,
+}: SalespersonDetailsCustomersProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -67,4 +69,4 @@ const SalespersonCustomers = ({ salespersonId }: SalespersonCustomersProps) => {
   );
 };
 
-export default SalespersonCustomers;
+export default SalespersonDetailsCustomers;

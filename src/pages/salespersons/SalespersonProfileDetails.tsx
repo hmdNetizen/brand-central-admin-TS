@@ -16,7 +16,7 @@ import placeholderAvatar from "src/assets/images/placeholder-avatar.png";
 import CustomIconButton from "src/utils/CustomIconButton";
 import SalespersonDetailsTable from "src/components/salespersons/SalespersonDetailsTable";
 import SalespersonOrdersTable from "src/components/salespersons/orders/SalespersonOrdersTable";
-import SalespersonCustomers from "src/components/salespersons/customers/SalespersonCustomers";
+import SalespersonCustomers from "src/components/salespersons/customers/SalespersonDetailsCustomers";
 
 export const DetailsWrapper = styled(Grid, {
   shouldForwardProp: (prop) => prop !== "menuSlideIn",

@@ -24,5 +24,6 @@ export type InitStateTypes = {
   loadingSalespersonCustomers: boolean;
   totalCustomers: number;
   salespersonCustomers: Array<SalespersonCustomerResponsePayload>;
+  singleSalespersonCustomer: SalespersonCustomerResponsePayload | null;
   error: string | null;
 };

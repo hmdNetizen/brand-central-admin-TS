@@ -87,6 +87,7 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
           setRowsPerPage={setRowsPerPage}
           setPage={setPage}
           isDeactivatedPage={false}
+          placeholderText="Search..."
         />
         <Grid item container style={{ marginTop: "5rem" }}>
           <Tables

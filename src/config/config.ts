@@ -21,6 +21,7 @@ export const config = {
       countByStatus: "/api/salesperson-orders/count/admin",
     },
     customers: {
+      get: "/api/salespersons-customers",
       getById: (salespersonId: string) =>
         `/api/salespersons-customers/admin/${salespersonId}`,
     },

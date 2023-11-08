@@ -6,15 +6,15 @@ import { SalespersonCustomerResponsePayload } from "src/services/salespersons/cu
 import { Link } from "react-router-dom";
 import { capitalizeFirstLetters } from "src/lib/helpers";
 
-type SalespersonCustomerItemProps = {
+type SalespersonDetailsCustomerItemProps = {
   customer: SalespersonCustomerResponsePayload;
   salespersonId: string | undefined;
 };
 
-const SalespersonCustomerItem = ({
+const SalespersonDetailsCustomerItem = ({
   customer,
   salespersonId,
-}: SalespersonCustomerItemProps) => {
+}: SalespersonDetailsCustomerItemProps) => {
   const {
     customerCode,
     companyName,
@@ -48,4 +48,4 @@ const SalespersonCustomerItem = ({
   );
 };
 
-export default SalespersonCustomerItem;
+export default SalespersonDetailsCustomerItem;
