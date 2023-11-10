@@ -11,6 +11,7 @@ import PageHeadingWithActionButton from "src/components/common/PageHeadingWithAc
 import SalespeopleCustomers from "src/components/salespersons/customers/SalespeopleCustomers";
 import { useActions } from "src/hooks/useActions";
 import CreateSalespersonCustomer from "./modals/CreateSalespersonCustomer";
+import EditSalespersonCustomer from "./modals/EditSalespersonCustomer";
 
 const SalespersonCustomersList = () => {
   const theme = useTheme();
@@ -18,7 +19,10 @@ const SalespersonCustomersList = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [filterText, setFilterText] = useState("");
+
   const [openAddSalespersonCustomer, setOpenAddSalespersonCustomer] =
+    useState(false);
+  const [openEditSalespersonCustomer, setOpenEditSalespersonCustomer] =
     useState(false);
 
   const { getSalespeopleCustomers, getAllSalespersons } = useActions();
@@ -60,12 +64,18 @@ const SalespersonCustomersList = () => {
           placeholderText="Search..."
         />
         <Grid item container style={{ marginTop: "5rem" }}>
-          <SalespeopleCustomers />
+          <SalespeopleCustomers
+            setOpenEditSalespersonCustomer={setOpenEditSalespersonCustomer}
+          />
         </Grid>
       </ContainerWrapper>
       <CreateSalespersonCustomer
         openAddSalespersonCustomer={openAddSalespersonCustomer}
         setOpenAddSalespersonCustomer={setOpenAddSalespersonCustomer}
+      />
+      <EditSalespersonCustomer
+        openEditSalespersonCustomer={openEditSalespersonCustomer}
+        setOpenEditSalespersonCustomer={setOpenEditSalespersonCustomer}
       />
     </Container>
   );

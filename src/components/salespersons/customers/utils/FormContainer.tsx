@@ -12,6 +12,8 @@ import CustomFormInput from "src/utils/CustomFormInput";
 import CustomSelect from "src/utils/CustomSelect";
 import { SelectChangeEvent } from "@mui/material";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
+import PhoneNumberInput from "src/utils/PhoneNumberInput";
+import { CountryData } from "react-phone-input-2";
 
 type SalespersonCustomerFormContainerProps = {
   onSubmit: (event: React.FormEvent<HTMLFormElement | HTMLDivElement>) => void;
@@ -34,6 +36,12 @@ type SalespersonCustomerFormContainerProps = {
   buttonTitle: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSelectChange: (event: SelectChangeEvent<unknown>) => void;
+  onChangePhoneNumber: (
+    value: string,
+    data: {} | CountryData,
+    event: React.ChangeEvent<HTMLInputElement>,
+    formattedValue: string
+  ) => void;
 };
 
 const SalespersonCustomerFormContainer = (
@@ -74,6 +82,7 @@ const SalespersonCustomerFormContainer = (
     initialsError,
     buttonTitle,
     onSelectChange,
+    onChangePhoneNumber,
   } = props;
   return (
     <StyledFormContainer
@@ -156,16 +165,14 @@ const SalespersonCustomerFormContainer = (
           style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
           md={5.5}
         >
-          <CustomFormInput
-            type="text"
-            label="Phone Number"
-            labelId="phoneNumber"
+          <PhoneNumberInput
             name="phoneNumber"
             value={phoneNumber}
-            placeholder="Enter phone number"
-            onChange={onChange}
-            error={phoneNumberError}
-            autoComplete="off"
+            label="Phone Number"
+            labelId="phoneNumber"
+            placeholder="Enter Phone Number"
+            onChange={onChangePhoneNumber}
+            error={phoneNumberError!}
           />
         </Grid>
       </Grid>
@@ -248,7 +255,7 @@ const SalespersonCustomerFormContainer = (
             onChange={onSelectChange}
             label="Price Code"
             placeholder="Select a Price Code"
-            errorMessage={props.priceCodeError}
+            errorMessage={priceCodeError}
           />
         </Grid>
         <Grid

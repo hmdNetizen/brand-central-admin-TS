@@ -4,7 +4,13 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { salespeopleCustomersColumns } from "src/lib/dataset/tableData";
 import SalespeopleCustomerItem from "./SalespeopleCustomerItem";
 
-const SalespeopleCustomers = () => {
+type SalespeopleCustomersProps = {
+  setOpenEditSalespersonCustomer: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const SalespeopleCustomers = (props: SalespeopleCustomersProps) => {
+  const { setOpenEditSalespersonCustomer } = props;
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -41,7 +47,11 @@ const SalespeopleCustomers = () => {
       {!loadingSalespersonCustomers &&
         salespersonCustomers.map((customer) => {
           return (
-            <SalespeopleCustomerItem key={customer.id} customer={customer} />
+            <SalespeopleCustomerItem
+              key={customer.id}
+              customer={customer}
+              setOpenEditSalespersonCustomer={setOpenEditSalespersonCustomer}
+            />
           );
         })}
     </Tables>

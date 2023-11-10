@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-
-import { ContentContainer } from "src/utilityStyles/pagesUtilityStyles";
-import ShowDialog from "src/utils/ShowDialog";
-import ModalHeading from "src/components/common/ModalHeading";
-import SalespersonCustomerFormContainer from "src/components/salespersons/customers/utils/FormContainer";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { SelectChangeEvent } from "@mui/material";
 
-type CreateSalespersonCustomerProps = {
-  openAddSalespersonCustomer: boolean;
-  setOpenAddSalespersonCustomer: React.Dispatch<React.SetStateAction<boolean>>;
+import ShowDialog from "src/utils/ShowDialog";
+import { ContentContainer } from "src/utilityStyles/pagesUtilityStyles";
+import ModalHeading from "src/components/common/ModalHeading";
+import SalespersonCustomerFormContainer from "src/components/salespersons/customers/utils/FormContainer";
+import { validateEmail } from "src/lib/helpers";
+
+type EditSalespersonCustomerProps = {
+  openEditSalespersonCustomer: boolean;
+  setOpenEditSalespersonCustomer: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type ErrorsTypes = {
@@ -26,11 +25,12 @@ type ErrorsTypes = {
   customerCodeError?: string;
 };
 
-const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
-  const { openAddSalespersonCustomer, setOpenAddSalespersonCustomer } = props;
+const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
+
+  const { openEditSalespersonCustomer, setOpenEditSalespersonCustomer } = props;
 
   const [customerInformation, setCustomerInformation] = useState({
     companyName: "",
@@ -65,16 +65,41 @@ const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
     priceCode,
   } = customerInformation;
 
-  const handleSubmit = (
-    event: React.FormEvent<HTMLFormElement | HTMLDivElement>
-  ) => {
-    event.preventDefault();
+  const validateInput = () => {
+    const errors: ErrorsTypes = {};
 
-    console.log("Submitted");
+    if (!companyName.trim())
+      errors.companyNameError = "Company Name is required";
+
+    if (!customerCode.trim())
+      errors.customerCodeError = "Enter customer identification code";
+
+    if (!validateEmail(companyEmail))
+      errors.companyEmailError = "Enter a valid email address";
+
+    if (!address.trim())
+      errors.addressError = "Enter an address for this customer";
+
+    if (!priceCode.trim())
+      errors.priceCodeError = "Please select a price code for this customer";
+
+    if (!initials.trim())
+      errors.initialsError = "Please select a sales rep's initial";
+
+    setCustomerInfoErrors(errors);
+
+    return Object.keys(errors).length === 0;
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+    setCustomerInformation((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (event: SelectChangeEvent<unknown>) => {
+    const selectEvent = event as React.ChangeEvent<HTMLInputElement>;
+    const { name, value } = selectEvent.target;
+
     setCustomerInformation((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -85,23 +110,28 @@ const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
     }));
   };
 
-  const handleSelectChange = (event: SelectChangeEvent<unknown>) => {
-    const selectEvent = event as React.ChangeEvent<HTMLInputElement>;
-    const { name, value } = selectEvent.target;
+  const handleSubmit = (
+    event: React.FormEvent<HTMLFormElement | HTMLDivElement>
+  ) => {
+    event.preventDefault();
 
-    setCustomerInformation((prev) => ({ ...prev, [name]: value }));
+    if (!validateInput()) {
+      return;
+    }
+
+    console.log("Submitted");
   };
 
   return (
     <ShowDialog
-      openModal={openAddSalespersonCustomer}
-      handleClose={() => setOpenAddSalespersonCustomer(false)}
+      openModal={openEditSalespersonCustomer}
+      handleClose={() => setOpenEditSalespersonCustomer(false)}
       width={matchesXS ? "95%" : matchesSM ? "85%" : 800}
     >
       <ContentContainer container direction="column">
         <ModalHeading
-          title="Add a Sales Rep's customer"
-          setOpen={setOpenAddSalespersonCustomer}
+          title="Edit Sales Rep's customer"
+          setOpen={setOpenEditSalespersonCustomer}
         />
         <SalespersonCustomerFormContainer
           address={address}
@@ -131,4 +161,4 @@ const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
   );
 };
 
-export default CreateSalespersonCustomer;
+export default EditSalespersonCustomer;
