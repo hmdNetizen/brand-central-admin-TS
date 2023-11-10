@@ -1,3 +1,4 @@
+import { SalespersonOrderResponsePayload } from "../orders/types";
 import { SalespersonReturnedPayload } from "../SalesPersonTypes";
 
 export type SalespersonCustomerResponsePayload = {
@@ -22,8 +23,12 @@ export type SalespersonCustomerPayloadTypes = {
 
 export type InitStateTypes = {
   loadingSalespersonCustomers: boolean;
+  loadingSingleSalespersonCustomer: boolean;
+  loadingCustomerOrders: boolean;
   totalCustomers: number;
+  totalCustomerOrders: number;
   salespersonCustomers: Array<SalespersonCustomerResponsePayload>;
+  salespersonCustomerOrders: Array<SalespersonOrderResponsePayload>;
   singleSalespersonCustomer: SalespersonCustomerResponsePayload | null;
   error: string | null;
 };

@@ -8,6 +8,7 @@ import { ContentContainer } from "src/utilityStyles/pagesUtilityStyles";
 import ShowDialog from "src/utils/ShowDialog";
 import ModalHeading from "src/components/common/ModalHeading";
 import SalespersonCustomerFormContainer from "src/components/salespersons/customers/utils/FormContainer";
+import { SelectChangeEvent } from "@mui/material";
 
 type CreateSalespersonCustomerProps = {
   openAddSalespersonCustomer: boolean;
@@ -77,6 +78,13 @@ const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
     setCustomerInformation((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleSelectChange = (event: SelectChangeEvent<unknown>) => {
+    const selectEvent = event as React.ChangeEvent<HTMLInputElement>;
+    const { name, value } = selectEvent.target;
+
+    setCustomerInformation((prev) => ({ ...prev, [name]: value }));
+  };
+
   return (
     <ShowDialog
       openModal={openAddSalespersonCustomer}
@@ -108,6 +116,7 @@ const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
           onSubmit={handleSubmit}
           onChange={handleChange}
           buttonTitle="Create Customer"
+          onSelectChange={handleSelectChange}
         />
       </ContentContainer>
     </ShowDialog>

@@ -187,9 +187,9 @@ export const salespersonCustomersColumns: TableHeaderColumnTypes[] = [
 export const salespeopleCustomersColumns: TableHeaderColumnTypes[] = [
   { id: 0, label: "Customer Code", align: "center" },
   { id: 1, label: "Company Name", align: "left" },
-  { id: 1, label: "Company Phone", align: "center", minWidth: 180 },
-  { id: 2, label: "Sales Rep", align: "center" },
-  { id: 3, label: "Price Code", align: "center" },
+  { id: 2, label: "Company Phone", align: "center", minWidth: 180 },
+  { id: 3, label: "Sales Rep", align: "center" },
+  { id: 4, label: "Price Code", align: "center" },
   { id: 5, label: "", align: "center" },
 ];
 

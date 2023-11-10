@@ -9,6 +9,9 @@ import {
   SubmitButton,
 } from "src/utilityStyles/pagesUtilityStyles";
 import CustomFormInput from "src/utils/CustomFormInput";
+import CustomSelect from "src/utils/CustomSelect";
+import { SelectChangeEvent } from "@mui/material";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
 
 type SalespersonCustomerFormContainerProps = {
   onSubmit: (event: React.FormEvent<HTMLFormElement | HTMLDivElement>) => void;
@@ -30,6 +33,7 @@ type SalespersonCustomerFormContainerProps = {
   initialsError: string | undefined;
   buttonTitle: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSelectChange: (event: SelectChangeEvent<unknown>) => void;
 };
 
 const SalespersonCustomerFormContainer = (
@@ -38,6 +42,14 @@ const SalespersonCustomerFormContainer = (
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
+
+  const salespeople = useTypedSelector(
+    (state) => state.salesPersons.salespersons
+  );
+
+  const salespeopleInitials = salespeople.map(
+    (salesperson) => salesperson.initials
+  );
 
   const loadingRequestAction = false;
 
@@ -61,6 +73,7 @@ const SalespersonCustomerFormContainer = (
     priceCodeError,
     initialsError,
     buttonTitle,
+    onSelectChange,
   } = props;
   return (
     <StyledFormContainer
@@ -212,7 +225,7 @@ const SalespersonCustomerFormContainer = (
           style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
           md={5.5}
         >
-          <CustomFormInput
+          {/* <CustomFormInput
             type="text"
             label="Price Code"
             labelId="priceCode"
@@ -222,6 +235,20 @@ const SalespersonCustomerFormContainer = (
             onChange={onChange}
             error={priceCodeError}
             autoComplete="off"
+          /> */}
+          <CustomSelect
+            options={[
+              "priceCode 1",
+              "priceCode 2",
+              "priceCode 3",
+              "priceCode 4",
+            ]}
+            name="priceCode"
+            value={priceCode}
+            onChange={onSelectChange}
+            label="Price Code"
+            placeholder="Select a Price Code"
+            errorMessage={props.priceCodeError}
           />
         </Grid>
         <Grid
@@ -229,7 +256,7 @@ const SalespersonCustomerFormContainer = (
           style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
           md={5.5}
         >
-          <CustomFormInput
+          {/* <CustomFormInput
             type="text"
             label="Sales Rep's Initials"
             labelId="initials"
@@ -239,6 +266,15 @@ const SalespersonCustomerFormContainer = (
             onChange={onChange}
             error={initialsError}
             autoComplete="off"
+          /> */}
+          <CustomSelect
+            options={salespeopleInitials}
+            name="initials"
+            value={initials}
+            onChange={onSelectChange}
+            label="Sales Rep's Initials"
+            placeholder="Select a Sales Rep's Initials"
+            errorMessage={initialsError}
           />
         </Grid>
       </Grid>

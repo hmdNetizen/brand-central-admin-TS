@@ -21,7 +21,7 @@ const SalespersonCustomersList = () => {
   const [openAddSalespersonCustomer, setOpenAddSalespersonCustomer] =
     useState(false);
 
-  const { getSalespeopleCustomers } = useActions();
+  const { getSalespeopleCustomers, getAllSalespersons } = useActions();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPage(0);
@@ -35,6 +35,10 @@ const SalespersonCustomersList = () => {
       page: page + 1,
     });
   }, [rowsPerPage, page]);
+
+  useEffect(() => {
+    getAllSalespersons(true);
+  }, []);
 
   return (
     <Container container direction="column">

@@ -19,11 +19,15 @@ export const config = {
       update: (orderId: string) =>
         `/api/salesperson-orders/order-status/admin/update/${orderId}`,
       countByStatus: "/api/salesperson-orders/count/admin",
+      getByCustomerId: (customerId: string) =>
+        `/api/salesperson-orders/admin/customer/${customerId}`,
     },
     customers: {
       get: "/api/salespersons-customers",
       getById: (salespersonId: string) =>
         `/api/salespersons-customers/admin/${salespersonId}`,
+      profile: (customerId: string) =>
+        `/api/salespersons-customers/admin/profile/${customerId}`,
     },
   },
   uploads: {

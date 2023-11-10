@@ -127,10 +127,15 @@ const PagesRoutes = () => {
                     path="deactivated"
                     element={<DeactivatedSalespeople />}
                   />
-                  <Route
-                    path="customers"
-                    element={<SalespersonCustomersList />}
-                  />
+                  <Route path="customers">
+                    <Route index element={<SalespersonCustomersList />} />
+                    <Route
+                      path=":customerId"
+                      element={
+                        <SalespersonCustomerProfile menuSlideIn={menuSlideIn} />
+                      }
+                    />
+                  </Route>
                   <Route path=":salespersonId">
                     <Route
                       index
@@ -140,7 +145,14 @@ const PagesRoutes = () => {
                     />
                     <Route path="customers">
                       <Route path=":customerId">
-                        <Route index element={<SalespersonCustomerProfile />} />
+                        <Route
+                          index
+                          element={
+                            <SalespersonCustomerProfile
+                              menuSlideIn={menuSlideIn}
+                            />
+                          }
+                        />
                       </Route>
                     </Route>
                   </Route>

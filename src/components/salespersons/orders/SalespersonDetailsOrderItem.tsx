@@ -25,7 +25,7 @@ const SalespersonDetailsOrderItem = (
   return (
     <TableRow hover role="checkbox" tabIndex={-1}>
       <TableCell>{orderId}</TableCell>
-      <TableCell>{orderedFor.companyName}</TableCell>
+      <TableCell style={{ minWidth: 200 }}>{orderedFor.companyName}</TableCell>
       <TableCell style={{ minWidth: 200 }}>
         <Moment format="YYYY-MM-DD hh:mm:ss">{orderDate}</Moment>
       </TableCell>
