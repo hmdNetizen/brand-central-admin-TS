@@ -6,10 +6,14 @@ import SalespeopleCustomerItem from "./SalespeopleCustomerItem";
 
 type SalespeopleCustomersProps = {
   setOpenEditSalespersonCustomer: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenDeleteSalespersonCustomer: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
 };
 
 const SalespeopleCustomers = (props: SalespeopleCustomersProps) => {
-  const { setOpenEditSalespersonCustomer } = props;
+  const { setOpenEditSalespersonCustomer, setOpenDeleteSalespersonCustomer } =
+    props;
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -51,6 +55,9 @@ const SalespeopleCustomers = (props: SalespeopleCustomersProps) => {
               key={customer.id}
               customer={customer}
               setOpenEditSalespersonCustomer={setOpenEditSalespersonCustomer}
+              setOpenDeleteSalespersonCustomer={
+                setOpenDeleteSalespersonCustomer
+              }
             />
           );
         })}

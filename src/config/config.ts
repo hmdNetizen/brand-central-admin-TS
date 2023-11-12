@@ -28,6 +28,9 @@ export const config = {
         `/api/salespersons-customers/admin/${salespersonId}`,
       profile: (customerId: string) =>
         `/api/salespersons-customers/admin/profile/${customerId}`,
+      add: "/api/salespersons-customers",
+      delete: (customerId: string) =>
+        `/api/salespersons-customers/admin/${customerId}`,
     },
   },
   uploads: {

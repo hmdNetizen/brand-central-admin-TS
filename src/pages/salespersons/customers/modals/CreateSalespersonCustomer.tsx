@@ -9,6 +9,9 @@ import ShowDialog from "src/utils/ShowDialog";
 import ModalHeading from "src/components/common/ModalHeading";
 import SalespersonCustomerFormContainer from "src/components/salespersons/customers/utils/FormContainer";
 import { SelectChangeEvent } from "@mui/material";
+import { useActions } from "src/hooks/useActions";
+import { validateEmail } from "src/lib/helpers";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
 
 type CreateSalespersonCustomerProps = {
   openAddSalespersonCustomer: boolean;
@@ -32,6 +35,8 @@ const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.only("xs"));
 
+  const [salespersonId, setSalespersonId] = useState("");
+
   const [customerInformation, setCustomerInformation] = useState({
     companyName: "",
     customerCode: "",
@@ -54,6 +59,12 @@ const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
     priceCodeError: "",
   });
 
+  const salespeople = useTypedSelector(
+    (state) => state.salesPersons.salespersons
+  );
+
+  const { createNewSalespersonCustomer } = useActions();
+
   const {
     address,
     companyName,
@@ -65,12 +76,30 @@ const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
     priceCode,
   } = customerInformation;
 
-  const handleSubmit = (
-    event: React.FormEvent<HTMLFormElement | HTMLDivElement>
-  ) => {
-    event.preventDefault();
+  const validateInput = () => {
+    const errors: ErrorsTypes = {};
 
-    console.log("Submitted");
+    if (!companyName.trim())
+      errors.companyNameError = "Company Name is required";
+
+    if (!customerCode.trim())
+      errors.customerCodeError = "Enter customer identification code";
+
+    if (!validateEmail(companyEmail))
+      errors.companyEmailError = "Enter a valid email address";
+
+    if (!address.trim())
+      errors.addressError = "Enter an address for this customer";
+
+    if (!priceCode.trim())
+      errors.priceCodeError = "Please select a price code for this customer";
+
+    if (!initials.trim())
+      errors.initialsError = "Please select a sales rep's initial";
+
+    setCustomerInfoErrors(errors);
+
+    return Object.keys(errors).length === 0;
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,6 +119,36 @@ const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
     const { name, value } = selectEvent.target;
 
     setCustomerInformation((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "initials") {
+      const salesperson = salespeople.filter(
+        (salesperson) => salesperson.initials === value
+      );
+
+      setSalespersonId(salesperson[0]._id);
+    }
+  };
+
+  const handleSubmit = (
+    event: React.FormEvent<HTMLFormElement | HTMLDivElement>
+  ) => {
+    event.preventDefault();
+
+    if (!validateInput()) {
+      return;
+    }
+
+    createNewSalespersonCustomer({
+      setOpen: setOpenAddSalespersonCustomer,
+      address,
+      companyEmail,
+      companyName,
+      contactName,
+      customerCode,
+      phoneNumber,
+      priceCode: priceCode.split(" ").join(""),
+      referrer: salespersonId,
+    });
   };
 
   return (

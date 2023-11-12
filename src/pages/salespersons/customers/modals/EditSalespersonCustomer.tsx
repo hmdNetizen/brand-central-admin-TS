@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { SelectChangeEvent } from "@mui/material";
@@ -8,6 +8,8 @@ import { ContentContainer } from "src/utilityStyles/pagesUtilityStyles";
 import ModalHeading from "src/components/common/ModalHeading";
 import SalespersonCustomerFormContainer from "src/components/salespersons/customers/utils/FormContainer";
 import { validateEmail } from "src/lib/helpers";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import { SalespersonCustomerResponsePayload } from "src/services/salespersons/customers/types";
 
 type EditSalespersonCustomerProps = {
   openEditSalespersonCustomer: boolean;
@@ -25,6 +27,22 @@ type ErrorsTypes = {
   customerCodeError?: string;
 };
 
+type SalespersonCustomerExcerpt = Omit<
+  SalespersonCustomerResponsePayload,
+  "id" | "createdAt"
+>;
+
+const initialContactInformation = {
+  companyName: "",
+  customerCode: "",
+  companyEmail: "",
+  address: "",
+  phoneNumber: "",
+  contactName: "",
+  priceCode: "",
+  initials: "",
+};
+
 const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
@@ -32,16 +50,9 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
 
   const { openEditSalespersonCustomer, setOpenEditSalespersonCustomer } = props;
 
-  const [customerInformation, setCustomerInformation] = useState({
-    companyName: "",
-    customerCode: "",
-    companyEmail: "",
-    address: "",
-    phoneNumber: "",
-    contactName: "",
-    priceCode: "",
-    initials: "",
-  });
+  const [customerInformation, setCustomerInformation] = useState(
+    initialContactInformation
+  );
 
   const [customerInfoErrors, setCustomerInfoErrors] = useState<ErrorsTypes>({
     addressError: "",
@@ -53,6 +64,10 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
     phoneNumberError: "",
     priceCodeError: "",
   });
+
+  const singleSalespersonCustomer = useTypedSelector(
+    (state) => state.salespersonCustomers.singleSalespersonCustomer
+  );
 
   const {
     address,
@@ -121,6 +136,40 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
 
     console.log("Submitted");
   };
+
+  useEffect(() => {
+    if (singleSalespersonCustomer) {
+      const newInitialsCustomerInformation = { ...initialContactInformation };
+
+      for (const key in newInitialsCustomerInformation) {
+        if (key in singleSalespersonCustomer) {
+          // @ts-expect-error
+          newInitialsCustomerInformation[
+            key as keyof SalespersonCustomerExcerpt
+          ] =
+            singleSalespersonCustomer[key as keyof SalespersonCustomerExcerpt];
+        }
+
+        setCustomerInformation(newInitialsCustomerInformation);
+
+        if (key === "initials") {
+          setCustomerInformation((prev) => ({
+            ...prev,
+            initials: singleSalespersonCustomer.referrer.initials,
+          }));
+        }
+      }
+
+      const transformedPriceCode = singleSalespersonCustomer.priceCode
+        .replace(/([a-z])([0-9])/i, "$1 $2")
+        .toLowerCase();
+
+      setCustomerInformation((prev) => ({
+        ...prev,
+        priceCode: transformedPriceCode,
+      }));
+    }
+  }, [singleSalespersonCustomer]);
 
   return (
     <ShowDialog

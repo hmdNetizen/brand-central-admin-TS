@@ -59,7 +59,9 @@ const SalespersonCustomerFormContainer = (
     (salesperson) => salesperson.initials
   );
 
-  const loadingRequestAction = false;
+  const loadingSalespersonCustomerAction = useTypedSelector(
+    (state) => state.salespersonCustomers.loadingSalespersonCustomerAction
+  );
 
   const {
     onSubmit,
@@ -84,6 +86,7 @@ const SalespersonCustomerFormContainer = (
     onSelectChange,
     onChangePhoneNumber,
   } = props;
+
   return (
     <StyledFormContainer
       item
@@ -107,7 +110,7 @@ const SalespersonCustomerFormContainer = (
         >
           <CustomFormInput
             type="text"
-            label="company Name"
+            label="Company Name"
             labelId="companyName"
             name="companyName"
             value={companyName}
@@ -150,7 +153,7 @@ const SalespersonCustomerFormContainer = (
         >
           <CustomFormInput
             type="text"
-            label="company Email"
+            label="Company Email"
             labelId="companyEmail"
             name="companyEmail"
             value={companyEmail}
@@ -191,7 +194,7 @@ const SalespersonCustomerFormContainer = (
         >
           <CustomFormInput
             type="text"
-            label="company Address"
+            label="Company Address"
             labelId="address"
             name="address"
             value={address}
@@ -232,23 +235,12 @@ const SalespersonCustomerFormContainer = (
           style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
           md={5.5}
         >
-          {/* <CustomFormInput
-            type="text"
-            label="Price Code"
-            labelId="priceCode"
-            name="priceCode"
-            value={priceCode}
-            placeholder="Enter Price Code"
-            onChange={onChange}
-            error={priceCodeError}
-            autoComplete="off"
-          /> */}
           <CustomSelect
             options={[
-              "priceCode 1",
-              "priceCode 2",
-              "priceCode 3",
-              "priceCode 4",
+              "pricecode 1",
+              "pricecode 2",
+              "pricecode 3",
+              "pricecode 4",
             ]}
             name="priceCode"
             value={priceCode}
@@ -263,17 +255,6 @@ const SalespersonCustomerFormContainer = (
           style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
           md={5.5}
         >
-          {/* <CustomFormInput
-            type="text"
-            label="Sales Rep's Initials"
-            labelId="initials"
-            name="initials"
-            value={initials}
-            placeholder="Enter Sales Rep's Initials"
-            onChange={onChange}
-            error={initialsError}
-            autoComplete="off"
-          /> */}
           <CustomSelect
             options={salespeopleInitials}
             name="initials"
@@ -291,9 +272,9 @@ const SalespersonCustomerFormContainer = (
           variant="contained"
           disableRipple
           color="secondary"
-          disabled={loadingRequestAction}
+          disabled={loadingSalespersonCustomerAction}
         >
-          {loadingRequestAction && (
+          {loadingSalespersonCustomerAction && (
             <StyledCircularProgress style={{ height: 25, width: 25 }} />
           )}{" "}
           {buttonTitle}

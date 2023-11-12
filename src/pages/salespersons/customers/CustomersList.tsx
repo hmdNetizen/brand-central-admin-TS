@@ -12,6 +12,7 @@ import SalespeopleCustomers from "src/components/salespersons/customers/Salespeo
 import { useActions } from "src/hooks/useActions";
 import CreateSalespersonCustomer from "./modals/CreateSalespersonCustomer";
 import EditSalespersonCustomer from "./modals/EditSalespersonCustomer";
+import DeleteSalespersonCustomer from "./modals/DeleteSalespersonCustomer";
 
 const SalespersonCustomersList = () => {
   const theme = useTheme();
@@ -23,6 +24,8 @@ const SalespersonCustomersList = () => {
   const [openAddSalespersonCustomer, setOpenAddSalespersonCustomer] =
     useState(false);
   const [openEditSalespersonCustomer, setOpenEditSalespersonCustomer] =
+    useState(false);
+  const [openDeleteSalespersonCustomer, setOpenDeleteSalespersonCustomer] =
     useState(false);
 
   const { getSalespeopleCustomers, getAllSalespersons } = useActions();
@@ -66,6 +69,7 @@ const SalespersonCustomersList = () => {
         <Grid item container style={{ marginTop: "5rem" }}>
           <SalespeopleCustomers
             setOpenEditSalespersonCustomer={setOpenEditSalespersonCustomer}
+            setOpenDeleteSalespersonCustomer={setOpenDeleteSalespersonCustomer}
           />
         </Grid>
       </ContainerWrapper>
@@ -76,6 +80,10 @@ const SalespersonCustomersList = () => {
       <EditSalespersonCustomer
         openEditSalespersonCustomer={openEditSalespersonCustomer}
         setOpenEditSalespersonCustomer={setOpenEditSalespersonCustomer}
+      />
+      <DeleteSalespersonCustomer
+        openDeleteSalespersonCustomer={openDeleteSalespersonCustomer}
+        setOpenDeleteSalespersonCustomer={setOpenDeleteSalespersonCustomer}
       />
     </Container>
   );

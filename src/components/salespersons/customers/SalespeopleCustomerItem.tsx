@@ -18,6 +18,9 @@ import { useActions } from "src/hooks/useActions";
 type SalespeopleCustomerItemProps = {
   customer: SalespersonCustomerResponsePayload;
   setOpenEditSalespersonCustomer: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenDeleteSalespersonCustomer: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
 };
 
 export const OptionsTableData = styled("div")({
@@ -30,6 +33,7 @@ export const OptionsTableData = styled("div")({
 const SalespeopleCustomerItem = ({
   customer,
   setOpenEditSalespersonCustomer,
+  setOpenDeleteSalespersonCustomer,
 }: SalespeopleCustomerItemProps) => {
   const theme = useTheme();
   const { customerCode, companyName, priceCode, phoneNumber, id, referrer } =
@@ -38,14 +42,13 @@ const SalespeopleCustomerItem = ({
   const { setCurrentSalespeopleCustomer } = useActions();
 
   const handleEditSalespersonCustomer = () => {
-    console.log(customer);
     setCurrentSalespeopleCustomer(customer);
     setOpenEditSalespersonCustomer(true);
   };
 
   const handleDeleteCustomer = () => {
-    console.log(customer);
     setCurrentSalespeopleCustomer(customer);
+    setOpenDeleteSalespersonCustomer(true);
   };
 
   return (
