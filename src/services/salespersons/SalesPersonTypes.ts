@@ -1,4 +1,5 @@
 import React from "react";
+import { SalespersonInfoProps } from "src/pages/salespersons/types";
 import { OrderReturnedPayload } from "../orders/OrderTypes";
 
 export type SalespersonReturnedPayload = {
@@ -29,6 +30,10 @@ export type SalespersonRequestPayload = {
   initials: string;
   profileImage: File | string;
   setOpenAddSalesperson: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
+  setSalespersonInformation?: React.Dispatch<
+    React.SetStateAction<SalespersonInfoProps>
+  >;
 };
 
 export type UpdateSalespersonRequestPayload = Pick<
@@ -37,6 +42,7 @@ export type UpdateSalespersonRequestPayload = Pick<
 > & {
   setOpenEditSalesperson: React.Dispatch<React.SetStateAction<boolean>>;
   id: string;
+  setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
 };
 
 export type InitStateType = {

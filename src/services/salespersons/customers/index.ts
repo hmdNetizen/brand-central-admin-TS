@@ -148,7 +148,7 @@ export const getSalespersonCustomerOrders = createAsyncThunk(
 export const createNewSalespersonCustomer = createAsyncThunk(
   "create-salesperson-customer",
   async (dataset: SalespersonCustomerRequestPayload, thunkAPI) => {
-    const { setOpen, ...fields } = dataset;
+    const { setOpen, setCustomerInformation, ...fields } = dataset;
     try {
       const { data, status } = await axios.post(
         config.salespersons.customers.add,
@@ -157,6 +157,19 @@ export const createNewSalespersonCustomer = createAsyncThunk(
 
       if (status === 201) {
         setOpen(false);
+
+        if (setCustomerInformation) {
+          setCustomerInformation({
+            companyName: "",
+            companyEmail: "",
+            address: "",
+            contactName: "",
+            customerCode: "",
+            initials: "",
+            phoneNumber: "",
+            priceCode: "",
+          });
+        }
       }
 
       const results = data as SingleSalespersonCustomerReturnedPayloadTypes;
@@ -231,6 +244,32 @@ export const deleteSalespersonCustomer = createAsyncThunk(
   }
 );
 
+export const getFilteredSalespersonCustomers = createAsyncThunk(
+  "get-filtered-salesperson-customers",
+  async (dataset: QueryParams & { searchTerm: string }, thunkAPI) => {
+    const { limit, page, searchTerm } = dataset;
+    try {
+      const { data } = await axios.get(config.salespersons.customers.filter, {
+        params: { page, limit, searchTerm },
+      });
+      const results = data as SalespersonCustomerPayloadTypes;
+
+      return {
+        customers: results.data.results,
+        total: results.data.total,
+      };
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+      }
+    }
+  }
+);
+
 const salespersonCustomerSlice = createSlice({
   name: "salespersonCustomers",
   initialState,
@@ -275,6 +314,14 @@ const salespersonCustomerSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder.addCase(
+      getFilteredSalespersonCustomers.fulfilled,
+      (state, action) => {
+        state.salespersonCustomers = action.payload.customers;
+        state.totalCustomers = action.payload.total;
+        state.error = null;
+      }
+    );
     builder
       .addCase(getSalespersonCustomerProfile.pending, (state) => {
         state.loadingSingleSalespersonCustomer = true;

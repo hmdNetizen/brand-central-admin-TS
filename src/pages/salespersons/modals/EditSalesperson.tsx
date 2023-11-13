@@ -125,6 +125,7 @@ const EditSalesperson = (props: EditSalespersonProps) => {
 
     updateSalesperson({
       setOpenEditSalesperson,
+      setSelectedFile,
       email,
       fullName,
       id: singleSalesperson?._id!,

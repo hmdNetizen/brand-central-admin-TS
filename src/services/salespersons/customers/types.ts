@@ -1,3 +1,4 @@
+import { SalespersonCustomerInfoProps } from "src/pages/salespersons/types";
 import React from "react";
 import { SalespersonOrderResponsePayload } from "../orders/types";
 import { SalespersonReturnedPayload } from "../SalesPersonTypes";
@@ -25,6 +26,9 @@ export type SalespersonCustomerRequestPayload = {
   contactName: string;
   priceCode: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setCustomerInformation?: React.Dispatch<
+    React.SetStateAction<SalespersonCustomerInfoProps>
+  >;
 };
 
 export type SingleSalespersonCustomerReturnedPayloadTypes = {

@@ -140,6 +140,7 @@ const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
 
     createNewSalespersonCustomer({
       setOpen: setOpenAddSalespersonCustomer,
+      setCustomerInformation,
       address,
       companyEmail,
       companyName,

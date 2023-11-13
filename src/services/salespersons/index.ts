@@ -71,7 +71,12 @@ export const getSalespersonProfile = createAsyncThunk(
 export const addNewSalesperson = createAsyncThunk(
   "add-new-salesperson",
   async (details: SalespersonRequestPayload, thunkAPI) => {
-    const { profileImage, setOpenAddSalesperson } = details;
+    const {
+      profileImage,
+      setOpenAddSalesperson,
+      setSelectedFile,
+      setSalespersonInformation,
+    } = details;
     const { config: uploadConfig, formData } = fileUploadConfig(profileImage);
     try {
       // Checks whether a new icon is being uploaded (which by default is an object type)
@@ -91,6 +96,18 @@ export const addNewSalesperson = createAsyncThunk(
 
         if (status === 201) {
           setOpenAddSalesperson(false);
+          setSelectedFile(null);
+
+          if (setSalespersonInformation) {
+            setSalespersonInformation({
+              fullName: "",
+              email: "",
+              confirmPassword: "",
+              initials: "",
+              password: "",
+              phoneNumber: "",
+            });
+          }
         }
 
         const result = data as SingleSalespersonPayloadTypes;
@@ -125,7 +142,8 @@ export const addNewSalesperson = createAsyncThunk(
 export const updateSalesperson = createAsyncThunk(
   "update-salesperson",
   async (details: UpdateSalespersonRequestPayload, thunkAPI) => {
-    const { id, setOpenEditSalesperson, profileImage } = details;
+    const { id, setOpenEditSalesperson, setSelectedFile, profileImage } =
+      details;
     const { config: fileConfig, formData } = fileUploadConfig(profileImage);
 
     try {
@@ -146,6 +164,7 @@ export const updateSalesperson = createAsyncThunk(
 
         if (status === 200) {
           setOpenEditSalesperson(false);
+          setSelectedFile(null);
         }
 
         const result = data as SingleSalespersonPayloadTypes;

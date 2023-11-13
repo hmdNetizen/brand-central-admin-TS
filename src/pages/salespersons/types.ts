@@ -40,3 +40,14 @@ export type CreateSalespersonProps = {
   openAddSalesperson: boolean;
   setOpenAddSalesperson: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+export type SalespersonCustomerInfoProps = {
+  companyName: string;
+  customerCode: string;
+  companyEmail: string;
+  address: string;
+  phoneNumber: string;
+  contactName: string;
+  priceCode: string;
+  initials: string;
+};

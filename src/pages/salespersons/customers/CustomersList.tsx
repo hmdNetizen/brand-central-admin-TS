@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
+import debounce from "lodash.debounce";
 
 import {
   Container,
@@ -28,20 +29,43 @@ const SalespersonCustomersList = () => {
   const [openDeleteSalespersonCustomer, setOpenDeleteSalespersonCustomer] =
     useState(false);
 
-  const { getSalespeopleCustomers, getAllSalespersons } = useActions();
+  const {
+    getSalespeopleCustomers,
+    getAllSalespersons,
+    getFilteredSalespersonCustomers,
+  } = useActions();
+
+  const debounceFilterSalespersonCustomers = useCallback(
+    debounce(getFilteredSalespersonCustomers, 500),
+    []
+  );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPage(0);
 
     setFilterText(event.target.value);
+
+    debounceFilterSalespersonCustomers({
+      limit: rowsPerPage,
+      page: page + 1,
+      searchTerm: event.target.value,
+    });
   };
 
   useEffect(() => {
-    getSalespeopleCustomers({
-      limit: rowsPerPage,
-      page: page + 1,
-    });
-  }, [rowsPerPage, page]);
+    if (!filterText) {
+      getSalespeopleCustomers({
+        limit: rowsPerPage,
+        page: page + 1,
+      });
+    } else {
+      debounceFilterSalespersonCustomers({
+        limit: rowsPerPage,
+        page: page + 1,
+        searchTerm: filterText,
+      });
+    }
+  }, [rowsPerPage, page, filterText]);
 
   useEffect(() => {
     getAllSalespersons(true);
@@ -64,7 +88,7 @@ const SalespersonCustomersList = () => {
           setRowsPerPage={setRowsPerPage}
           setPage={setPage}
           isDeactivatedPage={false}
-          placeholderText="Search..."
+          placeholderText="Search by company name or customer code"
         />
         <Grid item container style={{ marginTop: "5rem" }}>
           <SalespeopleCustomers

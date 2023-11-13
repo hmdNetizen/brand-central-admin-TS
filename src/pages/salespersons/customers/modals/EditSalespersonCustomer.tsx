@@ -11,6 +11,7 @@ import { validateEmail } from "src/lib/helpers";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { SalespersonCustomerResponsePayload } from "src/services/salespersons/customers/types";
 import { useActions } from "src/hooks/useActions";
+import { SalespersonCustomerInfoProps } from "../../types";
 
 type EditSalespersonCustomerProps = {
   openEditSalespersonCustomer: boolean;
@@ -51,9 +52,8 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
 
   const { openEditSalespersonCustomer, setOpenEditSalespersonCustomer } = props;
 
-  const [customerInformation, setCustomerInformation] = useState(
-    initialContactInformation
-  );
+  const [customerInformation, setCustomerInformation] =
+    useState<SalespersonCustomerInfoProps>(initialContactInformation);
   const [salespersonId, setSalespersonId] = useState("");
 
   const [customerInfoErrors, setCustomerInfoErrors] = useState<ErrorsTypes>({

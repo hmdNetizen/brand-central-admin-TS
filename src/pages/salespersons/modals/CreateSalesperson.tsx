@@ -65,6 +65,8 @@ const CreateSalesperson = ({
 
     addNewSalesperson({
       setOpenAddSalesperson,
+      setSelectedFile,
+      setSalespersonInformation,
       email,
       fullName,
       initials,
