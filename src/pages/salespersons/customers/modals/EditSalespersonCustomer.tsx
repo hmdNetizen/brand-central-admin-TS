@@ -10,6 +10,7 @@ import SalespersonCustomerFormContainer from "src/components/salespersons/custom
 import { validateEmail } from "src/lib/helpers";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { SalespersonCustomerResponsePayload } from "src/services/salespersons/customers/types";
+import { useActions } from "src/hooks/useActions";
 
 type EditSalespersonCustomerProps = {
   openEditSalespersonCustomer: boolean;
@@ -53,6 +54,7 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
   const [customerInformation, setCustomerInformation] = useState(
     initialContactInformation
   );
+  const [salespersonId, setSalespersonId] = useState("");
 
   const [customerInfoErrors, setCustomerInfoErrors] = useState<ErrorsTypes>({
     addressError: "",
@@ -68,6 +70,11 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
   const singleSalespersonCustomer = useTypedSelector(
     (state) => state.salespersonCustomers.singleSalespersonCustomer
   );
+  const salespeople = useTypedSelector(
+    (state) => state.salesPersons.salespersons
+  );
+
+  const { updateSalespersonCustomer } = useActions();
 
   const {
     address,
@@ -89,7 +96,7 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
     if (!customerCode.trim())
       errors.customerCodeError = "Enter customer identification code";
 
-    if (!validateEmail(companyEmail))
+    if (companyEmail && !validateEmail(companyEmail))
       errors.companyEmailError = "Enter a valid email address";
 
     if (!address.trim())
@@ -116,6 +123,14 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
     const { name, value } = selectEvent.target;
 
     setCustomerInformation((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "initials") {
+      const salesperson = salespeople.filter(
+        (salesperson) => salesperson.initials === value
+      );
+
+      setSalespersonId(salesperson[0]._id);
+    }
   };
 
   const handlePhoneNumberChange = (value: string) => {
@@ -134,7 +149,31 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
       return;
     }
 
-    console.log("Submitted");
+    // console.log({
+    //   customerId: singleSalespersonCustomer?.id!,
+    //   setOpen: setOpenEditSalespersonCustomer,
+    //   address,
+    //   companyEmail,
+    //   companyName,
+    //   contactName,
+    //   customerCode,
+    //   phoneNumber,
+    //   priceCode: priceCode.split(" ").join(""),
+    //   referrer: salespersonId,
+    // });
+
+    updateSalespersonCustomer({
+      customerId: singleSalespersonCustomer?.id!,
+      setOpen: setOpenEditSalespersonCustomer,
+      address,
+      companyEmail,
+      companyName,
+      contactName,
+      customerCode,
+      phoneNumber,
+      priceCode: priceCode.split(" ").join(""),
+      referrer: salespersonId,
+    });
   };
 
   useEffect(() => {
@@ -171,6 +210,16 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
     }
   }, [singleSalespersonCustomer]);
 
+  useEffect(() => {
+    if (initials) {
+      const salesperson = salespeople.filter(
+        (salesperson) => salesperson.initials === initials
+      );
+
+      setSalespersonId(salesperson[0]._id);
+    }
+  }, [initials]);
+
   return (
     <ShowDialog
       openModal={openEditSalespersonCustomer}
@@ -201,7 +250,7 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
           phoneNumberError={customerInfoErrors.phoneNumberError}
           onSubmit={handleSubmit}
           onChange={handleChange}
-          buttonTitle="Create Customer"
+          buttonTitle="Update Customer"
           onSelectChange={handleSelectChange}
           onChangePhoneNumber={handlePhoneNumberChange}
         />

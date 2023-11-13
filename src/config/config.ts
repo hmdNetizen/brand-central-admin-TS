@@ -31,6 +31,8 @@ export const config = {
       add: "/api/salespersons-customers",
       delete: (customerId: string) =>
         `/api/salespersons-customers/admin/${customerId}`,
+      update: (customerId: string) =>
+        `/api/salespersons-customers/admin/${customerId}`,
     },
   },
   uploads: {

@@ -85,7 +85,7 @@ const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
     if (!customerCode.trim())
       errors.customerCodeError = "Enter customer identification code";
 
-    if (!validateEmail(companyEmail))
+    if (companyEmail && !validateEmail(companyEmail))
       errors.companyEmailError = "Enter a valid email address";
 
     if (!address.trim())

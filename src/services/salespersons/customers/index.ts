@@ -174,6 +174,37 @@ export const createNewSalespersonCustomer = createAsyncThunk(
   }
 );
 
+export const updateSalespersonCustomer = createAsyncThunk(
+  "update-salesperson-customer",
+  async (
+    dataset: SalespersonCustomerRequestPayload & { customerId: string },
+    thunkAPI
+  ) => {
+    const { customerId, setOpen, ...fields } = dataset;
+    try {
+      const { data, status } = await axios.patch(
+        config.salespersons.customers.update(customerId),
+        fields
+      );
+      const result = data as SingleSalespersonCustomerReturnedPayloadTypes;
+
+      if (status === 200) {
+        setOpen(false);
+      }
+
+      return result.data;
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+      }
+    }
+  }
+);
+
 export const deleteSalespersonCustomer = createAsyncThunk(
   "delete-salesperson-customer",
   async (dataset: DeleteSalespersonCustomerRequestPayload, thunkAPI) => {
@@ -322,6 +353,32 @@ const salespersonCustomerSlice = createSlice({
         });
       })
       .addCase(deleteSalespersonCustomer.rejected, (state, action) => {
+        state.loadingSalespersonCustomerAction = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(updateSalespersonCustomer.pending, (state) => {
+        state.loadingSalespersonCustomerAction = true;
+      })
+      .addCase(updateSalespersonCustomer.fulfilled, (state, action) => {
+        state.loadingSalespersonCustomerAction = false;
+        state.salespersonCustomers = state.salespersonCustomers.map(
+          (customer) =>
+            customer.id === action.payload.id ? action.payload : customer
+        );
+        state.error = null;
+
+        toast.success(
+          `${action.payload.companyName} account has been updated.`,
+          {
+            position: "top-center",
+            hideProgressBar: true,
+          }
+        );
+      })
+      .addCase(updateSalespersonCustomer.rejected, (state, action) => {
         state.loadingSalespersonCustomerAction = false;
         if (typeof action.payload === "string" || action.payload === null) {
           state.error = action.payload;
