@@ -96,7 +96,7 @@ export const addNewSalesperson = createAsyncThunk(
 
         if (status === 201) {
           setOpenAddSalesperson(false);
-          setSelectedFile(null);
+          setSelectedFile("");
 
           if (setSalespersonInformation) {
             setSalespersonInformation({
@@ -164,7 +164,7 @@ export const updateSalesperson = createAsyncThunk(
 
         if (status === 200) {
           setOpenEditSalesperson(false);
-          setSelectedFile(null);
+          setSelectedFile("");
         }
 
         const result = data as SingleSalespersonPayloadTypes;
