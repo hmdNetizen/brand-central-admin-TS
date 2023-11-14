@@ -46,6 +46,7 @@ import SalespersonOrderDetails from "src/pages/salespersons/orders/SalespersonOr
 import SalespersonOrderInvoice from "src/pages/salespersons/orders/SalespersonOrderInvoice";
 import SalespersonProfileDetails from "src/pages/salespersons/SalespersonProfileDetails";
 import Salespersons from "src/pages/salespersons/Salespersons";
+import UpdateCustomers from "src/pages/salespersons/UpdateCustomers";
 import ShippingZipCodes from "src/pages/shipping/ShippingZipCodes";
 import SubCategories from "src/pages/subcategories/SubCategories";
 import UpdateInventory from "src/pages/UpdateInventory";
@@ -127,6 +128,7 @@ const PagesRoutes = () => {
                     path="deactivated"
                     element={<DeactivatedSalespeople />}
                   />
+
                   <Route path="customers">
                     <Route index element={<SalespersonCustomersList />} />
                     <Route
@@ -136,6 +138,11 @@ const PagesRoutes = () => {
                       }
                     />
                   </Route>
+                  <Route
+                    path="update-customers"
+                    element={<UpdateCustomers />}
+                  />
+
                   <Route path=":salespersonId">
                     <Route
                       index

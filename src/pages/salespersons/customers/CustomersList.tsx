@@ -68,7 +68,11 @@ const SalespersonCustomersList = () => {
   }, [rowsPerPage, page, filterText]);
 
   useEffect(() => {
-    getAllSalespersons(true);
+    getAllSalespersons({
+      isActive: true,
+      limit: 50,
+      page: 1,
+    });
   }, []);
 
   return (

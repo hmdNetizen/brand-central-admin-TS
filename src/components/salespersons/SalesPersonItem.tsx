@@ -43,23 +43,24 @@ const SalesPersonItem = (prop: SalesPersonItemProps) => {
     isActive,
   } = salesperson;
 
-  const { setCurrentSalesperson, handleToggleCustomerBlock, unblockCustomer } =
-    useActions();
+  const { setCurrentSalesperson, toggleSalespersonActivation } = useActions();
 
   const handleSwitchChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    salesperson: SalespersonReturnedPayload
+    event: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    // handleToggleCustomerBlock({
-    //   customerId: customer._id,
-    //   isBlocked: !customer.isBlocked,
-    // });
+    toggleSalespersonActivation({
+      id: _id,
+      status: !salesperson.isActive,
+    });
   };
 
   const handleSalespersonActivation = (
     salesperson: SalespersonReturnedPayload
   ): void => {
-    // unblockCustomer(customer._id);
+    toggleSalespersonActivation({
+      id: _id,
+      status: true,
+    });
   };
 
   const handleEditSalesperson = (
@@ -94,7 +95,7 @@ const SalesPersonItem = (prop: SalesPersonItemProps) => {
         {isActive ? (
           <CustomSwitch
             color={isActive ? "success" : "error"}
-            onChange={(event) => handleSwitchChange(event, salesperson)}
+            onChange={(event) => handleSwitchChange(event)}
             checked={isActive}
             isActive={isActive}
           />

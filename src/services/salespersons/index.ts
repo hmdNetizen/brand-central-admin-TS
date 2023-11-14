@@ -20,6 +20,7 @@ const initialState: InitStateType = {
   loadingSalespersons: false,
   loadingSingleSalesperson: false,
   loadingRequestAction: false,
+  loadingActivation: false,
   salespersons: [],
   totalSalespersons: 0,
   singleSalesperson: null,
@@ -263,6 +264,29 @@ export const getSearchedSalespeople = createAsyncThunk(
   }
 );
 
+export const toggleSalespersonActivation = createAsyncThunk(
+  "toggle-salesperson-activation",
+  async (dataset: { id: string; status: boolean }, thunkAPI) => {
+    const { id, status } = dataset;
+    try {
+      const { data } = await axios.patch(config.salespersons.update(id), {
+        isActive: status,
+      });
+      const result = data as SingleSalespersonPayloadTypes;
+
+      return result.data;
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+      }
+    }
+  }
+);
+
 const salespersonsSlice = createSlice({
   name: "salesperson",
   initialState,
@@ -381,6 +405,24 @@ const salespersonsSlice = createSlice({
           position: "top-center",
           hideProgressBar: true,
         });
+      });
+    builder
+      .addCase(toggleSalespersonActivation.pending, (state) => {
+        state.loadingActivation = true;
+      })
+      .addCase(toggleSalespersonActivation.fulfilled, (state, action) => {
+        state.loadingActivation = false;
+        state.salespersons = state.salespersons.map((salesperson) =>
+          salesperson._id === action.payload._id
+            ? { ...salesperson, isActive: action.payload.isActive }
+            : salesperson
+        );
+      })
+      .addCase(toggleSalespersonActivation.rejected, (state, action) => {
+        state.loadingActivation = false;
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
       });
   },
 });

@@ -15,7 +15,6 @@ import {
   IoPersonOutline as CustomersIcon,
   IoDiamondOutline as BrandsIcon,
   IoCloudUploadOutline,
-  // @ts-ignore
 } from "react-icons/io5";
 import { RiCoupon2Line as CouponIcon } from "react-icons/ri";
 
@@ -148,6 +147,11 @@ export const menus = [
         subId: 4,
         title: "Customers List",
         path: "/dashboard/salespeople/customers",
+      },
+      {
+        subId: 5,
+        title: "Update Customers",
+        path: "/dashboard/salespeople/update-customers",
       },
     ],
   },

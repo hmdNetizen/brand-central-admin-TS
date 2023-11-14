@@ -11,7 +11,7 @@ const Salespersons = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [filterText, setFilterText] = useState("");
 
-  const salesperson = useTypedSelector(
+  const salespeople = useTypedSelector(
     (state) => state.salesPersons.salespersons
   );
 
@@ -55,24 +55,9 @@ const Salespersons = () => {
     }
   }, [filterText, page, rowsPerPage]);
 
-  //   useEffect(() => {
-  //     if (!filterText) {
-  //       getAllCustomers({
-  //         limit: rowsPerPage,
-  //         page: page + 1,
-  //       });
-  //     } else {
-  //       getSearchedCustomers({
-  //         searchTerm: filterText,
-  //         page: page + 1,
-  //         limit: rowsPerPage,
-  //       });
-  //     }
-  //   }, [page, rowsPerPage]);
-
   return (
     <SalesPersonsPageLayout
-      title="Salespeople"
+      title="Sales Representatives"
       filterText={filterText}
       page={page}
       setPage={setPage}
@@ -82,7 +67,9 @@ const Salespersons = () => {
       setOpenDeleteSalesperson={setOpenDeleteSalesperson}
       openEditSalesperson={openEditSalesperson}
       setOpenEditSalesperson={setOpenEditSalesperson}
-      salesPersonsDataset={salesperson}
+      salesPersonsDataset={salespeople.filter(
+        (salesperson) => salesperson.isActive
+      )}
       onChange={handleSearch}
       openAddSalesperson={openAddSalesperson}
       setOpenAddSalesperson={setOpenAddSalesperson}

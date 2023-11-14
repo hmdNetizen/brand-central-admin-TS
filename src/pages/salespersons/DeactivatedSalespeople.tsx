@@ -11,7 +11,7 @@ const DeactivatedSalespersons = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [filterText, setFilterText] = useState("");
 
-  const salesperson = useTypedSelector(
+  const salespeople = useTypedSelector(
     (state) => state.salesPersons.salespersons
   );
 
@@ -71,7 +71,7 @@ const DeactivatedSalespersons = () => {
 
   return (
     <SalesPersonsPageLayout
-      title="Deactivated Salespeople"
+      title="Deactivated Sales Representatives"
       filterText={filterText}
       page={page}
       setPage={setPage}
@@ -81,7 +81,9 @@ const DeactivatedSalespersons = () => {
       setOpenDeleteSalesperson={setOpenDeleteSalesperson}
       openEditSalesperson={openEditSalesperson}
       setOpenEditSalesperson={setOpenEditSalesperson}
-      salesPersonsDataset={salesperson}
+      salesPersonsDataset={salespeople.filter(
+        (salesperson) => !salesperson.isActive
+      )}
       onChange={handleSearch}
       openAddSalesperson={openAddSalesperson}
       setOpenAddSalesperson={setOpenAddSalesperson}

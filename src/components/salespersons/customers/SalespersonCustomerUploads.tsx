@@ -14,9 +14,13 @@ import CustomLinearProgressBar from "src/utils/CustomLinearProgress";
 import { useActions } from "src/hooks/useActions";
 import { ProductsBulkUpdatePayload } from "src/services/products/ProductTypes";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-import { Container, Input, ProgressTextWrapper } from "./styles.inventory";
+import {
+  Container,
+  Input,
+  ProgressTextWrapper,
+} from "../../inventory/styles.inventory";
 
-function StyledDropzone() {
+function SalespersonCustomerUploads() {
   const theme = useTheme();
   const [fileName, setFileName] = useState<File | string>("");
 
@@ -65,9 +69,9 @@ function StyledDropzone() {
             // shippingCategory: product["shipping category"] ? product["shipping category"].toLowerCase(),
           }));
 
-        updateInventoryProducts({
-          products: newProducts,
-        });
+        // updateInventoryProducts({
+        //   products: newProducts,
+        // });
       },
     });
 
@@ -115,4 +119,4 @@ function StyledDropzone() {
   );
 }
 
-export default StyledDropzone;
+export default SalespersonCustomerUploads;

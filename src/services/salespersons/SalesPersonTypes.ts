@@ -52,6 +52,7 @@ export type InitStateType = {
   loadingSalespersons: boolean;
   loadingSingleSalesperson: boolean;
   loadingRequestAction: boolean;
+  loadingActivation: boolean;
   salespersons: SalespersonReturnedPayload[];
   totalSalespersons: number;
   singleSalesperson: SalespersonReturnedPayload | null;

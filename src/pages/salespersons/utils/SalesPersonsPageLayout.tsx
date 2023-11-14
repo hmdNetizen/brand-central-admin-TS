@@ -1,16 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import Tables from "src/components/table/Tables";
 import { salespeopleListColumns } from "src/lib/dataset/tableData";
-import CustomerItem from "src/components/customers/CustomerItem";
-// import EditCustomerProfile from "./modals/EditCustomerProfile";
-// import DeleteCustomer from "./modals/DeleteCustomer";
-// import EmailCustomer from "./modals/EmailCustomer";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
-import { SelectChangeEvent } from "@mui/material";
-import PageHeadingActions from "src/components/common/PageHeadingActions";
 import PageHeadingWithActionButton from "src/components/common/PageHeadingWithActionButton";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { SalesPersonsPageLayoutProps } from "../types";
@@ -46,8 +40,8 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
     (state) => state.salesPersons.loadingSalespersons
   );
 
-  const loadingCustomerAction = useTypedSelector(
-    (state) => state.customers.loadingCustomerAction
+  const loadingActivation = useTypedSelector(
+    (state) => state.salesPersons.loadingActivation
   );
   const totalSalespersons = useTypedSelector(
     (state) => state.salesPersons.totalSalespersons
@@ -60,17 +54,8 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
     setPage(0);
   };
 
-  const handleSelectRowsPerPage = (
-    event: SelectChangeEvent<unknown>,
-    child: React.ReactNode
-  ): void => {
-    const selectEvent = event as SelectChangeEvent<HTMLInputElement>;
-    setRowsPerPage(+selectEvent.target.value);
-    setPage(0);
-  };
-
-  const handleLoadingCustomerAction = () => {
-    return !loadingCustomerAction;
+  const handleLoadingSalespersonActivation = () => {
+    return !loadingActivation;
   };
 
   return (
@@ -130,18 +115,10 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
         openDeleteSalesperson={openDeleteSalesperson}
         setOpenDeleteSalesperson={setOpenDeleteSalesperson}
       />
-      {/*
-      <DeleteCustomer
-        openDeleteCustomer={openDeleteCustomer}
-        setOpenDeleteCustomer={setOpenDeleteCustomer}
-      />
-      <EmailCustomer open={openEmail} setOpen={setOpenEmail} />
       <CustomLoadingDialog
-        loading={
-          loadingCustomerAction !== undefined ? loadingCustomerAction : false
-        }
-        handleLoading={handleLoadingCustomerAction}
-      /> */}
+        loading={loadingActivation !== undefined ? loadingActivation : false}
+        handleLoading={handleLoadingSalespersonActivation}
+      />
     </Container>
   );
 };
