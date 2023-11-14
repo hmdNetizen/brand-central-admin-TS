@@ -49,6 +49,9 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
   const loadingCustomerAction = useTypedSelector(
     (state) => state.customers.loadingCustomerAction
   );
+  const totalSalespersons = useTypedSelector(
+    (state) => state.salesPersons.totalSalespersons
+  );
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -94,7 +97,7 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
             headerColumns={salespeopleListColumns}
             page={page}
             setPage={setPage}
-            total={salesPersonsDataset.length}
+            total={totalSalespersons}
             rowsPerPage={rowsPerPage}
             setRowsPerPage={setRowsPerPage}
             handleChangeRowsPerPage={handleChangeRowsPerPage}

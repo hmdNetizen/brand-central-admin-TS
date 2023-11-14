@@ -14,7 +14,10 @@ export type SalespersonReturnedPayload = {
 };
 
 export type SalespersonsPayloadTypes = {
-  data: Array<SalespersonReturnedPayload>;
+  data: {
+    results: Array<SalespersonReturnedPayload>;
+    total: number;
+  };
 };
 
 export type SingleSalespersonPayloadTypes = {
@@ -50,6 +53,7 @@ export type InitStateType = {
   loadingSingleSalesperson: boolean;
   loadingRequestAction: boolean;
   salespersons: SalespersonReturnedPayload[];
+  totalSalespersons: number;
   singleSalesperson: SalespersonReturnedPayload | null;
   error: null | string;
 };

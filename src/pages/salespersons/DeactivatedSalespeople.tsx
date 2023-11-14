@@ -19,14 +19,12 @@ const DeactivatedSalespersons = () => {
   const [openEditSalesperson, setOpenEditSalesperson] = useState(false);
   const [openDeleteSalesperson, setOpenDeleteSalesperson] = useState(false);
 
-  const { getAllSalespersons } = useActions();
+  const { getAllSalespersons, getSearchedSalespeople } = useActions();
 
-  //   const { getAllCustomers, getSearchedCustomers } = useActions();
-
-  //   const debounceFilteredCustomers = useCallback(
-  //     debounce(getSearchedCustomers, 500),
-  //     []
-  //   );
+  const debounceFilteredSalespersons = useCallback(
+    debounce(getSearchedSalespeople, 500),
+    []
+  );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPage(0);
@@ -40,8 +38,21 @@ const DeactivatedSalespersons = () => {
   };
 
   useEffect(() => {
-    getAllSalespersons(false);
-  }, []);
+    if (filterText) {
+      debounceFilteredSalespersons({
+        searchQuery: filterText.trim(),
+        page: page + 1,
+        limit: rowsPerPage,
+        isActive: false,
+      });
+    } else {
+      getAllSalespersons({
+        isActive: false,
+        page: page + 1,
+        limit: rowsPerPage,
+      });
+    }
+  }, [filterText, page, rowsPerPage]);
 
   //   useEffect(() => {
   //     if (!filterText) {

@@ -9,6 +9,7 @@ export const config = {
     add: `/api/salespersons/create`,
     update: (id: string) => `/api/salespersons/admin/${id}`,
     delete: (id: string) => `api/salespersons/${id}`,
+    filter: "/api/salespersons/filter",
 
     orders: {
       getBySalespersonId: (salespersonId: string) =>

@@ -19,29 +19,41 @@ const Salespersons = () => {
   const [openEditSalesperson, setOpenEditSalesperson] = useState(false);
   const [openDeleteSalesperson, setOpenDeleteSalesperson] = useState(false);
 
-  const { getAllSalespersons } = useActions();
+  const { getAllSalespersons, getSearchedSalespeople } = useActions();
 
-  //   const { getAllCustomers, getSearchedCustomers } = useActions();
-
-  //   const debounceFilteredCustomers = useCallback(
-  //     debounce(getSearchedCustomers, 500),
-  //     []
-  //   );
+  const debounceFilteredSalespersons = useCallback(
+    debounce(getSearchedSalespeople, 500),
+    []
+  );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPage(0);
     setFilterText(event.target.value);
 
-    // debounceFilteredCustomers({
-    //   searchTerm: event.target.value.trim(),
-    //   page: page + 1,
-    //   limit: rowsPerPage,
-    // });
+    debounceFilteredSalespersons({
+      searchQuery: event.target.value.trim(),
+      page: page + 1,
+      limit: rowsPerPage,
+      isActive: true,
+    });
   };
 
   useEffect(() => {
-    getAllSalespersons(true);
-  }, []);
+    if (filterText) {
+      debounceFilteredSalespersons({
+        searchQuery: filterText.trim(),
+        page: page + 1,
+        limit: rowsPerPage,
+        isActive: true,
+      });
+    } else {
+      getAllSalespersons({
+        isActive: true,
+        page: page + 1,
+        limit: rowsPerPage,
+      });
+    }
+  }, [filterText, page, rowsPerPage]);
 
   //   useEffect(() => {
   //     if (!filterText) {

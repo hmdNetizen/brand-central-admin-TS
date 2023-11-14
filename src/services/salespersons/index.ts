@@ -6,6 +6,7 @@ import { fileUploadConfig } from "src/config/fileUpload";
 import { capitalizeFirstLetters } from "src/lib/helpers";
 import axios from "../axios";
 import { UploadedFilePayload } from "../common/commonTypes";
+import { QueryParams } from "../types";
 import {
   InitStateType,
   SalespersonRequestPayload,
@@ -20,20 +21,25 @@ const initialState: InitStateType = {
   loadingSingleSalesperson: false,
   loadingRequestAction: false,
   salespersons: [],
+  totalSalespersons: 0,
   singleSalesperson: null,
   error: null,
 };
 
 export const getAllSalespersons = createAsyncThunk(
   "get-all-salespersons",
-  async (isActive: boolean, thunkAPI) => {
+  async (dataset: QueryParams & { isActive: boolean }, thunkAPI) => {
+    const { isActive, limit, page } = dataset;
     try {
       const { data } = await axios.get(config.salespersons.get, {
-        params: { isActive },
+        params: { isActive, limit, page },
       });
       const result = data as SalespersonsPayloadTypes;
 
-      return result.data;
+      return {
+        results: result.data.results,
+        total: result.data.total,
+      };
     } catch (error: AxiosError | any) {
       if (error.response) {
         return thunkAPI.rejectWithValue(error.response.data.error);
@@ -228,6 +234,35 @@ export const deleteSalesperson = createAsyncThunk(
   }
 );
 
+export const getSearchedSalespeople = createAsyncThunk(
+  "get-searched-salespeople",
+  async (
+    dataset: QueryParams & { searchQuery: string; isActive: boolean },
+    thunkAPI
+  ) => {
+    const { page, limit, isActive, searchQuery } = dataset;
+    try {
+      const { data } = await axios.get(config.salespersons.filter, {
+        params: { isActive, page, limit, searchQuery },
+      });
+      const result = data as SalespersonsPayloadTypes;
+
+      return {
+        results: result.data.results,
+        total: result.data.total,
+      };
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+      }
+    }
+  }
+);
+
 const salespersonsSlice = createSlice({
   name: "salesperson",
   initialState,
@@ -246,7 +281,8 @@ const salespersonsSlice = createSlice({
       })
       .addCase(getAllSalespersons.fulfilled, (state, action) => {
         state.loadingSalespersons = false;
-        state.salespersons = action.payload;
+        state.salespersons = action.payload.results;
+        state.totalSalespersons = action.payload.total;
         state.error = null;
       })
       .addCase(getAllSalespersons.rejected, (state, action) => {
@@ -255,6 +291,12 @@ const salespersonsSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder.addCase(getSearchedSalespeople.fulfilled, (state, action) => {
+      state.loadingSalespersons = false;
+      state.salespersons = action.payload.results;
+      state.totalSalespersons = action.payload.total;
+      state.error = null;
+    });
     builder
       .addCase(getSalespersonProfile.pending, (state) => {
         state.loadingSingleSalesperson = true;
