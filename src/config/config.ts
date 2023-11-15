@@ -35,6 +35,7 @@ export const config = {
       update: (customerId: string) =>
         `/api/salespersons-customers/admin/${customerId}`,
       filter: "/api/salespersons-customers/filter",
+      updateMany: "/api/salespersons-customers/admin/update",
     },
   },
   uploads: {

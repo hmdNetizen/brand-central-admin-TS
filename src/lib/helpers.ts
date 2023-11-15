@@ -3,6 +3,7 @@ import {
   ProductsBulkUpdatePayload,
   ProductTypes,
 } from "src/services/products/ProductTypes";
+import { SalespersonReturnedPayload } from "src/services/salespersons/SalesPersonTypes";
 
 export const capitalizeFirstLetters = (sentence: string) => {
   const lowerCaseSentence = sentence.toLowerCase();
@@ -154,4 +155,17 @@ export const addBrandWithApostrophe = (brand: string) => {
   } else {
     return `${brand}'s`;
   }
+};
+
+export const getSalespersonId = (
+  salespeople: SalespersonReturnedPayload[],
+  initials: string
+) => {
+  const salesperson = salespeople.filter((item) => item.initials === initials);
+
+  if (salesperson.length === 0) {
+    return "";
+  }
+
+  return salesperson[0]._id;
 };

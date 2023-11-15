@@ -104,17 +104,17 @@ export const addNewSalesperson = createAsyncThunk(
         if (status === 201) {
           setOpenAddSalesperson(false);
           setSelectedFile("");
+        }
 
-          if (setSalespersonInformation) {
-            setSalespersonInformation({
-              fullName: "",
-              email: "",
-              confirmPassword: "",
-              initials: "",
-              password: "",
-              phoneNumber: "",
-            });
-          }
+        if (setSalespersonInformation) {
+          setSalespersonInformation({
+            fullName: "",
+            email: "",
+            confirmPassword: "",
+            initials: "",
+            password: "",
+            phoneNumber: "",
+          });
         }
 
         const result = data as SingleSalespersonPayloadTypes;

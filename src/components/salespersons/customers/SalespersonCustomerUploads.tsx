@@ -4,21 +4,17 @@ import IconButton from "@mui/material/IconButton";
 import { IoIosCloudUpload } from "react-icons/io";
 import Typography from "@mui/material/Typography";
 import { read, utils } from "xlsx";
-import {
-  capitalizeFirstLetters,
-  constructBrandName,
-  constructSubCategory,
-} from "src/lib/helpers";
+import { capitalizeFirstLetters, getSalespersonId } from "src/lib/helpers";
 import { useTheme } from "@mui/material/styles";
 import CustomLinearProgressBar from "src/utils/CustomLinearProgress";
 import { useActions } from "src/hooks/useActions";
-import { ProductsBulkUpdatePayload } from "src/services/products/ProductTypes";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import {
   Container,
   Input,
   ProgressTextWrapper,
 } from "../../inventory/styles.inventory";
+import { SalespersonCustomerBulkUpdatePayload } from "src/services/salespersons/customers/types";
 
 function SalespersonCustomerUploads() {
   const theme = useTheme();
@@ -29,6 +25,9 @@ function SalespersonCustomerUploads() {
   );
   const updatedInventory = useTypedSelector(
     (state) => state.products.updatedInventory
+  );
+  const salespeople = useTypedSelector(
+    (state) => state.salesPersons.salespersons
   );
 
   const { updateInventoryProducts } = useActions();
@@ -47,31 +46,20 @@ function SalespersonCustomerUploads() {
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
         const jsonData = utils.sheet_to_json(worksheet);
-        const result = jsonData as ProductsBulkUpdatePayload[];
-        const newProducts = [...result]
-          .filter((data) => data["Item Code"])
-          .map((product) => ({
-            productName: product["Size"],
-            category: capitalizeFirstLetters(product["Category"]),
-            productDescription: product["Description"],
-            brandName: capitalizeFirstLetters(constructBrandName(product)),
-            itemCode: product["Item Code"],
-            units: product["UM"],
-            productType: "Physical",
-            productUPC: product["UPC"],
-            subCategory: capitalizeFirstLetters(constructSubCategory(product)),
-            productStock: product["Stock"],
-            priceCode1: product["Price Code 1"],
-            priceCode2: product["Price Code 2"],
-            priceCode3: product["Price Code 3"],
-            priceCode4: product["Price Code 4"],
-            SRP: product["MSRP"],
-            // shippingCategory: product["shipping category"] ? product["shipping category"].toLowerCase(),
+        const result = jsonData as SalespersonCustomerBulkUpdatePayload[];
+        const newSalespersonCustomers = [...result]
+          .filter((data) => data["Slsprn"])
+          .map((customer) => ({
+            companyName: capitalizeFirstLetters(customer["Company Name"]),
+            customerCode: customer["Customer:"],
+            address: `${customer["Address:"]}, ${customer["City, State, Zip"]}`,
+            phoneNumber: customer["Phone"].includes("blank")
+              ? ""
+              : `1${customer["Phone"].replace(/[\/-]/g, "")}`,
+            referrer: getSalespersonId(salespeople, customer["Slsprn"]),
           }));
 
-        // updateInventoryProducts({
-        //   products: newProducts,
-        // });
+        console.log(newSalespersonCustomers);
       },
     });
 

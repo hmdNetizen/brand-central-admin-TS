@@ -53,21 +53,14 @@ type ErrorResponseTypes = {
   param: "companyName";
 };
 
-// error response for creating new sales rep customer
-// "errors": [
-//   {
-//     "value": "Tech for Africa",
-//     "msg": "Company name already exists.",
-//     "param": "companyName",
-//     "location": "body"
-//   },
-//   {
-//     "value": "34567",
-//     "msg": "Customer code already exists.",
-//     "param": "customerCode",
-//     "location": "body"
-//   }
-// ]
+export type SalespersonCustomerBulkUpdatePayload = {
+  "Customer:": string;
+  "Company Name": string;
+  "Address:": string;
+  "City, State, Zip": string;
+  Phone: string;
+  Slsprn: string;
+};
 
 export type InitStateTypes = {
   loadingSalespersonCustomers: boolean;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme, styled } from "@mui/material/styles";
@@ -8,6 +8,7 @@ import { Container } from "src/components/common/styles/PageContainerStyles";
 import { ErrorMsg, ErrorsList } from "src/utilityStyles/pagesUtilityStyles";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import SalespersonCustomerUploads from "src/components/salespersons/customers/SalespersonCustomerUploads";
+import { useActions } from "src/hooks/useActions";
 
 const ContentWrapper = styled(Grid)({
   minHeight: "80vh",
@@ -30,6 +31,16 @@ const UpdateCustomers = () => {
   const loadingCustomerAction = useTypedSelector(
     (state) => state.salespersonCustomers.loadingSalespersonCustomerAction
   );
+
+  const { getAllSalespersons } = useActions();
+
+  useEffect(() => {
+    getAllSalespersons({
+      isActive: true,
+      limit: 50,
+      page: 1,
+    });
+  }, []);
 
   return (
     <Container container direction="column">

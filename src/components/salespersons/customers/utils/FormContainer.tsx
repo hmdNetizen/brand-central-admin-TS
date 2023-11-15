@@ -4,6 +4,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 
 import {
+  ErrorMsg,
+  ErrorsList,
   StyledCircularProgress,
   StyledFormContainer,
   SubmitButton,
@@ -55,12 +57,15 @@ const SalespersonCustomerFormContainer = (
     (state) => state.salesPersons.salespersons
   );
 
-  const salespeopleInitials = salespeople.map(
-    (salesperson) => salesperson.initials
-  );
+  const errors = useTypedSelector((state) => state.salespersonCustomers.errors);
+  const error = useTypedSelector((state) => state.salespersonCustomers.error);
 
   const loadingSalespersonCustomerAction = useTypedSelector(
     (state) => state.salespersonCustomers.loadingSalespersonCustomerAction
+  );
+
+  const salespeopleInitials = salespeople.map(
+    (salesperson) => salesperson.initials
   );
 
   const {
@@ -95,6 +100,28 @@ const SalespersonCustomerFormContainer = (
       component="form"
       onSubmit={onSubmit}
     >
+      {!loadingSalespersonCustomerAction && error && (
+        <ErrorsList item component="ul">
+          <ErrorMsg variant="body1" component="li" color="error">
+            {error}
+          </ErrorMsg>
+        </ErrorsList>
+      )}
+
+      {!loadingSalespersonCustomerAction && errors.length > 0 && (
+        <ErrorsList item component="ul" hasBullet>
+          {errors.map((err) => (
+            <ErrorMsg
+              variant="body1"
+              component="li"
+              color="error"
+              key={err.param}
+            >
+              {err.msg}
+            </ErrorMsg>
+          ))}
+        </ErrorsList>
+      )}
       <Grid
         item
         container
