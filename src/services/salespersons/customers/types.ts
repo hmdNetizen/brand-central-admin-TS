@@ -31,6 +31,11 @@ export type SalespersonCustomerRequestPayload = {
   >;
 };
 
+export type UploadSalespersonCustomersRequestTypes = Pick<
+  SalespersonCustomerRequestPayload,
+  "companyName" | "customerCode" | "referrer" | "phoneNumber" | "address"
+>;
+
 export type SingleSalespersonCustomerReturnedPayloadTypes = {
   data: SalespersonCustomerResponsePayload;
 };
@@ -69,6 +74,8 @@ export type InitStateTypes = {
   loadingSalespersonCustomerAction: boolean;
   totalCustomers: number;
   totalCustomerOrders: number;
+  uploadingCustomerStatus: string;
+  uploadedCustomerStatus: string;
   salespersonCustomers: Array<SalespersonCustomerResponsePayload>;
   salespersonCustomerOrders: Array<SalespersonOrderResponsePayload>;
   singleSalespersonCustomer: SalespersonCustomerResponsePayload | null;

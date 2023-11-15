@@ -9,14 +9,21 @@ type SalespeopleCustomersProps = {
   setOpenDeleteSalespersonCustomer: React.Dispatch<
     React.SetStateAction<boolean>
   >;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  rowsPerPage: number;
+  setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const SalespeopleCustomers = (props: SalespeopleCustomersProps) => {
-  const { setOpenEditSalespersonCustomer, setOpenDeleteSalespersonCustomer } =
-    props;
-
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const {
+    setOpenEditSalespersonCustomer,
+    setOpenDeleteSalespersonCustomer,
+    page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage,
+  } = props;
 
   const loadingSalespersonCustomers = useTypedSelector(
     (state) => state.salespersonCustomers.loadingSalespersonCustomers

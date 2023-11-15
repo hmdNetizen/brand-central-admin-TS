@@ -98,6 +98,10 @@ const SalespersonCustomersList = () => {
           <SalespeopleCustomers
             setOpenEditSalespersonCustomer={setOpenEditSalespersonCustomer}
             setOpenDeleteSalespersonCustomer={setOpenDeleteSalespersonCustomer}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            setPage={setPage}
+            setRowsPerPage={setRowsPerPage}
           />
         </Grid>
       </ContainerWrapper>

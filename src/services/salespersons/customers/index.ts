@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosProgressEvent } from "axios";
 import { toast } from "react-toastify";
 
 import { config } from "src/config/config";
 import axios from "src/services/axios";
+import { setUploadPercentage } from "src/services/common";
 import { QueryParams } from "src/services/types";
 import { SalespersonOrdersPayloadTypes } from "../orders/types";
 import {
@@ -13,6 +14,7 @@ import {
   SalespersonCustomerRequestPayload,
   SalespersonCustomerResponsePayload,
   SingleSalespersonCustomerReturnedPayloadTypes,
+  UploadSalespersonCustomersRequestTypes,
 } from "./types";
 
 const initialState: InitStateTypes = {
@@ -25,6 +27,8 @@ const initialState: InitStateTypes = {
   singleSalespersonCustomer: null,
   totalCustomers: 0,
   totalCustomerOrders: 0,
+  uploadedCustomerStatus: "",
+  uploadingCustomerStatus: "",
   error: null,
   errors: [],
 };
@@ -51,7 +55,9 @@ export const getSalespeopleCustomers = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching customers"
+        );
       }
     }
   }
@@ -84,7 +90,9 @@ export const getSingleSalespersonCustomers = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching sales rep's customers"
+        );
       }
     }
   }
@@ -106,7 +114,9 @@ export const getSalespersonCustomerProfile = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching customer's profile"
+        );
       }
     }
   }
@@ -139,7 +149,9 @@ export const getSalespersonCustomerOrders = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching customer orders"
+        );
       }
     }
   }
@@ -181,7 +193,9 @@ export const createNewSalespersonCustomer = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while creating new customer"
+        );
       }
     }
   }
@@ -212,7 +226,9 @@ export const updateSalespersonCustomer = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while updating customer"
+        );
       }
     }
   }
@@ -238,7 +254,9 @@ export const deleteSalespersonCustomer = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while deleting customer"
+        );
       }
     }
   }
@@ -264,7 +282,75 @@ export const getFilteredSalespersonCustomers = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching sales rep's customers"
+        );
+      }
+    }
+  }
+);
+
+export const uploadSalespersonCustomers = createAsyncThunk(
+  "upload-salesperson-customers",
+  async (dataset: Array<UploadSalespersonCustomersRequestTypes>, thunkAPI) => {
+    const uploadConfig = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+        thunkAPI.dispatch(setUploadingCustomerText());
+
+        const total = progressEvent.total;
+
+        if (total !== undefined) {
+          const percentage = Number(
+            Math.round((progressEvent.loaded * 100) / total)
+          );
+          thunkAPI.dispatch(setUploadPercentage(percentage));
+        }
+      },
+      onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
+        thunkAPI.dispatch(
+          setUploadedCustomerStatusText("Updating Customers List")
+        );
+
+        const total = progressEvent.total;
+
+        if (total !== undefined) {
+          const percentage = Number(
+            Math.round((progressEvent.loaded * 100) / total)
+          );
+          thunkAPI.dispatch(setUploadPercentage(percentage));
+        }
+      },
+    };
+    try {
+      const { data } = await axios.patch(
+        config.salespersons.customers.updateMany,
+        { customers: dataset },
+        uploadConfig
+      );
+
+      const result = data as { message: string };
+
+      // if (status === 200) {
+      //   thunkAPI.dispatch(
+      //     setUploadedCustomerStatusText(result.message)
+      //   );
+      // }
+
+      return result.message;
+    } catch (error: AxiosError | any) {
+      thunkAPI.dispatch(setUploadPercentage(0));
+      thunkAPI.dispatch(setUploadedCustomerStatusText(""));
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while updating inventory"
+        );
       }
     }
   }
@@ -279,6 +365,14 @@ const salespersonCustomerSlice = createSlice({
       action: PayloadAction<SalespersonCustomerResponsePayload>
     ) => {
       state.singleSalespersonCustomer = action.payload;
+    },
+    setUploadingCustomerText: (state) => {
+      state.uploadingCustomerStatus = "Uploading Files";
+      state.uploadedCustomerStatus = "";
+    },
+    setUploadedCustomerStatusText: (state, action) => {
+      state.uploadedCustomerStatus = action.payload;
+      state.uploadingCustomerStatus = "";
     },
   },
   extraReducers(builder) {
@@ -431,9 +525,31 @@ const salespersonCustomerSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder
+      .addCase(uploadSalespersonCustomers.pending, (state) => {
+        state.loadingSalespersonCustomerAction = true;
+      })
+      .addCase(uploadSalespersonCustomers.fulfilled, (state, action) => {
+        state.loadingSalespersonCustomerAction = false;
+        state.uploadedCustomerStatus = action.payload;
+        state.error = null;
+        state.errors = [];
+      })
+      .addCase(uploadSalespersonCustomers.rejected, (state, action) => {
+        state.loadingSalespersonCustomerAction = false;
+        if (Array.isArray(action.payload)) {
+          state.errors = action.payload;
+        }
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
   },
 });
 
-export const { setCurrentSalespeopleCustomer } =
-  salespersonCustomerSlice.actions;
+export const {
+  setCurrentSalespeopleCustomer,
+  setUploadingCustomerText,
+  setUploadedCustomerStatusText,
+} = salespersonCustomerSlice.actions;
 export default salespersonCustomerSlice.reducer;

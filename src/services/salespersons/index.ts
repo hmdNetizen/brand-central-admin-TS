@@ -47,7 +47,9 @@ export const getAllSalespersons = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching sales reps"
+        );
       }
     }
   }
@@ -69,7 +71,9 @@ export const getSalespersonProfile = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while fetching sales rep's profile"
+        );
       }
     }
   }
@@ -83,6 +87,7 @@ export const addNewSalesperson = createAsyncThunk(
       setOpenAddSalesperson,
       setSelectedFile,
       setSalespersonInformation,
+      setPreview,
     } = details;
     const { config: uploadConfig, formData } = fileUploadConfig(profileImage);
     try {
@@ -104,9 +109,8 @@ export const addNewSalesperson = createAsyncThunk(
         if (status === 201) {
           setOpenAddSalesperson(false);
           setSelectedFile("");
-        }
+          setPreview(undefined);
 
-        if (setSalespersonInformation) {
           setSalespersonInformation({
             fullName: "",
             email: "",
@@ -129,6 +133,15 @@ export const addNewSalesperson = createAsyncThunk(
 
       if (status === 201) {
         setOpenAddSalesperson(false);
+
+        setSalespersonInformation({
+          fullName: "",
+          email: "",
+          confirmPassword: "",
+          initials: "",
+          password: "",
+          phoneNumber: "",
+        });
       }
 
       const result = data as SingleSalespersonPayloadTypes;
@@ -140,7 +153,9 @@ export const addNewSalesperson = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while creating sales rep"
+        );
       }
     }
   }
@@ -197,7 +212,9 @@ export const updateSalesperson = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while updating sales rep"
+        );
       }
     }
   }
@@ -229,7 +246,9 @@ export const deleteSalesperson = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while deleting sales rep"
+        );
       }
     }
   }
@@ -258,7 +277,9 @@ export const getSearchedSalespeople = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while searching for sales reps"
+        );
       }
     }
   }
@@ -281,7 +302,9 @@ export const toggleSalespersonActivation = createAsyncThunk(
       } else if (error.request) {
         return thunkAPI.rejectWithValue("No response received from server");
       } else {
-        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+        return thunkAPI.rejectWithValue(
+          "Error occurred while performing this operation"
+        );
       }
     }
   }

@@ -34,7 +34,8 @@ export type SalespersonRequestPayload = {
   profileImage: File | string;
   setOpenAddSalesperson: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedFile: React.Dispatch<React.SetStateAction<File | string>>;
-  setSalespersonInformation?: React.Dispatch<
+  setPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setSalespersonInformation: React.Dispatch<
     React.SetStateAction<SalespersonInfoProps>
   >;
 };

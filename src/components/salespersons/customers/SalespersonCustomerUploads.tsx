@@ -20,17 +20,17 @@ function SalespersonCustomerUploads() {
   const theme = useTheme();
   const [fileName, setFileName] = useState<File | string>("");
 
-  const uploadedFiles = useTypedSelector(
-    (state) => state.products.uploadedFiles
+  const uploadingCustomerStatus = useTypedSelector(
+    (state) => state.salespersonCustomers.uploadingCustomerStatus
   );
-  const updatedInventory = useTypedSelector(
-    (state) => state.products.updatedInventory
+  const uploadedCustomerStatus = useTypedSelector(
+    (state) => state.salespersonCustomers.uploadedCustomerStatus
   );
   const salespeople = useTypedSelector(
     (state) => state.salesPersons.salespersons
   );
 
-  const { updateInventoryProducts } = useActions();
+  const { uploadSalespersonCustomers } = useActions();
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({
@@ -59,7 +59,7 @@ function SalespersonCustomerUploads() {
             referrer: getSalespersonId(salespeople, customer["Slsprn"]),
           }));
 
-        console.log(newSalespersonCustomers);
+        uploadSalespersonCustomers(newSalespersonCustomers);
       },
     });
 
@@ -86,19 +86,22 @@ function SalespersonCustomerUploads() {
           </IconButton>
         </label>
       </Container>
-      {(uploadedFiles || updatedInventory) && (
+      {(uploadingCustomerStatus || uploadedCustomerStatus) && (
         <ProgressTextWrapper>
           <Typography
             variant="body1"
             sx={{
               textTransform: "uppercase",
               color:
-                updatedInventory === "Update Completed"
+                uploadedCustomerStatus ===
+                "Sales Reps' customers have been updated"
                   ? theme.palette.success.main
                   : "#1a90ff",
             }}
           >
-            {uploadedFiles ? uploadedFiles : updatedInventory}
+            {uploadingCustomerStatus
+              ? uploadingCustomerStatus
+              : uploadedCustomerStatus}
           </Typography>
         </ProgressTextWrapper>
       )}
