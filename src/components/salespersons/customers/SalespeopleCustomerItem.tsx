@@ -60,7 +60,7 @@ const SalespeopleCustomerItem = ({
         {referrer.fullName}
       </TableCell>
       <TableCell style={{ minWidth: 120 }}>
-        {priceCode ? capitalizeFirstLetters(priceCode) : "Price code 1"}
+        {priceCode ? capitalizeFirstLetters(priceCode) : "N/A"}
       </TableCell>
       <TableCell style={{ minWidth: 300 }}>
         <OptionsTableData>
