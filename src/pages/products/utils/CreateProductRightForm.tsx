@@ -47,27 +47,19 @@ const CreateProductRightForm = (props: ProductRightFormProps) => {
             Product Image *
           </Typography>
         </Grid>
-        {/* <Grid
-          item
-          container
-          justifyContent={matchesSM ? "center" : "flex-start"}
-          style={{ marginTop: "2rem", marginBottom: "1rem" }}
-        >
-          <FileUploadBox setProductImageError={setProductImageError} />
-          {productImageError && (
-            <small className={classes.uploadError}>{productImageError}</small>
-          )}
-        </Grid> */}
-        <FileUploadLayout
-          onImageChange={handleChangeProductImage}
-          onRemoveImage={handleRemoveProductImage}
-          selectedFile={props.selectedFile}
-          setImageError={props.setProductImageError}
-          setSelectedFile={props.setSelectedFile}
-          preview={props.imagePreview}
-          setPreview={props.setImagePreview}
-          width={"100%"}
-        />
+        <Grid item container justifyContent="center">
+          <FileUploadLayout
+            onImageChange={handleChangeProductImage}
+            onRemoveImage={handleRemoveProductImage}
+            selectedFile={props.selectedFile}
+            setImageError={props.setProductImageError}
+            setSelectedFile={props.setSelectedFile}
+            preview={props.imagePreview}
+            setPreview={props.setImagePreview}
+            width={"100%"}
+          />
+        </Grid>
+
         {/* {props.productImageError && <small>{props.productImageError}</small>} */}
         <Grid
           item
