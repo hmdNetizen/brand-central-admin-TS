@@ -33,7 +33,12 @@ export type SalespersonCustomerRequestPayload = {
 
 export type UploadSalespersonCustomersRequestTypes = Pick<
   SalespersonCustomerRequestPayload,
-  "companyName" | "customerCode" | "referrer" | "phoneNumber" | "address"
+  | "companyName"
+  | "customerCode"
+  | "referrer"
+  | "phoneNumber"
+  | "address"
+  | "priceCode"
 >;
 
 export type SingleSalespersonCustomerReturnedPayloadTypes = {
@@ -65,6 +70,7 @@ export type SalespersonCustomerBulkUpdatePayload = {
   "City, State, Zip": string;
   Phone: string;
   Slsprn: string;
+  "Price Code": string;
 };
 
 export type InitStateTypes = {

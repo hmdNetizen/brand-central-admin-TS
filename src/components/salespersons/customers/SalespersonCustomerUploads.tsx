@@ -57,6 +57,9 @@ function SalespersonCustomerUploads() {
               ? ""
               : `1${customer["Phone"].replace(/[\/-]/g, "")}`,
             referrer: getSalespersonId(salespeople, customer["Slsprn"]),
+            priceCode: customer["Price Code"]
+              ? customer["Price Code"].split(" ").join("").toLowerCase()
+              : "pricecode3",
           }));
 
         uploadSalespersonCustomers(newSalespersonCustomers);
