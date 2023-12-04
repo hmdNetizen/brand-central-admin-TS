@@ -182,23 +182,26 @@ export const updateInventoryProducts = createAsyncThunk(
       },
       onUploadProgress: (progressEvent: AxiosProgressEvent) => {
         thunkAPI.dispatch(setUploadingFileText());
-        thunkAPI.dispatch(
-          setUploadPercentage(
-            Number(
-              Math.round((progressEvent.loaded * 100) / progressEvent.total!)
+        const total = progressEvent.total;
+        if (total !== undefined) {
+          thunkAPI.dispatch(
+            setUploadPercentage(
+              Number(Math.round((progressEvent.loaded * 100) / total!))
             )
-          )
-        );
+          );
+        }
       },
       onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
+        const total = progressEvent.total;
         thunkAPI.dispatch(setUpdatingInventory("Updating Inventory"));
-        thunkAPI.dispatch(
-          setUploadPercentage(
-            Number(
-              Math.round((progressEvent.loaded * 100) / progressEvent.total!)
+
+        if (total !== undefined) {
+          thunkAPI.dispatch(
+            setUploadPercentage(
+              Number(Math.round((progressEvent.loaded * 100) / total!))
             )
-          )
-        );
+          );
+        }
       },
     };
     try {

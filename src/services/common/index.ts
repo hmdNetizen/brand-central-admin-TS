@@ -24,13 +24,14 @@ export const uploadFile = createAsyncThunk(
       },
 
       onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-        thunkAPI.dispatch(
-          setUploadPercentage(
-            Number(
-              Math.round((progressEvent.loaded * 100) / progressEvent.total!)
+        const total = progressEvent.total;
+        if (total !== undefined) {
+          thunkAPI.dispatch(
+            setUploadPercentage(
+              Number(Math.round((progressEvent.loaded * 100) / total!))
             )
-          )
-        );
+          );
+        }
       },
     };
     try {
