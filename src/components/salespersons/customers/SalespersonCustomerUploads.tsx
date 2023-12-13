@@ -14,7 +14,58 @@ import {
   Input,
   ProgressTextWrapper,
 } from "../../inventory/styles.inventory";
-import { SalespersonCustomerBulkUpdatePayload } from "src/services/salespersons/customers/types";
+import {
+  SalespersonCustomerBulkUpdatePayload,
+  SalespersonCustomerResponsePayload,
+} from "src/services/salespersons/customers/types";
+import { SalespersonCustomerOrdersBulkUpdatePayload } from "src/services/orders/OrderTypes";
+import { ProductTypes } from "src/services/products/ProductTypes";
+
+type OrderProduct = {
+  product: string;
+  productQuantity: number;
+  productTotalCost: number;
+};
+
+const getProductId = (itemCode: string, products: ProductTypes[]) => {
+  const newProduct = products.find(
+    (item) => item.itemCode.toLowerCase() === itemCode.toLowerCase()
+  );
+  return newProduct?._id;
+};
+
+const getCustomerId = (
+  customerCode: string,
+  customers: Array<SalespersonCustomerResponsePayload>
+) => {
+  const customer = customers.find(
+    (customer) => customer.customerCode === customerCode
+  );
+  return customer?.id;
+};
+
+const calculateProductsTotalCost = (
+  quantity: number,
+  itemCode: string,
+  products: Array<ProductTypes>
+) => {
+  const currentProduct = products.find(
+    (product) => product.itemCode.toLowerCase() === itemCode.toLowerCase()
+  );
+
+  if (currentProduct) {
+    return Number(currentProduct.priceCode1) * quantity;
+  }
+
+  return 0;
+};
+
+const calculateOrderTotal = (ordersProducts: OrderProduct[]) => {
+  const totalAmount = ordersProducts.reduce(
+    (total, currItem) => total + currItem.productTotalCost,
+    0
+  );
+};
 
 function SalespersonCustomerUploads() {
   const theme = useTheme();
@@ -29,8 +80,46 @@ function SalespersonCustomerUploads() {
   const salespeople = useTypedSelector(
     (state) => state.salesPersons.salespersons
   );
+  const salespersonCustomers = useTypedSelector(
+    (state) => state.salespersonCustomers.salespersonCustomers
+  );
+  const products = useTypedSelector((state) => state.products.allProducts);
 
-  const { uploadSalespersonCustomers } = useActions();
+  // const { uploadSalespersonCustomers } = useActions();
+
+  // const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
+  //   useDropzone({
+  //     accept: {
+  //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [],
+  //     },
+  //     noClick: true,
+  //     onDrop: async (files) => {
+  //       setFileName(files[0]?.name);
+  //       const data = await files[0].arrayBuffer();
+  //       //     /* data is an ArrayBuffer */
+  //       const workbook = await read(data);
+  //       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+  //       const jsonData = utils.sheet_to_json(worksheet);
+  //       const result = jsonData as SalespersonCustomerBulkUpdatePayload[];
+  //       const newSalespersonCustomers = [...result]
+  //         .filter((data) => data["Slsprn"])
+  //         .map((customer) => ({
+  //           companyName: capitalizeFirstLetters(customer["Company Name"]),
+  //           customerCode: customer["Customer:"],
+  //           address: `${customer["Address:"]}, ${customer["City, State, Zip"]}`,
+  //           phoneNumber: customer["Phone"].includes("blank")
+  //             ? ""
+  //             : `1${customer["Phone"].replace(/[\/-]/g, "")}`,
+  //           referrer: getSalespersonId(salespeople, customer["Slsprn"]),
+  //           priceCode: customer["Price Code"]
+  //             ? customer["Price Code"].split(" ").join("").toLowerCase()
+  //             : "pricecode3",
+  //         }));
+
+  //       uploadSalespersonCustomers(newSalespersonCustomers);
+  //     },
+  //   });
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({
@@ -46,23 +135,60 @@ function SalespersonCustomerUploads() {
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
         const jsonData = utils.sheet_to_json(worksheet);
-        const result = jsonData as SalespersonCustomerBulkUpdatePayload[];
-        const newSalespersonCustomers = [...result]
-          .filter((data) => data["Slsprn"])
-          .map((customer) => ({
-            companyName: capitalizeFirstLetters(customer["Company Name"]),
-            customerCode: customer["Customer:"],
-            address: `${customer["Address:"]}, ${customer["City, State, Zip"]}`,
-            phoneNumber: customer["Phone"].includes("blank")
-              ? ""
-              : `1${customer["Phone"].replace(/[\/-]/g, "")}`,
-            referrer: getSalespersonId(salespeople, customer["Slsprn"]),
-            priceCode: customer["Price Code"]
-              ? customer["Price Code"].split(" ").join("").toLowerCase()
-              : "pricecode3",
-          }));
+        // const resultData = jsonData as SalespersonCustomerBulkUpdatePayload[];
+        const newResultData =
+          jsonData as SalespersonCustomerOrdersBulkUpdatePayload[];
 
-        uploadSalespersonCustomers(newSalespersonCustomers);
+        const result = newResultData.reduce((acc, order) => {
+          const existingCustomer = acc.find(
+            (item) =>
+              item["Cust.Code"] === order["Cust.Code"] &&
+              item["Slsprs"] === order["Slsprs"]
+          );
+
+          const orderProduct = {
+            product: getProductId(order.Item, products),
+            productQuantity: order["Qty Ship - Trn"],
+            productTotalCost: calculateProductsTotalCost(
+              order["Qty Ship - Trn"],
+              order.Item,
+              products
+            ),
+          };
+
+          if (existingCustomer) {
+            existingCustomer.ordersProducts.push(orderProduct);
+          } else {
+            // @ts-expect-error
+            acc.push({
+              "Cust.Code": order["Cust.Code"],
+              customerId: getCustomerId(
+                order["Cust.Code"],
+                salespersonCustomers
+              ),
+              salespersonId: getSalespersonId(salespeople, order["Slsprs"]),
+              Slsprs: order.Slsprs,
+              Company: order.Company,
+              orderInVoiceNumber: order["Invoice #"],
+              ordersProducts: [orderProduct],
+              OrderDate: new Date(order["Inv. Date"]).toISOString(),
+              orderPaymentAmount: 0,
+              orderPaymentDate: new Date(order["Inv. Date"]),
+              orderNote: "",
+              orderShippingAmount: 0,
+              ordersStatus: "completed",
+              orderTax: 0,
+              orderPaymentStatus: "paid",
+              orderDiscount: 0,
+              orderPaymentMethod: "Cash/Check",
+              orderTotalQuantity: 0,
+            });
+          }
+
+          return acc;
+        }, []);
+
+        console.log(result);
       },
     });
 

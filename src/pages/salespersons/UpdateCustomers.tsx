@@ -32,12 +32,17 @@ const UpdateCustomers = () => {
     (state) => state.salespersonCustomers.loadingSalespersonCustomerAction
   );
 
-  const { getAllSalespersons } = useActions();
+  const { getAllSalespersons, getSalespeopleCustomers } = useActions();
 
   useEffect(() => {
     getAllSalespersons({
       isActive: true,
       limit: 50,
+      page: 1,
+    });
+
+    getSalespeopleCustomers({
+      limit: 1000,
       page: 1,
     });
   }, []);

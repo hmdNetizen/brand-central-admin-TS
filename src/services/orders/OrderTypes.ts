@@ -120,6 +120,17 @@ export type OrdersCountReturnedPayload = {
   };
 };
 
+export type SalespersonCustomerOrdersBulkUpdatePayload = {
+  "Cust.Code": string;
+  Company: string;
+  "Inv. Date": string;
+  "Invoice #": string;
+  Item: string;
+  "Item Description": string;
+  Slsprs: string;
+  "Qty Ship - Trn": number;
+};
+
 export type SingleOrderPayloadType = {
   data: OrderReturnedPayload;
 };
