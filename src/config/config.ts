@@ -22,6 +22,7 @@ export const config = {
       countByStatus: "/api/salesperson-orders/count/admin",
       getByCustomerId: (customerId: string) =>
         `/api/salesperson-orders/admin/customer/${customerId}`,
+      uploadMultipleStaleOrders: `/api/salesperson-orders/uploads`,
     },
     customers: {
       get: "/api/salespersons-customers",

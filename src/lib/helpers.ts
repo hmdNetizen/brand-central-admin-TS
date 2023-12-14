@@ -161,11 +161,18 @@ export const getSalespersonId = (
   salespeople: SalespersonReturnedPayload[],
   initials: string
 ) => {
-  const salesperson = salespeople.filter((item) => item.initials === initials);
+  const currentSalesperson = salespeople.find(
+    (person) => person.initials === initials
+  );
+  // const salesperson = salespeople.filter((item) => item.initials === initials);
 
-  if (salesperson.length === 0) {
-    return "";
+  if (currentSalesperson) {
+    return currentSalesperson._id;
   }
 
-  return salesperson[0]._id;
+  const houseAccount = salespeople.find((rep) => rep.initials === "HA");
+
+  if (houseAccount) {
+    return houseAccount._id;
+  }
 };

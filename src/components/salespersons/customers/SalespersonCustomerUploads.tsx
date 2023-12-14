@@ -20,6 +20,7 @@ import {
 } from "src/services/salespersons/customers/types";
 import { SalespersonCustomerOrdersBulkUpdatePayload } from "src/services/orders/OrderTypes";
 import { ProductTypes } from "src/services/products/ProductTypes";
+import { nanoid } from "@reduxjs/toolkit";
 
 type OrderProduct = {
   product: string;
@@ -60,6 +61,18 @@ const calculateProductsTotalCost = (
   return 0;
 };
 
+const getProductPrice = (itemCode: string, products: Array<ProductTypes>) => {
+  const currentProduct = products.find(
+    (product) => product.itemCode.toLowerCase() === itemCode.toLowerCase()
+  );
+
+  if (currentProduct) {
+    return Number(currentProduct.priceCode1);
+  }
+
+  return 0;
+};
+
 const calculateOrderTotal = (ordersProducts: OrderProduct[]) => {
   const totalAmount = ordersProducts.reduce(
     (total, currItem) => total + currItem.productTotalCost,
@@ -85,7 +98,7 @@ function SalespersonCustomerUploads() {
   );
   const products = useTypedSelector((state) => state.products.allProducts);
 
-  // const { uploadSalespersonCustomers } = useActions();
+  const { uploadSalespersonCustomers, uploadStaleOrders } = useActions();
 
   // const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
   //   useDropzone({
@@ -111,7 +124,7 @@ function SalespersonCustomerUploads() {
   //           phoneNumber: customer["Phone"].includes("blank")
   //             ? ""
   //             : `1${customer["Phone"].replace(/[\/-]/g, "")}`,
-  //           referrer: getSalespersonId(salespeople, customer["Slsprn"]),
+  //           referrer: getSalespersonId(salespeople, customer["Slsprn"])!,
   //           priceCode: customer["Price Code"]
   //             ? customer["Price Code"].split(" ").join("").toLowerCase()
   //             : "pricecode3",
@@ -154,6 +167,7 @@ function SalespersonCustomerUploads() {
               order.Item,
               products
             ),
+            productPrice: getProductPrice(order.Item, products),
           };
 
           if (existingCustomer) {
@@ -164,40 +178,44 @@ function SalespersonCustomerUploads() {
                 0
               );
             existingCustomer.orderPaymentAmount =
-              existingCustomer.ordersProducts.reduce(
-                (total, item) => total + item["productTotalCost"],
-                0
-              );
+              existingCustomer.ordersProducts
+                .reduce((total, item) => total + item["productTotalCost"], 0)
+                .toFixed(2);
           } else {
             // @ts-expect-error
             acc.push({
               "Cust.Code": order["Cust.Code"],
-              customerId: getCustomerId(
+              orderedFor: getCustomerId(
                 order["Cust.Code"],
                 salespersonCustomers
               ),
-              salespersonId: getSalespersonId(salespeople, order["Slsprs"]),
+              placedBy: getSalespersonId(salespeople, order["Slsprs"]),
               Slsprs: order.Slsprs,
               Company: order.Company,
               orderInVoiceNumber: order["Invoice #"],
               ordersProducts: [orderProduct],
+              orderId: `${order["Slsprs"]}-${
+                order["Cust.Code"]
+              }-${nanoid().slice(0, 12)}`,
               OrderDate: new Date(order["Inv. Date"]).toISOString(),
               orderPaymentAmount: 0,
               orderPaymentDate: new Date(order["Inv. Date"]),
               orderNote: "",
               orderShippingAmount: 0,
-              ordersStatus: "completed",
+              orderStatus: "completed",
               orderTax: 0,
               orderPaymentStatus: "paid",
               orderDiscount: 0,
               orderPaymentMethod: "Cash/Check",
+              isStale: true,
             });
           }
 
           return acc;
         }, []);
 
-        console.log(result);
+        uploadStaleOrders({ orders: result });
+        // console.log(result.filter((item) => !item.placedBy));
       },
     });
 
