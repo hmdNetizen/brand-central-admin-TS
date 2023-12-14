@@ -135,21 +135,26 @@ export const menus = [
       },
       {
         subId: 2,
+        title: "All Orders",
+        path: "/dashboard/salespeople/orders",
+      },
+      {
+        subId: 3,
         title: "Pending Orders",
         path: "/dashboard/salespeople/orders/pending",
       },
       {
-        subId: 3,
+        subId: 4,
         title: "Completed Orders",
         path: "/dashboard/salespeople/orders/completed",
       },
       {
-        subId: 4,
+        subId: 5,
         title: "Customers List",
         path: "/dashboard/salespeople/customers",
       },
       {
-        subId: 5,
+        subId: 6,
         title: "Update Customers",
         path: "/dashboard/salespeople/update-customers",
       },

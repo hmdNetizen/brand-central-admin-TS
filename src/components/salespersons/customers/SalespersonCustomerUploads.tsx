@@ -100,40 +100,6 @@ function SalespersonCustomerUploads() {
 
   const { uploadSalespersonCustomers, uploadStaleOrders } = useActions();
 
-  // const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
-  //   useDropzone({
-  //     accept: {
-  //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [],
-  //     },
-  //     noClick: true,
-  //     onDrop: async (files) => {
-  //       setFileName(files[0]?.name);
-  //       const data = await files[0].arrayBuffer();
-  //       //     /* data is an ArrayBuffer */
-  //       const workbook = await read(data);
-  //       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-
-  //       const jsonData = utils.sheet_to_json(worksheet);
-  //       const result = jsonData as SalespersonCustomerBulkUpdatePayload[];
-  //       const newSalespersonCustomers = [...result]
-  //         .filter((data) => data["Slsprn"])
-  //         .map((customer) => ({
-  //           companyName: capitalizeFirstLetters(customer["Company Name"]),
-  //           customerCode: customer["Customer:"],
-  //           address: `${customer["Address:"]}, ${customer["City, State, Zip"]}`,
-  //           phoneNumber: customer["Phone"].includes("blank")
-  //             ? ""
-  //             : `1${customer["Phone"].replace(/[\/-]/g, "")}`,
-  //           referrer: getSalespersonId(salespeople, customer["Slsprn"])!,
-  //           priceCode: customer["Price Code"]
-  //             ? customer["Price Code"].split(" ").join("").toLowerCase()
-  //             : "pricecode3",
-  //         }));
-
-  //       uploadSalespersonCustomers(newSalespersonCustomers);
-  //     },
-  //   });
-
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({
       accept: {
@@ -148,76 +114,109 @@ function SalespersonCustomerUploads() {
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
         const jsonData = utils.sheet_to_json(worksheet);
-        // const resultData = jsonData as SalespersonCustomerBulkUpdatePayload[];
-        const newResultData =
-          jsonData as SalespersonCustomerOrdersBulkUpdatePayload[];
+        const result = jsonData as SalespersonCustomerBulkUpdatePayload[];
+        const newSalespersonCustomers = [...result]
+          .filter((data) => data["Slsprn"])
+          .map((customer) => ({
+            companyName: capitalizeFirstLetters(customer["Company Name"]),
+            customerCode: customer["Customer:"],
+            address: `${customer["Address:"]}, ${customer["City, State, Zip"]}`,
+            phoneNumber: customer["Phone"].includes("blank")
+              ? ""
+              : `1${customer["Phone"].replace(/[\/-]/g, "")}`,
+            referrer: getSalespersonId(salespeople, customer["Slsprn"])!,
+            priceCode: customer["Price Code"]
+              ? customer["Price Code"].split(" ").join("").toLowerCase()
+              : "pricecode3",
+          }));
 
-        const result = newResultData.reduce((acc, order) => {
-          const existingCustomer = acc.find(
-            (item) =>
-              item["Cust.Code"] === order["Cust.Code"] &&
-              item["Slsprs"] === order["Slsprs"]
-          );
-
-          const orderProduct = {
-            product: getProductId(order.Item, products),
-            productQuantity: order["Qty Ship - Trn"],
-            productTotalCost: calculateProductsTotalCost(
-              order["Qty Ship - Trn"],
-              order.Item,
-              products
-            ),
-            productPrice: getProductPrice(order.Item, products),
-          };
-
-          if (existingCustomer) {
-            existingCustomer.ordersProducts.push(orderProduct);
-            existingCustomer.orderTotalQuantity =
-              existingCustomer.ordersProducts.reduce(
-                (total, product) => total + product["productQuantity"],
-                0
-              );
-            existingCustomer.orderPaymentAmount =
-              existingCustomer.ordersProducts
-                .reduce((total, item) => total + item["productTotalCost"], 0)
-                .toFixed(2);
-          } else {
-            // @ts-expect-error
-            acc.push({
-              "Cust.Code": order["Cust.Code"],
-              orderedFor: getCustomerId(
-                order["Cust.Code"],
-                salespersonCustomers
-              ),
-              placedBy: getSalespersonId(salespeople, order["Slsprs"]),
-              Slsprs: order.Slsprs,
-              Company: order.Company,
-              orderInVoiceNumber: order["Invoice #"],
-              ordersProducts: [orderProduct],
-              orderId: `${order["Slsprs"]}-${
-                order["Cust.Code"]
-              }-${nanoid().slice(0, 12)}`,
-              OrderDate: new Date(order["Inv. Date"]).toISOString(),
-              orderPaymentAmount: 0,
-              orderPaymentDate: new Date(order["Inv. Date"]),
-              orderNote: "",
-              orderShippingAmount: 0,
-              orderStatus: "completed",
-              orderTax: 0,
-              orderPaymentStatus: "paid",
-              orderDiscount: 0,
-              orderPaymentMethod: "Cash/Check",
-              isStale: true,
-            });
-          }
-
-          return acc;
-        }, []);
-
-        uploadStaleOrders({ orders: result });
-        // console.log(result.filter((item) => !item.placedBy));
+        uploadSalespersonCustomers(newSalespersonCustomers);
       },
     });
+
+  // const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
+  //   useDropzone({
+  //     accept: {
+  //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [],
+  //     },
+  //     noClick: true,
+  //     onDrop: async (files) => {
+  //       setFileName(files[0]?.name);
+  //       const data = await files[0].arrayBuffer();
+  //       //     /* data is an ArrayBuffer */
+  //       const workbook = await read(data);
+  //       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+  //       const jsonData = utils.sheet_to_json(worksheet);
+  //       // const resultData = jsonData as SalespersonCustomerBulkUpdatePayload[];
+  //       const newResultData =
+  //         jsonData as SalespersonCustomerOrdersBulkUpdatePayload[];
+
+  //       const result = newResultData.reduce((acc, order) => {
+  //         const existingCustomer = acc.find(
+  //           (item) =>
+  //             item["Cust.Code"] === order["Cust.Code"] &&
+  //             item["Slsprs"] === order["Slsprs"]
+  //         );
+
+  //         const orderProduct = {
+  //           product: getProductId(order.Item, products),
+  //           productQuantity: order["Qty Ship - Trn"],
+  //           productTotalCost: calculateProductsTotalCost(
+  //             order["Qty Ship - Trn"],
+  //             order.Item,
+  //             products
+  //           ),
+  //           productPrice: getProductPrice(order.Item, products),
+  //         };
+
+  //         if (existingCustomer) {
+  //           existingCustomer.ordersProducts.push(orderProduct);
+  //           existingCustomer.orderTotalQuantity =
+  //             existingCustomer.ordersProducts.reduce(
+  //               (total, product) => total + product["productQuantity"],
+  //               0
+  //             );
+  //           existingCustomer.orderPaymentAmount =
+  //             existingCustomer.ordersProducts
+  //               .reduce((total, item) => total + item["productTotalCost"], 0)
+  //               .toFixed(2);
+  //         } else {
+  //           // @ts-expect-error
+  //           acc.push({
+  //             "Cust.Code": order["Cust.Code"],
+  //             orderedFor: getCustomerId(
+  //               order["Cust.Code"],
+  //               salespersonCustomers
+  //             ),
+  //             placedBy: getSalespersonId(salespeople, order["Slsprs"]),
+  //             Slsprs: order.Slsprs,
+  //             Company: order.Company,
+  //             orderInVoiceNumber: order["Invoice #"],
+  //             ordersProducts: [orderProduct],
+  //             orderId: `${order["Slsprs"]}-${
+  //               order["Cust.Code"]
+  //             }-${nanoid().slice(0, 12)}`,
+  //             OrderDate: new Date(order["Inv. Date"]).toISOString(),
+  //             orderPaymentAmount: 0,
+  //             orderPaymentDate: new Date(order["Inv. Date"]),
+  //             orderNote: "",
+  //             orderShippingAmount: 0,
+  //             orderStatus: "completed",
+  //             orderTax: 0,
+  //             orderPaymentStatus: "paid",
+  //             orderDiscount: 0,
+  //             orderPaymentMethod: "Cash/Check",
+  //             isStale: true,
+  //           });
+  //         }
+
+  //         return acc;
+  //       }, []);
+
+  //       uploadStaleOrders({ orders: result });
+  //     },
+  //   });
 
   return (
     <div className="container" style={{ width: "100%", minHeight: 300 }}>
