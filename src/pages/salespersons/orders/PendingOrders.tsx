@@ -21,10 +21,11 @@ const SalespersonPendingOrders = () => {
   const [openDeliveryStatus, setOpenDeliveryStatus] = useState(false);
   const [openEmailCustomer, setOpenEmailCustomer] = useState(false);
 
-  const { getAllSalespersonsOrders, getAllSearchedOrders } = useActions();
+  const { getAllSalespersonsOrders, getAllSearchedSalespersonsOrders } =
+    useActions();
 
   const debounceSearchedOrders = useCallback(
-    debounce(getAllSearchedOrders, 500),
+    debounce(getAllSearchedSalespersonsOrders, 500),
     []
   );
 
@@ -40,12 +41,21 @@ const SalespersonPendingOrders = () => {
   };
 
   useEffect(() => {
-    getAllSalespersonsOrders({
-      page: page + 1,
-      limit: rowsPerPage,
-      status: "pending",
-    });
-  }, [page, rowsPerPage]);
+    if (!filterText) {
+      getAllSalespersonsOrders({
+        page: page + 1,
+        limit: rowsPerPage,
+        status: "pending",
+      });
+    } else {
+      debounceSearchedOrders({
+        limit: rowsPerPage,
+        page: page + 1,
+        status: "pending",
+        searchTerm: filterText,
+      });
+    }
+  }, [page, rowsPerPage, filterText]);
 
   return (
     <SalespersonOrderPageDisplay

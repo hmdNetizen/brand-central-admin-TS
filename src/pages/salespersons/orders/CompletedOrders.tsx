@@ -21,17 +21,17 @@ const SalespersonCompletedOrders = () => {
   const [openDeliveryStatus, setOpenDeliveryStatus] = useState(false);
   const [openEmailCustomer, setOpenEmailCustomer] = useState(false);
 
-  const { getAllSalespersonsOrders, getAllSearchedOrders } = useActions();
+  const { getAllSalespersonsOrders, getAllSearchedSalespersonsOrders } =
+    useActions();
 
-  //   eslint-disable-next-line
   const debounceSearchedOrders = useCallback(
-    debounce(getAllSearchedOrders, 500),
+    debounce(getAllSearchedSalespersonsOrders, 500),
     []
   );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterText(event.target.value);
     setPage(0);
+    setFilterText(event.target.value);
     debounceSearchedOrders({
       limit: rowsPerPage,
       page: page + 1,
@@ -41,12 +41,21 @@ const SalespersonCompletedOrders = () => {
   };
 
   useEffect(() => {
-    getAllSalespersonsOrders({
-      page: page + 1,
-      limit: rowsPerPage,
-      status: "completed",
-    });
-  }, [page, rowsPerPage]);
+    if (!filterText) {
+      getAllSalespersonsOrders({
+        page: page + 1,
+        limit: rowsPerPage,
+        status: "completed",
+      });
+    } else {
+      debounceSearchedOrders({
+        limit: rowsPerPage,
+        page: page + 1,
+        status: "completed",
+        searchTerm: filterText,
+      });
+    }
+  }, [page, rowsPerPage, filterText]);
 
   return (
     <SalespersonOrderPageDisplay

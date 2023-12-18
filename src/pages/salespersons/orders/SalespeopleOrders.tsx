@@ -21,11 +21,11 @@ const SalespeopleOrders = () => {
   const [openDeliveryStatus, setOpenDeliveryStatus] = useState(false);
   const [openEmailCustomer, setOpenEmailCustomer] = useState(false);
 
-  const { getAllSalespersonsOrders, getAllSearchedOrders } = useActions();
+  const { getAllSalespersonsOrders, getAllSearchedSalespersonsOrders } =
+    useActions();
 
-  //   eslint-disable-next-line
   const debounceSearchedOrders = useCallback(
-    debounce(getAllSearchedOrders, 500),
+    debounce(getAllSearchedSalespersonsOrders, 500),
     []
   );
 
@@ -35,18 +35,24 @@ const SalespeopleOrders = () => {
     debounceSearchedOrders({
       limit: rowsPerPage,
       page: page + 1,
-      status: "completed",
       searchTerm: event.target.value,
     });
   };
 
   useEffect(() => {
-    getAllSalespersonsOrders({
-      page: page + 1,
-      limit: rowsPerPage,
-      status: "completed",
-    });
-  }, [page, rowsPerPage]);
+    if (!filterText) {
+      getAllSalespersonsOrders({
+        page: page + 1,
+        limit: rowsPerPage,
+      });
+    } else {
+      debounceSearchedOrders({
+        limit: rowsPerPage,
+        page: page + 1,
+        searchTerm: filterText,
+      });
+    }
+  }, [page, rowsPerPage, filterText]);
 
   return (
     <SalespersonOrderPageDisplay

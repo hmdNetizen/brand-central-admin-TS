@@ -81,16 +81,57 @@ export const getSalespersonSingleOrder = createAsyncThunk(
 
 export const getAllSalespersonsOrders = createAsyncThunk(
   "get-sales-person-order-status",
-  async (details: QueryParams & { status: string }, thunkAPI) => {
+  async (details: QueryParams & { status?: string }, thunkAPI) => {
     const { page, limit, status } = details;
     try {
-      const { data } = await axios.get(config.salespersons.orders.getByStatus, {
-        params: {
-          status,
-          page,
-          limit,
-        },
-      });
+      const { data } = await axios.get(
+        config.salespersons.orders.getOrderTypes,
+        {
+          params: {
+            status,
+            page,
+            limit,
+          },
+        }
+      );
+
+      const results = data as SalespersonOrdersPayloadTypes;
+
+      return {
+        orders: results.data.results,
+        total: results.data.total,
+      };
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue("Error occurred while fetching orders");
+      }
+    }
+  }
+);
+
+export const getAllSearchedSalespersonsOrders = createAsyncThunk(
+  "get-searched-salesperson-orders",
+  async (
+    details: QueryParams & { status?: string; searchTerm: string },
+    thunkAPI
+  ) => {
+    const { page, limit, status, searchTerm } = details;
+    try {
+      const { data } = await axios.get(
+        config.salespersons.orders.getOrderTypes,
+        {
+          params: {
+            status,
+            page,
+            limit,
+            searchTerm,
+          },
+        }
+      );
 
       const results = data as SalespersonOrdersPayloadTypes;
 
@@ -231,6 +272,15 @@ const salespersonOrdersSlice = createSlice({
           state.error = action.payload;
         }
       });
+    builder.addCase(
+      getAllSearchedSalespersonsOrders.fulfilled,
+      (state, action) => {
+        state.loadingOrders = false;
+        state.salespersonOrders = action.payload.orders;
+        state.totalOrders = action.payload.total;
+        state.error = null;
+      }
+    );
     builder
       .addCase(updateSalespersonOrderStatus.pending, (state) => {
         state.loadingOrderAction = true;

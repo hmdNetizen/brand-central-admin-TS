@@ -160,6 +160,7 @@ function SalespersonCustomerUploads() {
   //         );
 
   //         const orderProduct = {
+  //           Item: order.Item,
   //           product: getProductId(order.Item, products),
   //           productQuantity: order["Qty Ship - Trn"],
   //           productTotalCost: calculateProductsTotalCost(
@@ -171,12 +172,22 @@ function SalespersonCustomerUploads() {
   //         };
 
   //         if (existingCustomer) {
-  //           existingCustomer.ordersProducts.push(orderProduct);
+  //           const existingProduct = existingCustomer.ordersProducts.find(
+  //             (product) => product.Item === order.Item
+  //           );
+
+  //           if (existingProduct) {
+  //             existingProduct["productQuantity"] += order["Qty Ship - Trn"];
+  //           } else {
+  //             existingCustomer.ordersProducts.push(orderProduct);
+  //           }
+
   //           existingCustomer.orderTotalQuantity =
   //             existingCustomer.ordersProducts.reduce(
   //               (total, product) => total + product["productQuantity"],
   //               0
   //             );
+
   //           existingCustomer.orderPaymentAmount =
   //             existingCustomer.ordersProducts
   //               .reduce((total, item) => total + item["productTotalCost"], 0)
@@ -214,7 +225,14 @@ function SalespersonCustomerUploads() {
   //         return acc;
   //       }, []);
 
-  //       uploadStaleOrders({ orders: result });
+  //       const newResults = result.map(({ ordersProducts, ...rest }) => ({
+  //         ...rest,
+  //         ordersProducts: ordersProducts.filter(
+  //           (product) => product.product !== undefined
+  //         ),
+  //       }));
+
+  //       uploadStaleOrders({ orders: newResults });
   //     },
   //   });
 
