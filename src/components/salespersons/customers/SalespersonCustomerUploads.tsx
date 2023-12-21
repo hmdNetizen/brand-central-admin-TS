@@ -55,7 +55,8 @@ const calculateProductsTotalCost = (
   );
 
   if (currentProduct) {
-    return Number(currentProduct.priceCode1) * quantity;
+    const total = (Number(currentProduct.priceCode1) * quantity).toFixed(2);
+    return Number(total);
   }
 
   return 0;
@@ -203,14 +204,15 @@ function SalespersonCustomerUploads() {
   //             placedBy: getSalespersonId(salespeople, order["Slsprs"]),
   //             Slsprs: order.Slsprs,
   //             Company: order.Company,
-  //             orderInVoiceNumber: order["Invoice #"],
+  //             orderInVoiceNumber: "",
   //             ordersProducts: [orderProduct],
   //             orderId: `${order["Slsprs"]}-${
   //               order["Cust.Code"]
   //             }-${nanoid().slice(0, 12)}`,
-  //             OrderDate: new Date(order["Inv. Date"]).toISOString(),
+  //             OrderDate: new Date().toISOString(),
+  //             // OrderDate: new Date(order["Inv. Date"]).toISOString(),
   //             orderPaymentAmount: 0,
-  //             orderPaymentDate: new Date(order["Inv. Date"]),
+  //             orderPaymentDate: new Date().toISOString(),
   //             orderNote: "",
   //             orderShippingAmount: 0,
   //             orderStatus: "completed",
@@ -224,6 +226,10 @@ function SalespersonCustomerUploads() {
 
   //         return acc;
   //       }, []);
+
+  //       // const newOrders = result.filter(
+  //       //   (item) => item.Company.trim() === "CITY ACRESS"
+  //       // );
 
   //       const newResults = result.map(({ ordersProducts, ...rest }) => ({
   //         ...rest,

@@ -27,6 +27,7 @@ type ErrorsTypes = {
   initialsError?: string;
   addressError?: string;
   customerCodeError?: string;
+  balanceError?: string;
 };
 
 type SalespersonCustomerExcerpt = Omit<
@@ -43,6 +44,7 @@ const initialContactInformation = {
   contactName: "",
   priceCode: "",
   initials: "",
+  balance: "",
 };
 
 const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {

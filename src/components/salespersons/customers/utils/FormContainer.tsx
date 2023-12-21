@@ -27,10 +27,12 @@ type SalespersonCustomerFormContainerProps = {
   companyEmail: string;
   priceCode: string;
   initials: string;
+  balance?: string;
   companyNameError: string | undefined;
   customerCodeError: string | undefined;
   companyEmailError?: string;
   phoneNumberError?: string;
+  balanceError?: string;
   addressError: string | undefined;
   contactNameError?: string;
   priceCodeError: string | undefined;
@@ -78,6 +80,7 @@ const SalespersonCustomerFormContainer = (
     initials,
     phoneNumber,
     priceCode,
+    balance,
     onChange,
     companyNameError,
     customerCodeError,
@@ -85,6 +88,7 @@ const SalespersonCustomerFormContainer = (
     phoneNumberError,
     addressError,
     contactNameError,
+    balanceError,
     priceCodeError,
     initialsError,
     buttonTitle,
@@ -291,6 +295,49 @@ const SalespersonCustomerFormContainer = (
             placeholder="Select a Sales Rep's Initials"
             errorMessage={initialsError}
           />
+        </Grid>
+      </Grid>
+      <Grid
+        item
+        container
+        justifyContent="center"
+        style={{ marginBottom: "2rem" }}
+        columnGap="2rem"
+        rowGap="2rem"
+      >
+        <Grid
+          item
+          style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
+          md={5.5}
+        >
+          <CustomFormInput
+            type="text"
+            label="Balance"
+            labelId="balance"
+            name="balance"
+            value={balance}
+            placeholder="Enter Company's Account Balance"
+            onChange={onChange}
+            error={balanceError}
+            autoComplete="off"
+          />
+        </Grid>
+        <Grid
+          item
+          style={{ width: matchesXS ? "100%" : matchesSM ? 450 : 600 }}
+          md={5.5}
+        >
+          {/* <CustomFormInput
+            type="text"
+            label="Contact Person"
+            labelId="contactName"
+            name="contactName"
+            value={contactName}
+            placeholder="Enter Contact Person Name"
+            onChange={onChange}
+            error={contactNameError}
+            autoComplete="off"
+          /> */}
         </Grid>
       </Grid>
       <Grid item container justifyContent="center">
