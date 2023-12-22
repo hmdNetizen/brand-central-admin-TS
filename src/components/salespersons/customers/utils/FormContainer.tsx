@@ -311,7 +311,7 @@ const SalespersonCustomerFormContainer = (
           md={5.5}
         >
           <CustomFormInput
-            type="text"
+            type="number"
             label="Balance"
             labelId="balance"
             name="balance"
