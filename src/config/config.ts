@@ -38,6 +38,9 @@ export const config = {
       filter: "/api/salespersons-customers/filter",
       updateMany: "/api/salespersons-customers/admin/update",
     },
+    invoices: {
+      updateMany: "/api/salesperson-invoices/update-all",
+    },
   },
   uploads: {
     single: `/api/uploads/file`,

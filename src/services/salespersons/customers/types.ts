@@ -41,6 +41,16 @@ export type UploadSalespersonCustomersRequestTypes = Pick<
   | "priceCode"
 >;
 
+export type UploadSalespersonCustomerInvoicesRequestTypes = {
+  customer: string;
+  salesperson: string;
+  invoiceNumber: string;
+  invoiceTotal: number;
+  balance: number;
+  isOpen: boolean;
+  invoiceDate: string;
+};
+
 export type SingleSalespersonCustomerReturnedPayloadTypes = {
   data: SalespersonCustomerResponsePayload;
 };
@@ -71,6 +81,16 @@ export type SalespersonCustomerBulkUpdatePayload = {
   Phone: string;
   Slsprn: string;
   "Price Code": string;
+};
+
+export type SalespersonCustomersInvoicesBulkUpdatePayload = {
+  "Customer Code": string;
+  "Customer Name": string;
+  Salesperson: string;
+  date: string;
+  "Invoice #": string;
+  "invoice total": number;
+  balance: number;
 };
 
 export type InitStateTypes = {

@@ -14,6 +14,7 @@ import {
   SalespersonCustomerRequestPayload,
   SalespersonCustomerResponsePayload,
   SingleSalespersonCustomerReturnedPayloadTypes,
+  UploadSalespersonCustomerInvoicesRequestTypes,
   UploadSalespersonCustomersRequestTypes,
 } from "./types";
 
@@ -355,6 +356,68 @@ export const uploadSalespersonCustomers = createAsyncThunk(
     }
   }
 );
+export const uploadSalespersonCustomersInvoices = createAsyncThunk(
+  "upload-customers-invoices",
+  async (
+    dataset: Array<UploadSalespersonCustomerInvoicesRequestTypes>,
+    thunkAPI
+  ) => {
+    const uploadConfig = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+        thunkAPI.dispatch(setUploadingCustomerText());
+
+        const total = progressEvent.total;
+
+        if (total !== undefined) {
+          const percentage = Number(
+            Math.round((progressEvent.loaded * 100) / total)
+          );
+          thunkAPI.dispatch(setUploadPercentage(percentage));
+        }
+      },
+      onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
+        thunkAPI.dispatch(
+          setUploadedCustomerStatusText("Updating Customers Invoices")
+        );
+
+        const total = progressEvent.total;
+
+        if (total !== undefined) {
+          const percentage = Number(
+            Math.round((progressEvent.loaded * 100) / total)
+          );
+          thunkAPI.dispatch(setUploadPercentage(percentage));
+        }
+      },
+    };
+    try {
+      const { data } = await axios.patch(
+        config.salespersons.invoices.updateMany,
+        { invoices: dataset },
+        uploadConfig
+      );
+
+      const result = data as { message: string };
+
+      return result.message;
+    } catch (error: AxiosError | any) {
+      thunkAPI.dispatch(setUploadPercentage(0));
+      thunkAPI.dispatch(setUploadedCustomerStatusText(""));
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.error);
+      } else if (error.request) {
+        return thunkAPI.rejectWithValue("No response received from server");
+      } else {
+        return thunkAPI.rejectWithValue(
+          "Error occurred while updating inventory"
+        );
+      }
+    }
+  }
+);
 
 const salespersonCustomerSlice = createSlice({
   name: "salespersonCustomers",
@@ -536,6 +599,28 @@ const salespersonCustomerSlice = createSlice({
         state.errors = [];
       })
       .addCase(uploadSalespersonCustomers.rejected, (state, action) => {
+        state.loadingSalespersonCustomerAction = false;
+        if (Array.isArray(action.payload)) {
+          state.errors = action.payload;
+        }
+        if (typeof action.payload === "string" || action.payload === null) {
+          state.error = action.payload;
+        }
+      });
+    builder
+      .addCase(uploadSalespersonCustomersInvoices.pending, (state) => {
+        state.loadingSalespersonCustomerAction = true;
+      })
+      .addCase(
+        uploadSalespersonCustomersInvoices.fulfilled,
+        (state, action) => {
+          state.loadingSalespersonCustomerAction = false;
+          state.uploadedCustomerStatus = action.payload;
+          state.error = null;
+          state.errors = [];
+        }
+      )
+      .addCase(uploadSalespersonCustomersInvoices.rejected, (state, action) => {
         state.loadingSalespersonCustomerAction = false;
         if (Array.isArray(action.payload)) {
           state.errors = action.payload;

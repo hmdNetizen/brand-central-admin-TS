@@ -17,6 +17,7 @@ import {
 import {
   SalespersonCustomerBulkUpdatePayload,
   SalespersonCustomerResponsePayload,
+  SalespersonCustomersInvoicesBulkUpdatePayload,
 } from "src/services/salespersons/customers/types";
 import { SalespersonCustomerOrdersBulkUpdatePayload } from "src/services/orders/OrderTypes";
 import { ProductTypes } from "src/services/products/ProductTypes";
@@ -99,7 +100,11 @@ function SalespersonCustomerUploads() {
   );
   const products = useTypedSelector((state) => state.products.allProducts);
 
-  const { uploadSalespersonCustomers, uploadStaleOrders } = useActions();
+  const {
+    uploadSalespersonCustomers,
+    uploadStaleOrders,
+    uploadSalespersonCustomersInvoices,
+  } = useActions();
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({
@@ -115,23 +120,49 @@ function SalespersonCustomerUploads() {
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
         const jsonData = utils.sheet_to_json(worksheet);
-        const result = jsonData as SalespersonCustomerBulkUpdatePayload[];
-        const newSalespersonCustomers = [...result]
-          .filter((data) => data["Slsprn"])
-          .map((customer) => ({
-            companyName: capitalizeFirstLetters(customer["Company Name"]),
-            customerCode: customer["Customer:"],
-            address: `${customer["Address:"]}, ${customer["City, State, Zip"]}`,
-            phoneNumber: customer["Phone"].includes("blank")
-              ? ""
-              : `1${customer["Phone"].replace(/[\/-]/g, "")}`,
-            referrer: getSalespersonId(salespeople, customer["Slsprn"])!,
-            priceCode: customer["Price Code"]
-              ? customer["Price Code"].split(" ").join("").toLowerCase()
-              : "pricecode3",
-          }));
+        const customerData = jsonData as SalespersonCustomerBulkUpdatePayload[];
+        const invoiceData =
+          jsonData as SalespersonCustomersInvoicesBulkUpdatePayload[];
 
-        uploadSalespersonCustomers(newSalespersonCustomers);
+        if (customerData[0].Slsprn && customerData[0]["Customer:"]) {
+          const newSalespersonCustomers = [...customerData]
+            .filter((data) => data["Slsprn"])
+            .map((customer) => ({
+              companyName: capitalizeFirstLetters(customer["Company Name"]),
+              customerCode: customer["Customer:"],
+              address: `${customer["Address:"]}, ${customer["City, State, Zip"]}`,
+              phoneNumber: customer["Phone"].includes("blank")
+                ? ""
+                : `1${customer["Phone"].replace(/[\/-]/g, "")}`,
+              referrer: getSalespersonId(salespeople, customer["Slsprn"])!,
+              priceCode: customer["Price Code"]
+                ? customer["Price Code"].split(" ").join("").toLowerCase()
+                : "pricecode3",
+            }));
+
+          uploadSalespersonCustomers(newSalespersonCustomers);
+        } else {
+          const newCustomerInvoices = [...invoiceData]
+
+            .filter((data) => data["Customer Code"])
+            .map((invoice) => ({
+              customer: getCustomerId(
+                invoice["Customer Code"],
+                salespersonCustomers
+              )!,
+              salesperson: getSalespersonId(
+                salespeople,
+                invoice["Salesperson"]
+              )!,
+              invoiceNumber: invoice["Invoice #"],
+              invoiceTotal: invoice["invoice total"],
+              balance: invoice.balance,
+              isOpen: true,
+              invoiceDate: invoice["date"],
+            }));
+
+          uploadSalespersonCustomersInvoices(newCustomerInvoices);
+        }
       },
     });
 
