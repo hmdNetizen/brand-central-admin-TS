@@ -141,6 +141,7 @@ function SalespersonCustomerUploads() {
             }));
 
           uploadSalespersonCustomers(newSalespersonCustomers);
+          // console.log(newSalespersonCustomers);
         } else {
           const newCustomerInvoices = [...invoiceData]
 
@@ -162,6 +163,7 @@ function SalespersonCustomerUploads() {
             }));
 
           uploadSalespersonCustomersInvoices(newCustomerInvoices);
+          // console.log(newCustomerInvoices);
         }
       },
     });

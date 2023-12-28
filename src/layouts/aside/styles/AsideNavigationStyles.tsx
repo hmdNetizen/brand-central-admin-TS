@@ -7,8 +7,8 @@ type CustomAsideProps = {
 export const Aside = styled("aside", {
   shouldForwardProp: (prop) => prop !== "menuSlideIn",
 })<CustomAsideProps>(({ theme, menuSlideIn }) => ({
-  paddingLeft: menuSlideIn ? ".5rem" : "1.5em",
-  paddingRight: menuSlideIn ? ".5rem" : "1.5em",
+  paddingLeft: menuSlideIn ? ".5rem" : "1.1rem",
+  paddingRight: menuSlideIn ? ".5rem" : "1.1rem",
   paddingTop: "1em",
   paddingBottom: "15em",
   height: "100vh",

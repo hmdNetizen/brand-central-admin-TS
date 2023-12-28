@@ -155,7 +155,7 @@ export const menus = [
       },
       {
         subId: 6,
-        title: "Update Customers",
+        title: "Update Customers / Invoices",
         path: "/dashboard/salespeople/update-customers",
       },
     ],
