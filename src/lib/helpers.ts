@@ -3,6 +3,10 @@ import {
   ProductsBulkUpdatePayload,
   ProductTypes,
 } from "src/services/products/ProductTypes";
+import {
+  SalespersonCustomerResponsePayload,
+  SalespersonCustomersInvoicesBulkUpdatePayload,
+} from "src/services/salespersons/customers/types";
 import { SalespersonReturnedPayload } from "src/services/salespersons/SalesPersonTypes";
 
 export const capitalizeFirstLetters = (sentence: string) => {
@@ -176,3 +180,59 @@ export const getSalespersonId = (
     return houseAccount._id;
   }
 };
+
+export const getProductId = (itemCode: string, products: ProductTypes[]) => {
+  const newProduct = products.find(
+    (item) => item.itemCode.toLowerCase() === itemCode.toLowerCase()
+  );
+  return newProduct?._id;
+};
+
+export const getCustomerId = (
+  customerCode: string,
+  customers: Array<SalespersonCustomerResponsePayload>
+) => {
+  const customer = customers.find(
+    (customer) => customer.customerCode === customerCode
+  );
+  return customer?.id;
+};
+
+type TransformCustomerInvoiceDatasetTypes = {
+  dataset: Array<SalespersonCustomersInvoicesBulkUpdatePayload>;
+  customers: Array<SalespersonCustomerResponsePayload>;
+  salespeople: Array<SalespersonReturnedPayload>;
+};
+
+export function transformCustomerInvoiceDataset(
+  invoiceDataset: TransformCustomerInvoiceDatasetTypes
+) {
+  const { dataset, customers, salespeople } = invoiceDataset;
+  return dataset.reduce((acc: any[], invoice) => {
+    const existingCustomer = acc.find(
+      (customer) => customer.customerCode === invoice["Customer Code"]
+    );
+
+    const invoiceInfo = {
+      invoiceNumber: invoice["Invoice #"],
+      invoiceTotal: invoice["invoice total"],
+      invoiceDate: invoice["date"],
+      isOpen: true,
+    };
+
+    if (existingCustomer) {
+      existingCustomer.invoices.push(invoiceInfo);
+    } else {
+      acc.push({
+        customerCode: invoice["Customer Code"],
+        initials: invoice.Salesperson,
+        customer: getCustomerId(invoice["Customer Code"], customers),
+        referrer: getSalespersonId(salespeople, invoice["Salesperson"]),
+        balance: invoice.balance,
+        invoices: [invoiceInfo],
+      });
+    }
+
+    return acc;
+  }, []);
+}

@@ -4,7 +4,12 @@ import IconButton from "@mui/material/IconButton";
 import { IoIosCloudUpload } from "react-icons/io";
 import Typography from "@mui/material/Typography";
 import { read, utils } from "xlsx";
-import { capitalizeFirstLetters, getSalespersonId } from "src/lib/helpers";
+import {
+  capitalizeFirstLetters,
+  getCustomerId,
+  getSalespersonId,
+  transformCustomerInvoiceDataset,
+} from "src/lib/helpers";
 import { useTheme } from "@mui/material/styles";
 import CustomLinearProgressBar from "src/utils/CustomLinearProgress";
 import { useActions } from "src/hooks/useActions";
@@ -29,21 +34,20 @@ type OrderProduct = {
   productTotalCost: number;
 };
 
-const getProductId = (itemCode: string, products: ProductTypes[]) => {
-  const newProduct = products.find(
-    (item) => item.itemCode.toLowerCase() === itemCode.toLowerCase()
-  );
-  return newProduct?._id;
+type InvoiceTypes = {
+  invoiceNumber: string;
+  invoiceDate: string;
+  invoiceTotal: number;
+  isOpen?: boolean;
 };
 
-const getCustomerId = (
-  customerCode: string,
-  customers: Array<SalespersonCustomerResponsePayload>
-) => {
-  const customer = customers.find(
-    (customer) => customer.customerCode === customerCode
-  );
-  return customer?.id;
+type SalespersonCustomerInvoiceTypes = {
+  customerCode: string;
+  salesRepInitials: string;
+  salesperson: string;
+  customer: string;
+  balance: number;
+  invoices: Array<InvoiceTypes>;
 };
 
 const calculateProductsTotalCost = (
@@ -143,8 +147,14 @@ function SalespersonCustomerUploads() {
           uploadSalespersonCustomers(newSalespersonCustomers);
           // console.log(newSalespersonCustomers);
         } else {
+          // const newDataset = transformCustomerInvoiceDataset({
+          //   dataset: invoiceData,
+          //   customers: salespersonCustomers,
+          //   salespeople,
+          // });
+          // console.log(newDataset);
+          // console.log(newInvoiceData);
           const newCustomerInvoices = [...invoiceData]
-
             .filter((data) => data["Customer Code"])
             .map((invoice) => ({
               customer: getCustomerId(
@@ -159,9 +169,8 @@ function SalespersonCustomerUploads() {
               invoiceTotal: invoice["invoice total"],
               balance: invoice.balance,
               isOpen: true,
-              invoiceDate: invoice["date"],
+              invoiceDate: new Date(invoice["date"]).toISOString(),
             }));
-
           uploadSalespersonCustomersInvoices(newCustomerInvoices);
           // console.log(newCustomerInvoices);
         }
