@@ -215,8 +215,8 @@ export function transformCustomerInvoiceDataset(
 
     const invoiceInfo = {
       invoiceNumber: invoice["Invoice #"],
-      invoiceTotal: invoice["invoice total"],
-      invoiceDate: invoice["date"],
+      invoiceTotal: invoice["Total"],
+      invoiceDate: invoice["Invoice Date"],
       isOpen: true,
     };
 
@@ -228,7 +228,7 @@ export function transformCustomerInvoiceDataset(
         initials: invoice.Salesperson,
         customer: getCustomerId(invoice["Customer Code"], customers),
         referrer: getSalespersonId(salespeople, invoice["Salesperson"]),
-        balance: invoice.balance,
+        balance: invoice.Balance,
         invoices: [invoiceInfo],
       });
     }
