@@ -166,10 +166,10 @@ function SalespersonCustomerUploads() {
                 invoice["Salesperson"]
               )!,
               invoiceNumber: invoice["Invoice #"],
-              Total: invoice["invoice total"],
-              balance: invoice.balance,
+              invoiceTotal: invoice["Total"],
+              balance: invoice.Balance,
               isOpen: true,
-              invoiceDate: new Date(invoice["date"]).toISOString(),
+              invoiceDate: new Date(invoice["Invoice Date"]).toISOString(),
             }));
           uploadSalespersonCustomersInvoices(newCustomerInvoices);
           // console.log(newCustomerInvoices);

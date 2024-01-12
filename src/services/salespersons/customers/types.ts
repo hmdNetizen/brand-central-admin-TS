@@ -45,7 +45,7 @@ export type UploadSalespersonCustomerInvoicesRequestTypes = {
   customer: string;
   salesperson: string;
   invoiceNumber: string;
-  Total: number;
+  invoiceTotal: number;
   balance: number;
   isOpen: boolean;
   invoiceDate: string;
@@ -87,10 +87,10 @@ export type SalespersonCustomersInvoicesBulkUpdatePayload = {
   "Customer Code": string;
   "Customer Name": string;
   Salesperson: string;
-  date: string;
+  "Invoice Date": string;
   "Invoice #": string;
-  "invoice total": number;
-  balance: number;
+  Total: number;
+  Balance: number;
 };
 
 export type InitStateTypes = {
