@@ -166,7 +166,7 @@ function SalespersonCustomerUploads() {
                 invoice["Salesperson"]
               )!,
               invoiceNumber: invoice["Invoice #"],
-              invoiceTotal: invoice["invoice total"],
+              Total: invoice["invoice total"],
               balance: invoice.balance,
               isOpen: true,
               invoiceDate: new Date(invoice["date"]).toISOString(),

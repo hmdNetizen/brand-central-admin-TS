@@ -45,7 +45,7 @@ export type UploadSalespersonCustomerInvoicesRequestTypes = {
   customer: string;
   salesperson: string;
   invoiceNumber: string;
-  invoiceTotal: number;
+  Total: number;
   balance: number;
   isOpen: boolean;
   invoiceDate: string;
