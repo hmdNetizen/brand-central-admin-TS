@@ -147,15 +147,12 @@ function SalespersonCustomerUploads() {
           uploadSalespersonCustomers(newSalespersonCustomers);
           // console.log(newSalespersonCustomers);
         } else {
-          // const newDataset = transformCustomerInvoiceDataset({
-          //   dataset: invoiceData,
-          //   customers: salespersonCustomers,
-          //   salespeople,
-          // });
-          // console.log(newDataset);
-          // console.log(newInvoiceData);
           const newCustomerInvoices = [...invoiceData]
-            .filter((data) => data["Customer Code"])
+            .filter(
+              (data) =>
+                data["Customer Code"] &&
+                getCustomerId(data["Customer Code"], salespersonCustomers)!
+            )
             .map((invoice) => ({
               customer: getCustomerId(
                 invoice["Customer Code"],
@@ -172,7 +169,7 @@ function SalespersonCustomerUploads() {
               invoiceDate: new Date(invoice["Invoice Date"]).toISOString(),
             }));
           uploadSalespersonCustomersInvoices(newCustomerInvoices);
-          // console.log(newCustomerInvoices);
+          // console.log(JSON.stringify(newCustomerInvoices));
         }
       },
     });

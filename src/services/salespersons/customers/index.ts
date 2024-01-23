@@ -294,6 +294,7 @@ export const getFilteredSalespersonCustomers = createAsyncThunk(
 export const uploadSalespersonCustomers = createAsyncThunk(
   "upload-salesperson-customers",
   async (dataset: Array<UploadSalespersonCustomersRequestTypes>, thunkAPI) => {
+    setUploadPercentage(0);
     const uploadConfig = {
       headers: {
         "Content-Type": "application/json",
@@ -362,6 +363,7 @@ export const uploadSalespersonCustomersInvoices = createAsyncThunk(
     dataset: Array<UploadSalespersonCustomerInvoicesRequestTypes>,
     thunkAPI
   ) => {
+    setUploadPercentage(0);
     const uploadConfig = {
       headers: {
         "Content-Type": "application/json",
