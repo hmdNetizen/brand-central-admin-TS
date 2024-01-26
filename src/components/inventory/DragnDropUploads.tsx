@@ -18,7 +18,6 @@ import { Container, Input, ProgressTextWrapper } from "./styles.inventory";
 
 function StyledDropzone() {
   const theme = useTheme();
-  // eslint-disable-next-line
   const [fileName, setFileName] = useState<File | string>("");
 
   const uploadedFiles = useTypedSelector(

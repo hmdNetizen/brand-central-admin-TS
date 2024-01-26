@@ -24,6 +24,7 @@ const Dashboard = ({ menuSlideIn }: DashboardProps) => {
     getRecentlyAddedProducts,
     getDashboardPopularProducts,
     getProductVariants,
+    countSalespersonOrderByStatus,
   } = useActions();
 
   useEffect(() => {
@@ -37,6 +38,7 @@ const Dashboard = ({ menuSlideIn }: DashboardProps) => {
     getRecentCustomers();
     getRecentlyAddedProducts(1);
     getDashboardPopularProducts(1);
+    countSalespersonOrderByStatus("pending");
   }, []);
 
   return (

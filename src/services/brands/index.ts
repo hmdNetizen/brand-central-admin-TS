@@ -11,6 +11,7 @@ import {
 import { fileUploadConfig } from "src/config/fileUpload";
 import { UploadedFilePayload } from "../common/commonTypes";
 import { AxiosError } from "axios";
+import { config } from "src/config/config";
 
 const initialState: initStateType = {
   loadingBrands: false,
@@ -139,13 +140,13 @@ export const createNewBrand = createAsyncThunk(
       setSelectedFile,
       ...fields
     } = details;
-    const { config, formData } = fileUploadConfig(file);
+    const { config: fileConfig, formData } = fileUploadConfig(file);
     try {
       if (typeof file === "object") {
         const { data: uploadedFile } = await axios.post(
-          `/api/uploads/file`,
+          config.uploads.single,
           formData,
-          config
+          fileConfig
         );
 
         const result = uploadedFile as UploadedFilePayload;
@@ -209,13 +210,13 @@ export const updateBrand = createAsyncThunk(
       setSelectedFile,
       ...fields
     } = details;
-    const { config, formData } = fileUploadConfig(file);
+    const { config: fileConfig, formData } = fileUploadConfig(file);
     try {
       if (typeof file === "object") {
         const { data: uploadedFile } = await axios.post(
-          `/api/uploads/file`,
+          config.uploads.single,
           formData,
-          config
+          fileConfig
         );
 
         const result = uploadedFile as UploadedFilePayload;

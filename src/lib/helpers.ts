@@ -3,6 +3,11 @@ import {
   ProductsBulkUpdatePayload,
   ProductTypes,
 } from "src/services/products/ProductTypes";
+import {
+  SalespersonCustomerResponsePayload,
+  SalespersonCustomersInvoicesBulkUpdatePayload,
+} from "src/services/salespersons/customers/types";
+import { SalespersonReturnedPayload } from "src/services/salespersons/SalesPersonTypes";
 
 export const capitalizeFirstLetters = (sentence: string) => {
   const lowerCaseSentence = sentence.toLowerCase();
@@ -155,3 +160,79 @@ export const addBrandWithApostrophe = (brand: string) => {
     return `${brand}'s`;
   }
 };
+
+export const getSalespersonId = (
+  salespeople: SalespersonReturnedPayload[],
+  initials: string
+) => {
+  const currentSalesperson = salespeople.find(
+    (person) => person.initials === initials
+  );
+  // const salesperson = salespeople.filter((item) => item.initials === initials);
+
+  if (currentSalesperson) {
+    return currentSalesperson._id;
+  }
+
+  const houseAccount = salespeople.find((rep) => rep.initials === "HA");
+
+  if (houseAccount) {
+    return houseAccount._id;
+  }
+};
+
+export const getProductId = (itemCode: string, products: ProductTypes[]) => {
+  const newProduct = products.find(
+    (item) => item.itemCode.toLowerCase() === itemCode.toLowerCase()
+  );
+  return newProduct?._id;
+};
+
+export const getCustomerId = (
+  customerCode: string,
+  customers: Array<SalespersonCustomerResponsePayload>
+) => {
+  const customer = customers.find(
+    (customer) => customer.customerCode === customerCode
+  );
+  return customer?.id;
+};
+
+type TransformCustomerInvoiceDatasetTypes = {
+  dataset: Array<SalespersonCustomersInvoicesBulkUpdatePayload>;
+  customers: Array<SalespersonCustomerResponsePayload>;
+  salespeople: Array<SalespersonReturnedPayload>;
+};
+
+export function transformCustomerInvoiceDataset(
+  invoiceDataset: TransformCustomerInvoiceDatasetTypes
+) {
+  const { dataset, customers, salespeople } = invoiceDataset;
+  return dataset.reduce((acc: any[], invoice) => {
+    const existingCustomer = acc.find(
+      (customer) => customer.customerCode === invoice["Customer Code"]
+    );
+
+    const invoiceInfo = {
+      invoiceNumber: invoice["Invoice #"],
+      invoiceTotal: invoice["Total"],
+      invoiceDate: invoice["Invoice Date"],
+      isOpen: true,
+    };
+
+    if (existingCustomer) {
+      existingCustomer.invoices.push(invoiceInfo);
+    } else {
+      acc.push({
+        customerCode: invoice["Customer Code"],
+        initials: invoice.Salesperson,
+        customer: getCustomerId(invoice["Customer Code"], customers),
+        referrer: getSalespersonId(salespeople, invoice["Salesperson"]),
+        balance: invoice.Balance,
+        invoices: [invoiceInfo],
+      });
+    }
+
+    return acc;
+  }, []);
+}

@@ -18,6 +18,7 @@ type PageHeadingActionProps = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   buttonTitle: string;
   isDeactivatedPage?: boolean;
+  placeholderText?: string;
 };
 
 const PageHeadingWithActionButton = (props: PageHeadingActionProps) => {
@@ -31,6 +32,7 @@ const PageHeadingWithActionButton = (props: PageHeadingActionProps) => {
     setOpen,
     buttonTitle,
     isDeactivatedPage,
+    placeholderText,
   } = props;
 
   const matchesMD = useMediaQuery(theme.breakpoints.only("md"));
@@ -75,7 +77,7 @@ const PageHeadingWithActionButton = (props: PageHeadingActionProps) => {
       </Grid>
       <Grid item style={{ width: matchesSM ? "100%" : 350 }}>
         <Input
-          placeholder="Search Category by name..."
+          placeholder={placeholderText}
           value={filterText}
           onChange={handleSearch}
         />

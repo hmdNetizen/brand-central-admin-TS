@@ -4,20 +4,27 @@ import TableCell from "@mui/material/TableCell";
 import VisibilitySharpIcon from "@mui/icons-material/VisibilitySharp";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
-import { useTheme } from "@mui/material/styles";
+import { useTheme, styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import CustomSwitch from "src/utils/CustomSwitch";
-import { SalesPersonReturnedPayload } from "src/services/salespersons/SalesPersonTypes";
+import { SalespersonReturnedPayload } from "src/services/salespersons/SalesPersonTypes";
+import placeholderAvatar from "src/assets/images/placeholder-avatar.png";
 import { useActions } from "src/hooks/useActions";
 import {
   ActionButton,
-  OptionsTableData,
   StyledIconButton,
   UnblockButton,
 } from "../customers/styles/CustomerItemStyles";
 
+export const OptionsTableData = styled("div")({
+  minWidth: 250,
+  display: "grid",
+  gridTemplateColumns: "repeat(3, 1fr)",
+  gridColumnGap: "1rem",
+});
+
 type SalesPersonItemProps = {
-  salesperson: SalesPersonReturnedPayload;
+  salesperson: SalespersonReturnedPayload;
   setOpenEditSalesperson: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenDeleteSalesperson: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -36,56 +43,61 @@ const SalesPersonItem = (prop: SalesPersonItemProps) => {
     isActive,
   } = salesperson;
 
-  const { setCurrentSalesperson, handleToggleCustomerBlock, unblockCustomer } =
-    useActions();
+  const { setCurrentSalesperson, toggleSalespersonActivation } = useActions();
 
   const handleSwitchChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    customer: SalesPersonReturnedPayload
+    event: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    // handleToggleCustomerBlock({
-    //   customerId: customer._id,
-    //   isBlocked: !customer.isBlocked,
-    // });
+    toggleSalespersonActivation({
+      id: _id,
+      status: !salesperson.isActive,
+    });
   };
 
   const handleSalespersonActivation = (
-    customer: SalesPersonReturnedPayload
+    salesperson: SalespersonReturnedPayload
   ): void => {
-    // unblockCustomer(customer._id);
+    toggleSalespersonActivation({
+      id: _id,
+      status: true,
+    });
   };
 
   const handleEditSalesperson = (
-    customer: SalesPersonReturnedPayload
+    salesperson: SalespersonReturnedPayload
   ): void => {
     setOpenEditSalesperson(true);
-    setCurrentSalesperson(customer);
+    setCurrentSalesperson(salesperson);
   };
 
   const handleDeleteSalesperson = (
-    customer: SalesPersonReturnedPayload
+    salesperson: SalespersonReturnedPayload
   ): void => {
     setOpenDeleteSalesperson(true);
-    setCurrentSalesperson(customer);
+    setCurrentSalesperson(salesperson);
   };
 
   return (
     <TableRow hover role="checkbox" tabIndex={-1}>
-      <TableCell style={{ maxWidth: 150 }}>
-        <img src={profileImage} alt={`${fullName}'s photo`} />
+      <TableCell style={{ maxWidth: 50 }}>
+        <img
+          src={profileImage ? profileImage : placeholderAvatar}
+          alt={`${fullName}'s photo`}
+          style={{ width: 40 }}
+        />
       </TableCell>
-      <TableCell style={{ minWidth: 250 }}>
+      <TableCell style={{ minWidth: 220 }}>
         {fullName} ({initials})
       </TableCell>
       <TableCell style={{ minWidth: 200 }}>{email}</TableCell>
       <TableCell style={{ minWidth: 150 }}>{phoneNumber}</TableCell>
       <TableCell align="center">
-        {!isActive ? (
+        {isActive ? (
           <CustomSwitch
-            color={!isActive ? "success" : "error"}
-            onChange={(event) => handleSwitchChange(event, salesperson)}
-            checked={!isActive}
-            isActive={!isActive}
+            color={isActive ? "success" : "error"}
+            onChange={(event) => handleSwitchChange(event)}
+            checked={isActive}
+            isActive={isActive}
           />
         ) : (
           <UnblockButton
@@ -105,7 +117,7 @@ const SalesPersonItem = (prop: SalesPersonItemProps) => {
             background={theme.palette.secondary}
             title="Details"
             component={Link}
-            to={`/dashboard/customers/${_id}`}
+            to={`/dashboard/salespeople/${_id}`}
           />
           <ActionButton
             startIcon={<EditSharpIcon />}

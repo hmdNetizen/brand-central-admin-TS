@@ -10,6 +10,8 @@ interface NotificationDataTypes {
 export interface OrderNotificationReturnedPayload
   extends NotificationDataTypes {
   orderId: string;
+  isAddedBySalesperson?: boolean;
+  salespersonOrderId?: string;
 }
 
 // Object shape returned from API

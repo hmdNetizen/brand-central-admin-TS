@@ -66,7 +66,7 @@ const OrderInvoicePageDisplay = () => {
         <Fragment>
           <Grid item container alignItems="center" columnSpacing={1}>
             <Grid item>
-              <PreviousButton path={`orders/${orderId}`} />
+              <PreviousButton path={`/dashboard/orders/${orderId}`} />
             </Grid>
             <Grid item>
               <Typography variant="h2">Order Invoice</Typography>

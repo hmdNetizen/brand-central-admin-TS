@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import { OrderReturnedPayload } from "src/services/orders/OrderTypes";
 import Moment from "react-moment";
+import { SalespersonOrderResponsePayload } from "src/services/salespersons/orders/types";
 
 const Heading = styled(Typography)({
   fontWeight: 700,
@@ -21,13 +22,18 @@ const Title = styled(Typography)(({ theme }) => ({
 }));
 
 type OrderInvoiceProps = {
-  singleOrder: OrderReturnedPayload;
+  singleOrder: OrderReturnedPayload | SalespersonOrderResponsePayload;
 };
 
 const OrderInvoiceDetails = ({ singleOrder }: OrderInvoiceProps) => {
   return (
     <Grid item>
       <Heading variant="h3">Order Details</Heading>
+      {singleOrder.placedBy ? (
+        <Title>
+          Placed By: <span>{singleOrder.placedBy.fullName}</span>
+        </Title>
+      ) : null}
       <Title variant="body1">
         Invoice Number :{" "}
         <span>
@@ -45,7 +51,7 @@ const OrderInvoiceDetails = ({ singleOrder }: OrderInvoiceProps) => {
         </span>
       </Title>
       <Title variant="body1">
-        Order ID : <span>${singleOrder.orderId}</span>
+        Order ID : <span>{singleOrder.orderId}</span>
       </Title>
       <Title variant="body1">
         Payment Method :{" "}

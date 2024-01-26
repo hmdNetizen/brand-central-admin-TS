@@ -14,6 +14,8 @@ import categoriesReducer from "./categories";
 import brandsReducer from "./brands";
 import messagesReducer from "./messages";
 import salespersonReducer from "./salespersons";
+import salespersonOrdersReducer from "./salespersons/orders";
+import salespersonCustomersReducer from "./salespersons/customers";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -31,6 +33,8 @@ const rootReducer = combineReducers({
   shipping: shippingReducer,
   settings: settingsReducer,
   salesPersons: salespersonReducer,
+  salespersonOrders: salespersonOrdersReducer,
+  salespersonCustomers: salespersonCustomersReducer,
 });
 
 const store = configureStore({

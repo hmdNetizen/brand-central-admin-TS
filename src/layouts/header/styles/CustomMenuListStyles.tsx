@@ -1,7 +1,7 @@
 import { styled, Theme } from "@mui/material/styles";
 import MenuItem, { MenuItemProps } from "@mui/material/MenuItem";
+import Chip from "@mui/material/Chip";
 import { LinkProps } from "react-router-dom";
-import { SxProps } from "@mui/system";
 import React from "react";
 
 interface CustomMenuItemProps extends MenuItemProps {
@@ -67,4 +67,16 @@ export const StyledMenuItem = styled(MenuItem, {
 
     // },
   },
+}));
+
+export const StyledChip = styled(Chip)(({ theme }) => ({
+  // position: "absolute",
+  // top: 2,
+  // left: 5,
+  fontSize: ".85rem",
+  color: "#fff",
+  textAlign: "center",
+  background: theme.palette.primary.light,
+  height: 20,
+  maxWidth: 80,
 }));

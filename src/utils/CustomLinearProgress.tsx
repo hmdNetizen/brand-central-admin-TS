@@ -9,26 +9,31 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 
 interface LinearProgressPropTypes extends LinearProgressProps {
   updatedInventory: string;
+  uploadedCustomerStatus: string;
 }
 
 const BorderLinearProgress = styled(LinearProgress, {
-  shouldForwardProp: (prop) => prop !== "updatedInventory",
-})<LinearProgressPropTypes>(({ theme, updatedInventory }) => ({
-  height: 10,
-  borderRadius: 5,
-  [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor:
-      theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
-  },
-  [`& .${linearProgressClasses.bar}`]: {
+  shouldForwardProp: (prop) =>
+    prop !== "updatedInventory" && prop !== "uploadedCustomerStatus",
+})<LinearProgressPropTypes>(
+  ({ theme, updatedInventory, uploadedCustomerStatus }) => ({
+    height: 10,
     borderRadius: 5,
-    // backgroundColor: theme.palette.mode === "light" ? "#1a90ff" : "#308fe8",
-    backgroundColor:
-      updatedInventory === "Update Completed"
-        ? theme.palette.success.main
-        : "#308fe8",
-  },
-}));
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      backgroundColor:
+        theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+      borderRadius: 5,
+      // backgroundColor: theme.palette.mode === "light" ? "#1a90ff" : "#308fe8",
+      backgroundColor:
+        updatedInventory === "Update Completed" ||
+        uploadedCustomerStatus === "Sales Reps' customers have been updated"
+          ? theme.palette.success.main
+          : "#308fe8",
+    },
+  })
+);
 
 const CustomLinearProgressBar = () => {
   const uploadPercentage = useTypedSelector(
@@ -36,6 +41,9 @@ const CustomLinearProgressBar = () => {
   );
   const updatedInventory = useTypedSelector(
     (state) => state.products.updatedInventory
+  );
+  const uploadedCustomerStatus = useTypedSelector(
+    (state) => state.salespersonCustomers.uploadedCustomerStatus
   );
 
   return (
@@ -50,6 +58,7 @@ const CustomLinearProgressBar = () => {
           variant="determinate"
           value={uploadPercentage}
           updatedInventory={updatedInventory}
+          uploadedCustomerStatus={uploadedCustomerStatus}
         />
       </Box>
       <Box sx={{ minWidth: 35 }}>

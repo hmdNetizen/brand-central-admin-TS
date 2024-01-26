@@ -33,3 +33,9 @@
   background: #fff;
   color: #6b6b6b;
 }
+
+.react-tel-input input::placeholder {
+  color: #ccc;
+  font-weight: 500;
+  font-size: 1.4rem;
+}

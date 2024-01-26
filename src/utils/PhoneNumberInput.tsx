@@ -1,12 +1,19 @@
 import React from "react";
 import PI from "react-phone-input-2";
-const PhoneInput = (PI as any).default !== null ? (PI as any).default : PI;
 import "react-phone-input-2/lib/style.css";
 import "./styles/PhoneNumberInput.css";
 import { styled } from "@mui/material/styles";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import { CountryData } from "react-phone-input-2";
+
+let PhoneInput: any;
+
+if (import.meta.env.MODE === "development") {
+  PhoneInput = PI;
+} else {
+  PhoneInput = (PI as any).default !== null ? (PI as any).default : PI;
+}
 
 const StyledFormHelperText = styled(FormHelperText)(({ theme }) => ({
   marginLeft: 0,

@@ -8,6 +8,7 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   placeholder: string;
   error?: string;
   labelColor?: string;
+  right?: React.ReactNode;
   onChange?: (
     event: React.ChangeEvent<HTMLInputElement>,
     index?: number | string
@@ -23,6 +24,7 @@ const CustomFormInput = (props: FormInputProps) => {
     error,
     labelColor,
     onChange,
+    right,
     ...rest
   } = props;
   return (
@@ -30,15 +32,29 @@ const CustomFormInput = (props: FormInputProps) => {
       <FormLabel htmlFor={labelId} labelColor={labelColor}>
         {label}
       </FormLabel>
-      <FormInput
-        type={type}
-        id={labelId}
-        placeholder={placeholder}
-        autoComplete="off"
-        onChange={onChange}
-        {...rest}
-      />
-      {error && <Error>{error}</Error>}
+      <div style={{ position: "relative" }}>
+        <FormInput
+          type={type}
+          id={labelId}
+          placeholder={placeholder}
+          autoComplete="off"
+          onChange={onChange}
+          {...rest}
+        />
+        {right && (
+          <span
+            style={{
+              position: "absolute",
+              top: "50%",
+              transform: "translate(0, -50%)",
+              right: "1rem",
+            }}
+          >
+            {right}
+          </span>
+        )}
+        {error && <Error>{error}</Error>}
+      </div>
     </Fragment>
   );
 };

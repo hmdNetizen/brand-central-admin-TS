@@ -4,13 +4,8 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import Tables from "src/components/table/Tables";
 import { salespeopleListColumns } from "src/lib/dataset/tableData";
-import CustomerItem from "src/components/customers/CustomerItem";
-// import EditCustomerProfile from "./modals/EditCustomerProfile";
-// import DeleteCustomer from "./modals/DeleteCustomer";
-// import EmailCustomer from "./modals/EmailCustomer";
 import CustomLoadingDialog from "src/utils/CustomLoadingDialog";
-import { SelectChangeEvent } from "@mui/material";
-import PageHeadingActions from "src/components/common/PageHeadingActions";
+import PageHeadingWithActionButton from "src/components/common/PageHeadingWithActionButton";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
 import { SalesPersonsPageLayoutProps } from "../types";
 import {
@@ -18,6 +13,9 @@ import {
   Container,
 } from "src/components/common/styles/PageContainerStyles";
 import SalesPersonItem from "src/components/salespersons/SalesPersonItem";
+import CreateSalesperson from "../modals/CreateSalesperson";
+import EditSalesperson from "../modals/EditSalesperson";
+import DeleteSalesperson from "../modals/DeleteSalesperson";
 
 const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
   const {
@@ -33,15 +31,20 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
     openDeleteSalesperson,
     setOpenDeleteSalesperson,
     salesPersonsDataset,
+    setOpenAddSalesperson,
+    openAddSalesperson,
   } = props;
   const theme = useTheme();
 
-  const loadingCustomers = useTypedSelector(
-    (state) => state.customers.loadingCustomers
+  const loadingSalespersons = useTypedSelector(
+    (state) => state.salesPersons.loadingSalespersons
   );
 
-  const loadingCustomerAction = useTypedSelector(
-    (state) => state.customers.loadingCustomerAction
+  const loadingActivation = useTypedSelector(
+    (state) => state.salesPersons.loadingActivation
+  );
+  const totalSalespersons = useTypedSelector(
+    (state) => state.salesPersons.totalSalespersons
   );
 
   const handleChangeRowsPerPage = (
@@ -51,17 +54,8 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
     setPage(0);
   };
 
-  const handleSelectRowsPerPage = (
-    event: SelectChangeEvent<unknown>,
-    child: React.ReactNode
-  ): void => {
-    const selectEvent = event as SelectChangeEvent<HTMLInputElement>;
-    setRowsPerPage(+selectEvent.target.value);
-    setPage(0);
-  };
-
-  const handleLoadingCustomerAction = () => {
-    return !loadingCustomerAction;
+  const handleLoadingSalespersonActivation = () => {
+    return !loadingActivation;
   };
 
   return (
@@ -72,25 +66,30 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
         </Typography>
       </Grid>
       <ContainerWrapper item container>
-        <PageHeadingActions
+        <PageHeadingWithActionButton
           filterText={filterText}
-          onChange={onChange}
-          rowsPerPage={rowsPerPage.toString()}
-          handleSelectRowsPerPage={handleSelectRowsPerPage}
+          handleSearch={onChange}
+          rowsPerPage={rowsPerPage}
+          buttonTitle="Create a Salesperson"
+          setOpen={setOpenAddSalesperson}
+          setRowsPerPage={setRowsPerPage}
+          setPage={setPage}
+          isDeactivatedPage={false}
+          placeholderText="Search..."
         />
         <Grid item container style={{ marginTop: "5rem" }}>
           <Tables
             headerColumns={salespeopleListColumns}
             page={page}
             setPage={setPage}
-            total={salesPersonsDataset.length}
+            total={totalSalespersons}
             rowsPerPage={rowsPerPage}
             setRowsPerPage={setRowsPerPage}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
-            loading={loadingCustomers}
+            loading={loadingSalespersons}
             notFoundText="No Salesperson found"
           >
-            {!loadingCustomers &&
+            {!loadingSalespersons &&
               salesPersonsDataset.map((salesperson) => {
                 return (
                   <SalesPersonItem
@@ -104,22 +103,22 @@ const SalesPersonsPageLayout = (props: SalesPersonsPageLayoutProps) => {
           </Tables>
         </Grid>
       </ContainerWrapper>
-      {/* <EditCustomerProfile
-        openEditCustomer={openEditCustomer}
-        setOpenEditCustomer={setOpenEditCustomer}
-        customerProfileData={singleCustomer!}
+      <CreateSalesperson
+        openAddSalesperson={openAddSalesperson}
+        setOpenAddSalesperson={setOpenAddSalesperson}
       />
-      <DeleteCustomer
-        openDeleteCustomer={openDeleteCustomer}
-        setOpenDeleteCustomer={setOpenDeleteCustomer}
+      <EditSalesperson
+        openEditSalesperson={openEditSalesperson}
+        setOpenEditSalesperson={setOpenEditSalesperson}
       />
-      <EmailCustomer open={openEmail} setOpen={setOpenEmail} />
+      <DeleteSalesperson
+        openDeleteSalesperson={openDeleteSalesperson}
+        setOpenDeleteSalesperson={setOpenDeleteSalesperson}
+      />
       <CustomLoadingDialog
-        loading={
-          loadingCustomerAction !== undefined ? loadingCustomerAction : false
-        }
-        handleLoading={handleLoadingCustomerAction}
-      /> */}
+        loading={loadingActivation !== undefined ? loadingActivation : false}
+        handleLoading={handleLoadingSalespersonActivation}
+      />
     </Container>
   );
 };

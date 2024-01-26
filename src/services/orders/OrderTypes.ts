@@ -37,11 +37,20 @@ export type OrdersProductsType = {
   isSpecial: boolean;
 };
 
+export type OrderStatusTypes =
+  | "pending"
+  | "completed"
+  | "declined"
+  | "processing"
+  | "";
+
+export type OrderPaymentStatusTypes = "paid" | "unpaid" | "processing" | "";
+
 export type OrderReturnedPayload = {
   id: string;
   _id?: string;
   orderId: string;
-  orderStatus: string;
+  orderStatus: OrderStatusTypes;
   orderDate: string;
   orderNote: string;
   orderTotalQuantity: number;
@@ -50,9 +59,10 @@ export type OrderReturnedPayload = {
   promoCode: string;
   orderPaymentAmount: number;
   orderPaymentMethod: string;
-  orderPaymentStatus: string;
+  orderPaymentStatus: OrderPaymentStatusTypes;
   orderPaymentDate: string;
   orderInVoiceNumber: string;
+  deliveryMethod: string;
   shippingAddress: AddressType;
   billingAddress: AddressType;
   shipToAddress: boolean;
@@ -62,6 +72,13 @@ export type OrderReturnedPayload = {
     email: string;
   };
   ordersProducts: OrdersProductsType[];
+  /* I added this here just to bypass TS error. This field is not 
+   available in the Order schema rather in the salesperson's */
+  placedBy?: {
+    id: string;
+    fullName: string;
+    email: string;
+  };
 };
 
 export type RecentSalesPayloadType = {
@@ -101,6 +118,17 @@ export type OrdersCountReturnedPayload = {
     processing: number;
     completed: number;
   };
+};
+
+export type SalespersonCustomerOrdersBulkUpdatePayload = {
+  "Cust.Code": string;
+  Company: string;
+  "Inv. Date": string;
+  "Invoice #": string;
+  Item: string;
+  "Item Description": string;
+  Slsprs: string;
+  "Qty Ship - Trn": number;
 };
 
 export type SingleOrderPayloadType = {

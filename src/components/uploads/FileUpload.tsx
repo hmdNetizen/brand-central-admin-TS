@@ -8,7 +8,7 @@ const Input = styled("input")({
 });
 
 type FileUploadProps = {
-  setImageError: React.Dispatch<React.SetStateAction<string>>;
+  setImageError?: React.Dispatch<React.SetStateAction<string>>;
   errorMessage: string;
   iconSize: string | number;
   selectedFile: File | string;
@@ -28,12 +28,16 @@ const FileUpload = (props: FileUploadProps) => {
     const file = event.target?.files?.[0];
 
     if (!file && !selectedFile) {
-      setImageError(errorMessage);
+      if (setImageError) {
+        setImageError(errorMessage);
+      }
       return;
     }
 
     setSelectedFile(file!);
-    setImageError("");
+    if (setImageError) {
+      setImageError("");
+    }
   };
 
   return (

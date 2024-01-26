@@ -2,9 +2,6 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import FileUpload from "./FileUpload";
 import { styled } from "@mui/material/styles";
-import { useSelector } from "react-redux";
-import CustomCircularProgress from "src/utils/CustomCircularProgress";
-import { useTypedSelector } from "src/hooks/useTypedSelector";
 import NewItemImagePreview from "./NewItemImagePreview";
 import { GridProps } from "@mui/system";
 
@@ -15,6 +12,7 @@ const UploadWrapper = styled(Grid, {
   height: 200,
   width: width ? width : 200,
   position: "relative",
+  margin: "0 auto",
 
   [theme.breakpoints.down("md")]: {
     maxWidth: 200,
@@ -22,7 +20,7 @@ const UploadWrapper = styled(Grid, {
 }));
 
 type FileUploadBoxProps = {
-  setImageError: React.Dispatch<React.SetStateAction<string>>;
+  setImageError?: React.Dispatch<React.SetStateAction<string>>;
   errorMessage: string;
   iconSize: string | number;
   selectedFile: File | string;

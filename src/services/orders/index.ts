@@ -13,8 +13,13 @@ import {
   PaginatedOrdersQueryType,
 } from "./OrderTypes";
 import React from "react";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosProgressEvent } from "axios";
 import { logout } from "../auth";
+import {
+  setUploadedCustomerStatusText,
+  setUploadingCustomerText,
+} from "../salespersons/customers";
+import { setUploadPercentage } from "../common";
 
 const initialState: initStateType = {
   loadingOrders: false,
@@ -272,6 +277,54 @@ export const markOrderStatusAsCompleted = createAsyncThunk(
       } else {
         return thunkAPI.rejectWithValue("Something went wrong. Try again.");
       }
+    }
+  }
+);
+
+export const uploadStaleOrders = createAsyncThunk(
+  "upload-stale-orders",
+  async (dataset, thunkAPI) => {
+    const uploadConfig = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+        thunkAPI.dispatch(setUploadingCustomerText());
+
+        const total = progressEvent.total;
+
+        if (total !== undefined) {
+          const percentage = Number(
+            Math.round((progressEvent.loaded * 100) / total)
+          );
+          thunkAPI.dispatch(setUploadPercentage(percentage));
+        }
+      },
+      onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
+        thunkAPI.dispatch(
+          setUploadedCustomerStatusText("Uploading Customers Orders")
+        );
+
+        const total = progressEvent.total;
+
+        if (total !== undefined) {
+          const percentage = Number(
+            Math.round((progressEvent.loaded * 100) / total)
+          );
+          thunkAPI.dispatch(setUploadPercentage(percentage));
+        }
+      },
+    };
+
+    try {
+      const { data } = await axios.post(
+        `/api/salesperson-orders/uploads`,
+        dataset,
+        uploadConfig
+      );
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );

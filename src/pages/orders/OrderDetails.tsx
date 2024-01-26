@@ -59,7 +59,7 @@ const OrderDetails = ({ menuSlideIn }: { menuSlideIn: boolean }) => {
     <Container container direction="column">
       <Grid item container alignItems="center" columnSpacing={1}>
         <Grid item>
-          <PreviousButton path="orders" />
+          <PreviousButton path="/dashboard/orders" />
         </Grid>
         <Grid item>
           <Typography variant="h2">Order Details</Typography>
@@ -75,7 +75,7 @@ const OrderDetails = ({ menuSlideIn }: { menuSlideIn: boolean }) => {
         <Grid
           item
           component={Link}
-          to="orders"
+          to="/dashboard/orders"
           style={{
             textDecoration: "none",
             color: theme.palette.secondary.dark,
@@ -87,7 +87,7 @@ const OrderDetails = ({ menuSlideIn }: { menuSlideIn: boolean }) => {
         <Grid
           item
           component={Link}
-          to={`orders/${orderId}`}
+          to={`/dashboard/orders/${orderId}`}
           style={{
             textDecoration: "none",
             color: theme.palette.secondary.dark,

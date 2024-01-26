@@ -35,7 +35,18 @@ import FeaturedProducts from "src/pages/products/FeaturedProducts";
 import NonImageProducts from "src/pages/products/NonImageProducts";
 import PopularProducts from "src/pages/products/Popular";
 import WeeklyOffersProducts from "src/pages/products/WeeklyOffers";
+import SalespersonCustomersList from "src/pages/salespersons/customers/CustomersList";
+import SalespersonCustomerProfile from "src/pages/salespersons/customers/SalespersonCustomerProfile";
+import DeactivatedSalespeople from "src/pages/salespersons/DeactivatedSalespeople";
+import SalespersonCompletedOrders from "src/pages/salespersons/orders/CompletedOrders";
+import SalespersonPendingOrders from "src/pages/salespersons/orders/PendingOrders";
+import PrintSalespersonOrderInvoice from "src/pages/salespersons/orders/PrintSalespersonOrderInvoice";
+import SalespeopleOrders from "src/pages/salespersons/orders/SalespeopleOrders";
+import SalespersonOrderDetails from "src/pages/salespersons/orders/SalespersonOrderDetails";
+import SalespersonOrderInvoice from "src/pages/salespersons/orders/SalespersonOrderInvoice";
+import SalespersonProfileDetails from "src/pages/salespersons/SalespersonProfileDetails";
 import Salespersons from "src/pages/salespersons/Salespersons";
+import UpdateCustomers from "src/pages/salespersons/UpdateCustomers";
 import ShippingZipCodes from "src/pages/shipping/ShippingZipCodes";
 import SubCategories from "src/pages/subcategories/SubCategories";
 import UpdateInventory from "src/pages/UpdateInventory";
@@ -111,13 +122,73 @@ const PagesRoutes = () => {
                     }
                   />
                 </Route>
-                <Route path="salespersons">
+                <Route path="salespeople">
                   <Route index element={<Salespersons />} />
-                  {/* <Route path="blocked" element={<BlockedCustomers />} />
-                <Route
-                  path=":customerId"
-                  element={<CustomerProfileDetails menuSlideIn={menuSlideIn} />}
-                /> */}
+                  <Route
+                    path="deactivated"
+                    element={<DeactivatedSalespeople />}
+                  />
+
+                  <Route path="customers">
+                    <Route index element={<SalespersonCustomersList />} />
+                    <Route
+                      path=":customerId"
+                      element={
+                        <SalespersonCustomerProfile menuSlideIn={menuSlideIn} />
+                      }
+                    />
+                  </Route>
+                  <Route
+                    path="update-customers"
+                    element={<UpdateCustomers />}
+                  />
+
+                  <Route path=":salespersonId">
+                    <Route
+                      index
+                      element={
+                        <SalespersonProfileDetails menuSlideIn={menuSlideIn} />
+                      }
+                    />
+                    <Route path="customers">
+                      <Route path=":customerId">
+                        <Route
+                          index
+                          element={
+                            <SalespersonCustomerProfile
+                              menuSlideIn={menuSlideIn}
+                            />
+                          }
+                        />
+                      </Route>
+                    </Route>
+                  </Route>
+                  <Route path="orders">
+                    <Route index element={<SalespeopleOrders />} />
+                    <Route
+                      path="pending"
+                      element={<SalespersonPendingOrders />}
+                    />
+                    <Route
+                      path="completed"
+                      element={<SalespersonCompletedOrders />}
+                    />
+                    <Route path=":orderId">
+                      <Route
+                        index
+                        element={
+                          <SalespersonOrderDetails menuSlideIn={menuSlideIn} />
+                        }
+                      />
+                      <Route path="invoice">
+                        <Route index element={<SalespersonOrderInvoice />} />
+                        <Route
+                          path="print"
+                          element={<PrintSalespersonOrderInvoice />}
+                        />
+                      </Route>
+                    </Route>
+                  </Route>
                 </Route>
                 <Route path="categories">
                   <Route index element={<Categories />} />

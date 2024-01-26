@@ -121,20 +121,45 @@ export const menus = [
       },
     ],
   },
-  // {
-  //   id: 5,
-  //   title: "Salespersons",
-  //   icon: SalesPeopleIcon,
-  //   path: "/dashboard/salespersons",
-  //   subMenus: [
-  //     { subId: 0, title: "Salespersons List", path: "/dashboard/salespersons" },
-  //     {
-  //       subId: 1,
-  //       title: "Deactivated Salespersons",
-  //       path: "/dashboard/salespersons/deactivated",
-  //     },
-  //   ],
-  // },
+  {
+    id: 5,
+    title: "Salespersons",
+    icon: SalesPeopleIcon,
+    path: "/dashboard/salespeople",
+    subMenus: [
+      { subId: 0, title: "Salespeople", path: "/dashboard/salespeople" },
+      {
+        subId: 1,
+        title: "Deactivated Salespeople",
+        path: "/dashboard/salespeople/deactivated",
+      },
+      {
+        subId: 2,
+        title: "All Orders",
+        path: "/dashboard/salespeople/orders",
+      },
+      {
+        subId: 3,
+        title: "Pending Orders",
+        path: "/dashboard/salespeople/orders/pending",
+      },
+      {
+        subId: 4,
+        title: "Completed Orders",
+        path: "/dashboard/salespeople/orders/completed",
+      },
+      {
+        subId: 5,
+        title: "Customers List",
+        path: "/dashboard/salespeople/customers",
+      },
+      {
+        subId: 6,
+        title: "Update Customers / Invoices",
+        path: "/dashboard/salespeople/update-customers",
+      },
+    ],
+  },
   {
     id: 6,
     title: "Manage Categories",
