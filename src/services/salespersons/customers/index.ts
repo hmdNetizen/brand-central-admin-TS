@@ -181,6 +181,7 @@ export const createNewSalespersonCustomer = createAsyncThunk(
             initials: "",
             phoneNumber: "",
             priceCode: "",
+            balance: "",
           });
         }
       }

@@ -46,6 +46,7 @@ const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
     contactName: "",
     priceCode: "",
     initials: "",
+    balance: "",
   });
 
   const [customerInfoErrors, setCustomerInfoErrors] = useState<ErrorsTypes>({
@@ -74,6 +75,7 @@ const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
     initials,
     phoneNumber,
     priceCode,
+    balance,
   } = customerInformation;
 
   const validateInput = () => {
@@ -149,6 +151,7 @@ const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
       phoneNumber,
       priceCode: priceCode.split(" ").join(""),
       referrer: salespersonId,
+      balance,
     });
   };
 
@@ -185,6 +188,7 @@ const CreateSalespersonCustomer = (props: CreateSalespersonCustomerProps) => {
           buttonTitle="Create Customer"
           onSelectChange={handleSelectChange}
           onChangePhoneNumber={handlePhoneNumberChange}
+          balance={balance}
         />
       </ContentContainer>
     </ShowDialog>

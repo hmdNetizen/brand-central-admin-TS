@@ -13,6 +13,7 @@ export type SalespersonCustomerResponsePayload = {
   companyEmail: string;
   priceCode: string;
   referrer: SalespersonReturnedPayload;
+  balance: number;
   createdAt: "2023-07-24T11:34:00.907Z";
 };
 
@@ -25,6 +26,7 @@ export type SalespersonCustomerRequestPayload = {
   address: string;
   contactName: string;
   priceCode: string;
+  balance: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setCustomerInformation?: React.Dispatch<
     React.SetStateAction<SalespersonCustomerInfoProps>

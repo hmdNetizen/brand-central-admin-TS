@@ -27,7 +27,7 @@ type SalespersonCustomerFormContainerProps = {
   companyEmail: string;
   priceCode: string;
   initials: string;
-  balance?: string;
+  balance: string;
   companyNameError: string | undefined;
   customerCodeError: string | undefined;
   companyEmailError?: string;

@@ -87,6 +87,7 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
     initials,
     phoneNumber,
     priceCode,
+    balance,
   } = customerInformation;
 
   const validateInput = () => {
@@ -175,6 +176,7 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
       phoneNumber,
       priceCode: priceCode.split(" ").join(""),
       referrer: salespersonId,
+      balance,
     });
   };
 
@@ -192,13 +194,6 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
         }
 
         setCustomerInformation(newInitialsCustomerInformation);
-
-        if (key === "initials") {
-          setCustomerInformation((prev) => ({
-            ...prev,
-            initials: singleSalespersonCustomer.referrer.initials,
-          }));
-        }
       }
 
       const transformedPriceCode = singleSalespersonCustomer.priceCode
@@ -208,7 +203,14 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
       setCustomerInformation((prev) => ({
         ...prev,
         priceCode: transformedPriceCode,
+        initials: singleSalespersonCustomer.referrer.initials,
+        balance: singleSalespersonCustomer.balance.toString(),
       }));
+
+      // setCustomerInformation((prev) => ({
+      //   ...prev,
+      //   initials: singleSalespersonCustomer.referrer.initials,
+      // }));
     }
   }, [singleSalespersonCustomer]);
 
@@ -255,6 +257,7 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
           buttonTitle="Update Customer"
           onSelectChange={handleSelectChange}
           onChangePhoneNumber={handlePhoneNumberChange}
+          balance={balance}
         />
       </ContentContainer>
     </ShowDialog>

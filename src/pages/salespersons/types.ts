@@ -50,4 +50,5 @@ export type SalespersonCustomerInfoProps = {
   contactName: string;
   priceCode: string;
   initials: string;
+  balance: string;
 };
