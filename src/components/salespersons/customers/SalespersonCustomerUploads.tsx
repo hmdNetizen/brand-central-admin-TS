@@ -7,8 +7,9 @@ import { read, utils } from "xlsx";
 import {
   capitalizeFirstLetters,
   getCustomerId,
+  // getProductId,
   getSalespersonId,
-  transformCustomerInvoiceDataset,
+  // transformCustomerInvoiceDataset,
 } from "src/lib/helpers";
 import { useTheme } from "@mui/material/styles";
 import CustomLinearProgressBar from "src/utils/CustomLinearProgress";
@@ -21,12 +22,12 @@ import {
 } from "../../inventory/styles.inventory";
 import {
   SalespersonCustomerBulkUpdatePayload,
-  SalespersonCustomerResponsePayload,
+  // SalespersonCustomerResponsePayload,
   SalespersonCustomersInvoicesBulkUpdatePayload,
 } from "src/services/salespersons/customers/types";
-import { SalespersonCustomerOrdersBulkUpdatePayload } from "src/services/orders/OrderTypes";
+// import { SalespersonCustomerOrdersBulkUpdatePayload } from "src/services/orders/OrderTypes";
 import { ProductTypes } from "src/services/products/ProductTypes";
-import { nanoid } from "@reduxjs/toolkit";
+// import { nanoid } from "@reduxjs/toolkit";
 
 type OrderProduct = {
   product: string;
@@ -106,7 +107,7 @@ function SalespersonCustomerUploads() {
 
   const {
     uploadSalespersonCustomers,
-    uploadStaleOrders,
+    // uploadStaleOrders,
     uploadSalespersonCustomersInvoices,
   } = useActions();
 
