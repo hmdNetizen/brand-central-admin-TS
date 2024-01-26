@@ -206,11 +206,6 @@ const EditSalespersonCustomer = (props: EditSalespersonCustomerProps) => {
         initials: singleSalespersonCustomer.referrer.initials,
         balance: singleSalespersonCustomer.balance.toString(),
       }));
-
-      // setCustomerInformation((prev) => ({
-      //   ...prev,
-      //   initials: singleSalespersonCustomer.referrer.initials,
-      // }));
     }
   }, [singleSalespersonCustomer]);
 
