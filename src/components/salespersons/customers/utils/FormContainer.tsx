@@ -312,7 +312,7 @@ const SalespersonCustomerFormContainer = (
         >
           <CustomFormInput
             type="number"
-            label="Balance"
+            label="Balance ($)"
             labelId="balance"
             name="balance"
             value={balance}
