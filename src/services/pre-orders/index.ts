@@ -195,14 +195,16 @@ const preorderSlice = createSlice({
         // Checks if the index of the product exist and that the stock is
         // atleast 2 if the unit is not EA And 2 if it is not EA
 
-        if (
-          (currentProduct.units === "EA" &&
-            currentProduct.productStock >= 12) ||
-          (currentProduct.units !== "EA" && currentProduct.productStock >= 2)
-        ) {
-          return preOrder;
-        } else {
-          return null;
+        if (currentProduct) {
+          if (
+            (currentProduct.units === "EA" &&
+              currentProduct.productStock >= 12) ||
+            (currentProduct.units !== "EA" && currentProduct.productStock >= 2)
+          ) {
+            return preOrder;
+          } else {
+            return null;
+          }
         }
       });
 
@@ -213,12 +215,14 @@ const preorderSlice = createSlice({
       */
       let productsInStock: ProductTypes[] = [];
 
-      sanitizePreOrder.filter((item): ProductTypes | undefined => {
-        if (item !== null) {
-          productsInStock.push(item);
-          return item;
-        }
-      });
+      if (sanitizePreOrder) {
+        sanitizePreOrder.filter((item): ProductTypes | undefined => {
+          if (item && item !== null) {
+            productsInStock.push(item);
+            return item;
+          }
+        });
+      }
 
       productsInStock = productsInStock.filter((newPreOrder) => {
         const itemCopy = { ...newPreOrder };
