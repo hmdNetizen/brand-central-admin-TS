@@ -217,7 +217,7 @@ const preorderSlice = createSlice({
 
       if (sanitizePreOrder) {
         sanitizePreOrder.filter((item): ProductTypes | undefined => {
-          if (item && item !== null) {
+          if (item) {
             productsInStock.push(item);
             return item;
           }
