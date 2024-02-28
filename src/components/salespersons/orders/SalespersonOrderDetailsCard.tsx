@@ -64,7 +64,11 @@ const SalespersonOrderDetailsCard = (
           <td>Payment Status</td>
           <td>
             <Chip
-              label={capitalizeFirstLetters(orderPaymentStatus)}
+              label={
+                orderPaymentStatus
+                  ? capitalizeFirstLetters(orderPaymentStatus)
+                  : ""
+              }
               style={{
                 fontSize: "1.25rem",
                 fontWeight: 500,
