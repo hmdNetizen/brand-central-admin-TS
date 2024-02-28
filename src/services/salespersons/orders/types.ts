@@ -34,7 +34,7 @@ export type SingleSalespersonOrderPayloadTypes = {
 
 export type UpdateSalespersonOrderRequestPayload = {
   orderStatus: OrderStatusTypes;
-  paymentStatus?: OrderPaymentStatusTypes;
+  orderPaymentStatus?: OrderPaymentStatusTypes;
   orderId: string;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };

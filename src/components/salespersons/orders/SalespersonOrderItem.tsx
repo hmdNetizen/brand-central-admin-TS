@@ -48,7 +48,7 @@ const SalespersonOrderItem = (props: OrderItemProps) => {
     updateSalespersonOrderStatus({
       orderId: order.id,
       orderStatus: "completed",
-      paymentStatus: "paid",
+      orderPaymentStatus: "paid",
     });
   };
 
