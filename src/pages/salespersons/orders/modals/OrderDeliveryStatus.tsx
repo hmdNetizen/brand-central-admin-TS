@@ -119,7 +119,7 @@ const SalespersonOrderDeliveryStatus = (
       orderId: singleOrder?.id!,
       setOpen: setOpenDeliveryStatus,
       orderStatus,
-      paymentStatus: orderPaymentStatus,
+      orderPaymentStatus,
     });
   };
 

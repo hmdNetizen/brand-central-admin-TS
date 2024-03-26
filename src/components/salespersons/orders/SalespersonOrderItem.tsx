@@ -15,8 +15,6 @@ import {
 } from "../../orders/styles/OrderItemStyles";
 import { SalespersonOrderResponsePayload } from "src/services/salespersons/orders/types";
 
-// Testing redeployment
-
 type OrderItemProps = {
   order: SalespersonOrderResponsePayload;
   setOpenDeliveryStatus: React.Dispatch<React.SetStateAction<boolean>>;
